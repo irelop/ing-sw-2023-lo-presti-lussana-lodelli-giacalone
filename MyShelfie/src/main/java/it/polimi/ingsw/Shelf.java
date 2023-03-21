@@ -36,7 +36,7 @@ public class Shelf {
         int dimension;
         for(int r=0; r<5; r++)
             for(int c=0; c<6; c++){
-                if(beenThere[r][c]==0){
+                if(beenThere[r][c]==0 && !grid[r][c].equals(Color.BLANK)){
                     dimension = spotDimention(grid[r][c],r,c,0);
                     switch(dimension){
                         case 1: break;
