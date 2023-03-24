@@ -1,6 +1,8 @@
 package it.polimi.ingsw;
 
 
+import java.util.ArrayList;
+
 public class Shelf {
     private Color[][] grid;
     private int[][] beenThere;
@@ -20,11 +22,12 @@ public class Shelf {
 
     //OVERVIEW: inserimento della/e tessera/e selezionata/e (dentro il vettore littleHand)
     // nella propria libreria nella colonna di indice columnIndex
-    public void insert(int columnIndex, Color[] littleHand){
+    public void insert(int columnIndex, ArrayList<Tile> littleHand) throws NotEnoughSpaceInChosenColumnException{
+        if(columnFreeSpace(columnIndex) < littleHand.size()) throw new NotEnoughSpaceInChosenColumnException();
         //controllo se l'indice è corretto e la shelf non è piena prima di chiamare questa funz
         for(int r=5; r>=0; r--){
             if(grid[r][columnIndex]==Color.BLANK){
-                for(int i=0; i<littleHand.length; i++){ grid[r+i][columnIndex] = littleHand[i];}
+                for(int i=0; i<littleHand.size(); i++){ grid[r+i][columnIndex] = littleHand.get(i).color;}
                 break;
             }
         }
@@ -90,5 +93,20 @@ public class Shelf {
         for(int c=0; c<6; c++)
             if(grid[0][c]==Color.BLANK) return false;
         return true;
+    }
+
+    //OVERVIEW: restituisce il numero massimo di tessere pescabili in tutta la shelf
+    private int maxTilesPickable(){
+        int freeSpace=0;
+        int r;
+        for(int c=0; c<6; c++) {
+            r=0;
+            while (r < 5 && grid[r][c] == Color.BLANK){
+                r++;
+                if(r==3) return 3;
+            }
+            if (freeSpace < r) freeSpace = r;
+        }
+        return freeSpace;
     }
 }
