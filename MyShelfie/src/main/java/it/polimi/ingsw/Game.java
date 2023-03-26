@@ -45,17 +45,53 @@ public class Game {
             } catch (NotEnoughSpaceInChosenColumnException e){
                 System.out.println(e);
             }
-
-
         }while(true);
 
+        //checking goals and adding score if necessary
+        playerPlaying.score.addScore(playerPlaying.personalGoalCard.checkPersonalGoal(playerPlaying.myShelfie));
+        if(!playerPlaying.isCommonGoalAchived(0))
+            playerPlaying.score.addScore(Board.commonGoalCards[0].checkPattern());
+        if(!playerPlaying.isCommonGoalAchived(1))
+            playerPlaying.score.addScore(Board.commonGoalCards[1].checkPattern());
 
-
+        //checking if a player's shelf is full,
+        // if true add +1pt and set the last lap
+        if(playerPlaying.myShelfie.isFull()) {
+            playerPlaying.score.addScore(1);
+            this.isOver = true;
+        }
     }
 
     private void manageTurn(){
         while(!isOver){
-            for (Player player : playersConnected) turn(player);
+            for (Player player : playersConnected) {
+                //a player can plays his turn if the match is not over
+                // or if that is the last lap
+                if(!isOver || (isOver && !player.hasChar()))
+                    turn(player);
+            }
+        }
+        for (Player player : playersConnected) {
+            int spotScore = player.myShelfie.spotCheck();
+            player.score.addScore(spotScore);
+        }
+        endGame();
+    }
+
+    private void endGame(){
+        System.out.println("GAME OVER");
+        int Player temp;
+        for (int i=0; i< playersConnected.size(); i++)
+            for (int j=0; j< playersConnected.size(); j++){
+                if(playersConnected.get(j).score < playersConnected.get(j+1).score){
+                    temp = playersConnected.get(j);
+                    playersConnected.get(j) = playersConnected.get(j+1);
+                    playersConnected.get(j+1) = temp;
+                }
+            }
+        for(int i=0; i< playersConnected.size(); i++){
+            System.out.print("Position "+(i+1));
+            System.out.println(playersConnected.get(i));
         }
     }
 }
