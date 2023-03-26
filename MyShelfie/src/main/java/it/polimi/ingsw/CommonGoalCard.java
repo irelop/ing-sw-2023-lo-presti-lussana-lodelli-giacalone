@@ -20,10 +20,7 @@ public class CommonGoalCard {
      * @return score: the available score for the completed goal.
      */
     public int getScore(){
-        int score;
-        score = availableScore.get(0);
-        availableScore.remove(0);
-        return score;
+        return availableScore.remove(0);
     }
 
     /* -o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-o-
