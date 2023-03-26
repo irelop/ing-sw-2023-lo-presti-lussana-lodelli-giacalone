@@ -23,7 +23,7 @@ public class Bag {
      * @return the single tile in order to be placed on the board.
      */
     public Color draw(){
-        List<Color> remainingTiles = bag.keySet().stream().filter(x -> bag.get(x) > 0).collect(Collectors.toList());
+        List<Color> remainingTiles = bag.keySet().stream().filter(x -> bag.get(x) > 0).toList();
         Random random = new Random();
         int i = random.nextInt(remainingTiles.size());
 
