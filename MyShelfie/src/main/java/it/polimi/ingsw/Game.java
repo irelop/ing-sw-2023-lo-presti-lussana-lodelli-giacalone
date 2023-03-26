@@ -40,7 +40,7 @@ public class Game {
                 Scanner scanner = new Scanner(System.in);
                 int columnChosen = scanner.nextInt();
 
-                playerPlaying.myShelfie.insert(columnChosen);
+                playerPlaying.myShelfie.insert(columnChosen, playerPlaying.getLittleHand());
                 break;
             } catch (NotEnoughSpaceInChosenColumnException e){
                 System.out.println(e);
@@ -48,45 +48,57 @@ public class Game {
         }while(true);
 
         //checking goals and adding score if necessary
-        playerPlaying.score.addScore(playerPlaying.personalGoalCard.checkPersonalGoal(playerPlaying.myShelfie));
+        playerPlaying.myScore.addScore(playerPlaying.personalGoalCard.checkPersonalGoal(playerPlaying.myShelfie));
         if(!playerPlaying.isCommonGoalAchived(0))
-            playerPlaying.score.addScore(Board.commonGoalCards[0].checkPattern());
+            playerPlaying.myScore.addScore(Board.commonGoalCards[0].checkPattern());
         if(!playerPlaying.isCommonGoalAchived(1))
-            playerPlaying.score.addScore(Board.commonGoalCards[1].checkPattern());
+            playerPlaying.myScore.addScore(Board.commonGoalCards[1].checkPattern());
 
         //checking if a player's shelf is full,
         // if true add +1pt and set the last lap
-        if(playerPlaying.myShelfie.isFull()) {
-            playerPlaying.score.addScore(1);
+        if(playerPlaying.myShelfie.isShelfFull()) {
+            playerPlaying.myScore.addScore(1);
             this.isOver = true;
         }
     }
 
+    private void dealPersonalCards(){
+        for(Player player : playersConnected){
+            player.setCard(personalDeck.drawPersonal());
+        }
+    }
+
+    private void setChair(){
+        int index = (int) (Math.random()%playersConnected.size());
+        playersConnected.get(index).setChair();
+    }
     private void manageTurn(){
+        setChair();
+        dealPersonalCards();
         while(!isOver){
             for (Player player : playersConnected) {
                 //a player can plays his turn if the match is not over
                 // or if that is the last lap
-                if(!isOver || (isOver && !player.hasChar()))
+                if(!isOver || !player.hasChair())
                     turn(player);
             }
         }
         for (Player player : playersConnected) {
             int spotScore = player.myShelfie.spotCheck();
-            player.score.addScore(spotScore);
+            player.myScore.addScore(spotScore);
         }
         endGame();
     }
 
     private void endGame(){
         System.out.println("GAME OVER");
-        int Player temp;
+        Player temp;
         for (int i=0; i< playersConnected.size(); i++)
             for (int j=0; j< playersConnected.size(); j++){
-                if(playersConnected.get(j).score < playersConnected.get(j+1).score){
+                if(playersConnected.get(j).myScore.getScore() < playersConnected.get(j+1).myScore.getScore()){
                     temp = playersConnected.get(j);
-                    playersConnected.get(j) = playersConnected.get(j+1);
-                    playersConnected.get(j+1) = temp;
+                    playersConnected.set(j,playersConnected.get(j+1));
+                    playersConnected.set(j+1, temp);
                 }
             }
         for(int i=0; i< playersConnected.size(); i++){

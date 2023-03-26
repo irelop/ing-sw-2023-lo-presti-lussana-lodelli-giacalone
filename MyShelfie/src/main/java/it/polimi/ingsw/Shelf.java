@@ -34,7 +34,7 @@ public class Shelf {
     }
 
     //OVERVIEW: controllo numero tessere dello stesso colore (color) adiacenti e restituisce il totale
-    private int spotCheck(){
+    public int spotCheck(){
         int score=0;
         int dimension;
         for(int r=0; r<5; r++)
@@ -89,14 +89,14 @@ public class Shelf {
     }
 
     //OVERVIEW: controlla se la libreria è piena
-    private boolean isShelfFull(){
+    public boolean isShelfFull(){
         for(int c=0; c<6; c++)
             if(grid[0][c]==Color.BLANK) return false;
         return true;
     }
 
     //OVERVIEW: restituisce il numero massimo di tessere pescabili in tutta la shelf
-    private int maxTilesPickable(){
+    public int maxTilesPickable(){
         int freeSpace=0;
         int r;
         for(int c=0; c<6; c++) {

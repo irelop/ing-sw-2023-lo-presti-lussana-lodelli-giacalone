@@ -6,4 +6,5 @@ public class Tile {
     public Tile(Color color){
         this.tileColor = color;
     }
+
 }
