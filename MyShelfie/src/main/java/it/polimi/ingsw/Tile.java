@@ -7,4 +7,7 @@ public class Tile {
         this.tileColor = color;
     }
 
+    public Color getTileColor() {
+        return tileColor;
+    }
 }

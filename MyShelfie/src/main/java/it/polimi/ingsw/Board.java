@@ -24,6 +24,10 @@ public class Board {
         return boardInstance;
     }
 
+    public static CommonGoalCard[] getCommonGoalCards() {
+        return commonGoalCards;
+    }
+
     public void initGrid(int numPlayers){
         int r, c, l, x, f, y;
 
