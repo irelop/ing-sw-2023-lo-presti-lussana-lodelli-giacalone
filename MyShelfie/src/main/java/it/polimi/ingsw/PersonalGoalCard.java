@@ -10,6 +10,7 @@ public class PersonalGoalCard {
     private Tile[][] pattern;
     private ArrayList<Integer> availableScore;
 
+    // Bisogna implementare la lettura da file della matrice
     public PersonalGoalCard() {
         // availableScore contains the amount of points gained when the player puts
         // the correct color in the correct position, given by the personal goal card
