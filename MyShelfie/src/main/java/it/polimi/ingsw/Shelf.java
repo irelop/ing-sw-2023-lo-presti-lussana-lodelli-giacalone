@@ -4,18 +4,18 @@ package it.polimi.ingsw;
 import java.util.ArrayList;
 
 public class Shelf {
-    private Color[][] grid;
+    private Tile[][] grid;
     private int[][] beenThere;
 
 
     public Shelf(){
-        this.grid = new Color[6][5];
+        this.grid = new Tile[6][5];
         //l'indice (0,0) è quello della prima cella in alto a sinistra
         this.beenThere = new int[6][5];
 
         for(int r=0; r<6; r++)
             for(int c=0; c<5; c++){
-                grid[r][c] = Color.BLANK;
+                grid[r][c] = Tile.BLANK;
                 beenThere[r][c] = 0;
             }
     }
@@ -26,7 +26,7 @@ public class Shelf {
         if(columnFreeSpace(columnIndex) < littleHand.size()) throw new NotEnoughSpaceInChosenColumnException();
         //controllo se l'indice è corretto e la shelf non è piena prima di chiamare questa funz
         for(int r=5; r>=0; r--){
-            if(grid[r][columnIndex]==Color.BLANK){
+            if(grid[r][columnIndex]== Tile.BLANK){
                 for(int i=0; i<littleHand.size(); i++){ grid[r+i][columnIndex] = littleHand.get(i).getTileColor();}
                 break;
             }
@@ -39,7 +39,7 @@ public class Shelf {
         int dimension;
         for(int r=0; r<5; r++)
             for(int c=0; c<6; c++){
-                if(beenThere[r][c]==0 && !grid[r][c].equals(Color.BLANK)){
+                if(beenThere[r][c]==0 && !grid[r][c].equals(Tile.BLANK)){
                     dimension = spotDimention(grid[r][c],r,c,0);
                     switch(dimension){
                         case 1: break;
@@ -59,23 +59,23 @@ public class Shelf {
 
     //OVERVIEW: conta il numero di celle del colore color adiacenti a partire dalla cella
     // di indice (startRow, startColumn)
-    private int spotDimention(Color color, int startRow, int startColumn, int counter){
+    private int spotDimention(Tile tile, int startRow, int startColumn, int counter){
         beenThere[startRow][startColumn] = 1;
         //right
-        if(startColumn+1<5 && beenThere[startRow][startColumn+1]!=1 && grid[startRow][startColumn+1].equals(color))
-            counter = 1 + spotDimention(color, startRow, startColumn+1, counter);
+        if(startColumn+1<5 && beenThere[startRow][startColumn+1]!=1 && grid[startRow][startColumn+1].equals(tile))
+            counter = 1 + spotDimention(tile, startRow, startColumn+1, counter);
 
         //left
-        if(startColumn-1>=0 && beenThere[startRow][startColumn-1]!=1 && grid[startRow][startColumn-1].equals(color))
-            counter = 1 + spotDimention(color, startRow, startColumn-1, counter);
+        if(startColumn-1>=0 && beenThere[startRow][startColumn-1]!=1 && grid[startRow][startColumn-1].equals(tile))
+            counter = 1 + spotDimention(tile, startRow, startColumn-1, counter);
 
         //down
-        if(startRow+1<6 && beenThere[startRow+1][startColumn]!=1 && grid[startRow+1][startColumn].equals(color))
-            counter = 1 + spotDimention(color, startRow+1, startColumn, counter);
+        if(startRow+1<6 && beenThere[startRow+1][startColumn]!=1 && grid[startRow+1][startColumn].equals(tile))
+            counter = 1 + spotDimention(tile, startRow+1, startColumn, counter);
 
         //up
-        if(startRow-1>=0 && beenThere[startRow-1][startColumn]!=1 && grid[startRow-1][startColumn].equals(color))
-            counter = 1 + spotDimention(color, startRow-1, startColumn, counter);
+        if(startRow-1>=0 && beenThere[startRow-1][startColumn]!=1 && grid[startRow-1][startColumn].equals(tile))
+            counter = 1 + spotDimention(tile, startRow-1, startColumn, counter);
 
         return counter;
     }
@@ -83,7 +83,7 @@ public class Shelf {
     //OVERVIEW: ritorna il numero di celle libere della colonna di indice columnIndex
     private int columnFreeSpace(int columnIndex){
         int r=0;
-        while(grid[r][columnIndex]==Color.BLANK && r<6)
+        while(grid[r][columnIndex]== Tile.BLANK && r<6)
             r++;
         return r;
     }
@@ -91,7 +91,7 @@ public class Shelf {
     //OVERVIEW: controlla se la libreria è piena
     public boolean isShelfFull(){
         for(int c=0; c<6; c++)
-            if(grid[0][c]==Color.BLANK) return false;
+            if(grid[0][c]== Tile.BLANK) return false;
         return true;
     }
 
@@ -101,7 +101,7 @@ public class Shelf {
         int r;
         for(int c=0; c<6; c++) {
             r=0;
-            while (r < 5 && grid[r][c] == Color.BLANK){
+            while (r < 5 && grid[r][c] == Tile.BLANK){
                 r++;
                 if(r==3) return 3;
             }

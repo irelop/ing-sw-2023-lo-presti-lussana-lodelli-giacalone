@@ -13,6 +13,6 @@ public interface StrategyInterface {
      * @return true: if the shelf contains the pattern,
      *         false: otherwise
      */
-    boolean checkPattern(Color[][] shelfSnapshot);
+    boolean checkPattern(Tile[][] shelfSnapshot);
 
 }

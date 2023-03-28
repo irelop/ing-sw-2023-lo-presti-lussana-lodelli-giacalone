@@ -6,7 +6,7 @@ package it.polimi.ingsw;
 
 public class DPatternStrategy implements StrategyInterface{
     @Override
-    public boolean checkPattern(Color[][] shelfSnapshot) {
+    public boolean checkPattern(Tile[][] shelfSnapshot) {
         int numRow = shelfSnapshot.length;
         int numCol = shelfSnapshot[0].length;
 

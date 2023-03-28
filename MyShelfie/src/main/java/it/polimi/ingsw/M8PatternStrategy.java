@@ -6,11 +6,11 @@ package it.polimi.ingsw;
 
 public class M8PatternStrategy implements StrategyInterface {
     @Override
-    public boolean checkPattern(Color[][] shelfSnapshot) {
+    public boolean checkPattern(Tile[][] shelfSnapshot) {
         int cont = 0;
         final int maxc = shelfSnapshot.length-1;
         final int maxr = shelfSnapshot[0].length-1;
-        for (Color c : Color.values()) {
+        for (Tile c : Tile.values()) {
             for (int i = 0; i < maxr; i++) {
                 for (int j = 0; j < maxc; j++) {
                     if (shelfSnapshot[i][j] == c)

@@ -7,13 +7,13 @@ public class Board {
     protected final static int MAX_DRAWABLE_COMMON = 2;
     private static Board boardInstance;
     private static Bag bag;
-    private static Color[][] boardGrid;
+    private static Tile[][] boardGrid;
     private static CommonGoalCard[] commonGoalCards;
 
     public static Board getBoardInstance(){
         if(boardInstance == null){
             boardInstance = new Board();
-            boardGrid = new Color[MAX_ROWS][MAX_COLUMNS];
+            boardGrid = new Tile[MAX_ROWS][MAX_COLUMNS];
             bag = new Bag();
             for(int i=0; i<MAX_DRAWABLE_COMMON;i++){
                 commonGoalCards[i] = CommonGoalDeck.drawCommon();
@@ -37,8 +37,8 @@ public class Board {
         }
 
 
-        boardGrid[0][4] = Color.BLANK;
-        boardGrid[8][4] = Color.BLANK;
+        boardGrid[0][4] = Tile.BLANK;
+        boardGrid[8][4] = Tile.BLANK;
 
         r = 1;
         c = 3;
@@ -49,8 +49,8 @@ public class Board {
         while(r<=4){
             x = c;
             while(x<=l){
-                boardGrid[r][x] = Color.BLANK;
-                boardGrid[f][x] = Color.BLANK;
+                boardGrid[r][x] = Tile.BLANK;
+                boardGrid[f][x] = Tile.BLANK;
                 x++;
             }
             c--;
@@ -79,9 +79,9 @@ public class Board {
             y = l;
             while(x<=l){
                 if(!(r==1 && x==5) && !(r==2 && (x==2 || x==6)) && !(r==3 && x==1) && !(r==4 && (x==8 || x==0))){
-                    boardGrid[r][x] = Color.BLANK;
+                    boardGrid[r][x] = Tile.BLANK;
                     if(f!=4)
-                        boardGrid[f][y] = Color.BLANK;
+                        boardGrid[f][y] = Tile.BLANK;
                 }
                 x++;
                 y--;
@@ -94,8 +94,8 @@ public class Board {
     }
 
     private void init3Players() {
-        boardGrid[0][3] = Color.BLANK;
-        boardGrid[8][5] = Color.BLANK;
+        boardGrid[0][3] = Tile.BLANK;
+        boardGrid[8][5] = Tile.BLANK;
 
         int r, c, l, f, x, y;
 
@@ -107,15 +107,15 @@ public class Board {
             x = c;
             y = l;
             if (r == 3) {
-                boardGrid[r][l + 1] = Color.BLANK;
-                boardGrid[f][c - 1] = Color.BLANK;
+                boardGrid[r][l + 1] = Tile.BLANK;
+                boardGrid[f][c - 1] = Tile.BLANK;
             }
             while (x <= l) {
                 if (!(r == 1 && x == 5) && !(r == 3 && x == 1) && !(r == 4 && (x == 8 || x == 0))) {
-                    boardGrid[r][x] = Color.BLANK;
+                    boardGrid[r][x] = Tile.BLANK;
 
                     if (f != 4) {
-                        boardGrid[f][y] = Color.BLANK;
+                        boardGrid[f][y] = Tile.BLANK;
                     }
                 }
                 x++;
@@ -130,8 +130,8 @@ public class Board {
 
     private void init4Players() {
         int r, c, l, f, x, y;
-        boardGrid[0][3] = Color.BLANK;
-        boardGrid[8][5] = Color.BLANK;
+        boardGrid[0][3] = Tile.BLANK;
+        boardGrid[8][5] = Tile.BLANK;
         r = 0;
         c = 4;
         l = 4;
@@ -140,12 +140,12 @@ public class Board {
             x = c;
             y = l;
             if (r == 3) {
-                boardGrid[r][l + 1] = Color.BLANK;
-                boardGrid[f][c - 1] = Color.BLANK;
+                boardGrid[r][l + 1] = Tile.BLANK;
+                boardGrid[f][c - 1] = Tile.BLANK;
             }
             while (x <= l) {
-                boardGrid[r][x] = Color.BLANK;
-                boardGrid[f][y] = Color.BLANK;
+                boardGrid[r][x] = Tile.BLANK;
+                boardGrid[f][y] = Tile.BLANK;
                 x++;
                 y--;
             }
