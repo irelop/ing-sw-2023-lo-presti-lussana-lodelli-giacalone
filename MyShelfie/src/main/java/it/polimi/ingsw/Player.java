@@ -1,4 +1,6 @@
 package it.polimi.ingsw;
+import it.polimi.ingsw.Exceptions.InvalidTileIndexInLittleHandException;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -63,7 +65,6 @@ public class Player {
 
         int tilesNumber = chosenTiles.size();
         int[] choices = new int[tilesNumber];
-        Scanner scanner = new Scanner(System.in);
 
         System.out.print("Your tiles are: ");
         for(int i=0; i<tilesNumber; i++){
@@ -71,9 +72,12 @@ public class Player {
         }
 
         System.out.println("Choose the order (the first one is the lowest):");
-        for(int i=0; i<tilesNumber; i++){
-            choices[i] = scanner.nextInt();
+        try{
+            getTiles(choices);
+        }catch(InvalidTileIndexInLittleHandException e){
+            System.out.println(e);
         }
+
 
         for(int i=0; i<tilesNumber; i++){
             for(int j=0; j<tilesNumber; j++){
@@ -85,5 +89,20 @@ public class Player {
             }
         }
 
+    }
+
+    private void getTiles(int choices[]) throws InvalidTileIndexInLittleHandException {
+
+        Scanner scanner = new Scanner(System.in);
+
+        for(int i=0; i<choices.length; i++){
+            choices[i] = scanner.nextInt();
+            if(choices[i]<0 || choices[i]> choices.length) throw new InvalidTileIndexInLittleHandException(choices.length);
+        }
+        for(int i=0; i< choices.length-1; i++){
+            for(int j=i+1; j<choices.length; j++){
+                if(choices[i]==choices[j]) throw new InvalidTileIndexInLittleHandException(choices.length);
+            }
+        }
     }
 }
