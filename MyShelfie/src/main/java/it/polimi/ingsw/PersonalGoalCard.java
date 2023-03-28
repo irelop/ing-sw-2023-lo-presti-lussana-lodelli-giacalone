@@ -5,8 +5,8 @@ import java.util.Arrays;
 
 public class PersonalGoalCard {
 
-    private final static int maxr = 5;
-    private final static int maxc = 6;
+    private final static int maxr = 6;
+    private final static int maxc = 5;
     private Tile[][] pattern;
     private ArrayList<Integer> availableScore;
 
