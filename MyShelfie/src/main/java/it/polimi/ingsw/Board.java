@@ -1,5 +1,12 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.Exceptions.EmptyCellException;
+import it.polimi.ingsw.Exceptions.InvalidDirectionException;
+import it.polimi.ingsw.Exceptions.OutOfBoardException;
+import it.polimi.ingsw.Exceptions.TooManyTilesException;
+
+import java.util.ArrayList;
+
 //OVERVIEW: Draft della classe BOARD: mancano i metodi per fillare e check di adiacenza
 public class Board {
     protected final static int MAX_ROWS = 9;
@@ -156,6 +163,51 @@ public class Board {
         }
     }
 
+
+    //gestire meglio le eccezioni!!!!!!!
+    public ArrayList<Tile> pick (int maxTilesPickable) throws TooManyTilesException, OutOfBoardException, AdjacentException, InvalidDirectionException, EmptyCellException {
+        int[]  position;
+        int numberOfTiles;
+        char direction;
+        ArrayList<Tile> chosenTiles;
+
+        position = new int[2];
+        try{
+            position = getStartingPosition();
+        }catch(OutOfBoardException e1){
+            System.out.println(e1);
+        }catch(AdjacentException e2){
+            System.out.println(e2);
+        }
+
+        try{
+            direction = getDirection();
+        }catch(InvalidDirectionException e){
+            System.out.println(e);
+        }
+
+        try{
+            numberOfTiles = getNumberOfTile(maxTilesPickable);
+        }catch(TooManyTilesException e){
+            System.out.println(e);
+        }
+
+        chosenTiles = new ArrayList<Tile>();
+        int r = position[0], c = position[1];
+        for(int i=0; i<numberOfTiles; i++){
+            chosenTiles.add(boardGrid[r][c]);
+            boardGrid[r][c] = Tile.BLANK;
+            if(direction == 'n')
+                r--;
+            else if(direction == 's')
+                r++;
+            else if(direction == 'e')
+                c++;
+            else
+                c--;
+        }
+
+    }
 
 
 }
