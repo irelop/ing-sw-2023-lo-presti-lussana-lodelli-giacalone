@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.PatternStrategy.*;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -9,11 +11,16 @@ import java.util.Random;
  */
 public class CommonGoalDeck {
     private static ArrayList<CommonGoalCard> commonGoalCardDeck;
-    private final static int MAX_SIZE = 2;
+    private final static int MAX_SIZE = 12;
 
 
-    public CommonGoalDeck(ArrayList<CommonGoalCard> commonGoalCardDeck) {
-        commonGoalCardDeck = commonGoalCardDeck;
+    public CommonGoalDeck() {
+        commonGoalCardDeck = new ArrayList<>();
+        commonGoalCardDeck.add(new CommonGoalCard(new M8PatternStrategy()));
+        commonGoalCardDeck.add(new CommonGoalCard(new APatternStrategy()));
+        commonGoalCardDeck.add(new CommonGoalCard(new XPatternStrategy()));
+        //lo andiamo a riempire con il resto delle strategie
+
     }
     //method needed to be fixed: facciamo il singolo pick o direttamente i due pick delle carte qui?
     public static CommonGoalCard drawCommon() {
