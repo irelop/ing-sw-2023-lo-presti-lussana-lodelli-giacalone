@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.Exceptions;
 
 public class InvalidChoiceException extends Exception {
     public InvalidChoiceException(boolean exCase) {

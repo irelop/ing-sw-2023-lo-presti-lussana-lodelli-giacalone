@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.Exceptions.NotEnoughSpaceInChosenColumnException;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 

@@ -1,6 +1,8 @@
 package it.polimi.ingsw;
 
 
+import it.polimi.ingsw.Exceptions.NotEnoughSpaceInChosenColumnException;
+
 import java.util.ArrayList;
 
 public class Shelf {
@@ -22,7 +24,7 @@ public class Shelf {
 
     //OVERVIEW: inserimento della/e tessera/e selezionata/e (dentro il vettore littleHand)
     // nella propria libreria nella colonna di indice columnIndex
-    public void insert(int columnIndex, ArrayList<Tile> littleHand) throws NotEnoughSpaceInChosenColumnException{
+    public void insert(int columnIndex, ArrayList<Tile> littleHand) throws NotEnoughSpaceInChosenColumnException {
         if(columnFreeSpace(columnIndex) < littleHand.size()) throw new NotEnoughSpaceInChosenColumnException();
         //controllo se l'indice è corretto e la shelf non è piena prima di chiamare questa funz
         for(int r=5; r>=0; r--){

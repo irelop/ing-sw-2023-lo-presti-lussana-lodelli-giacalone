@@ -1,4 +1,7 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.PatternStrategy;
+
+import it.polimi.ingsw.StrategyInterface;
+import it.polimi.ingsw.Tile;
 
 /**
  * a class implementing the - 8 cells of the same color - pattern strategy of the corresponding common goal card.
