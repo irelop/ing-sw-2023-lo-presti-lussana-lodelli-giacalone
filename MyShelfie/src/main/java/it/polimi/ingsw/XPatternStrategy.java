@@ -9,8 +9,8 @@ public class XPatternStrategy implements StrategyInterface {
         int numRow = shelfSnapshot.length;
         int numCol = shelfSnapshot[0].length;
 
-        for(int i=0; i<numRow; i++){
-            for(int j=0; j<numCol;j++){
+        for(int i=0; i<numRow - 2; i++){
+            for(int j=0; j<numCol - 2;j++){
                if(shelfSnapshot[i][j]==shelfSnapshot[i][j+2] && shelfSnapshot[i][j]==shelfSnapshot[i+1][j+1] && shelfSnapshot[i][j]==shelfSnapshot[i+2][j] && shelfSnapshot[i][j]==shelfSnapshot[i+2][j+2])
                    return true;
             }
