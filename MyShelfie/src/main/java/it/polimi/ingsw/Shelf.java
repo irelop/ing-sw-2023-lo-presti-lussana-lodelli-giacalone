@@ -29,7 +29,7 @@ public class Shelf {
         //controllo se l'indice è corretto e la shelf non è piena prima di chiamare questa funz
         for(int r=5; r>=0; r--){
             if(grid[r][columnIndex]== Tile.BLANK){
-                for(int i=0; i<littleHand.size(); i++){ grid[r+i][columnIndex] = littleHand.get(i).getTileColor();}
+                for(int i=0; i<littleHand.size(); i++){ grid[r+i][columnIndex] = littleHand.get(i);}
                 break;
             }
         }

@@ -55,6 +55,7 @@ public class Player {
 
     //controllare che l'utente inserisca il numero corretto
     public void orderTiles(ArrayList<Tile> chosenTiles){
+        // se sceglie una tessera metto solo quella in littleHand
         if(chosenTiles.size() == 1){
             this.littleHand.add(chosenTiles.get(0));
             return;
