@@ -49,10 +49,10 @@ public class Game {
 
         //checking goals and adding score if necessary
         playerPlaying.myScore.addScore(playerPlaying.personalGoalCard.checkPersonalGoal(playerPlaying.myShelfie));
-        if(!playerPlaying.isCommonGoalAchived(0))
-            playerPlaying.myScore.addScore(Board.commonGoalCards[0].checkPattern());
-        if(!playerPlaying.isCommonGoalAchived(1))
-            playerPlaying.myScore.addScore(Board.commonGoalCards[1].checkPattern());
+        if(!playerPlaying.isCommonGoalAchived(0) && Board.getCommonGoalCard(0).checkPattern(playerPlaying.myShelfie))
+            playerPlaying.myScore.addScore(Board.getCommonGoalCard(0).addScore());
+        if(!playerPlaying.isCommonGoalAchived(1)  && Board.getCommonGoalCard(1).checkPattern(playerPlaying.myShelfie))
+            playerPlaying.myScore.addScore(Board.getCommonGoalCard(1).addScore());
 
         //checking if a player's shelf is full,
         // if true add +1pt and set the last lap

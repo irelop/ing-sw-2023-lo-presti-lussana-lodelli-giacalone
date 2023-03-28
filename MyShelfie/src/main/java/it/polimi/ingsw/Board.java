@@ -1,6 +1,5 @@
 package it.polimi.ingsw;
 
-import java.util.ArrayList;
 //OVERVIEW: Draft della classe BOARD: mancano i metodi per fillare e check di adiacenza
 public class Board {
     protected final static int MAX_ROWS = 9;
@@ -17,7 +16,7 @@ public class Board {
             boardGrid = new Color[MAX_ROWS][MAX_COLUMNS];
             bag = new Bag();
             for(int i=0; i<MAX_DRAWABLE_COMMON;i++){
-                commonGoalCards[i] = CommonGoalCardDeck.drawCommon();
+                commonGoalCards[i] = CommonGoalDeck.drawCommon();
             }
         }
 
