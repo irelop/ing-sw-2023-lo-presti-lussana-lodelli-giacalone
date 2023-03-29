@@ -14,7 +14,7 @@ public class V4UPatternStrategy implements StrategyInterface {
         int numRow = shelfSnapshot.length;
         int numCol = shelfSnapshot[0].length;
         int contatore = 0;
-        int[] found = new int[4];
+        int[] found = new int[numCol];
 
         //set the array with inexistent index of the shelf
         Arrays.fill(found, -4);
