@@ -19,10 +19,12 @@ public class CommonGoalDeck {
         commonGoalCardDeck.add(new CommonGoalCard(new M8PatternStrategy()));
         commonGoalCardDeck.add(new CommonGoalCard(new APatternStrategy()));
         commonGoalCardDeck.add(new CommonGoalCard(new XPatternStrategy()));
+        commonGoalCardDeck.add(new CommonGoalCard((new V4UPatternStrategy() )));
+        commonGoalCardDeck.add(new CommonGoalCard(new PPatternStrategy()));
         //lo andiamo a riempire con il resto delle strategie
 
     }
-    //method needed to be fixed: facciamo il singolo pick o direttamente i due pick delle carte qui?
+
     public static CommonGoalCard drawCommon() {
         Random random = new Random();
         int idx = random.nextInt(commonGoalCardDeck.size());
