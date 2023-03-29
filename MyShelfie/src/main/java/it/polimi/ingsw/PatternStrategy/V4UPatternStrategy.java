@@ -16,10 +16,10 @@ public class V4UPatternStrategy implements StrategyInterface {
         int contatore = 0;
         int[] found = new int[4];
 
-        //set the array with impossibol index of the shelf
+        //set the array with inexistent index of the shelf
         Arrays.fill(found, -4);
 
-        //check if there is a pattern of 4 vertical tile and it hasn't beed already counted
+        //check if there is a pattern of 4 vertical tile and it hasn't been already counted
         for(int i=0; i<numRow-3; i++)
             for(int j=0; j<numCol; j++){
                 if(shelfSnapshot[i][j] == shelfSnapshot[i+1][j] &&
