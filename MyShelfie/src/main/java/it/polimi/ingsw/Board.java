@@ -210,4 +210,74 @@ public class Board {
     }
 
 
+
+
+
+
+    public void initGridParabolic(int numPlayers){
+        int max_col = MAX_COLUMNS, max_raw = MAX_ROWS;
+        for(int i=0; i<MAX_ROWS; i++) {
+            for (int j = 0; j < MAX_COLUMNS; j++) {
+                boardGrid[i][j] = null;
+            }
+        }
+        boardGrid[MAX_ROWS/2][MAX_COLUMNS/2] = Tile.BLANK;
+
+        switch(numPlayers){
+            case 2: init2PlayesParabolic();
+            case 3: init3PlayesParabolic();
+            case 4: init4PlayesParabolic();
+        }
+
+        for(int i=0; i<(MAX_ROWS/2)+1; i++)
+            for(int j=0; j<MAX_COLUMNS/2; j++){
+                boardGrid[j][MAX_COLUMNS-1-i]=boardGrid[i][j];
+                boardGrid[MAX_ROWS-1-j][i]=boardGrid[i][j];
+                boardGrid[MAX_ROWS-1-i][MAX_COLUMNS-1-j]=boardGrid[i][j];
+            }
+    }
+
+    private void init2PlayesParabolic(){
+        int x;
+        for(int i=3; i<MAX_ROWS-1; i++){
+            if(i!=3){
+                x = (int) Math.pow(1.24,i);
+                int j=0;
+                while(j<x-1){
+                    boardGrid[i-(MAX_ROWS/2)-1][(MAX_COLUMNS/2)-1-j] = Tile.BLANK;
+                    j++;
+                }
+            }
+        }
+    }
+
+    private void init3PlayesParabolic(){
+        int x;
+        for(int i=3; i<MAX_ROWS-1; i++){
+            if(i!=3){
+                x = (int) (0+03 + Math.pow(1.256,i));
+                int j=0;
+                while(j<x-1){
+                    boardGrid[i-(MAX_ROWS/2)-1][(MAX_COLUMNS/2)-1-j] = Tile.BLANK;
+                    j++;
+                }
+            }
+        }
+    }
+
+    private void init4PlayesParabolic(){
+        int x;
+        for(int i=3; i<MAX_ROWS-1; i++){
+            if(i!=3){
+                x = (int) Math.pow(1.27,i);
+                int j=0;
+                while(j<x-1){
+                    boardGrid[i-(MAX_ROWS/2)-1][(MAX_COLUMNS/2)-1-j] = Tile.BLANK;
+                    j++;
+                }
+            }
+        }
+    }
+
+
 }
