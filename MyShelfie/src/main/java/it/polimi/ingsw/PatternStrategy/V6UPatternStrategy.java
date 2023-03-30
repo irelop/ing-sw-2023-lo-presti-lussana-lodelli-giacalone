@@ -22,7 +22,7 @@ public class V6UPatternStrategy implements StrategyInterface {
                 tmp[i] = shelfSnapshot[i][j];
             }
 
-            if(Arrays.stream(tmp).distinct().count()==6) counter++;
+            if(Arrays.stream(tmp).filter(x->x!=Tile.BLANK).distinct().count()==6) counter++;
         }
 
         if(counter==2) return true;
