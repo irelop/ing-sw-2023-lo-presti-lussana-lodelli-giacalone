@@ -24,7 +24,7 @@ public class V6DPatternStrategy implements StrategyInterface {
             //first I need to check if there are 6 tiles
             if(Arrays.stream(tmp).filter(x->x!=Tile.BLANK).count()==6) {
                 //then I'll check the types
-                if (Arrays.stream(tmp).filter(x -> x != Tile.BLANK).distinct().count() < 3) counter++;
+                if (Arrays.stream(tmp).filter(x -> x != Tile.BLANK).distinct().count() <= 3) counter++;
             }
         }
 
