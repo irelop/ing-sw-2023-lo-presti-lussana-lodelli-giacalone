@@ -1,7 +1,14 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.Exceptions.NotEnoughSpaceInChosenColumnException;
+/**
+ * Game class: this class manages the single game, composed by 2 to 4 players, a board,
+ * a deck of common goal cards and a deck of personal goal card. This class manages the turn of every single
+ * player and the end of the game.
+ *
+ * @authors Matteo Lussana, Irene Lo Presti
+ */
 
+import it.polimi.ingsw.Exceptions.NotEnoughSpaceInChosenColumnException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -12,7 +19,14 @@ public class Game {
     private CommonGoalDeck commonDeck;
     private Board board;
 
-
+    /**
+     * OVERVIEW: Constructor: it inizialises the ArrayList of players and creates the two decks and the board.
+     * @see Player
+     * @see Board
+     * @see PersonalGoalDeck
+     * @see CommonGoalDeck
+     * @param playersConnected
+     */
     public Game(ArrayList<Player> playersConnected){
         //fill the arrayList of players
         this.playersConnected = new ArrayList<Player>();
@@ -25,15 +39,25 @@ public class Game {
         this.board = new Board();
     }
 
-    //OVERVIEW: manage all the moves of a single player during his turn
+    /**
+     * OVERVIEW: it manages all the moves of a single player during his turn:
+     *          1) find max pickable tiles by the player
+     *          2) the player chooses the tiles from the board
+     *          3) copy of the tiles chosen in the player littleHand already in the correct order
+     *          4) check of the goals and adding score if necessary
+     *          5) check if a player's shelf is full, if it is the method adds one point
+     * @see Player
+     * @see Board
+     * @param playerPlaying
+     */
     private void turn(Player playerPlaying){
-        //call  the maxpickable tiles by the player
+        // find max pickable tiles by the player
         int maxTilesPickable = playerPlaying.myShelfie.maxTilesPickable();
 
-        // the player choose the tiles from the board
+        // the player chooses the tiles from the board
         ArrayList<Tile> chosenTiles = board.pick(maxTilesPickable);
 
-        //copy the tiles choosen in the player littleHand already in the correct order
+        //copy of the tiles chosen in the player littleHand already in the correct order
         playerPlaying.orderTiles(chosenTiles);
 
         do{
@@ -64,22 +88,36 @@ public class Game {
         }
     }
 
+    /**
+     * OVERVIEW: this method calls the method drawPersonal for each player, so every player has his / her own
+     * personal goal card
+     * @see Player
+     * @see PersonalGoalDeck
+     */
     private void dealPersonalCards(){
         for(Player player : playersConnected){
             player.setCard(personalDeck.drawPersonal());
         }
     }
 
+    /**
+     * OVERVIEW: this method gives, randomly, a chair to one player
+     */
     private void setChair(){
         int index = (int) (Math.random()%playersConnected.size());
         playersConnected.get(index).setChair();
     }
+
+    /**
+     * OVERVIEW: this method manages the game: a player can play his/her turn if the match is not over
+     *       or if that is the last lap
+     */
     private void manageTurn(){
         setChair();
         dealPersonalCards();
         while(!isOver){
             for (Player player : playersConnected) {
-                //a player can plays his turn if the match is not over
+                //a player can play his/her turn if the match is not over
                 // or if that is the last lap
                 if(!isOver || !player.hasChair())
                     turn(player);
@@ -92,6 +130,9 @@ public class Game {
         endGame();
     }
 
+    /**
+     * OVERVIEW: this method prints the leaderboard of the game (nickname and score for each player)
+     */
     private void endGame(){
         System.out.println("GAME OVER");
         Player temp;

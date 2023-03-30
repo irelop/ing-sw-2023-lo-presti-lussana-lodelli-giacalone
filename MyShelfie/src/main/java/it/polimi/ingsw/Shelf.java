@@ -89,8 +89,6 @@ public class Shelf {
      * @see Tile
      * @return counter >= 0
      */
-    //OVERVIEW: conta il numero di celle del colore color adiacenti a partire dalla cella
-    // di indice (startRow, startColumn)
     private int spotDimention(Tile tile, int startRow, int startColumn, int counter){
         beenThere[startRow][startColumn] = 1;
         //right
@@ -112,8 +110,12 @@ public class Shelf {
         return counter;
     }
 
-    //OVERVIEW: ritorna il numero di celle libere della colonna di indice columnIndex
-
+    /**
+     * OVERVIEW: this method counts the number of free cell in the column with the index 'columnIndex'
+     * @see Tile
+     * @param columnIndex
+     * @return r >= 0
+     */
     private int columnFreeSpace(int columnIndex){
         int r=0;
         while(grid[r][columnIndex]== Tile.BLANK && r<6)
@@ -121,14 +123,23 @@ public class Shelf {
         return r;
     }
 
-    //OVERVIEW: controlla se la libreria è piena
+    /**
+     * OVERVIEW: this method checks if the shelf is completely full
+     * @see Tile
+     * @return true if the shelf is full, false otherwise
+     */
     public boolean isShelfFull(){
         for(int c=0; c<6; c++)
             if(grid[0][c]== Tile.BLANK) return false;
         return true;
     }
 
-    //OVERVIEW: restituisce il numero massimo di tessere pescabili in tutta la shelf
+    /**
+     * OVERVIEW: it returns the maximum number of tiles that the player can pick from the board. For
+     * example if all the columns have 2 free cells, the player can pick only 2 tiles.
+     * @see Tile
+     * @return freeSpace >= 1 (not zero because it would mean that the shelf is full)
+     */
     public int maxTilesPickable(){
         int freeSpace=0;
         int r;
