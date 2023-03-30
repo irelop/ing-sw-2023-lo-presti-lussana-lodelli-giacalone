@@ -113,6 +113,7 @@ public class Shelf {
     }
 
     //OVERVIEW: ritorna il numero di celle libere della colonna di indice columnIndex
+
     private int columnFreeSpace(int columnIndex){
         int r=0;
         while(grid[r][columnIndex]== Tile.BLANK && r<6)
