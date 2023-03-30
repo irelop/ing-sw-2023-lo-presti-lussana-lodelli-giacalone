@@ -1,18 +1,29 @@
 package it.polimi.ingsw;
 
+/**
+ * Shelf Class: this class manages each player's library, in particular it allows the insertion of new tiles
+ * and counts the adjacent tiles of the same color returning the final score
+ *
+ * @authors Irene Lo Presti, Matteo Lussana
+ */
 
 import it.polimi.ingsw.Exceptions.NotEnoughSpaceInChosenColumnException;
-
 import java.util.ArrayList;
 
 public class Shelf {
     private Tile[][] grid;
     private int[][] beenThere;
 
-
+    /**
+     * OVERVIEW: Constructor: it creates grid that is a matrix 6x5 of tiles, that represents the shelf,
+     * initializing all its cell to BLANK (because the shelf is initially empty). It also creates
+     * beenThere that is a matrix 6x5 of int that used to control the adjacent tiles of the same color.
+     *
+     * @see Tile
+     */
     public Shelf(){
         this.grid = new Tile[6][5];
-        //l'indice (0,0) è quello della prima cella in alto a sinistra
+        //the index (0;0) indicates the first cell top left
         this.beenThere = new int[6][5];
 
         for(int r=0; r<6; r++)
@@ -22,11 +33,17 @@ public class Shelf {
             }
     }
 
-    //OVERVIEW: inserimento della/e tessera/e selezionata/e (dentro il vettore littleHand)
-    // nella propria libreria nella colonna di indice columnIndex
+    /**
+     * OVERVIEW: this method takes the tiles in the player's hand (lttleHand), that are already in the
+     * right order, and puts them in the player's shelf. If the players chooses a column that has not
+     * enough free cells, this method throws NotEnoughSpaceInChosenColumnException
+     * @param columnIndex
+     * @param littleHand
+     * @see Player
+     * @throws NotEnoughSpaceInChosenColumnException
+     */
     public void insert(int columnIndex, ArrayList<Tile> littleHand) throws NotEnoughSpaceInChosenColumnException {
         if(columnFreeSpace(columnIndex) < littleHand.size()) throw new NotEnoughSpaceInChosenColumnException();
-        //controllo se l'indice è corretto e la shelf non è piena prima di chiamare questa funz
         for(int r=5; r>=0; r--){
             if(grid[r][columnIndex]== Tile.BLANK){
                 for(int i=0; i<littleHand.size(); i++){ grid[r+i][columnIndex] = littleHand.get(i);}
@@ -35,7 +52,11 @@ public class Shelf {
         }
     }
 
-    //OVERVIEW: controllo numero tessere dello stesso colore (color) adiacenti e restituisce il totale
+    /**
+     * OVERVIEW: this methods checks how many adiancent tiles of the same color there are (calling the
+     * spotDimention method) and returns the right score
+     * @return score >= 0
+     */
     public int spotCheck(){
         int score=0;
         int dimension;
@@ -59,6 +80,15 @@ public class Shelf {
         return score;
     }
 
+    /**
+     * OVERVIEW: recursive function to count the adjacent tiles of the same color
+     * @param tile
+     * @param startRow
+     * @param startColumn
+     * @param counter
+     * @see Tile
+     * @return counter >= 0
+     */
     //OVERVIEW: conta il numero di celle del colore color adiacenti a partire dalla cella
     // di indice (startRow, startColumn)
     private int spotDimention(Tile tile, int startRow, int startColumn, int counter){
@@ -83,6 +113,7 @@ public class Shelf {
     }
 
     //OVERVIEW: ritorna il numero di celle libere della colonna di indice columnIndex
+
     private int columnFreeSpace(int columnIndex){
         int r=0;
         while(grid[r][columnIndex]== Tile.BLANK && r<6)

@@ -19,7 +19,7 @@ public class PersonalGoalDeck {
         }
     }
 
-    public PersonalGoalCard draw() {
+    public PersonalGoalCard drawPersonal() {
         Random random = new Random();
         int idx = random.nextInt(personalGoalCardDeck.size());
         return personalGoalCardDeck.get(idx);
