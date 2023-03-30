@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
-
+/**
+ *
+ */
 public class Score {
     private int score;
 
