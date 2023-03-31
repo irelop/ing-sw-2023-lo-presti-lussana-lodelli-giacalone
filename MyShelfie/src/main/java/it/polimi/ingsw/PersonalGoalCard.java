@@ -22,8 +22,6 @@ public class PersonalGoalCard {
         availableScore = new ArrayList<>(Arrays.asList(1,1,2,2,3,3));
         pattern = new Tile[maxr][maxc];
 
-        ReadFileByLines reader = new ReadFileByLines();
-        reader.readFrom("PersonalGoalCards.txt");
         for (int i = 0; i < maxr; i++) {
 
             String row = ReadFileByLines.getLine();

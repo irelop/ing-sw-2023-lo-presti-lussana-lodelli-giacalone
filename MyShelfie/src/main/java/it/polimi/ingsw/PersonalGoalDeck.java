@@ -14,6 +14,10 @@ public class PersonalGoalDeck {
 
     public PersonalGoalDeck() {
         personalGoalCardDeck = new ArrayList<>();
+
+        ReadFileByLines reader = new ReadFileByLines();
+        reader.readFrom("PersonalGoalCards.txt");
+
         for (int i = 0; i < MAX_SIZE; i++) {
             personalGoalCardDeck.add(new PersonalGoalCard());
         }
