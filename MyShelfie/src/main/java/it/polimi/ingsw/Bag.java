@@ -14,7 +14,7 @@ public class Bag {
 
     public Bag(){
         bag = new HashMap<>();
-        for(int i = 0; i< Tile.values().length; i++){
+        for(int i = 0; i< Tile.values().length -1; i++){
             bag.put(Tile.values()[i],MAX_TILES);
         }
     }
