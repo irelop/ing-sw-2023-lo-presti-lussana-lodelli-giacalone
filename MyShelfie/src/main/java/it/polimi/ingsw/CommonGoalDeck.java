@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Draft of class CommonGoalCardDeck: this version wraps the base structure and a method that allows to randomly
- * draw a common goal card among the possible ones.
+ * CommonGoalDeck class: this class represent the set of the playable common goal cards of the game, providing the
+ * necessary functions for a random draw.
+ *
+ * @author Andrea Giacalone
  */
 public class CommonGoalDeck {
     private static ArrayList<CommonGoalCard> commonGoalCardDeck;
-    private final static int MAX_SIZE = 12;
+    //private final static int MAX_SIZE = 12;
 
 
     public CommonGoalDeck() {
@@ -21,10 +23,14 @@ public class CommonGoalDeck {
         commonGoalCardDeck.add(new CommonGoalCard(new XPatternStrategy()));
         commonGoalCardDeck.add(new CommonGoalCard((new V4UPatternStrategy() )));
         commonGoalCardDeck.add(new CommonGoalCard(new PPatternStrategy()));
-        //lo andiamo a riempire con il resto delle strategie
+
 
     }
 
+    /**
+     * OVERVIEW: this method allows the draw of a common goal card, as specified by the game rules.
+     * @return the drawn common goal card.
+     */
     public static CommonGoalCard drawCommon() {
         Random random = new Random();
         int idx = random.nextInt(commonGoalCardDeck.size());
