@@ -1,0 +1,83 @@
+{Tile.GREEN, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLUE, Tile.BLANK}
+{Tile.BLANK, Tile.PINK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.LIGHTBLUE, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.YELLOW}
+{Tile.BLANK, Tile.BLANK, Tile.WHITE, Tile.BLANK, Tile.BLANK}
+
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.LIGHTBLUE, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLUE, Tile.WHITE, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.PINK}
+{Tile.YELLOW, Tile.BLANK, Tile.BLANK, Tile.GREEN, Tile.BLANK}
+
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.PINK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.GREEN, Tile.BLANK, Tile.YELLOW, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.WHITE}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.LIGHTBLUE, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLUE}
+
+{Tile.PINK, Tile.BLANK, Tile.BLUE, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.GREEN}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.WHITE, Tile.BLANK}
+{Tile.BLANK, Tile.YELLOW, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.LIGHTBLUE, Tile.BLANK, Tile.BLANK}
+
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.YELLOW}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.LIGHTBLUE, Tile.BLANK, Tile.BLUE, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.PINK, Tile.BLANK}
+{Tile.BLANK, Tile.WHITE, Tile.GREEN, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.BLUE, Tile.BLANK, Tile.BLANK, Tile.YELLOW, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.PINK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.GREEN, Tile.BLANK, Tile.BLANK, Tile.LIGHTBLUE}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.WHITE, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+
+{Tile.BLANK, Tile.BLANK, Tile.WHITE, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.PINK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLUE, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.LIGHTBLUE, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.YELLOW}
+{Tile.GREEN, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+
+{Tile.BLANK, Tile.BLANK, Tile.PINK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.WHITE, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.YELLOW, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLUE, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.GREEN}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.LIGHTBLUE, Tile.BLANK}
+
+{Tile.BLANK, Tile.BLANK, Tile.YELLOW, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.GREEN, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.WHITE}
+{Tile.BLANK, Tile.LIGHTBLUE, Tile.BLANK, Tile.BLANK, Tile.PINK}
+{Tile.BLUE, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.LIGHTBLUE}
+{Tile.BLANK, Tile.YELLOW, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.WHITE, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.GREEN, Tile.BLANK}
+{Tile.BLANK, Tile.BLUE, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.PINK, Tile.BLANK}
+
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLUE}
+{Tile.BLANK, Tile.GREEN, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.LIGHTBLUE, Tile.BLANK, Tile.BLANK}
+{Tile.PINK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.WHITE, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.YELLOW, Tile.BLANK}
+
+{Tile.BLANK, Tile.BLANK, Tile.LIGHTBLUE, Tile.BLANK, Tile.GREEN}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.WHITE, Tile.BLANK}
+{Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}
+{Tile.BLANK, Tile.YELLOW, Tile.BLANK, Tile.BLUE, Tile.BLANK}
+{Tile.PINK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK}

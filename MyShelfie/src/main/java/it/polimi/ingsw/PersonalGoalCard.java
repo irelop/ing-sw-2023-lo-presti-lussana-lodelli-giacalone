@@ -15,17 +15,27 @@ public class PersonalGoalCard {
 
     // Bisogna implementare la lettura da file della matrice
     public PersonalGoalCard() {
-        /**
-         *  availableScore contains the amount of points gained when the player puts
-         *  the correct color in the correct position, given by the personal goal card
+        /*
+           availableScore contains the amount of points gained when the player puts
+           the correct color in the correct position, given by the personal goal card
          */
         availableScore = new ArrayList<>(Arrays.asList(1,1,2,2,3,3));
         pattern = new Tile[maxr][maxc];
+
+        ReadFileByLines reader = new ReadFileByLines();
+        reader.readFrom("PersonalGoalCards.txt");
         for (int i = 0; i < maxr; i++) {
-            for (int j = 0; j < maxc; j++) {
-                pattern[i][j] = Tile.BLANK;
-            }
+
+            String row = ReadFileByLines.getLine();
+
+            String[] values = row.replaceAll("\\{", "")
+                    .replaceAll("}", "")
+                    .split(", ");
+
+            for (int j = 0; j < maxc; j++)
+                pattern[i][j] = Tile.valueOf(values[j]);
         }
+
     }
 
     /**

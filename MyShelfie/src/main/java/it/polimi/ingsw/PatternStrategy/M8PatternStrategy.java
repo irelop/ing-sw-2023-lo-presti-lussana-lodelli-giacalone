@@ -11,11 +11,11 @@ public class M8PatternStrategy implements StrategyInterface {
     @Override
     public boolean checkPattern(Tile[][] shelfSnapshot) {
         int cont = 0;
-        final int maxr = shelfSnapshot.length-1;
-        final int maxc = shelfSnapshot[0].length-1;
+        final int maxr = shelfSnapshot.length;
+        final int maxc = shelfSnapshot[0].length;
         for (Tile c : Tile.values()) {
-            for (int i = 0; i <= maxr; i++) {
-                for (int j = 0; j <= maxc; j++) {
+            for (int i = 0; i < maxr; i++) {
+                for (int j = 0; j < maxc; j++) {
                     if (shelfSnapshot[i][j] == c && c != Tile.BLANK)
                         cont++;
                     if (cont >= 8) {
