@@ -21,8 +21,15 @@ public class CommonGoalDeck {
         commonGoalCardDeck.add(new CommonGoalCard(new M8PatternStrategy()));
         commonGoalCardDeck.add(new CommonGoalCard(new APatternStrategy()));
         commonGoalCardDeck.add(new CommonGoalCard(new XPatternStrategy()));
-        commonGoalCardDeck.add(new CommonGoalCard((new V4UPatternStrategy() )));
+        commonGoalCardDeck.add(new CommonGoalCard((new V4UPatternStrategy())));
+        commonGoalCardDeck.add(new CommonGoalCard(new V2UPatternStrategy()));
+        commonGoalCardDeck.add(new CommonGoalCard(new V6DPatternStrategy()));
+        commonGoalCardDeck.add(new CommonGoalCard(new V6UPatternStrategy()));
         commonGoalCardDeck.add(new CommonGoalCard(new PPatternStrategy()));
+        commonGoalCardDeck.add(new CommonGoalCard(new O5DPatternStrategy()));
+        commonGoalCardDeck.add(new CommonGoalCard(new O5UPatternStrategy()));
+        commonGoalCardDeck.add(new CommonGoalCard(new Q2UPatternStrategy()));
+        commonGoalCardDeck.add(new CommonGoalCard(new DPatternStrategy()));
 
 
     }
