@@ -16,7 +16,7 @@ public class APatternStrategyTest {
     @Before
     public void setUp() {
         aPatternStrategy = new APatternStrategy();
-        Tile[][] shelf = new Tile[6][5];
+        shelf = new Tile[6][5];
 
         for(int i=0; i<6; i++)
             for(int j=0; j<5; j++)
@@ -29,7 +29,7 @@ public class APatternStrategyTest {
     }
 
     @Test
-    public void checkPattern_correctInput_correctOutput() {
+    public void checkPattern_correctInput_correctOutput_true() {
         shelf[0][0] = Tile.BLUE;
         shelf[5][0] = Tile.BLUE;
         shelf[0][4] = Tile.BLUE;
@@ -38,4 +38,24 @@ public class APatternStrategyTest {
         assertTrue(aPatternStrategy.checkPattern(shelf));
 
     }
+
+    @Test
+    public void checkPattern_correctInput_correctOutput_false() {
+
+        shelf[3][3] = Tile.BLUE;
+        assertFalse(aPatternStrategy.checkPattern(shelf));
+
+    }
+
+    @Test
+    public void checkPattern_correctInput_correctOutput_false2() {
+        shelf[0][0] = Tile.BLUE;
+        shelf[5][0] = Tile.BLUE;
+        shelf[0][4] = Tile.YELLOW;
+        shelf[5][4] = Tile.BLUE;
+
+        assertFalse(aPatternStrategy.checkPattern(shelf));
+
+    }
+
 }
