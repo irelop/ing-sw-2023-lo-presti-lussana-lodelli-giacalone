@@ -17,8 +17,6 @@ public class O5DPatternStrategy implements StrategyInterface {
             }
         }
 
-        if (counter == 4) return true;
-
-        return false;
+        return (counter == 4);
     }
 }

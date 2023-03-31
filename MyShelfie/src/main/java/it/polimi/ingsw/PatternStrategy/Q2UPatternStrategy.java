@@ -3,7 +3,6 @@ package it.polimi.ingsw.PatternStrategy;
 import it.polimi.ingsw.StrategyInterface;
 import it.polimi.ingsw.Tile;
 
-import java.util.Arrays;
 
 public class Q2UPatternStrategy implements StrategyInterface {
     @Override
@@ -24,8 +23,6 @@ public class Q2UPatternStrategy implements StrategyInterface {
             }
         }
 
-        if(counter==2) return true;
-
-        return false;
+        return (counter==2);
     }
 }

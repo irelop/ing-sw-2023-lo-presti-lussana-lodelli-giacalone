@@ -29,8 +29,6 @@ public class V2UPatternStrategy implements StrategyInterface {
             }
         }
 
-        if(counter==6) return true;
-
-        return false;
+        return (counter==6);
     }
 }

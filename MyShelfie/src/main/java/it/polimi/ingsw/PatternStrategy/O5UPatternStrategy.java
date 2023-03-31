@@ -16,8 +16,6 @@ public class O5UPatternStrategy implements StrategyInterface {
             if(Arrays.stream(shelfSnapshot[i]).filter(x->x!=Tile.BLANK).distinct().count()>=5) counter++;
         }
 
-        if(counter ==2) return true;
-
-        return false;
+        return (counter ==2);
     }
 }

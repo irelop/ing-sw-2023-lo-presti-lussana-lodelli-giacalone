@@ -25,9 +25,7 @@ public class V6UPatternStrategy implements StrategyInterface {
             if(Arrays.stream(tmp).filter(x->x!=Tile.BLANK).distinct().count()==6) counter++;
         }
 
-        if(counter==2) return true;
-
-        return false;
+        return(counter==2);
 
     }
 }

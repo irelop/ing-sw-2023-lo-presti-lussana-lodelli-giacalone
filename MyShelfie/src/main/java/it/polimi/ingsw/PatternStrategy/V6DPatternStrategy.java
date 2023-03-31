@@ -28,8 +28,6 @@ public class V6DPatternStrategy implements StrategyInterface {
             }
         }
 
-        if(counter==3) return true;
-
-        return false;
+        return (counter==3);
     }
 }
