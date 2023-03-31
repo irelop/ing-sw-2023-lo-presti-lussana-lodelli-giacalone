@@ -12,6 +12,8 @@ public class APatternStrategy implements StrategyInterface {
     public boolean checkPattern(Tile[][] shelfSnapshot) {
         final int maxr = shelfSnapshot.length-1;
         final int maxc = shelfSnapshot[0].length-1;
-        return shelfSnapshot[0][0] == shelfSnapshot[0][maxc] && shelfSnapshot[0][0] == shelfSnapshot[maxr][0] && shelfSnapshot[0][0] == shelfSnapshot[maxr][maxc];
+        if (shelfSnapshot[0][0] != Tile.BLANK)
+            return shelfSnapshot[0][0] == shelfSnapshot[0][maxc] && shelfSnapshot[0][0] == shelfSnapshot[maxr][0] && shelfSnapshot[0][0] == shelfSnapshot[maxr][maxc];
+        else return false;
     }
 }
