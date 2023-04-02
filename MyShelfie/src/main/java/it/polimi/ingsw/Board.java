@@ -295,7 +295,12 @@ public class Board {
         for(int r=0; r<MAX_ROWS; r++)
             for(int c=0; c<MAX_COLUMNS; c++)
                 if(boardGrid[r][c] == Tile.BLANK)
-                    boardGrid[r][c] = bag.draw();
+                    try {
+                        boardGrid[r][c] = bag.draw();
+                    } catch (EmptyBagException ex){
+                        ex.toString();
+                        ex.printStackTrace();
+                    }
     }
 
     public boolean needRefill(){
