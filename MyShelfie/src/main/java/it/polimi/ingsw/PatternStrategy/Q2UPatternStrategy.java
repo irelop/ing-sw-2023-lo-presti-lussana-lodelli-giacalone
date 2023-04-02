@@ -13,12 +13,18 @@ public class Q2UPatternStrategy implements StrategyInterface {
 
         for(int i=0;i<rows-1 && counter <2;i++){
             for(int j=0;j<columns-1;j++){
-                if(shelfSnapshot[i][j] != Tile.BLANK && shelfSnapshot[i][j]==shelfSnapshot[i][j+1] && shelfSnapshot[i][j]==shelfSnapshot[i+1][j] && shelfSnapshot[i][j]==shelfSnapshot[i+1][j+1]){
+                if(shelfSnapshot[i][j] != Tile.BLANK &&
+                        shelfSnapshot[i][j] != Tile.NOT_VALID &&
+                        shelfSnapshot[i][j]==shelfSnapshot[i][j+1] &&
+                        shelfSnapshot[i][j]==shelfSnapshot[i+1][j] &&
+                        shelfSnapshot[i][j]==shelfSnapshot[i+1][j+1])
+                {
                     counter++;
-                    shelfSnapshot[i][j]=null;
-                    shelfSnapshot[i][j+1]=null;
-                    shelfSnapshot[i+1][j]=null;
-                    shelfSnapshot[i+1][j+1]=null;
+
+                    shelfSnapshot[i][j]=Tile.NOT_VALID;
+                    shelfSnapshot[i][j+1]=Tile.NOT_VALID;
+                    shelfSnapshot[i+1][j]=Tile.NOT_VALID;
+                    shelfSnapshot[i+1][j+1]=Tile.NOT_VALID;
                 }
             }
         }

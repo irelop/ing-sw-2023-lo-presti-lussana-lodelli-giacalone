@@ -15,16 +15,16 @@ public class V2UPatternStrategy implements StrategyInterface {
             for(int j = 0; j< columns -1; j++){
 
                 //checking the adjacent cell on the right
-                if(shelfSnapshot[i][j]==shelfSnapshot[i][j+1]) {
-                    counter++;
-                    shelfSnapshot[i][j] = null;
-                    shelfSnapshot[i][j + 1] = null;
-                }
-
-                else if(shelfSnapshot[i][j]==shelfSnapshot[i+1][j]) {
-                    counter++;
-                    shelfSnapshot[i][j] = null;
-                    shelfSnapshot[i+1][j] = null;
+                if(shelfSnapshot[i][j] != Tile.BLANK && shelfSnapshot[i][j] != Tile.NOT_VALID) {
+                    if (shelfSnapshot[i][j] == shelfSnapshot[i][j + 1]) {
+                        counter++;
+                        shelfSnapshot[i][j] = Tile.NOT_VALID;
+                        shelfSnapshot[i][j + 1] = Tile.NOT_VALID;
+                    } else if (shelfSnapshot[i][j] == shelfSnapshot[i + 1][j]) {
+                        counter++;
+                        shelfSnapshot[i][j] = Tile.NOT_VALID;
+                        shelfSnapshot[i + 1][j] = Tile.NOT_VALID;
+                    }
                 }
             }
         }

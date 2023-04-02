@@ -13,7 +13,7 @@ public class O5UPatternStrategy implements StrategyInterface {
         int rows = shelfSnapshot.length;
 
         for(int i = 0; i< rows && counter < 2;i++){
-            if(Arrays.stream(shelfSnapshot[i]).filter(x->x!=Tile.BLANK).distinct().count()>=5) counter++;
+            if(Arrays.stream(shelfSnapshot[i]).filter(x->x!=Tile.BLANK && x!= Tile.NOT_VALID).distinct().count()>=5) counter++;
         }
 
         return (counter ==2);
