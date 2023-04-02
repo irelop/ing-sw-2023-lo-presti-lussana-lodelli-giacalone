@@ -39,6 +39,11 @@ public class Bag {
         }
     }
 
+    /**
+     * OVERVIEW: this method allows to check if the game bag is already empty or not in order to refill the game board.
+     * @return true: if it's empty.
+     *         false: otherwise.
+     */
     public boolean isBagEmpty(){
         return(this.bag.values().stream().filter(x->x!=0).count()==0);
     }
