@@ -8,6 +8,8 @@ package it.polimi.ingsw;
  */
 
 import it.polimi.ingsw.Exceptions.NotEnoughSpaceInChosenColumnException;
+
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Shelf {
@@ -29,6 +31,16 @@ public class Shelf {
         for(int r=0; r<6; r++)
             for(int c=0; c<5; c++){
                 grid[r][c] = Tile.BLANK;
+                beenThere[r][c] = 0;
+            }
+    }
+    public Shelf(Tile[][] grid){
+        //the index (0;0) indicates the first cell top left
+        this.beenThere = new int[6][5];
+        this.grid = grid;
+
+        for(int r=0; r<6; r++)
+            for(int c=0; c<5; c++){
                 beenThere[r][c] = 0;
             }
     }
@@ -129,8 +141,8 @@ public class Shelf {
      * @return true if the shelf is full, false otherwise
      */
     public boolean isShelfFull(){
-        for(int c=0; c<6; c++)
-            if(grid[0][c]== Tile.BLANK) return false;
+        for(int c=0; c<5; c++)
+            if(grid[0][c] == Tile.BLANK) return false;
         return true;
     }
 
@@ -143,9 +155,9 @@ public class Shelf {
     public int maxTilesPickable(){
         int freeSpace=0;
         int r;
-        for(int c=0; c<6; c++) {
+        for(int c=0; c<5; c++) {
             r=0;
-            while (r < 5 && grid[r][c] == Tile.BLANK){
+            while (r < 6 && grid[r][c] == Tile.BLANK){
                 r++;
                 if(r==3) return 3;
             }
@@ -153,4 +165,5 @@ public class Shelf {
         }
         return freeSpace;
     }
+
 }
