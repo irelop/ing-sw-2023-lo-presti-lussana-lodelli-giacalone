@@ -1,4 +1,4 @@
-package it.polimi.ingsw.PatternStrategy;
+package it.polimi.ingsw;
 
 import it.polimi.ingsw.PersonalGoalCard;
 import it.polimi.ingsw.ReadFileByLines;
