@@ -24,4 +24,12 @@ public class CommonGoalCard {
     public int getScore(){
         return availableScore.remove(0);
     }
+
+    public StrategyInterface getCommonStrategy() {
+        return commonStrategy;
+    }
+
+    public boolean checkPattern(Tile[][] shelfSnapshot){
+        return (this.commonStrategy.checkPattern(shelfSnapshot));
+    }
 }
