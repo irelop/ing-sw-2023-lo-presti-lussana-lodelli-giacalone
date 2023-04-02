@@ -72,10 +72,10 @@ public class Shelf {
     public int spotCheck(){
         int score=0;
         int dimension;
-        for(int r=0; r<5; r++)
-            for(int c=0; c<6; c++){
+        for(int r=0; r<6; r++)
+            for(int c=0; c<5; c++){
                 if(beenThere[r][c]==0 && !grid[r][c].equals(Tile.BLANK)){
-                    dimension = spotDimention(grid[r][c],r,c,0);
+                    dimension = spotDimention(grid[r][c],r,c,1);
                     switch(dimension){
                         case 1: break;
                         case 2: break;
@@ -103,6 +103,7 @@ public class Shelf {
      */
     private int spotDimention(Tile tile, int startRow, int startColumn, int counter){
         beenThere[startRow][startColumn] = 1;
+
         //right
         if(startColumn+1<5 && beenThere[startRow][startColumn+1]!=1 && grid[startRow][startColumn+1].equals(tile))
             counter = 1 + spotDimention(tile, startRow, startColumn+1, counter);
@@ -118,6 +119,7 @@ public class Shelf {
         //up
         if(startRow-1>=0 && beenThere[startRow-1][startColumn]!=1 && grid[startRow-1][startColumn].equals(tile))
             counter = 1 + spotDimention(tile, startRow-1, startColumn, counter);
+
 
         return counter;
     }
