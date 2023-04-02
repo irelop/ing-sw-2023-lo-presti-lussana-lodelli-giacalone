@@ -8,6 +8,7 @@ package it.polimi.ingsw;
  * @authors Matteo Lussana, Irene Lo Presti
  */
 
+import it.polimi.ingsw.Exceptions.InvalidTileIndexInLittleHandException;
 import it.polimi.ingsw.Exceptions.NotEnoughSpaceInChosenColumnException;
 
 import java.awt.image.ColorModel;
@@ -80,9 +81,9 @@ public class Game {
         //checking goals and adding score if necessary
         playerPlaying.myScore.addScore(personalPointsEarned(playerPlaying));
 
-        if(!playerPlaying.isCommonGoalAchived(0))
+        if(!playerPlaying.isCommonGoalAchieved(0))
             playerPlaying.myScore.addScore(commonPointsEarned(playerPlaying, 0));
-        if(!playerPlaying.isCommonGoalAchived(1))
+        if(!playerPlaying.isCommonGoalAchieved(1))
             playerPlaying.myScore.addScore(commonPointsEarned(playerPlaying, 1));
 
         //checking if a player's shelf is full,
@@ -106,8 +107,10 @@ public class Game {
         CommonGoalCard card = Board.getCommonGoalCard(commonGoalIndex);
         Tile[][] playerShelfSnapshot = playerPlaying.myShelfie.getGrid();
         if(card.checkPattern(playerShelfSnapshot)) {
+            playerPlaying.setCommonGoalAchieved(commonGoalIndex);
             return card.getScore();
-        } else return 0;
+        }
+        else return 0;
     }
 
     /**

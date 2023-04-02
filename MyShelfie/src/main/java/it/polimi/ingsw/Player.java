@@ -1,6 +1,14 @@
 package it.polimi.ingsw;
-import it.polimi.ingsw.Exceptions.InvalidTileIndexInLittleHandException;
 
+/**
+ * Player class: this class contains all the information about a player: nickname, score, shelf,
+ * personal goal card, the tiles in his/her hand chosen from the board, if he/she has achieved some
+ * common goal and if he/she has the chair.
+ *
+ * @authors Irene Lo Presti, Matteo Lussana
+ */
+
+import it.polimi.ingsw.Exceptions.InvalidTileIndexInLittleHandException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -11,46 +19,87 @@ public class Player {
     private PersonalGoalCard card;
     private boolean chair;
     private ArrayList<Tile> littleHand;//tiles in player's hand (the ones just picked)
-    private boolean[] commonGoalsAchived;
+    private boolean[] commonGoalsAchieved;
 
+    /**
+     * OVERVIEW: Constructor: it is used to when a player joins the game. This method saves the nickname and
+     * initializes all the attributes
+     * @see Shelf
+     * @see Tile
+     * @see Score
+     * @param nickname : String
+     */
     public Player(String nickname){
         this.nickname = nickname;
         this.myShelfie = new Shelf();
         this.myScore = new Score();
         this.chair = false;
-        this.littleHand = new ArrayList<Tile>();
-        this.commonGoalsAchived = new boolean[2];
-        this.commonGoalsAchived[0] = false;
-        this.commonGoalsAchived[1] = false;
+        this.littleHand = new ArrayList<>();
+        this.commonGoalsAchieved = new boolean[2];
+        this.commonGoalsAchieved[0] = false;
+        this.commonGoalsAchieved[1] = false;
     }
 
+    /**
+     * OVERVIEW: getter method
+     * @see PersonalGoalCard
+     * @return card
+     */
     public PersonalGoalCard getPersonalGoalCard(){
-        return card;
+        return this.card;
     }
 
+    /**
+     * OVERVIEW: setter method for chair. It is called only if the player is randomly chosen to be the first
+     * to play.
+     */
     public void setChair(){
         this.chair = true;
     }
 
+    /**
+     * OVERVIEW: getter method
+     * @return chair
+     */
     public boolean hasChair(){
         return this.chair;
     }
 
-    public void setCommonGoalAchived(int indexCommonCard){
-        this.commonGoalsAchived[indexCommonCard] = true;
+    /**
+     * OVERVIEW: setter method for commonGoalAchived. It is called only if the player achieves a common goal.
+     * @see CommonGoalCard
+     * @param indexCommonCard : int
+     */
+    public void setCommonGoalAchieved(int indexCommonCard){
+        this.commonGoalsAchieved[indexCommonCard] = true;
     }
 
-
+    /**
+     * OVERVIEW: setter method for personalGoalCard. This method is used to save the personal goal card after
+     * the player draws it from the deck.
+     * @see PersonalGoalCard
+     * @param card : PersonalGoalCard
+     */
     public void setCard(PersonalGoalCard card){
         this.card = card;
     }
 
+    /**
+     * OVERVIEW: getter method
+     * @see Tile
+     * @return littleHand
+     */
     public ArrayList<Tile> getLittleHand(){
         return this.littleHand;
     }
 
-    public boolean isCommonGoalAchived(int indexCommonCard){
-        return this.commonGoalsAchived[indexCommonCard];
+    /**
+     * OVERVIEW: getter method
+     * @param indexCommonCard : int
+     * @return commonGoalAchieved[indexCommonCard]
+     */
+    public boolean isCommonGoalAchieved(int indexCommonCard){
+        return this.commonGoalsAchieved[indexCommonCard];
     }
 
     @Override
@@ -59,9 +108,13 @@ public class Player {
     }
 
 
-    //controllare che l'utente inserisca il numero corretto
-    public void orderTiles(ArrayList<Tile> chosenTiles){
-        // se sceglie una tessera metto solo quella in littleHand
+    /**
+     * OVERVIEW: this method orders the chosen tiles from the board in order to put them in the player's shelf
+     * @see Tile
+     * @param chosenTiles : ArrayList<Tile>
+     */
+    public void orderTiles(ArrayList<Tile> chosenTiles) {
+        // if the player chooses only one tile, there is no need to order.
         if(chosenTiles.size() == 1){
             this.littleHand.add(chosenTiles.get(0));
             return;
@@ -72,8 +125,7 @@ public class Player {
 
         System.out.print("Your tiles are: ");
         for(int i=0; i<tilesNumber; i++){
-            System.out.println((i+1)+ ") " + chosenTiles.get(i)); //va bene scrivere chosenTiles.get(i)? serve un override di tostring?
-        }
+            System.out.println((i+1)+ ") " + chosenTiles.get(i));
 
         System.out.println("Choose the order (the first one is the lowest):");
         try{
@@ -83,10 +135,10 @@ public class Player {
         }
 
 
-        for(int i=0; i<tilesNumber; i++){
-            for(int j=0; j<tilesNumber; j++){
-                if(choices[j] == tilesNumber-i){
-                    int correctIndex = choices[j]-1;
+        for(int j=0; j<tilesNumber; j++){
+            for(int k=0; k<tilesNumber; k++){
+                if(choices[k] == tilesNumber-j){
+                    int correctIndex = choices[k]-1;
                     this.littleHand.add(chosenTiles.get(correctIndex));
                     break;
                 }
@@ -94,9 +146,15 @@ public class Player {
         }
 
     }
+}
 
-    private void getTiles(int choices[]) throws InvalidTileIndexInLittleHandException {
-
+    /**
+     * OVERVIEW: this method gets the new order
+     * @deprecated
+     * @param choices : int[]
+     * @throws InvalidTileIndexInLittleHandException e
+     */
+    private void getTiles(int[] choices) throws InvalidTileIndexInLittleHandException {
         Scanner scanner = new Scanner(System.in);
 
         for(int i=0; i<choices.length; i++){

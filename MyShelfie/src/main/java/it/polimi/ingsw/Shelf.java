@@ -54,8 +54,10 @@ public class Shelf {
      * @see Player
      * @throws NotEnoughSpaceInChosenColumnException e
      */
-    public void insert(int columnIndex, ArrayList<Tile> littleHand) throws NotEnoughSpaceInChosenColumnException {
-        if(columnFreeSpace(columnIndex) < littleHand.size()) throw new NotEnoughSpaceInChosenColumnException();
+    public void insert(int columnIndex, ArrayList<Tile> littleHand)
+            throws NotEnoughSpaceInChosenColumnException {
+        if(columnFreeSpace(columnIndex) < littleHand.size())
+            throw new NotEnoughSpaceInChosenColumnException();
         for(int r=5; r>=0; r--){
             if(grid[r][columnIndex]== Tile.BLANK){
                 for(int i=0; i<littleHand.size(); i++){ grid[r+i][columnIndex] = littleHand.get(i);}
@@ -105,19 +107,23 @@ public class Shelf {
         beenThere[startRow][startColumn] = 1;
 
         //right
-        if(startColumn+1<5 && beenThere[startRow][startColumn+1]!=1 && grid[startRow][startColumn+1].equals(tile))
+        if(startColumn+1<5 && beenThere[startRow][startColumn+1]!=1 &&
+                grid[startRow][startColumn+1].equals(tile))
             counter = 1 + spotDimention(tile, startRow, startColumn+1, counter);
 
         //left
-        if(startColumn-1>=0 && beenThere[startRow][startColumn-1]!=1 && grid[startRow][startColumn-1].equals(tile))
+        if(startColumn-1>=0 && beenThere[startRow][startColumn-1]!=1 &&
+                grid[startRow][startColumn-1].equals(tile))
             counter = 1 + spotDimention(tile, startRow, startColumn-1, counter);
 
         //down
-        if(startRow+1<6 && beenThere[startRow+1][startColumn]!=1 && grid[startRow+1][startColumn].equals(tile))
+        if(startRow+1<6 && beenThere[startRow+1][startColumn]!=1 &&
+                grid[startRow+1][startColumn].equals(tile))
             counter = 1 + spotDimention(tile, startRow+1, startColumn, counter);
 
         //up
-        if(startRow-1>=0 && beenThere[startRow-1][startColumn]!=1 && grid[startRow-1][startColumn].equals(tile))
+        if(startRow-1>=0 && beenThere[startRow-1][startColumn]!=1 &&
+                grid[startRow-1][startColumn].equals(tile))
             counter = 1 + spotDimention(tile, startRow-1, startColumn, counter);
 
 
