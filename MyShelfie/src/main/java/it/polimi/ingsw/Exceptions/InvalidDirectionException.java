@@ -1,5 +1,11 @@
 package it.polimi.ingsw.Exceptions;
 
+/**
+ * Exception for the choice of the tiles from the board. It is thrown if the insert direction is not a letter
+ * between n,s,w,e.
+ *
+ * @author Irene Lo Presti
+ */
 public class InvalidDirectionException extends Exception {
 
     public InvalidDirectionException(){

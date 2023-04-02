@@ -1,5 +1,12 @@
 package it.polimi.ingsw.Exceptions;
 
+/**
+ * Exception for the choice of the tiles from the board. It is thrown if one of the chosen tile has not a
+ * free side.
+ *
+ * @author Irene Lo Presti
+ */
+
 public class InvalidPositionException extends Exception {
     public InvalidPositionException(){
         super();

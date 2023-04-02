@@ -193,7 +193,7 @@ public class Board {
                 direction = getDirection();
                 checkDirectionAndNumberOfTiles(direction, numberOfTiles, initalPositionR, initialPositionC);
                 break;
-            }catch(TooManyTilesException | InvalidDirectionException | InvalidPositionException e){
+            }catch(InvalidNumberOfTilesException | InvalidDirectionException | InvalidPositionException e){
                 System.out.println(e);
             }
         }while(true);
@@ -236,11 +236,11 @@ public class Board {
             throw new InvalidPositionException();
     }
 
-    private int getNumberOfTiles(int maxTilesPickable) throws TooManyTilesException{
+    private int getNumberOfTiles(int maxTilesPickable) throws InvalidNumberOfTilesException {
         Scanner scanner = new Scanner(System.in);
         int numberOfTiles;
         numberOfTiles = scanner.nextInt();
-        if(numberOfTiles>maxTilesPickable || numberOfTiles <= 0) throw new TooManyTilesException();   // cambia il nome perchè toomany non ha senso
+        if(numberOfTiles>maxTilesPickable || numberOfTiles <= 0) throw new InvalidNumberOfTilesException(maxTilesPickable);   // cambia il nome perchè toomany non ha senso
         else return numberOfTiles;
     }
 
