@@ -1,10 +1,13 @@
 package it.polimi.ingsw;
 
+import it.polimi.ingsw.Exceptions.NotEnoughSpaceInChosenColumnException;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -20,7 +23,7 @@ public class ShelfTest {
         grid = new Tile[6][5];
 
         ReadFileByLines reader = new ReadFileByLines();
-        reader.readFrom("src/ShelfTest.txt");
+        reader.readFrom("src/test/testFiles/ShelfTest.txt");
 
         for (int i = 0; i < 6; i++) {
 
@@ -41,7 +44,38 @@ public class ShelfTest {
     }
 
     @Test
-    public void insert() {
+    public void insert_correctInput_correctOutput() throws NotEnoughSpaceInChosenColumnException {
+        ArrayList<Tile> littleHand = new ArrayList<Tile>();
+        littleHand.add(Tile.WHITE);
+        littleHand.add(Tile.BLUE);
+        littleHand.add(Tile.GREEN);
+        shelf.insert(0, littleHand);
+
+        grid[0][3] = Tile.GREEN;
+        grid[0][2] = Tile.GREEN;
+        grid[0][1] = Tile.GREEN;
+        Shelf shelf2 = new Shelf(grid);
+
+        for(int r=0; r<6; r++){
+            for(int c=0; c<5; c++)
+                assertEquals(shelf2.getGrid()[r][c], shelf.getGrid()[r][c]);
+        }
+    }
+    @Test (expected = NotEnoughSpaceInChosenColumnException.class)
+    public void insert_exception() {
+        grid[0][3] = Tile.GREEN;
+        grid[0][2] = Tile.GREEN;
+        grid[0][1] = Tile.GREEN;
+        Shelf shelf = new Shelf(grid);
+
+        ArrayList<Tile> littleHand = new ArrayList<Tile>();
+
+        littleHand.add(Tile.WHITE);
+        littleHand.add(Tile.BLUE);
+        littleHand.add(Tile.GREEN);
+
+        shelf.insert(0, littleHand);
+
     }
 
     @Test
