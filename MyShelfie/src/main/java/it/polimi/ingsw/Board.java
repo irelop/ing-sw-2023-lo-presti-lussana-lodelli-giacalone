@@ -218,7 +218,7 @@ public class Board {
         System.out.print("Row: ");
         Scanner scanner = new Scanner(System.in);
         r = scanner.nextInt() - 1;
-        if(r<0 || r>MAX_ROWS) throw new OutOfBoardException();
+        if(r<0 || r>=MAX_ROWS) throw new OutOfBoardException();
         else return r;
     }
     private int getInitialColumn() throws OutOfBoardException {
@@ -226,7 +226,7 @@ public class Board {
         System.out.print("Column: ");
         Scanner scanner = new Scanner(System.in);
         c = scanner.nextInt() - 1;
-        if(c<0 || c>MAX_COLUMNS) throw new OutOfBoardException();
+        if(c<0 || c>=MAX_COLUMNS) throw new OutOfBoardException();
         else return c;
     }
 
@@ -240,7 +240,7 @@ public class Board {
         Scanner scanner = new Scanner(System.in);
         int numberOfTiles;
         numberOfTiles = scanner.nextInt();
-        if(numberOfTiles>maxTilesPickable) throw new TooManyTilesException();
+        if(numberOfTiles>maxTilesPickable || numberOfTiles <= 0) throw new TooManyTilesException();   // cambia il nome perchè toomany non ha senso
         else return numberOfTiles;
     }
 
@@ -254,30 +254,31 @@ public class Board {
 
     }
     private void checkDirectionAndNumberOfTiles(char direction, int numberOfTiles, int r, int c) throws InvalidPositionException, InvalidDirectionException {
-        switch(direction){
-            case 'e':
-                for(int i=1; i<numberOfTiles; i++){
-                    if(r+i>MAX_ROWS) throw new InvalidDirectionException();
-                    checkPosition(r+i,c);
+        switch (direction) {
+            case 'e' -> {
+                for (int i = 1; i < numberOfTiles; i++) {
+                    if (r + i > MAX_ROWS) throw new InvalidDirectionException();
+                    checkPosition(r + i, c);
                 }
-                break;
-            case 'n':
-                for(int i=1; i<numberOfTiles; i++){
-                    if(c-i<0) throw new InvalidDirectionException();
-                    checkPosition(r,c-i);
+            }
+            case 'n' -> {
+                for (int i = 1; i < numberOfTiles; i++) {
+                    if (c - i < 0) throw new InvalidDirectionException();
+                    checkPosition(r, c - i);
                 }
-                break;
-            case 's':
-                for(int i=1; i<numberOfTiles; i++){
-                    if(c+i>MAX_COLUMNS) throw new InvalidDirectionException();
-                    checkPosition(r,c+i);
+            }
+            case 's' -> {
+                for (int i = 1; i < numberOfTiles; i++) {
+                    if (c + i > MAX_COLUMNS) throw new InvalidDirectionException();
+                    checkPosition(r, c + i);
                 }
-                break;
-            default:
-                for(int i=1; i<numberOfTiles; i++){
-                    if(r-i<0) throw new InvalidDirectionException();
-                    checkPosition(r-i,c);
+            }
+            case 'w' -> {
+                for (int i = 1; i < numberOfTiles; i++) {
+                    if (r - i < 0) throw new InvalidDirectionException();
+                    checkPosition(r - i, c);
                 }
+            }
         }
     }
 
@@ -322,7 +323,7 @@ public class Board {
         int x;
         for(int i=3; i<MAX_ROWS-1; i++){
             if(i!=3){
-                x = (int) (0+03 + Math.pow(1.256,i));
+                x = (int) (0.03 + Math.pow(1.256,i));
                 int j=0;
                 while(j<x-1){
                     boardGrid[i-(MAX_ROWS/2)-1][(MAX_COLUMNS/2)-1-j] = Tile.BLANK;
