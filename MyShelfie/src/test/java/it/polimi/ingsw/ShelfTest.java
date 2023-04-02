@@ -61,11 +61,11 @@ public class ShelfTest {
                 assertEquals(shelf2.getGrid()[r][c], shelf.getGrid()[r][c]);
         }
     }
-    @Test (expected = NotEnoughSpaceInChosenColumnException.class)
-    public void insert_exception() {
-        grid[0][3] = Tile.GREEN;
-        grid[0][2] = Tile.GREEN;
-        grid[0][1] = Tile.GREEN;
+    @Test(expected = NotEnoughSpaceInChosenColumnException.class)
+    public void insert_exception() throws NotEnoughSpaceInChosenColumnException{
+        grid[3][0] = Tile.GREEN;
+        grid[2][0] = Tile.GREEN;
+        grid[1][0] = Tile.GREEN;
         Shelf shelf = new Shelf(grid);
 
         ArrayList<Tile> littleHand = new ArrayList<Tile>();
