@@ -17,6 +17,10 @@ public class ReadFileByLines {
         return text.remove(0);
     }
 
+    /**
+     * Scan all the file line by line and put them into text
+     * @param fileName: the name of the path to the file
+     */
     public void readFrom(String fileName) {
 
         try {
