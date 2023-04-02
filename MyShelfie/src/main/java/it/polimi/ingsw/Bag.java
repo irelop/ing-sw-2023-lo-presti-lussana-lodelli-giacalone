@@ -2,6 +2,8 @@ package it.polimi.ingsw;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
+
 import it.polimi.ingsw.Exceptions.*;
 
 /**
@@ -15,8 +17,9 @@ public class Bag {
 
     public Bag(){
         bag = new HashMap<>();
-        for(int i = 0; i< Tile.values().length -1; i++){
-            bag.put(Tile.values()[i],MAX_TILES);
+        List<Tile> validTiles = Arrays.stream(Tile.values()).filter(x->x!=Tile.NOT_VALID && x!=Tile.BLANK).collect(Collectors.toList());
+        for(Tile t: validTiles){
+            bag.put(t,MAX_TILES);
         }
     }
 
@@ -44,7 +47,11 @@ public class Bag {
      * @return true: if it's empty.
      *         false: otherwise.
      */
-    public boolean isBagEmpty(){
+    private boolean isBagEmpty(){
         return(this.bag.values().stream().filter(x->x!=0).count()==0);
+    }
+
+    public int getTileQuantity(Tile tile){
+        return bag.get(tile);
     }
 }
