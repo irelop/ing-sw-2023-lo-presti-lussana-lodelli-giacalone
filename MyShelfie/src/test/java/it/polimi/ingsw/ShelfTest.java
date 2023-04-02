@@ -45,7 +45,24 @@ public class ShelfTest {
     }
 
     @Test
-    public void spotCheck() {
+    public void spotCheck_correctInput_correctOutput() {
+        ReadFileByLines reader = new ReadFileByLines();
+        reader.readFrom("src/ShelfTest_spotCheck.txt");
+
+        for (int i = 0; i < 6; i++) {
+
+            String row = ReadFileByLines.getLine();
+
+            String[] values = row.replaceAll("\\{", "")
+                    .replaceAll("}", "")
+                    .split(", ");
+
+            for (int j = 0; j < 5; j++)
+                grid[i][j] = Tile.valueOf(values[j]);
+        }
+        shelf = new Shelf(grid);
+
+        assertEquals(15,shelf.spotCheck());
     }
 
     @Test
