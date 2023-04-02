@@ -1,7 +1,13 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.Exceptions.*;
+/**
+ * Board class: this class manages the board with the singleton pattern. There is only one initialization, then
+ * it is only possible to pick a tile or to refill the board if necessary.
+ *
+ * @authors Andrea Giacalone, Matteo Lussana, Irene Lo Presti
+ */
 
+import it.polimi.ingsw.Exceptions.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -180,7 +186,7 @@ public class Board {
                 initialPositionC = getInitialColumn();
                 checkPosition(initalPositionR, initialPositionC);
                 break;
-            }catch(OutOfBoardException | InvalidPositionException e){
+            }catch(OutOfBoardException | InvalidPositionException | InvalidCellException e){
                 System.out.println(e);
             }
         }while(true);
@@ -193,7 +199,8 @@ public class Board {
                 direction = getDirection();
                 checkDirectionAndNumberOfTiles(direction, numberOfTiles, initalPositionR, initialPositionC);
                 break;
-            }catch(InvalidNumberOfTilesException | InvalidDirectionException | InvalidPositionException e){
+            }catch(InvalidNumberOfTilesException | InvalidDirectionException | InvalidPositionException
+                    | InvalidCellException e){
                 System.out.println(e);
             }
         }while(true);
@@ -230,10 +237,11 @@ public class Board {
         else return c;
     }
 
-    private void checkPosition(int r, int c) throws InvalidPositionException{
+    private void checkPosition(int r, int c) throws InvalidPositionException, InvalidCellException {
         if(boardGrid[r+1][c]!=Tile.BLANK && boardGrid[r-1][c]!=Tile.BLANK &&
                 boardGrid[r][c+1]!=Tile.BLANK && boardGrid[r][c-1]!=Tile.BLANK)
             throw new InvalidPositionException();
+        if(boardGrid[r][c] == null) throw new InvalidCellException();
     }
 
     private int getNumberOfTiles(int maxTilesPickable) throws InvalidNumberOfTilesException {
@@ -253,7 +261,7 @@ public class Board {
         else return direction;
 
     }
-    private void checkDirectionAndNumberOfTiles(char direction, int numberOfTiles, int r, int c) throws InvalidPositionException, InvalidDirectionException {
+    private void checkDirectionAndNumberOfTiles(char direction, int numberOfTiles, int r, int c) throws InvalidPositionException, InvalidDirectionException, InvalidCellException {
         switch (direction) {
             case 'e' -> {
                 for (int i = 1; i < numberOfTiles; i++) {
@@ -280,6 +288,27 @@ public class Board {
                 }
             }
         }
+    }
+
+    //eccezione se la bag è vuota?
+    public void refill(){
+        for(int r=0; r<MAX_ROWS; r++)
+            for(int c=0; c<MAX_COLUMNS; c++)
+                if(boardGrid[r][c] == Tile.BLANK)
+                    boardGrid[r][c] = bag.draw();
+    }
+
+    public boolean needRefill(){
+        for(int r=0; r<MAX_ROWS-1; r++)
+            for(int c=0; c<MAX_COLUMNS-1; c++){
+                if(boardGrid[r][c] != Tile.BLANK && boardGrid[r][c]!=null){
+                    if(boardGrid[r+1][c] != Tile.BLANK && boardGrid[r+1][c]!=null)
+                        return false;
+                    else if(boardGrid[r][c+1] != Tile.BLANK && boardGrid[r][c+1]!=null)
+                        return false;
+                }
+            }
+        return true;
     }
 
     public void initGridParabolic(int numPlayers){

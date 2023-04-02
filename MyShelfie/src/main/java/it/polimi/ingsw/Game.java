@@ -51,6 +51,7 @@ public class Game {
      *          3) copy of the tiles chosen in the player littleHand already in the correct order
      *          4) check of the goals and adding score if necessary
      *          5) check if a player's shelf is full, if it is the method adds one point
+     *          6) check if the board needs to be refilled, if it is true it calls the refill method
      * @see Player
      * @see Board
      * @param playerPlaying: ArrayList<Player>
@@ -92,6 +93,10 @@ public class Game {
             playerPlaying.myScore.addScore(1);
             this.isOver = true;
         }
+
+        //checking if the board need to be refilled
+        if(board.needRefill())
+            board.refill();
     }
 
     /**
