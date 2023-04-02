@@ -7,5 +7,6 @@ public enum Tile {
     LIGHTBLUE,
     YELLOW,
     WHITE,
-    BLANK
+    BLANK,
+    NOT_VALID
 }
