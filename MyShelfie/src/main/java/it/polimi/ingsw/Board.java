@@ -241,7 +241,7 @@ public class Board {
         if(boardGrid[r+1][c]!=Tile.BLANK && boardGrid[r-1][c]!=Tile.BLANK &&
                 boardGrid[r][c+1]!=Tile.BLANK && boardGrid[r][c-1]!=Tile.BLANK)
             throw new InvalidPositionException();
-        if(boardGrid[r][c] == null) throw new InvalidCellException();
+        if(boardGrid[r][c] == Tile.NOT_VALID) throw new InvalidCellException();
     }
 
     private int getNumberOfTiles(int maxTilesPickable) throws InvalidNumberOfTilesException {
@@ -290,7 +290,7 @@ public class Board {
         }
     }
 
-    //eccezione se la bag è vuota?
+
     public void refill(){
         for(int r=0; r<MAX_ROWS; r++)
             for(int c=0; c<MAX_COLUMNS; c++)
@@ -301,10 +301,10 @@ public class Board {
     public boolean needRefill(){
         for(int r=0; r<MAX_ROWS-1; r++)
             for(int c=0; c<MAX_COLUMNS-1; c++){
-                if(boardGrid[r][c] != Tile.BLANK && boardGrid[r][c]!=null){
-                    if(boardGrid[r+1][c] != Tile.BLANK && boardGrid[r+1][c]!=null)
+                if(boardGrid[r][c] != Tile.BLANK && boardGrid[r][c]!=Tile.NOT_VALID){
+                    if(boardGrid[r+1][c] != Tile.BLANK && boardGrid[r+1][c]!=Tile.NOT_VALID)
                         return false;
-                    else if(boardGrid[r][c+1] != Tile.BLANK && boardGrid[r][c+1]!=null)
+                    else if(boardGrid[r][c+1] != Tile.BLANK && boardGrid[r][c+1]!=Tile.NOT_VALID)
                         return false;
                 }
             }
