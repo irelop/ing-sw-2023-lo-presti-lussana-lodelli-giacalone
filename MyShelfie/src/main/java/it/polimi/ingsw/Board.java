@@ -1,11 +1,9 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.Exceptions.EmptyCellException;
-import it.polimi.ingsw.Exceptions.InvalidDirectionException;
-import it.polimi.ingsw.Exceptions.OutOfBoardException;
-import it.polimi.ingsw.Exceptions.TooManyTilesException;
+import it.polimi.ingsw.Exceptions.*;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 //OVERVIEW: Draft della classe BOARD: mancano i metodi per fillare e check di adiacenza
 public class Board {
@@ -22,12 +20,17 @@ public class Board {
             boardInstance = new Board();
             boardGrid = new Tile[MAX_ROWS][MAX_COLUMNS];
             bag = new Bag();
+            commonGoalCards = new CommonGoalCard[MAX_DRAWABLE_COMMON];
             for(int i=0; i<MAX_DRAWABLE_COMMON;i++){
                 commonGoalCards[i] = CommonGoalDeck.drawCommon();
             }
         }
 
         return boardInstance;
+    }
+
+    public static CommonGoalCard getCommonGoalCard(int index){
+        return commonGoalCards[index];
     }
 
     public static CommonGoalCard[] getCommonGoalCards() {
@@ -164,55 +167,119 @@ public class Board {
     }
 
 
-    //gestire meglio le eccezioni!!!!!!!
-    public ArrayList<Tile> pick (int maxTilesPickable) throws TooManyTilesException, OutOfBoardException, AdjacentException, InvalidDirectionException, EmptyCellException {
-        int[]  position;
-        int numberOfTiles;
+
+    public ArrayList<Tile> pick(int maxTilesPickable){
+        int initalPositionR, initialPositionC, numberOfTiles;
         char direction;
-        ArrayList<Tile> chosenTiles;
+        ArrayList<Tile> chosenTiles = new ArrayList<>();
 
-        position = new int[2];
-        try{
-            position = getStartingPosition();
-        }catch(OutOfBoardException e1){
-            System.out.println(e1);
-        }catch(AdjacentException e2){
-            System.out.println(e2);
-        }
+        System.out.println("Insert the initial position of the tile: ");
+        do{
+            try{
+                initalPositionR = getInitalRow();
+                initialPositionC = getInitialColumn();
+                checkPosition(initalPositionR, initialPositionC);
+                break;
+            }catch(OutOfBoardException | InvalidPositionException e){
+                System.out.println(e);
+            }
+        }while(true);
 
-        try{
-            direction = getDirection();
-        }catch(InvalidDirectionException e){
-            System.out.println(e);
-        }
+        System.out.println("Insert the number of tiles that you want to pick and the direction " +
+                "you want to follow (north n, south s, est e, west w");
+        do{
+            try{
+                numberOfTiles = getNumberOfTiles(maxTilesPickable);
+                direction = getDirection();
+                checkDirectionAndNumberOfTiles(direction, numberOfTiles, initalPositionR, initialPositionC);
+                break;
+            }catch(TooManyTilesException | InvalidDirectionException | InvalidPositionException e){
+                System.out.println(e);
+            }
+        }while(true);
 
-        try{
-            numberOfTiles = getNumberOfTile(maxTilesPickable);
-        }catch(TooManyTilesException e){
-            System.out.println(e);
-        }
-
-        chosenTiles = new ArrayList<Tile>();
-        int r = position[0], c = position[1];
         for(int i=0; i<numberOfTiles; i++){
-            chosenTiles.add(boardGrid[r][c]);
-            boardGrid[r][c] = Tile.BLANK;
+            chosenTiles.add(boardGrid[initalPositionR][initialPositionC]);
+            boardGrid[initalPositionR][initialPositionC] = Tile.BLANK;
             if(direction == 'n')
-                r--;
+                initalPositionR--;
             else if(direction == 's')
-                r++;
+                initalPositionR++;
             else if(direction == 'e')
-                c++;
+                initialPositionC++;
             else
-                c--;
+                initialPositionC--;
         }
 
+        return chosenTiles;
+    }
+    private int getInitalRow() throws OutOfBoardException {
+        int r;
+        System.out.print("Row: ");
+        Scanner scanner = new Scanner(System.in);
+        r = scanner.nextInt() - 1;
+        if(r<0 || r>MAX_ROWS) throw new OutOfBoardException();
+        else return r;
+    }
+    private int getInitialColumn() throws OutOfBoardException {
+        int c;
+        System.out.print("Column: ");
+        Scanner scanner = new Scanner(System.in);
+        c = scanner.nextInt() - 1;
+        if(c<0 || c>MAX_COLUMNS) throw new OutOfBoardException();
+        else return c;
     }
 
+    private void checkPosition(int r, int c) throws InvalidPositionException{
+        if(boardGrid[r+1][c]!=Tile.BLANK && boardGrid[r-1][c]!=Tile.BLANK &&
+                boardGrid[r][c+1]!=Tile.BLANK && boardGrid[r][c-1]!=Tile.BLANK)
+            throw new InvalidPositionException();
+    }
 
+    private int getNumberOfTiles(int maxTilesPickable) throws TooManyTilesException{
+        Scanner scanner = new Scanner(System.in);
+        int numberOfTiles;
+        numberOfTiles = scanner.nextInt();
+        if(numberOfTiles>maxTilesPickable) throw new TooManyTilesException();
+        else return numberOfTiles;
+    }
 
+    private char getDirection() throws InvalidDirectionException{
+        Scanner scanner = new Scanner(System.in);
+        char direction;
+        direction = scanner.next().charAt(0);
+        if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w')
+            throw new InvalidDirectionException();
+        else return direction;
 
-
+    }
+    private void checkDirectionAndNumberOfTiles(char direction, int numberOfTiles, int r, int c) throws InvalidPositionException, InvalidDirectionException {
+        switch(direction){
+            case 'e':
+                for(int i=1; i<numberOfTiles; i++){
+                    if(r+i>MAX_ROWS) throw new InvalidDirectionException();
+                    checkPosition(r+i,c);
+                }
+                break;
+            case 'n':
+                for(int i=1; i<numberOfTiles; i++){
+                    if(c-i<0) throw new InvalidDirectionException();
+                    checkPosition(r,c-i);
+                }
+                break;
+            case 's':
+                for(int i=1; i<numberOfTiles; i++){
+                    if(c+i>MAX_COLUMNS) throw new InvalidDirectionException();
+                    checkPosition(r,c+i);
+                }
+                break;
+            default:
+                for(int i=1; i<numberOfTiles; i++){
+                    if(r-i<0) throw new InvalidDirectionException();
+                    checkPosition(r-i,c);
+                }
+        }
+    }
 
     public void initGridParabolic(int numPlayers){
         int max_col = MAX_COLUMNS, max_raw = MAX_ROWS;

@@ -24,6 +24,10 @@ public class Player {
         this.commonGoalsAchived[1] = false;
     }
 
+    public PersonalGoalCard getPersonalGoalCard(){
+        return card;
+    }
+
     public void setChair(){
         this.chair = true;
     }

@@ -49,10 +49,10 @@ public class Shelf {
      * OVERVIEW: this method takes the tiles in the player's hand (lttleHand), that are already in the
      * right order, and puts them in the player's shelf. If the players chooses a column that has not
      * enough free cells, this method throws NotEnoughSpaceInChosenColumnException
-     * @param columnIndex
-     * @param littleHand
+     * @param columnIndex : int
+     * @param littleHand : ArrayList<Tile>
      * @see Player
-     * @throws NotEnoughSpaceInChosenColumnException
+     * @throws NotEnoughSpaceInChosenColumnException e
      */
     public void insert(int columnIndex, ArrayList<Tile> littleHand) throws NotEnoughSpaceInChosenColumnException {
         if(columnFreeSpace(columnIndex) < littleHand.size()) throw new NotEnoughSpaceInChosenColumnException();
@@ -94,10 +94,10 @@ public class Shelf {
 
     /**
      * OVERVIEW: recursive function to count the adjacent tiles of the same color
-     * @param tile
-     * @param startRow
-     * @param startColumn
-     * @param counter
+     * @param tile : int
+     * @param startRow : int
+     * @param startColumn : int
+     * @param counter : int
      * @see Tile
      * @return counter >= 0
      */
@@ -125,7 +125,7 @@ public class Shelf {
     /**
      * OVERVIEW: this method counts the number of free cell in the column with the index 'columnIndex'
      * @see Tile
-     * @param columnIndex
+     * @param columnIndex : int
      * @return r >= 0
      */
     private int columnFreeSpace(int columnIndex){
@@ -164,6 +164,10 @@ public class Shelf {
             if (freeSpace < r) freeSpace = r;
         }
         return freeSpace;
+    }
+
+    public Tile[][] getGrid(){
+        return grid;
     }
 
 }

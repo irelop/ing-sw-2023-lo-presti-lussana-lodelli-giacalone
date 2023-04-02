@@ -5,6 +5,6 @@ public class TooManyTilesException extends Exception {
 
     @Override
     public String toString(){
-        return "You have chosen too many tiles! You dont' have enough space in your shelf";
+        return "You have chosen too many tiles! You don't have enough space in your shelf";
     }
 }

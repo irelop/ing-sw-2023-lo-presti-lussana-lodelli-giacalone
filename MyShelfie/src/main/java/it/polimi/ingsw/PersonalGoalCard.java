@@ -50,7 +50,7 @@ public class PersonalGoalCard {
      * @param shelfSnapshot: a snapshot of the current player's shelf
      * @return an int given by the head of availableScore
      */
-    private int getPersonalGoalScore(Tile[][] shelfSnapshot) {
+    int getPersonalGoalScore(Tile[][] shelfSnapshot) {
 
         for (int i = 0; i < maxr; i++) {
             for (int j = 0; j < maxc; j++) {

@@ -9,23 +9,25 @@ package it.polimi.ingsw;
  */
 
 import it.polimi.ingsw.Exceptions.NotEnoughSpaceInChosenColumnException;
+
+import java.awt.image.ColorModel;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Game {
-    private ArrayList<Player> playersConnected;
+    private final ArrayList<Player> playersConnected;
     private boolean isOver;
-    private PersonalGoalDeck personalDeck;
-    private CommonGoalDeck commonDeck;
-    private Board board;
+    private final PersonalGoalDeck personalDeck;
+    private final CommonGoalDeck commonDeck;
+    private final Board board;
 
     /**
-     * OVERVIEW: Constructor: it inizialises the ArrayList of players and creates the two decks and the board.
+     * OVERVIEW: Constructor: it initializes the ArrayList of players and creates the two decks and the board.
      * @see Player
      * @see Board
      * @see PersonalGoalDeck
      * @see CommonGoalDeck
-     * @param playersConnected
+     * @param playersConnected : ArrayList<Player>
      */
     public Game(ArrayList<Player> playersConnected){
         //fill the arrayList of players
@@ -39,6 +41,8 @@ public class Game {
         this.board = new Board();
     }
 
+
+
     /**
      * OVERVIEW: it manages all the moves of a single player during his turn:
      *          1) find max pickable tiles by the player
@@ -48,7 +52,7 @@ public class Game {
      *          5) check if a player's shelf is full, if it is the method adds one point
      * @see Player
      * @see Board
-     * @param playerPlaying
+     * @param playerPlaying: ArrayList<Player>
      */
     private void turn(Player playerPlaying){
         // find max pickable tiles by the player
@@ -74,11 +78,12 @@ public class Game {
         }while(true);
 
         //checking goals and adding score if necessary
-        playerPlaying.myScore.addScore(playerPlaying.personalGoalCard.checkPersonalGoal(playerPlaying.myShelfie));
+        playerPlaying.myScore.addScore(personalPointsEarned(playerPlaying));
+
         if(!playerPlaying.isCommonGoalAchived(0))
-            playerPlaying.myScore.addScore(Board.commonGoalCards[0].checkPattern());
+            playerPlaying.myScore.addScore(commonPointsEarned(playerPlaying, 0));
         if(!playerPlaying.isCommonGoalAchived(1))
-            playerPlaying.myScore.addScore(Board.commonGoalCards[1].checkPattern());
+            playerPlaying.myScore.addScore(commonPointsEarned(playerPlaying, 1));
 
         //checking if a player's shelf is full,
         // if true add +1pt and set the last lap
@@ -86,6 +91,38 @@ public class Game {
             playerPlaying.myScore.addScore(1);
             this.isOver = true;
         }
+    }
+
+    /**
+     * OVERVIEW: this method checks if the player playing has achieved the number commonGoalIndex common goal,
+     * and it returns the right amount of points
+     * @see Player
+     * @see CommonGoalCard
+     * @param playerPlaying : Player
+     * @param commonGoalIndex : int
+     * @return commonPointsEarned >= 0
+     */
+    private int commonPointsEarned(Player playerPlaying, int commonGoalIndex){
+        CommonGoalCard card = Board.getCommonGoalCard(commonGoalIndex);
+        if(card.checkPattern())
+            return card.getScore();
+        else
+            return 0;
+    }
+
+    /**
+     * OVERVIEW: this method checks if the player playing has achieved some personal goals, and it returns
+     * the right amount of points
+     * @see Player
+     * @see PersonalGoalCard
+     * @see Tile
+     * @param playerPlaying : Player
+     * @return personalPointsEarned >= 0
+     */
+    private int personalPointsEarned(Player playerPlaying){
+        PersonalGoalCard card = playerPlaying.getPersonalGoalCard();
+        Tile[][] playerShelfSnapshot = playerPlaying.myShelfie.getGrid();
+        return card.getPersonalGoalScore(playerShelfSnapshot);
     }
 
     /**
