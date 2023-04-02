@@ -2,6 +2,7 @@ package it.polimi.ingsw;
 
 
 import java.util.*;
+import it.polimi.ingsw.Exceptions.*;
 
 /**
  * Bag class: this class represents the bag of all the drawable tiles of the game.
@@ -23,13 +24,22 @@ public class Bag {
      * OVERVIEW: this method allows to draw a single tile randomly chosen from the drawable remaining tiles of the game.
      * @return the single tile in order to be placed on the board.
      */
-    public Tile draw(){
-        List<Tile> remainingTiles = bag.keySet().stream().filter(x -> bag.get(x) > 0).toList();
-        Random random = new Random();
-        int i = random.nextInt(remainingTiles.size());
+    public Tile draw() throws EmptyBagException {
+        if (isBagEmpty()){
+            throw new EmptyBagException();
+        }
+        else{
+            List<Tile> remainingTiles = bag.keySet().stream().filter(x -> bag.get(x) > 0).toList();
+            Random random = new Random();
+            int i = random.nextInt(remainingTiles.size());
 
-        Tile drawableTile = remainingTiles.get(i);
-        bag.put(drawableTile,bag.get(drawableTile)-1);
-        return drawableTile;
+            Tile drawableTile = remainingTiles.get(i);
+            bag.put(drawableTile, bag.get(drawableTile) - 1);
+            return drawableTile;
+        }
+    }
+
+    public boolean isBagEmpty(){
+        return(this.bag.values().stream().filter(x->x!=0).count()==0);
     }
 }

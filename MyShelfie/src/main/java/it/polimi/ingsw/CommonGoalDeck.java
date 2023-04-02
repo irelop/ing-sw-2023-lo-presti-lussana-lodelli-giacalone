@@ -42,7 +42,7 @@ public class CommonGoalDeck {
         Random random = new Random();
         int idx = random.nextInt(commonGoalCardDeck.size());
 
-        return commonGoalCardDeck.get(idx);
+        return commonGoalCardDeck.remove(idx);
     }
 
 }
