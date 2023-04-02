@@ -104,10 +104,10 @@ public class Game {
      */
     private int commonPointsEarned(Player playerPlaying, int commonGoalIndex){
         CommonGoalCard card = Board.getCommonGoalCard(commonGoalIndex);
-        if(card.checkPattern())
+        Tile[][] playerShelfSnapshot = playerPlaying.myShelfie.getGrid();
+        if(card.checkPattern(playerShelfSnapshot)) {
             return card.getScore();
-        else
-            return 0;
+        } else return 0;
     }
 
     /**
