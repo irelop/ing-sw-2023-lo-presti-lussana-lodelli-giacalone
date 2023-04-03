@@ -154,9 +154,14 @@ public class Player {
     }
 
     public int[] askOrder(ArrayList<Tile> chosenTiles){
+
         int tilesNumber = chosenTiles.size();
         int[] choices = new int[tilesNumber];
 
+        if(chosenTiles.size()==1){
+            choices[0] = 1;
+            return choices;
+        }
         System.out.print("Your tiles are: ");
         for(int i=0; i<tilesNumber; i++)
             System.out.println((i+1)+ ") " + chosenTiles.get(i));
