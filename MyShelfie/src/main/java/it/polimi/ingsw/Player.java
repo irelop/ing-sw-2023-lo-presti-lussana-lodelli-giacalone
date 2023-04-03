@@ -113,6 +113,13 @@ public class Player {
      * @see Tile
      * @param chosenTiles : ArrayList<Tile>
      */
+
+    //bisogna rivedere la funzione orderTiles, per come è fatta è difficile da testare
+    // IDEA: spostiamo al di fuori della funzione tutta la richiesta del nuovo ordine delle tessere,
+    // e quindi orderTiles riceverà chosenTiles (la lista delle tessere prese dalla board) e
+    // e choices (un array contenente l'ordine scelto dall'utente)
+    //
+    // in modo tale che durante il test io possa simulare un ordine scelto da un utente
     public void orderTiles(ArrayList<Tile> chosenTiles) {
         // if the player chooses only one tile, there is no need to order.
         if(chosenTiles.size() == 1){

@@ -4,8 +4,9 @@ package it.polimi.ingsw;
         import org.junit.Before;
         import org.junit.Test;
 
-        import java.io.ByteArrayInputStream;
+        import java.io.*;
         import java.util.ArrayList;
+        import java.util.Scanner;
 
         import static org.junit.Assert.*;
 
@@ -35,15 +36,11 @@ public class PlayerTest {
         choosenTiles.add(Tile.BLUE);
         choosenTiles.add(Tile.GREEN);
         //set the stream of input in order to change the order in the function
-        String input1 = "2";
-        String input2 = "1";
-        String simulatedInput = input1 + System.getProperty("line.separator")
-                + input2 + System.getProperty("line.separator");
 
-        ByteArrayInputStream in = new ByteArrayInputStream(simulatedInput.getBytes());
-        System.setIn(in);
+
 
         player.orderTiles(choosenTiles);
+
         //change order of chooseTiles manually
         choosenTiles.remove(1);
         choosenTiles.add(Tile.BLUE);
