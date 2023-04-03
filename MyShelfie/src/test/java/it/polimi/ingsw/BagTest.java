@@ -21,13 +21,8 @@ class BagTest {
     }
 
     @Test
-    public void singleDraw_shouldRemoveOneRandomTileFromBag(){
-        Tile randomTile = null;
-        try {
-            randomTile = bag.draw();
-        } catch (EmptyBagException e) {
-            throw new RuntimeException(e);
-        }
+    public void singleDraw_shouldRemoveOneRandomTileFromBag() throws EmptyBagException{
+        Tile randomTile = bag.draw();
         assertEquals(21,bag.getTileQuantity(randomTile));
     }
     @Test
