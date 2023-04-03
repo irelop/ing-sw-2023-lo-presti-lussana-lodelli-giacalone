@@ -90,7 +90,7 @@ public class Player {
      * @return littleHand
      */
     public ArrayList<Tile> getLittleHand(){
-        return this.littleHand;
+        return littleHand;
     }
 
     /**
@@ -120,18 +120,19 @@ public class Player {
     // e choices (un array contenente l'ordine scelto dall'utente)
     //
     // in modo tale che durante il test io possa simulare un ordine scelto da un utente
-    public void orderTiles(ArrayList<Tile> chosenTiles) {
+    public void orderTiles(ArrayList<Tile> chosenTiles, int[] choices) {
         // if the player chooses only one tile, there is no need to order.
         if(chosenTiles.size() == 1){
             this.littleHand.add(chosenTiles.get(0));
             return;
         }
-
+        //choices = new int[chosenTiles.size()];
+/*
         int tilesNumber = chosenTiles.size();
         int[] choices = new int[tilesNumber];
 
         System.out.print("Your tiles are: ");
-        for(int i=0; i<tilesNumber; i++){
+        for(int i=0; i<tilesNumber; i++)
             System.out.println((i+1)+ ") " + chosenTiles.get(i));
 
         System.out.println("Choose the order (the first one is the lowest):");
@@ -140,20 +141,35 @@ public class Player {
         }catch(InvalidTileIndexInLittleHandException e){
             System.out.println(e);
         }
+*/
 
-
-        for(int j=0; j<tilesNumber; j++){
-            for(int k=0; k<tilesNumber; k++){
-                if(choices[k] == tilesNumber-j){
-                    int correctIndex = choices[k]-1;
-                    this.littleHand.add(chosenTiles.get(correctIndex));
+        for(int j=0; j<chosenTiles.size(); j++){
+            for(int k=0; k<chosenTiles.size(); k++){
+                if(choices[k] == j+1 ){
+                    littleHand.add(chosenTiles.get(k));
                     break;
                 }
             }
         }
-
     }
-}
+
+    public int[] askOrder(ArrayList<Tile> chosenTiles){
+        int tilesNumber = chosenTiles.size();
+        int[] choices = new int[tilesNumber];
+
+        System.out.print("Your tiles are: ");
+        for(int i=0; i<tilesNumber; i++)
+            System.out.println((i+1)+ ") " + chosenTiles.get(i));
+
+        System.out.println("Choose the order (the first one is the lowest):");
+        try{
+            getTiles(choices);
+        }catch(InvalidTileIndexInLittleHandException e){
+            System.out.println(e);
+        }
+        return choices;
+    }
+
 
     /**
      * OVERVIEW: this method gets the new order

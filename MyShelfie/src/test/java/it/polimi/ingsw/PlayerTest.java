@@ -6,7 +6,6 @@ package it.polimi.ingsw;
 
         import java.io.*;
         import java.util.ArrayList;
-        import java.util.Scanner;
 
         import static org.junit.Assert.*;
 
@@ -26,7 +25,8 @@ public class PlayerTest {
     public void orderTiles_singleTile() {
         ArrayList<Tile> choosenTiles = new ArrayList<>();
         choosenTiles.add(Tile.BLUE);
-        player.orderTiles(choosenTiles);
+        int[] order = new int[] {1};
+        player.orderTiles(choosenTiles,order);
         assertEquals(choosenTiles, player.getLittleHand());
     }
 
@@ -35,16 +35,29 @@ public class PlayerTest {
         ArrayList<Tile> choosenTiles = new ArrayList<>();
         choosenTiles.add(Tile.BLUE);
         choosenTiles.add(Tile.GREEN);
-        //set the stream of input in order to change the order in the function
-
-
-
-        player.orderTiles(choosenTiles);
+        //set the array of the player's choices
+        int[] order = new int[] {2, 1};
+        player.orderTiles(choosenTiles, order);
 
         //change order of chooseTiles manually
-        choosenTiles.remove(1);
+        choosenTiles.remove(0);
         choosenTiles.add(Tile.BLUE);
         assertEquals(choosenTiles, player.getLittleHand());
     }
 
+    @Test
+    public void orderTiles_threeTiles() {
+        ArrayList<Tile> choosenTiles = new ArrayList<>();
+        choosenTiles.add(Tile.BLUE);
+        choosenTiles.add(Tile.GREEN);
+        choosenTiles.add(Tile.YELLOW);
+        //set the array of the player's choices
+        int[] order = new int[] {3, 1 ,2};
+        player.orderTiles(choosenTiles, order);
+
+        //change order of chooseTiles manually
+        choosenTiles.remove(0);
+        choosenTiles.add(Tile.BLUE);
+        assertEquals(choosenTiles, player.getLittleHand());
+    }
 }
