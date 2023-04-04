@@ -36,6 +36,13 @@ public class Board {
         return boardInstance;
     }
 
+    public void initFromMatrix(Tile[][] matrix){
+        for(int i=0; i<matrix.length; i++)
+            for(int j=0; j<matrix[0].length; j++){
+                this.boardGrid[i][j] = matrix[i][j];
+            }
+    }
+
     /**
      * OVERVIEW: getter method
      * @see CommonGoalCard
@@ -263,7 +270,7 @@ public class Board {
      * @param direction : char
      * @return ArrayList<Tile> chosenTiles != null
      */
-    private ArrayList<Tile> pickTilesFromBoard(int initialPositionR, int initialPositionC, int numberOfTiles, char direction){
+    public ArrayList<Tile> pickTilesFromBoard(int initialPositionR, int initialPositionC, int numberOfTiles, char direction){
         ArrayList<Tile> chosenTiles = new ArrayList<>();
 
         for(int i=0; i<numberOfTiles; i++){
