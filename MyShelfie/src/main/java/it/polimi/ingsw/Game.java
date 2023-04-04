@@ -13,6 +13,7 @@ import it.polimi.ingsw.Exceptions.NotEnoughSpaceInChosenColumnException;
 
 import java.awt.image.ColorModel;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Game {
@@ -149,7 +150,8 @@ public class Game {
      * OVERVIEW: this method gives, randomly, a chair to one player
      */
     private void setChair(){
-        int index = (int) (Math.random()%playersConnected.size());
+        Random random = new Random();
+        int index = random.nextInt(playersConnected.size());
         playersConnected.get(index).setChair();
     }
 
@@ -157,7 +159,7 @@ public class Game {
      * OVERVIEW: this method manages the game: a player can play his/her turn if the match is not over
      *       or if that is the last lap
      */
-    private void manageTurn(){
+    public void manageTurn(){
         setChair();
         dealPersonalCards();
         while(!isOver){
