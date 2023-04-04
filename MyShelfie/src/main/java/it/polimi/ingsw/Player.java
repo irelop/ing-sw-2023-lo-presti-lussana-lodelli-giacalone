@@ -153,6 +153,12 @@ public class Player {
         }
     }
 
+    /**
+     * OVERVIEW: this method manage the user input of order
+     * @deprecated
+     * @see Tile
+     * @param chosenTiles : ArrayList<Tile>
+     */
     public int[] askOrder(ArrayList<Tile> chosenTiles){
 
         int tilesNumber = chosenTiles.size();
