@@ -32,4 +32,12 @@ public class PersonalGoalDeck {
         int idx = random.nextInt(personalGoalCardDeck.size());
         return personalGoalCardDeck.remove(idx);
     }
+
+    public int getCurrentSize() {
+        return personalGoalCardDeck.size();
+    }
+
+    public ArrayList<PersonalGoalCard> getPersonalGoalCardDeck() {
+        return personalGoalCardDeck;
+    }
 }

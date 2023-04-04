@@ -13,7 +13,15 @@ public class PersonalGoalCard {
     private Tile[][] pattern;
     private ArrayList<Integer> availableScore;
 
-    // Bisogna implementare la lettura da file della matrice
+    public PersonalGoalCard(Tile[][] givenPattern) {
+        availableScore = new ArrayList<>(Arrays.asList(1,1,2,2,3,3));
+        this.pattern = givenPattern;
+    }
+
+    public Tile[][] getPattern() {
+        return pattern;
+    }
+
     public PersonalGoalCard() {
         /*
            availableScore contains the amount of points gained when the player puts
