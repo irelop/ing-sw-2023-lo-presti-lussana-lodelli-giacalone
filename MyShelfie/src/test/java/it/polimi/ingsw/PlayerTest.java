@@ -23,41 +23,41 @@ public class PlayerTest {
 
     @Test
     public void orderTiles_singleTile() {
-        ArrayList<Tile> choosenTiles = new ArrayList<>();
-        choosenTiles.add(Tile.BLUE);
+        ArrayList<Tile> chosenTiles = new ArrayList<>();
+        chosenTiles.add(Tile.BLUE);
         int[] order = new int[] {1};
-        player.orderTiles(choosenTiles,order);
-        assertEquals(choosenTiles, player.getLittleHand());
+        player.orderTiles(chosenTiles,order);
+        assertEquals(chosenTiles, player.getLittleHand());
     }
 
     @Test
     public void orderTiles_twoTiles() {
-        ArrayList<Tile> choosenTiles = new ArrayList<>();
-        choosenTiles.add(Tile.BLUE);
-        choosenTiles.add(Tile.GREEN);
+        ArrayList<Tile> chosenTiles = new ArrayList<>();
+        chosenTiles.add(Tile.BLUE);
+        chosenTiles.add(Tile.GREEN);
         //set the array of the player's choices
         int[] order = new int[] {2, 1};
-        player.orderTiles(choosenTiles, order);
+        player.orderTiles(chosenTiles, order);
 
         //change order of chooseTiles manually
-        choosenTiles.remove(0);
-        choosenTiles.add(Tile.BLUE);
-        assertEquals(choosenTiles, player.getLittleHand());
+        chosenTiles.remove(0);
+        chosenTiles.add(Tile.BLUE);
+        assertEquals(chosenTiles, player.getLittleHand());
     }
 
     @Test
     public void orderTiles_threeTiles() {
-        ArrayList<Tile> choosenTiles = new ArrayList<>();
-        choosenTiles.add(Tile.BLUE);
-        choosenTiles.add(Tile.GREEN);
-        choosenTiles.add(Tile.YELLOW);
+        ArrayList<Tile> chosenTiles = new ArrayList<>();
+        chosenTiles.add(Tile.BLUE);
+        chosenTiles.add(Tile.GREEN);
+        chosenTiles.add(Tile.YELLOW);
         //set the array of the player's choices
         int[] order = new int[] {3, 1 ,2};
-        player.orderTiles(choosenTiles, order);
+        player.orderTiles(chosenTiles, order);
 
         //change order of chooseTiles manually
-        choosenTiles.remove(0);
-        choosenTiles.add(Tile.BLUE);
-        assertEquals(choosenTiles, player.getLittleHand());
+        chosenTiles.remove(0);
+        chosenTiles.add(Tile.BLUE);
+        assertEquals(chosenTiles, player.getLittleHand());
     }
 }
