@@ -173,18 +173,17 @@ public class Board {
     }
 
 
-
-    public ArrayList<Tile> pick(int maxTilesPickable){
-        int initalPositionR, initialPositionC, numberOfTiles;
+    public ArrayList<Tile> chooseTilesFromBoard(int maxTilesPickable){
+        int initialPositionR, initialPositionC, numberOfTiles;
         char direction;
         ArrayList<Tile> chosenTiles = new ArrayList<>();
 
         System.out.println("Insert the initial position of the tile: ");
         do{
             try{
-                initalPositionR = getInitalRow();
+                initialPositionR = getInitalRow();
                 initialPositionC = getInitialColumn();
-                checkPosition(initalPositionR, initialPositionC);
+                checkPosition(initialPositionR, initialPositionC);
                 break;
             }catch(OutOfBoardException | InvalidPositionException | InvalidCellException e){
                 System.out.println(e);
@@ -197,7 +196,7 @@ public class Board {
             try{
                 numberOfTiles = getNumberOfTiles(maxTilesPickable);
                 direction = getDirection();
-                checkDirectionAndNumberOfTiles(direction, numberOfTiles, initalPositionR, initialPositionC);
+                checkDirectionAndNumberOfTiles(direction, numberOfTiles, initialPositionR, initialPositionC);
                 break;
             }catch(InvalidNumberOfTilesException | InvalidDirectionException | InvalidPositionException
                     | InvalidCellException e){
@@ -205,13 +204,19 @@ public class Board {
             }
         }while(true);
 
+        return pickTilesFromBoard(initialPositionR, initialPositionC, numberOfTiles, direction);
+    }
+
+    private ArrayList<Tile> pickTilesFromBoard(int initialPositionR, int initialPositionC, int numberOfTiles, char direction){
+        ArrayList<Tile> chosenTiles = new ArrayList<>();
+
         for(int i=0; i<numberOfTiles; i++){
-            chosenTiles.add(boardGrid[initalPositionR][initialPositionC]);
-            boardGrid[initalPositionR][initialPositionC] = Tile.BLANK;
+            chosenTiles.add(boardGrid[initialPositionR][initialPositionC]);
+            boardGrid[initialPositionR][initialPositionC] = Tile.BLANK;
             if(direction == 'n')
-                initalPositionR--;
+                initialPositionR--;
             else if(direction == 's')
-                initalPositionR++;
+                initialPositionR++;
             else if(direction == 'e')
                 initialPositionC++;
             else

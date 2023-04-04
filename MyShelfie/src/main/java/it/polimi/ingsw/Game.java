@@ -61,7 +61,7 @@ public class Game {
         int maxTilesPickable = playerPlaying.myShelfie.maxTilesPickable();
 
         // the player chooses the tiles from the board
-        ArrayList<Tile> chosenTiles = board.pick(maxTilesPickable);
+        ArrayList<Tile> chosenTiles = board.chooseTilesFromBoard(maxTilesPickable);
 
         //copy of the tiles chosen in the player littleHand already in the correct order
         playerPlaying.orderTiles(chosenTiles, playerPlaying.askOrder(chosenTiles));
