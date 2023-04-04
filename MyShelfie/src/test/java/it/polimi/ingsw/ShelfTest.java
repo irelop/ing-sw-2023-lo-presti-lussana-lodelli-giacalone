@@ -1,15 +1,15 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.Exceptions.NotEnoughSpaceInChosenColumnException;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+        import it.polimi.ingsw.Exceptions.NotEnoughSpaceInChosenColumnException;
+        import org.junit.After;
+        import org.junit.Assert;
+        import org.junit.Before;
+        import org.junit.Test;
 
-import java.awt.*;
-import java.util.ArrayList;
+        import java.awt.*;
+        import java.util.ArrayList;
 
-import static org.junit.Assert.*;
+        import static org.junit.Assert.*;
 
 public class ShelfTest {
     Shelf shelf;
@@ -61,11 +61,11 @@ public class ShelfTest {
                 assertEquals(shelf2.getGrid()[r][c], shelf.getGrid()[r][c]);
         }
     }
-    @Test (expected = NotEnoughSpaceInChosenColumnException.class)
-    public void insert_exception() {
-        grid[0][3] = Tile.GREEN;
-        grid[0][2] = Tile.GREEN;
-        grid[0][1] = Tile.GREEN;
+    @Test(expected = NotEnoughSpaceInChosenColumnException.class)
+    public void insert_exception() throws NotEnoughSpaceInChosenColumnException{
+        grid[3][0] = Tile.GREEN;
+        grid[2][0] = Tile.GREEN;
+        grid[1][0] = Tile.GREEN;
         Shelf shelf = new Shelf(grid);
 
         ArrayList<Tile> littleHand = new ArrayList<Tile>();
@@ -81,7 +81,7 @@ public class ShelfTest {
     @Test
     public void spotCheck_correctInput_correctOutput() {
         ReadFileByLines reader = new ReadFileByLines();
-        reader.readFrom("src/ShelfTest_spotCheck.txt");
+        reader.readFrom("src/test/testFiles/ShelfTest_spotCheck.txt");
 
         for (int i = 0; i < 6; i++) {
 
@@ -115,47 +115,47 @@ public class ShelfTest {
     @Test
     public void maxTilesPickable_corretInput_correctOutput_true() {
         //top four taws empty
-            shelf = new Shelf(grid);
-            assertEquals(3,shelf.maxTilesPickable());
+        shelf = new Shelf(grid);
+        assertEquals(3,shelf.maxTilesPickable());
 
         //filling the fourth (from top)
-            for(int i = 0; i<5 ; i++)
-                grid[3][i] = Tile.BLUE;
-            shelf = new Shelf(grid);
-            assertEquals(3,shelf.maxTilesPickable());
+        for(int i = 0; i<5 ; i++)
+            grid[3][i] = Tile.BLUE;
+        shelf = new Shelf(grid);
+        assertEquals(3,shelf.maxTilesPickable());
 
         //filling the third (from top)
-            for(int i = 0; i<5 ; i++)
-                grid[2][i] = Tile.BLUE;
-            shelf = new Shelf(grid);
-            assertEquals(2,shelf.maxTilesPickable());
+        for(int i = 0; i<5 ; i++)
+            grid[2][i] = Tile.BLUE;
+        shelf = new Shelf(grid);
+        assertEquals(2,shelf.maxTilesPickable());
 
         //filling the second (from top)
-            for(int i = 0; i<5 ; i++)
-                grid[1][i] = Tile.BLUE;
-            shelf = new Shelf(grid);
+        for(int i = 0; i<5 ; i++)
+            grid[1][i] = Tile.BLUE;
+        shelf = new Shelf(grid);
         assertEquals(1,shelf.maxTilesPickable());
 
         //filling the first (from top)
-            for(int i = 0; i<5 ; i++)
-                grid[0][i] = Tile.BLUE;
-            shelf = new Shelf(grid);
+        for(int i = 0; i<5 ; i++)
+            grid[0][i] = Tile.BLUE;
+        shelf = new Shelf(grid);
         assertEquals(0,shelf.maxTilesPickable());
 
         //creating a hole
-            grid[0][3] = Tile.BLANK;
-            grid[0][2] = Tile.BLANK;
-            shelf = new Shelf(grid);
-            assertEquals(1,shelf.maxTilesPickable());
+        grid[0][3] = Tile.BLANK;
+        grid[0][2] = Tile.BLANK;
+        shelf = new Shelf(grid);
+        assertEquals(1,shelf.maxTilesPickable());
 
-            grid[1][3] = Tile.BLANK;
-            shelf = new Shelf(grid);
-            assertEquals(2,shelf.maxTilesPickable());
+        grid[1][3] = Tile.BLANK;
+        shelf = new Shelf(grid);
+        assertEquals(2,shelf.maxTilesPickable());
 
-            grid[2][3] = Tile.BLANK;
-            grid[1][2] = Tile.BLANK;
-            shelf = new Shelf(grid);
-            assertEquals(3,shelf.maxTilesPickable());
+        grid[2][3] = Tile.BLANK;
+        grid[1][2] = Tile.BLANK;
+        shelf = new Shelf(grid);
+        assertEquals(3,shelf.maxTilesPickable());
 
 
     }

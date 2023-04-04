@@ -38,11 +38,15 @@ public class CommonGoalDeck {
      * OVERVIEW: this method allows the draw of a common goal card, as specified by the game rules.
      * @return the drawn common goal card.
      */
-    public static CommonGoalCard drawCommon() {
+    public static CommonGoalCard drawCommon() throws IllegalArgumentException{
         Random random = new Random();
         int idx = random.nextInt(commonGoalCardDeck.size());
 
-        return commonGoalCardDeck.get(idx);
+            return commonGoalCardDeck.remove(idx);
+    }
+
+    public static int getRemainingCommonGoalCards(){
+        return (commonGoalCardDeck.size());
     }
 
 }

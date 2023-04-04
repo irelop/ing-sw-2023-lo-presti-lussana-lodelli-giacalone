@@ -23,10 +23,13 @@ public class V4UPatternStrategy implements StrategyInterface {
         //check if there is a pattern of 4 vertical tile and it hasn't been already counted
         for(int i=0; i<numRow-3; i++)
             for(int j=0; j<numCol; j++){
-                if(shelfSnapshot[i][j] == shelfSnapshot[i+1][j] &&
-                   shelfSnapshot[i][j] == shelfSnapshot[i+2][j] &&
-                   shelfSnapshot[i][j] == shelfSnapshot[i+3][j] &&
-                   foundVertical[j] + 3 < i){
+                if(shelfSnapshot[i][j] != Tile.BLANK &&
+                        shelfSnapshot[i][j] != Tile.NOT_VALID &&
+                        shelfSnapshot[i][j] == shelfSnapshot[i+1][j] &&
+                        shelfSnapshot[i][j] == shelfSnapshot[i+2][j] &&
+                        shelfSnapshot[i][j] == shelfSnapshot[i+3][j] &&
+                        foundVertical[j] + 3 < i)
+                {
 
                     //count and mark on the array
                     contatore++;
@@ -38,10 +41,13 @@ public class V4UPatternStrategy implements StrategyInterface {
         Arrays.fill(foundHorizontal, -4);
         for(int i=0; i<numRow; i++)
             for(int j=0; j<numCol-3; j++){
-                if(shelfSnapshot[i][j] == shelfSnapshot[i][j+1] &&
-                   shelfSnapshot[i][j] == shelfSnapshot[i][j+2] &&
-                   shelfSnapshot[i][j] == shelfSnapshot[i][j+3] &&
-                   foundHorizontal[i] +3 < j ){
+                if(shelfSnapshot[i][j] != Tile.BLANK &&
+                        shelfSnapshot[i][j] != Tile.NOT_VALID &&
+                        shelfSnapshot[i][j] == shelfSnapshot[i][j+1] &&
+                        shelfSnapshot[i][j] == shelfSnapshot[i][j+2] &&
+                        shelfSnapshot[i][j] == shelfSnapshot[i][j+3] &&
+                        foundHorizontal[i] +3 < j )
+                {
 
                     //count and mark on the array
                     contatore++;

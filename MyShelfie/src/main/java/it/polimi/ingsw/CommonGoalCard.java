@@ -32,4 +32,8 @@ public class CommonGoalCard {
     public boolean checkPattern(Tile[][] shelfSnapshot){
         return (this.commonStrategy.checkPattern(shelfSnapshot));
     }
+
+    public String getStrategyName(){
+        return this.commonStrategy.getClass().getName();
+    }
 }

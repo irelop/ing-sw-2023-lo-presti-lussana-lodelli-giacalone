@@ -2,6 +2,9 @@ package it.polimi.ingsw;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
+
+import it.polimi.ingsw.Exceptions.*;
 
 /**
  * Bag class: this class represents the bag of all the drawable tiles of the game.
@@ -14,8 +17,9 @@ public class Bag {
 
     public Bag(){
         bag = new HashMap<>();
-        for(int i = 0; i< Tile.values().length -1; i++){
-            bag.put(Tile.values()[i],MAX_TILES);
+        List<Tile> validTiles = Arrays.stream(Tile.values()).filter(x->x!=Tile.NOT_VALID && x!=Tile.BLANK).collect(Collectors.toList());
+        for(Tile t: validTiles){
+            bag.put(t,MAX_TILES);
         }
     }
 
@@ -23,13 +27,31 @@ public class Bag {
      * OVERVIEW: this method allows to draw a single tile randomly chosen from the drawable remaining tiles of the game.
      * @return the single tile in order to be placed on the board.
      */
-    public Tile draw(){
-        List<Tile> remainingTiles = bag.keySet().stream().filter(x -> bag.get(x) > 0).toList();
-        Random random = new Random();
-        int i = random.nextInt(remainingTiles.size());
+    public Tile draw() throws EmptyBagException {
+        if (isBagEmpty()){
+            throw new EmptyBagException();
+        }
+        else{
+            List<Tile> remainingTiles = bag.keySet().stream().filter(x -> bag.get(x) > 0).toList();
+            Random random = new Random();
+            int i = random.nextInt(remainingTiles.size());
 
-        Tile drawableTile = remainingTiles.get(i);
-        bag.put(drawableTile,bag.get(drawableTile)-1);
-        return drawableTile;
+            Tile drawableTile = remainingTiles.get(i);
+            bag.put(drawableTile, bag.get(drawableTile) - 1);
+            return drawableTile;
+        }
+    }
+
+    /**
+     * OVERVIEW: this method allows to check if the game bag is already empty or not in order to refill the game board.
+     * @return true: if it's empty.
+     *         false: otherwise.
+     */
+    private boolean isBagEmpty(){
+        return(this.bag.values().stream().filter(x->x!=0).count()==0);
+    }
+
+    public int getTileQuantity(Tile tile){
+        return bag.get(tile);
     }
 }

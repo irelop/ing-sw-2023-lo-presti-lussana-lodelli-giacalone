@@ -14,7 +14,12 @@ public class XPatternStrategy implements StrategyInterface {
 
         for(int i=0; i<numRow - 2; i++){
             for(int j=0; j<numCol - 2;j++){
-               if(shelfSnapshot[i][j]==shelfSnapshot[i][j+2] && shelfSnapshot[i][j]==shelfSnapshot[i+1][j+1] && shelfSnapshot[i][j]==shelfSnapshot[i+2][j] && shelfSnapshot[i][j]==shelfSnapshot[i+2][j+2])
+               if(shelfSnapshot[i][j] != Tile.BLANK &&
+                       shelfSnapshot[i][j] != Tile.NOT_VALID &&
+                       shelfSnapshot[i][j]==shelfSnapshot[i][j+2] &&
+                       shelfSnapshot[i][j]==shelfSnapshot[i+1][j+1] &&
+                       shelfSnapshot[i][j]==shelfSnapshot[i+2][j] &&
+                       shelfSnapshot[i][j]==shelfSnapshot[i+2][j+2])
                    return true;
             }
         }

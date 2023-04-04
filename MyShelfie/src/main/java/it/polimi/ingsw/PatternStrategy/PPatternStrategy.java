@@ -12,7 +12,7 @@ public class PPatternStrategy implements StrategyInterface {
         int numCol = shelfSnapshot[0].length;
 
         //check from the west
-        if(shelfSnapshot[1][0]!=Tile.BLANK){
+        if(shelfSnapshot[1][0]!=Tile.BLANK && shelfSnapshot[1][0]!=Tile.NOT_VALID){
             for(int i = 1;i<numCol;i++){
                 if(shelfSnapshot[1+i][i]==Tile.BLANK){
                     return false;
@@ -22,7 +22,7 @@ public class PPatternStrategy implements StrategyInterface {
         }
 
         //check from the east
-        else if(shelfSnapshot[1][4]!=Tile.BLANK){
+        else if(shelfSnapshot[1][4]!=Tile.BLANK && shelfSnapshot[1][4]!=Tile.NOT_VALID){
             for(int i=1;i<numCol;i++){
                 if(shelfSnapshot[i+1][numCol-1-i]==Tile.BLANK)
                     return false;

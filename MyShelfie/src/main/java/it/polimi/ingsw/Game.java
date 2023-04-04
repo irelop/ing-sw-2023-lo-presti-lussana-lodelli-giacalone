@@ -64,7 +64,7 @@ public class Game {
         ArrayList<Tile> chosenTiles = board.pick(maxTilesPickable);
 
         //copy of the tiles chosen in the player littleHand already in the correct order
-        playerPlaying.orderTiles(chosenTiles);
+        playerPlaying.orderTiles(chosenTiles, playerPlaying.askOrder(chosenTiles));
 
         do{
             try {

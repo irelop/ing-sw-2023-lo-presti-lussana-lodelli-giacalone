@@ -40,7 +40,7 @@ public class PersonalGoalCard {
      *  This method removes the head of availableScore in order to give points to the player who put a tile
      *  in the place indicated on the personal goal card
      */
-    public int getScore() {
+    private int getScore() {
         return availableScore.remove(0);
     }
 
@@ -50,11 +50,11 @@ public class PersonalGoalCard {
      * @param shelfSnapshot: a snapshot of the current player's shelf
      * @return an int given by the head of availableScore
      */
-    int getPersonalGoalScore(Tile[][] shelfSnapshot) {
+    public int getPersonalGoalScore(Tile[][] shelfSnapshot) {
 
         for (int i = 0; i < maxr; i++) {
             for (int j = 0; j < maxc; j++) {
-                if (shelfSnapshot[i][j] == pattern[i][j]) {
+                if (shelfSnapshot[i][j] == pattern[i][j] && pattern[i][j] != Tile.BLANK) {
                     pattern[i][j] = Tile.BLANK;
                     return getScore();
                 }
