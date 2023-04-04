@@ -21,6 +21,7 @@ public class Board {
     private static Tile[][] boardGrid;
     private static CommonGoalCard[] commonGoalCards;
 
+
     public static Board getBoardInstance(){
         if(boardInstance == null){
             boardInstance = new Board();
@@ -35,6 +36,12 @@ public class Board {
         return boardInstance;
     }
 
+    /**
+     * OVERVIEW: getter method
+     * @see CommonGoalCard
+     * @param index: int
+     * @return commonGoalCard in the position 'index'
+     */
     public static CommonGoalCard getCommonGoalCard(int index){
         return commonGoalCards[index];
     }
@@ -43,36 +50,49 @@ public class Board {
         return commonGoalCards;
     }
 
-    public void initGrid(int numPlayers){
-        int r, c, l, x, f, y;
+    /**
+     * OVERVIEW: getter method
+     * @see Tile
+     * @return boardGrid (matrix of Tile)
+     */
+    public static Tile[][] getBoardGrid(){
+        return boardGrid;
+    }
 
-        for(r=0; r<MAX_ROWS; r++) {
-            for (c = 0; c < MAX_COLUMNS; c++) {
-                boardGrid[r][c] = null;
+    /**
+     * OVERVIEW: a first draft of the initialization of the board. In this method we use some variables
+     * that move in the board: ns (north - south), sn (south-north), w (west), e (est), we (west-est),
+     * ew (est-west).
+     * @deprecated
+     * @param numPlayers : int
+     */
+    public void initGrid(int numPlayers){
+
+        for(int r=0; r<MAX_ROWS; r++) {
+            for (int c = 0; c < MAX_COLUMNS; c++) {
+                boardGrid[r][c] = Tile.NOT_VALID;
             }
         }
 
+        int ns, e, w, sn, we;
 
-        boardGrid[0][4] = Tile.BLANK;
-        boardGrid[8][4] = Tile.BLANK;
-
-        r = 1;
-        c = 3;
-        l = 5;
-        f = 7;
+        ns = 0;
+        e = (MAX_COLUMNS-1)/2;
+        w = (MAX_COLUMNS-1)/2;
+        sn = MAX_ROWS-1;
 
 
-        while(r<=4){
-            x = c;
-            while(x<=l){
-                boardGrid[r][x] = Tile.BLANK;
-                boardGrid[f][x] = Tile.BLANK;
-                x++;
+        while(ns<=4){
+            we = w;
+            while(we<=e){
+                boardGrid[ns][we] = Tile.BLANK;
+                boardGrid[sn][we] = Tile.BLANK;
+                we++;
             }
-            c--;
-            l++;
-            r++;
-            f--;
+            w--;
+            e++;
+            ns++;
+            sn--;
         }
 
         switch (numPlayers){
@@ -84,95 +104,122 @@ public class Board {
         }
     }
 
+    /**
+     * OVERVIEW: initialization of the board for 2 players
+     * @deprecated
+     */
     private void init2Players(){
-        int r, c, l, f, x, y;
-        r = 1;
-        c = 3;
-        l = 5;
-        f = 7;
-        while(r<=4){
-            x = c;
-            y = l;
-            while(x<=l){
-                if(!(r==1 && x==5) && !(r==2 && (x==2 || x==6)) && !(r==3 && x==1) && !(r==4 && (x==8 || x==0))){
-                    boardGrid[r][x] = Tile.BLANK;
-                    if(f!=4)
-                        boardGrid[f][y] = Tile.BLANK;
+        int ns, e, w, sn, we, ew;
+        ns = 1;
+        w = (MAX_COLUMNS-1)/2 - 1;
+        e = (MAX_COLUMNS-1)/2 + 1;
+        sn = MAX_ROWS-2;
+        while(ns<=4){
+            we = w;
+            ew = e;
+            while(we<=e){
+                if(!(ns==1 && we==5) && !(ns==2 && (we==2 || we==6)) && !(ns==3 && we==1) && !(ns==4 && (we==8 || we==0))){
+                    boardGrid[ns][we] = Tile.BLANK;
+                    if(sn!=4)
+                        boardGrid[sn][ew] = Tile.BLANK;
                 }
-                x++;
-                y--;
+                we++;
+                ew--;
             }
-            c--;
-            l++;
-            r++;
-            f--;
+            w--;
+            e++;
+            ns++;
+            sn--;
         }
     }
 
+    /**
+     * OVERVIEW: initialization of the board for 3 players
+     * @deprecated
+     */
     private void init3Players() {
-        boardGrid[0][3] = Tile.BLANK;
-        boardGrid[8][5] = Tile.BLANK;
 
-        int r, c, l, f, x, y;
+        int ns, e, w, sn, we, ew;
+        ns = 0;
+        w = (MAX_COLUMNS-1)/2 - 1;
+        e = (MAX_COLUMNS-1)/2 + 1;
+        sn = MAX_ROWS-1;
 
-        r = 1;
-        c = 3;
-        l = 5;
-        f = 7;
-        while (r <= 4) {
-            x = c;
-            y = l;
-            if (r == 3) {
-                boardGrid[r][l + 1] = Tile.BLANK;
-                boardGrid[f][c - 1] = Tile.BLANK;
+        boardGrid[ns][w] = Tile.BLANK;
+        boardGrid[sn][e] = Tile.BLANK;
+
+        ns++;
+        sn++;
+
+        while (ns <= 4) {
+            we = w;
+            ew = e;
+            if (ns == 3) {
+                boardGrid[ns][e + 1] = Tile.BLANK;
+                boardGrid[sn][w - 1] = Tile.BLANK;
             }
-            while (x <= l) {
-                if (!(r == 1 && x == 5) && !(r == 3 && x == 1) && !(r == 4 && (x == 8 || x == 0))) {
-                    boardGrid[r][x] = Tile.BLANK;
+            while (we <= e) {
+                if (!(ns == 1 && we == 5) && !(ns == 3 && we == 1) && !(ns == 4 && (we == 8 || we == 0))) {
+                    boardGrid[ns][we] = Tile.BLANK;
 
-                    if (f != 4) {
-                        boardGrid[f][y] = Tile.BLANK;
+                    if (sn != 4) {
+                        boardGrid[sn][ew] = Tile.BLANK;
                     }
                 }
-                x++;
-                y--;
+                we++;
+                ew--;
             }
-            c--;
-            l++;
-            r++;
-            f--;
+            w--;
+            e++;
+            ns++;
+            sn--;
         }
     }
 
+    /**
+     * OVERVIEW: initialization of the board for 4 players
+     * @deprecated
+     */
     private void init4Players() {
-        int r, c, l, f, x, y;
-        boardGrid[0][3] = Tile.BLANK;
-        boardGrid[8][5] = Tile.BLANK;
-        r = 0;
-        c = 4;
-        l = 4;
-        f = 8;
-        while (r <= 4) {
-            x = c;
-            y = l;
-            if (r == 3) {
-                boardGrid[r][l + 1] = Tile.BLANK;
-                boardGrid[f][c - 1] = Tile.BLANK;
+        int ns, e, w, sn, we, ew;
+        ns = 1;
+        w = (MAX_COLUMNS-1)/2 - 1;
+        e = (MAX_COLUMNS-1)/2 + 1;
+        sn = MAX_ROWS-2;
+
+        boardGrid[ns][w] = Tile.BLANK;
+        boardGrid[sn][e] = Tile.BLANK;
+
+        ns++;
+        sn++;
+
+        while (ns <= 4) {
+            we = w;
+            ew = e;
+            if (ns == 3) {
+                boardGrid[ns][e + 1] = Tile.BLANK;
+                boardGrid[sn][w - 1] = Tile.BLANK;
             }
-            while (x <= l) {
-                boardGrid[r][x] = Tile.BLANK;
-                boardGrid[f][y] = Tile.BLANK;
-                x++;
-                y--;
+            while (we <= e) {
+                boardGrid[ns][we] = Tile.BLANK;
+                boardGrid[sn][ew] = Tile.BLANK;
+                we++;
+                ew--;
             }
-            c--;
-            l++;
-            r++;
-            f--;
+            w--;
+            e++;
+            ns++;
+            sn--;
         }
     }
 
-
+    /**
+     * OVERVIEW: this method sets the position of the first tile, the number of tiles that the player wants and
+     * which direction (north, south, est, west) the player wants to follow in order to pick the other one/s.
+     * Then it call the method pickTilesFromBoard to pick the tiles.
+     * @param maxTilesPickable : int
+     * @return ArrayList<Tile> chosenTiles != null
+     */
     public ArrayList<Tile> chooseTilesFromBoard(int maxTilesPickable){
         int initialPositionR, initialPositionC, numberOfTiles;
         char direction;
@@ -207,6 +254,15 @@ public class Board {
         return pickTilesFromBoard(initialPositionR, initialPositionC, numberOfTiles, direction);
     }
 
+    /**
+     * OVERVIEW: this method picks the tiles from the board, and it returns them to the player's hand.
+     * @see Tile
+     * @param initialPositionR : int
+     * @param initialPositionC : int
+     * @param numberOfTiles : int
+     * @param direction : char
+     * @return ArrayList<Tile> chosenTiles != null
+     */
     private ArrayList<Tile> pickTilesFromBoard(int initialPositionR, int initialPositionC, int numberOfTiles, char direction){
         ArrayList<Tile> chosenTiles = new ArrayList<>();
 
@@ -225,6 +281,12 @@ public class Board {
 
         return chosenTiles;
     }
+
+    /**
+     * OVERVIEW: this method asks the index of the row of the initial position
+     * @return row >=0 || row < MAX_ROWS
+     * @throws OutOfBoardException e (if the chosen row is not between 0 and MAX_ROWS-1)
+     */
     private int getInitalRow() throws OutOfBoardException {
         int r;
         System.out.print("Row: ");
@@ -233,6 +295,13 @@ public class Board {
         if(r<0 || r>=MAX_ROWS) throw new OutOfBoardException();
         else return r;
     }
+
+    /**
+     * OVERVIEW: this method asks the index of the column of the initial position,
+     * if the chosen column is not between 0 and MAX_ROWS-1
+     * @return row >=0 || row < MAX_COLUMN
+     * @throws OutOfBoardException e
+     */
     private int getInitialColumn() throws OutOfBoardException {
         int c;
         System.out.print("Column: ");
@@ -242,13 +311,30 @@ public class Board {
         else return c;
     }
 
+    /**
+     * OVERVIEW: this method throws exceptions if the position chosen is not valid, is blank or if the tile has
+     * not a free side
+     * @param r : int
+     * @param c : int
+     * @throws InvalidPositionException e
+     * @throws InvalidCellException e
+     */
     private void checkPosition(int r, int c) throws InvalidPositionException, InvalidCellException {
         if(boardGrid[r+1][c]!=Tile.BLANK && boardGrid[r-1][c]!=Tile.BLANK &&
-                boardGrid[r][c+1]!=Tile.BLANK && boardGrid[r][c-1]!=Tile.BLANK)
+                boardGrid[r][c+1]!=Tile.BLANK && boardGrid[r][c-1]!=Tile.BLANK &&
+                boardGrid[r+1][c]!=Tile.NOT_VALID && boardGrid[r-1][c]!=Tile.NOT_VALID &&
+                boardGrid[r][c+1]!=Tile.NOT_VALID && boardGrid[r][c-1]!=Tile.NOT_VALID)
             throw new InvalidPositionException();
-        if(boardGrid[r][c] == Tile.NOT_VALID) throw new InvalidCellException();
+        if(boardGrid[r][c] == Tile.NOT_VALID || boardGrid[r][c] == Tile.BLANK) throw new InvalidCellException();
     }
 
+    /**
+     * OVERVIEW: this method get the number of tiles and throws an exception if the number of tiles chosen is not between 1 and
+     * the maximum number of tiles pickable
+     * @param maxTilesPickable : int
+     * @return numberOfTiles > 0 && numberOfTiles <= maxTilesPickable
+     * @throws InvalidNumberOfTilesException e
+     */
     private int getNumberOfTiles(int maxTilesPickable) throws InvalidNumberOfTilesException {
         Scanner scanner = new Scanner(System.in);
         int numberOfTiles;
@@ -257,6 +343,11 @@ public class Board {
         else return numberOfTiles;
     }
 
+    /**
+     * OVERVIEW: this method gets the direction and throws an exception if the direction chosen is not n, s, e or w
+     * @return direction
+     * @throws InvalidDirectionException e
+     */
     private char getDirection() throws InvalidDirectionException{
         Scanner scanner = new Scanner(System.in);
         char direction;
@@ -266,36 +357,51 @@ public class Board {
         else return direction;
 
     }
-    private void checkDirectionAndNumberOfTiles(char direction, int numberOfTiles, int r, int c) throws InvalidPositionException, InvalidDirectionException, InvalidCellException {
+
+    /**
+     * OVERVIEW: this method throws exception if the tiles chosen are not valid, blank, don't have a free side
+     * or the direction chosen goes out of the board.
+     * @param direction : char
+     * @param numberOfTiles : int
+     * @param r : int
+     * @param c : int
+     * @throws InvalidPositionException e
+     * @throws InvalidDirectionException e
+     * @throws InvalidCellException e
+     */
+    private void checkDirectionAndNumberOfTiles(char direction, int numberOfTiles, int r, int c)
+            throws InvalidPositionException, InvalidDirectionException, InvalidCellException {
         switch (direction) {
             case 'e' -> {
                 for (int i = 1; i < numberOfTiles; i++) {
-                    if (r + i > MAX_ROWS) throw new InvalidDirectionException();
-                    checkPosition(r + i, c);
+                    if (c + i >= MAX_COLUMNS) throw new InvalidDirectionException();
+                    checkPosition(r, c+i);
                 }
             }
             case 'n' -> {
                 for (int i = 1; i < numberOfTiles; i++) {
-                    if (c - i < 0) throw new InvalidDirectionException();
-                    checkPosition(r, c - i);
+                    if (r - i < 0) throw new InvalidDirectionException();
+                    checkPosition(r-i, c);
                 }
             }
             case 's' -> {
                 for (int i = 1; i < numberOfTiles; i++) {
-                    if (c + i > MAX_COLUMNS) throw new InvalidDirectionException();
-                    checkPosition(r, c + i);
+                    if (r + i >= MAX_ROWS) throw new InvalidDirectionException();
+                    checkPosition(r+i, c);
                 }
             }
             case 'w' -> {
                 for (int i = 1; i < numberOfTiles; i++) {
-                    if (r - i < 0) throw new InvalidDirectionException();
-                    checkPosition(r - i, c);
+                    if (c - i < 0) throw new InvalidDirectionException();
+                    checkPosition(r, c-i);
                 }
             }
         }
     }
 
-
+    /**
+     * OVERVIEW: this method refills the board with tiles from the bag
+     */
     public void refill(){
         for(int r=0; r<MAX_ROWS; r++)
             for(int c=0; c<MAX_COLUMNS; c++)
@@ -308,6 +414,10 @@ public class Board {
                     }
     }
 
+    /**
+     * OVERVIEW: this method checks if the board needs to be refilled
+     * @return true if the board needs to be refilled, false otherwise
+     */
     public boolean needRefill(){
         for(int r=0; r<MAX_ROWS-1; r++)
             for(int c=0; c<MAX_COLUMNS-1; c++){
