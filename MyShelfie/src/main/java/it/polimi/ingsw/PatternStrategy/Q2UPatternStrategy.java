@@ -26,7 +26,7 @@ public class Q2UPatternStrategy implements StrategyInterface {
                             shelfSnapshot[i + 1][j + 1] = Tile.NOT_VALID;
                         }
                     }
-                } else if(foundTile!=Tile.BLANK && foundTile!=Tile.NOT_VALID){
+                } else if(foundTile != Tile.NOT_VALID){
                     if (shelfSnapshot[i][j] != Tile.BLANK && shelfSnapshot[i][j] != Tile.NOT_VALID) {
                         if (shelfSnapshot[i][j] == foundTile &&
                                 shelfSnapshot[i][j] == shelfSnapshot[i][j + 1] &&
