@@ -438,6 +438,15 @@ public class Board {
         return true;
     }
 
+    /**
+     * OVERVIEW: initialization of the board with a geometric solution:
+     * the edges of the board corrisponds at 3 differents parabolas:
+     *  - 2 players: y = (1.24)x^2
+     *  - 3 players: y = (1.256)x^2 + 0.03
+     *  - 4 players: y = (1.27)x^2
+     * using these parabolas we can fill the first corner (top right) and then rotate it and fill the entire board
+     * @param numPlayers : int
+     */
     public void initGridParabolic(int numPlayers){
         int max_col = MAX_COLUMNS, max_raw = MAX_ROWS;
         for(int i=0; i<MAX_ROWS; i++) {
@@ -453,6 +462,7 @@ public class Board {
             case 4: init4PlayesParabolic();
         }
 
+        //rotate
         for(int i=0; i<(MAX_ROWS/2)+1; i++)
             for(int j=0; j<MAX_COLUMNS/2; j++){
                 boardGrid[j][MAX_COLUMNS-1-i]=boardGrid[i][j];
@@ -461,6 +471,9 @@ public class Board {
             }
     }
 
+    /**
+     * OVERVIEW: initialization of the board for 2 players
+     */
     private void init2PlayesParabolic(){
         int x;
         for(int i=3; i<MAX_ROWS-1; i++){
@@ -475,6 +488,9 @@ public class Board {
         }
     }
 
+    /**
+     * OVERVIEW: initialization of the board for 3 players
+     */
     private void init3PlayesParabolic(){
         int x;
         for(int i=3; i<MAX_ROWS-1; i++){
@@ -489,6 +505,9 @@ public class Board {
         }
     }
 
+    /**
+     * OVERVIEW: initialization of the board for 4 players
+     */
     private void init4PlayesParabolic(){
         int x;
         for(int i=3; i<MAX_ROWS-1; i++){
