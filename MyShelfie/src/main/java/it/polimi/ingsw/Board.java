@@ -21,7 +21,10 @@ public class Board {
     private static Tile[][] boardGrid;
     private static CommonGoalCard[] commonGoalCards;
 
-
+    /**
+     * OVERVIEW: this method returns the singleton instance of the Board class.
+     * @return the instacce of the game board.
+     */
     public static Board getBoardInstance(){
         if(boardInstance == null){
             boardInstance = new Board();
@@ -36,6 +39,10 @@ public class Board {
         return boardInstance;
     }
 
+    /**
+     * OVERVIEW: this method allows to initialize the grid of a board given a matrix of tiles which can be read by a file.
+     * @param matrix: the matrix of tiles chosen for the initialization.
+     */
     public void initFromMatrix(Tile[][] matrix){
         for(int i=0; i<matrix.length; i++)
             for(int j=0; j<matrix[0].length; j++){
