@@ -30,7 +30,7 @@ public class V4UPatternStrategy implements StrategyInterface {
                     shelfSnapshot[i][j] = Tile.NOT_VALID;
                     shelfSnapshot[i+1][j] = Tile.NOT_VALID;
                     shelfSnapshot[i+2][j] = Tile.NOT_VALID;
-                    shelfSnapshot[i+4][j] = Tile.NOT_VALID;
+                    shelfSnapshot[i+3][j] = Tile.NOT_VALID;
                     contatore++;
                     if(contatore == 4) return true;
                 }
