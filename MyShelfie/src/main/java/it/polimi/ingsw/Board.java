@@ -242,7 +242,7 @@ public class Board {
         System.out.println("Insert the initial position of the tile: ");
         do{
             try{
-                initialPositionR = getInitalRow();
+                initialPositionR = getInitialRow();
                 initialPositionC = getInitialColumn();
                 checkPosition(initialPositionR, initialPositionC);
                 break;
@@ -298,10 +298,12 @@ public class Board {
 
     /**
      * OVERVIEW: this method asks the index of the row of the initial position
+     * (if the chosen row is not between 0 and MAX_ROWS-1 it throws an exception)
+     * WITH SCANNER FROM INPUT
      * @return row >=0 || row < MAX_ROWS
-     * @throws OutOfBoardException e (if the chosen row is not between 0 and MAX_ROWS-1)
+     * @throws OutOfBoardException e
      */
-    private int getInitalRow() throws OutOfBoardException {
+    public int getInitialRow() throws OutOfBoardException {
         int r;
         System.out.print("Row: ");
         Scanner scanner = new Scanner(System.in);
@@ -309,10 +311,24 @@ public class Board {
         if(r<0 || r>=MAX_ROWS) throw new OutOfBoardException();
         else return r;
     }
+    /**
+     * OVERVIEW: this method asks the index of the row of the initial position
+     * (if the chosen row is not between 0 and MAX_ROWS-1 it throws an exception)
+     * WITHOUT SCANNER, now we used it for testing
+     * @param r : int
+     * @return row >=0 || row < MAX_ROWS
+     * @throws OutOfBoardException e
+     */
+    public int getInitialRow(int r) throws OutOfBoardException {
+        r = r - 1;
+        if(r<0 || r>=MAX_ROWS) throw new OutOfBoardException();
+        else return r;
+    }
 
     /**
      * OVERVIEW: this method asks the index of the column of the initial position,
      * if the chosen column is not between 0 and MAX_ROWS-1
+     * WITH SCANNER
      * @return row >=0 || row < MAX_COLUMN
      * @throws OutOfBoardException e
      */
@@ -321,6 +337,18 @@ public class Board {
         System.out.print("Column: ");
         Scanner scanner = new Scanner(System.in);
         c = scanner.nextInt() - 1;
+        if(c<0 || c>=MAX_COLUMNS) throw new OutOfBoardException();
+        else return c;
+    }
+    /**
+     * OVERVIEW: this method asks the index of the column of the initial position,
+     * if the chosen column is not between 0 and MAX_ROWS-1
+     * WITHOUT SCANNER, now we used it for testing
+     * @return row >=0 || row < MAX_COLUMN
+     * @throws OutOfBoardException e
+     */
+    public int getInitialColumn(int c) throws OutOfBoardException {
+        c = c - 1;
         if(c<0 || c>=MAX_COLUMNS) throw new OutOfBoardException();
         else return c;
     }
@@ -333,18 +361,24 @@ public class Board {
      * @throws InvalidPositionException e
      * @throws InvalidCellException e
      */
-    private void checkPosition(int r, int c) throws InvalidPositionException, InvalidCellException {
+    public void checkPosition(int r, int c) throws InvalidPositionException, InvalidCellException {
+        if(boardGrid[r][c] == Tile.NOT_VALID || boardGrid[r][c] == Tile.BLANK) throw new InvalidCellException();
+
+        if(r == MAX_ROWS-1 || c == MAX_COLUMNS-1 || r==0 || c==0)
+            return;
+
         if(boardGrid[r+1][c]!=Tile.BLANK && boardGrid[r-1][c]!=Tile.BLANK &&
                 boardGrid[r][c+1]!=Tile.BLANK && boardGrid[r][c-1]!=Tile.BLANK &&
                 boardGrid[r+1][c]!=Tile.NOT_VALID && boardGrid[r-1][c]!=Tile.NOT_VALID &&
                 boardGrid[r][c+1]!=Tile.NOT_VALID && boardGrid[r][c-1]!=Tile.NOT_VALID)
             throw new InvalidPositionException();
-        if(boardGrid[r][c] == Tile.NOT_VALID || boardGrid[r][c] == Tile.BLANK) throw new InvalidCellException();
+
     }
 
     /**
      * OVERVIEW: this method get the number of tiles and throws an exception if the number of tiles chosen is not between 1 and
      * the maximum number of tiles pickable
+     * SCANNER
      * @param maxTilesPickable : int
      * @return numberOfTiles > 0 && numberOfTiles <= maxTilesPickable
      * @throws InvalidNumberOfTilesException e
@@ -358,7 +392,21 @@ public class Board {
     }
 
     /**
+     * OVERVIEW: this method get the number of tiles and throws an exception if the number of tiles chosen is not between 1 and
+     * the maximum number of tiles pickable
+     * NO SCANNER, for test
+     * @param maxTilesPickable : int
+     * @return numberOfTiles > 0 && numberOfTiles <= maxTilesPickable
+     * @throws InvalidNumberOfTilesException e
+     */
+    public int getNumberOfTiles(int maxTilesPickable, int numberOfTiles) throws InvalidNumberOfTilesException {
+        if(numberOfTiles>maxTilesPickable || numberOfTiles <= 0) throw new InvalidNumberOfTilesException(maxTilesPickable);   // cambia il nome perchè toomany non ha senso
+        else return numberOfTiles;
+    }
+
+    /**
      * OVERVIEW: this method gets the direction and throws an exception if the direction chosen is not n, s, e or w
+     * SCANNER
      * @return direction
      * @throws InvalidDirectionException e
      */
@@ -366,6 +414,19 @@ public class Board {
         Scanner scanner = new Scanner(System.in);
         char direction;
         direction = scanner.next().charAt(0);
+        if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w')
+            throw new InvalidDirectionException();
+        else return direction;
+
+    }
+
+    /**
+     * OVERVIEW: this method gets the direction and throws an exception if the direction chosen is not n, s, e or w
+     * NO SCANNER, for test
+     * @return direction
+     * @throws InvalidDirectionException e
+     */
+    public char getDirection(char direction) throws InvalidDirectionException{
         if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w')
             throw new InvalidDirectionException();
         else return direction;
@@ -383,7 +444,7 @@ public class Board {
      * @throws InvalidDirectionException e
      * @throws InvalidCellException e
      */
-    private void checkDirectionAndNumberOfTiles(char direction, int numberOfTiles, int r, int c)
+    public void checkDirectionAndNumberOfTiles(char direction, int numberOfTiles, int r, int c)
             throws InvalidPositionException, InvalidDirectionException, InvalidCellException {
         switch (direction) {
             case 'e' -> {
