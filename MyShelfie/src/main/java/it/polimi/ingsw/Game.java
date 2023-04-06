@@ -158,6 +158,13 @@ public class Game {
         playersConnected.add(0, firstPlayer);
     }
 
+    private void drawCommonGoalCards(){
+        CommonGoalCard[] commonGoalCards = new CommonGoalCard[2];
+        commonGoalCards[0] = commonDeck.drawCommon();
+        commonGoalCards[1] = commonDeck.drawCommon();
+        board.setCommonGoalCard(commonGoalCards);
+    }
+
     /**
      * OVERVIEW: this method manages the game: a player can play his/her turn if the match is not over
      *       or if that is the last lap
@@ -165,6 +172,7 @@ public class Game {
     public void manageTurn(){
         setChair();
         dealPersonalCards();
+        drawCommonGoalCards();
         while(!isOver){
             for (Player player : playersConnected) {
                 //a player can play his/her turn if the match is not over

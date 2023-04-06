@@ -31,12 +31,13 @@ public class Board {
             boardGrid = new Tile[MAX_ROWS][MAX_COLUMNS];
             bag = new Bag();
             commonGoalCards = new CommonGoalCard[MAX_DRAWABLE_COMMON];
-            for(int i=0; i<MAX_DRAWABLE_COMMON;i++){
-                commonGoalCards[i] = CommonGoalDeck.drawCommon();
-            }
         }
 
         return boardInstance;
+    }
+
+    public void setCommonGoalCards(CommonGoalCard[] commonCards){
+        System.arraycopy(commonCards, 0, commonGoalCards, 0, MAX_DRAWABLE_COMMON);
     }
 
     /**
