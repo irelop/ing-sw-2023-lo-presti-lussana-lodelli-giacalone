@@ -51,6 +51,18 @@ class DPatternStrategyTest {
             }
         }
 
+
+        for (int i = 0; i < 6; i++) {
+            String row = ReadFileByLines.getLine();
+
+            String[] values = row.replaceAll("\\{", "")
+                    .replaceAll("}", "")
+                    .split(", ");
+
+            for (int j = 0; j < 5; j++) {
+                thirdPattern[i][j] = Tile.valueOf(values[j]);
+            }
+        }
     }
 
     @Test
