@@ -162,7 +162,7 @@ public class Game {
         CommonGoalCard[] commonGoalCards = new CommonGoalCard[2];
         commonGoalCards[0] = commonDeck.drawCommon();
         commonGoalCards[1] = commonDeck.drawCommon();
-        board.setCommonGoalCard(commonGoalCards);
+        board.setCommonGoalCards(commonGoalCards);
     }
 
     /**
