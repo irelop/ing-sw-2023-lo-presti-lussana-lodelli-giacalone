@@ -35,7 +35,6 @@ public class PPatternStrategy implements StrategyInterface {
                 }
                 if ((Arrays.stream(tmp).filter(x -> x != Tile.BLANK && x != Tile.NOT_VALID).count()) !=
                         numTilesColumn+ 1) {
-                    System.out.println(Arrays.stream(tmp).filter(x -> x != Tile.BLANK && x != Tile.NOT_VALID).count());
                     return false;
                 }
                 numTilesColumn = Math.toIntExact(Arrays.stream(tmp).filter(x -> x != Tile.BLANK && x != Tile.NOT_VALID).count());
@@ -64,29 +63,3 @@ public class PPatternStrategy implements StrategyInterface {
         else return false;
     }
 }
-    //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-    /*ATTENTION: NOT WORKING - DOESN'T CHECK THE FALSE CASE
-    @Override
-    public boolean checkPattern(Tile[][] shelfSnapshot) {
-        int numCol = shelfSnapshot[0].length;
-
-        //check from the west
-        if(shelfSnapshot[1][0]!=Tile.BLANK && shelfSnapshot[1][0]!=Tile.NOT_VALID){
-            for(int i = 1;i<numCol;i++){
-                if(shelfSnapshot[1+i][i]==Tile.BLANK){
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        //check from the east
-        else if(shelfSnapshot[1][4]!=Tile.BLANK && shelfSnapshot[1][4]!=Tile.NOT_VALID){
-            for(int i=1;i<numCol;i++){
-                if(shelfSnapshot[i+1][numCol-1-i]==Tile.BLANK)
-                    return false;
-            }
-            return true;
-        }
-        return false;*/
