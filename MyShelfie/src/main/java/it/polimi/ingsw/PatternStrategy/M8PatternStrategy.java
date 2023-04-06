@@ -23,7 +23,7 @@ public class M8PatternStrategy implements StrategyInterface {
         for (Tile c : validTiles) {
             for (int i = 0; i < maxr; i++) {
                 for (int j = 0; j < maxc; j++) {
-                    if (shelfSnapshot[i][j] == c && c != Tile.BLANK)
+                    if (shelfSnapshot[i][j] == c)
                         cont++;
                     if (cont >= 8) {
                         return true;
