@@ -11,7 +11,7 @@ public class V6DPatternStrategy implements StrategyInterface {
         int counter = 0;
         int rows = shelfSnapshot.length;
         int columns = shelfSnapshot[0].length;
-        Tile[] tmp = new Tile[columns];
+        Tile[] tmp = new Tile[rows];
 
         /* I need to use a temporary array in order to save the chosen column, then I'll proceed to count the
            distinct elements
