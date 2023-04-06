@@ -152,7 +152,10 @@ public class Game {
     private void setChair(){
         Random random = new Random();
         int index = random.nextInt(playersConnected.size());
-        playersConnected.get(index).setChair();
+        Player firstPlayer = playersConnected.get(index);
+        firstPlayer.setChair();
+        playersConnected.remove(firstPlayer);
+        playersConnected.add(0, firstPlayer);
     }
 
     /**
