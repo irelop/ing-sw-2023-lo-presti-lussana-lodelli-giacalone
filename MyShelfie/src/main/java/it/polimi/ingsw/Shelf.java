@@ -4,7 +4,6 @@ package it.polimi.ingsw;
  * Shelf Class: this class manages each player's library, in particular it allows the insertion of new tiles
  * and counts the adjacent tiles of the same color returning the final score
  *
- * @authors Irene Lo Presti, Matteo Lussana
  */
 
 import it.polimi.ingsw.Exceptions.NotEnoughSpaceInChosenColumnException;
@@ -22,6 +21,7 @@ public class Shelf {
      * beenThere that is a matrix 6x5 of int that used to control the adjacent tiles of the same color.
      *
      * @see Tile
+     * @authors Irene Lo Presti, Matteo Lussana
      */
     public Shelf(){
         this.grid = new Tile[6][5];
@@ -34,6 +34,14 @@ public class Shelf {
                 beenThere[r][c] = 0;
             }
     }
+    /**
+     * OVERVIEW: Constructor: it creates grid that is a matrix 6x5 of tiles, that represents the shelf,
+     * initializing all its cell to BLANK (because the shelf is initially empty). It also creates
+     * beenThere that is a matrix 6x5 of int that used to control the adjacent tiles of the same color.
+     *
+     * @see Tile
+     * @authors Matteo Lussana
+     */
     public Shelf(Tile[][] grid){
         //the index (0;0) indicates the first cell top left
         this.beenThere = new int[6][5];
@@ -53,6 +61,7 @@ public class Shelf {
      * @param littleHand : ArrayList<Tile>
      * @see Player
      * @throws NotEnoughSpaceInChosenColumnException e
+     * @authors Irene Lo Presti, Matteo Lussana
      */
     public void insert(int columnIndex, ArrayList<Tile> littleHand)
             throws NotEnoughSpaceInChosenColumnException {
@@ -70,6 +79,7 @@ public class Shelf {
      * OVERVIEW: this methods checks how many adiancent tiles of the same color there are (calling the
      * spotDimention method) and returns the right score
      * @return score >= 0
+     * @author Matteo Lussana
      */
     public int spotCheck(){
         int score=0;
@@ -102,6 +112,7 @@ public class Shelf {
      * @param counter : int
      * @see Tile
      * @return counter >= 0
+     * @author Matteo Lussana
      */
     private int spotDimention(Tile tile, int startRow, int startColumn, int counter){
         beenThere[startRow][startColumn] = 1;
@@ -135,6 +146,7 @@ public class Shelf {
      * @see Tile
      * @param columnIndex : int
      * @return r >= 0
+     * @authors Irene Lo Presti, Matteo Lussana
      */
     private int columnFreeSpace(int columnIndex){
         int r=0;
@@ -147,6 +159,7 @@ public class Shelf {
      * OVERVIEW: this method checks if the shelf is completely full
      * @see Tile
      * @return true if the shelf is full, false otherwise
+     * @authors Irene Lo Presti, Matteo Lussana
      */
     public boolean isShelfFull(){
         for(int c=0; c<5; c++)
@@ -159,6 +172,7 @@ public class Shelf {
      * example if all the columns have 2 free cells, the player can pick only 2 tiles.
      * @see Tile
      * @return freeSpace >= 1 (not zero because it would mean that the shelf is full)
+     * @authors Irene Lo Presti, Matteo Lussana
      */
     public int maxTilesPickable(){
         int freeSpace=0;
@@ -174,6 +188,11 @@ public class Shelf {
         return freeSpace;
     }
 
+    /**
+     * OVERVIEW: getter method
+     * @return grid
+     * @authors Irene Lo Presti, Matteo Lussana
+     */
     public Tile[][] getGrid(){
         return grid;
     }

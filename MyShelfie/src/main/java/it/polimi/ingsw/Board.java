@@ -4,7 +4,6 @@ package it.polimi.ingsw;
  * Board class: this class manages the board with the singleton pattern. There is only one initialization, then
  * it is only possible to pick a tile or to refill the board if necessary.
  *
- * @authors Andrea Giacalone, Matteo Lussana, Irene Lo Presti
  */
 
 import it.polimi.ingsw.Exceptions.*;
@@ -24,6 +23,7 @@ public class Board {
     /**
      * OVERVIEW: this method returns the singleton instance of the Board class.
      * @return the instacce of the game board.
+     * @author Andrea Giacalone
      */
     public static Board getBoardInstance(){
         if(boardInstance == null){
@@ -36,6 +36,13 @@ public class Board {
         return boardInstance;
     }
 
+    /**
+     * OVERVIEW: in the class Game there is the common deck where there is the draw of the two common
+     * cards. This method saves the common cards in board.
+     * @see CommonGoalCard
+     * @param commonCards : CommonGoalCard[]
+     * @authors Irene Lo Presti, Matteo Lussana
+     */
     public void setCommonGoalCards(CommonGoalCard[] commonCards){
         System.arraycopy(commonCards, 0, commonGoalCards, 0, MAX_DRAWABLE_COMMON);
     }
@@ -43,6 +50,7 @@ public class Board {
     /**
      * OVERVIEW: this method allows to initialize the grid of a board given a matrix of tiles which can be read by a file.
      * @param matrix: the matrix of tiles chosen for the initialization.
+     * @author Matteo Lussana
      */
     public void initFromMatrix(Tile[][] matrix){
         for(int i=0; i<matrix.length; i++)
@@ -56,6 +64,7 @@ public class Board {
      * @see CommonGoalCard
      * @param index: int
      * @return commonGoalCard in the position 'index'
+     * @author Irene Lo Presti
      */
     public static CommonGoalCard getCommonGoalCard(int index){
         return commonGoalCards[index];
@@ -69,6 +78,7 @@ public class Board {
      * OVERVIEW: getter method
      * @see Tile
      * @return boardGrid (matrix of Tile)
+     * @author Irene Lo Presti
      */
     public static Tile[][] getBoardGrid(){
         return boardGrid;
@@ -80,6 +90,7 @@ public class Board {
      * ew (est-west).
      * @deprecated
      * @param numPlayers : int
+     * @author Irene Lo Presti
      */
     public void initGrid(int numPlayers){
 
@@ -122,6 +133,7 @@ public class Board {
     /**
      * OVERVIEW: initialization of the board for 2 players
      * @deprecated
+     * @author Irene Lo Presti
      */
     private void init2Players(){
         int ns, e, w, sn, we, ew;
@@ -151,6 +163,7 @@ public class Board {
     /**
      * OVERVIEW: initialization of the board for 3 players
      * @deprecated
+     * @author Irene Lo Presti
      */
     private void init3Players() {
 
@@ -194,6 +207,7 @@ public class Board {
     /**
      * OVERVIEW: initialization of the board for 4 players
      * @deprecated
+     * @author Irene Lo Presti
      */
     private void init4Players() {
         int ns, e, w, sn, we, ew;
@@ -234,6 +248,7 @@ public class Board {
      * Then it call the method pickTilesFromBoard to pick the tiles.
      * @param maxTilesPickable : int
      * @return ArrayList<Tile> chosenTiles != null
+     * @author Irene Lo Presti
      */
     public ArrayList<Tile> chooseTilesFromBoard(int maxTilesPickable){
         int initialPositionR, initialPositionC, numberOfTiles;
@@ -277,6 +292,7 @@ public class Board {
      * @param numberOfTiles : int
      * @param direction : char
      * @return ArrayList<Tile> chosenTiles != null
+     * @author Irene Lo Presti
      */
     public ArrayList<Tile> pickTilesFromBoard(int initialPositionR, int initialPositionC, int numberOfTiles, char direction){
         ArrayList<Tile> chosenTiles = new ArrayList<>();
@@ -303,6 +319,7 @@ public class Board {
      * WITH SCANNER FROM INPUT
      * @return row >=0 || row < MAX_ROWS
      * @throws OutOfBoardException e
+     * @author Irene Lo Presti
      */
     public int getInitialRow() throws OutOfBoardException {
         int r;
@@ -319,6 +336,7 @@ public class Board {
      * @param r : int
      * @return row >=0 || row < MAX_ROWS
      * @throws OutOfBoardException e
+     * @author Irene Lo Presti
      */
     public int getInitialRow(int r) throws OutOfBoardException {
         r = r - 1;
@@ -332,6 +350,7 @@ public class Board {
      * WITH SCANNER
      * @return row >=0 || row < MAX_COLUMN
      * @throws OutOfBoardException e
+     * @author Irene Lo Presti
      */
     private int getInitialColumn() throws OutOfBoardException {
         int c;
@@ -347,6 +366,7 @@ public class Board {
      * WITHOUT SCANNER, now we used it for testing
      * @return row >=0 || row < MAX_COLUMN
      * @throws OutOfBoardException e
+     * @author Irene Lo Presti
      */
     public int getInitialColumn(int c) throws OutOfBoardException {
         c = c - 1;
@@ -361,6 +381,7 @@ public class Board {
      * @param c : int
      * @throws InvalidPositionException e
      * @throws InvalidCellException e
+     * @author Irene Lo Presti
      */
     public void checkPosition(int r, int c) throws InvalidPositionException, InvalidCellException {
         if(boardGrid[r][c] == Tile.NOT_VALID || boardGrid[r][c] == Tile.BLANK) throw new InvalidCellException();
@@ -383,6 +404,7 @@ public class Board {
      * @param maxTilesPickable : int
      * @return numberOfTiles > 0 && numberOfTiles <= maxTilesPickable
      * @throws InvalidNumberOfTilesException e
+     * @author Irene Lo Presti
      */
     private int getNumberOfTiles(int maxTilesPickable) throws InvalidNumberOfTilesException {
         Scanner scanner = new Scanner(System.in);
@@ -399,6 +421,7 @@ public class Board {
      * @param maxTilesPickable : int
      * @return numberOfTiles > 0 && numberOfTiles <= maxTilesPickable
      * @throws InvalidNumberOfTilesException e
+     * @author Irene Lo Presti
      */
     public int getNumberOfTiles(int maxTilesPickable, int numberOfTiles) throws InvalidNumberOfTilesException {
         if(numberOfTiles>maxTilesPickable || numberOfTiles <= 0) throw new InvalidNumberOfTilesException(maxTilesPickable);   // cambia il nome perchè toomany non ha senso
@@ -410,6 +433,7 @@ public class Board {
      * SCANNER
      * @return direction
      * @throws InvalidDirectionException e
+     * @author Irene Lo Presti
      */
     private char getDirection() throws InvalidDirectionException{
         Scanner scanner = new Scanner(System.in);
@@ -426,6 +450,7 @@ public class Board {
      * NO SCANNER, for test
      * @return direction
      * @throws InvalidDirectionException e
+     * @author Irene Lo Presti
      */
     public char getDirection(char direction) throws InvalidDirectionException{
         if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w')
@@ -444,6 +469,7 @@ public class Board {
      * @throws InvalidPositionException e
      * @throws InvalidDirectionException e
      * @throws InvalidCellException e
+     * @author Irene Lo Presti
      */
     public void checkDirectionAndNumberOfTiles(char direction, int numberOfTiles, int r, int c)
             throws InvalidPositionException, InvalidDirectionException, InvalidCellException {
@@ -477,6 +503,7 @@ public class Board {
 
     /**
      * OVERVIEW: this method refills the board with tiles from the bag
+     * @author Irene Lo Presti
      */
     public void refill(){
         for(int r=0; r<MAX_ROWS; r++)
@@ -493,6 +520,7 @@ public class Board {
     /**
      * OVERVIEW: this method checks if the board needs to be refilled
      * @return true if the board needs to be refilled, false otherwise
+     * @author Irene Lo Presti
      */
     public boolean needRefill(){
         for(int r=0; r<MAX_ROWS-1; r++)
@@ -515,6 +543,7 @@ public class Board {
      *  - 4 players: y = (1.27)x^2
      * using these parabolas we can fill the first corner (top right) and then rotate it and fill the entire board
      * @param numPlayers : int
+     * @author Matteo Lussana
      */
     public void initGridParabolic(int numPlayers){
         int max_col = MAX_COLUMNS, max_raw = MAX_ROWS;
@@ -542,6 +571,7 @@ public class Board {
 
     /**
      * OVERVIEW: initialization of the board for 2 players
+     *  @author Matteo Lussana
      */
     private void init2PlayesParabolic(){
         int x;
@@ -559,6 +589,7 @@ public class Board {
 
     /**
      * OVERVIEW: initialization of the board for 3 players
+     *  @author Matteo Lussana
      */
     private void init3PlayesParabolic(){
         int x;
@@ -576,6 +607,7 @@ public class Board {
 
     /**
      * OVERVIEW: initialization of the board for 4 players
+     * @author Matteo Lussana
      */
     private void init4PlayesParabolic(){
         int x;
