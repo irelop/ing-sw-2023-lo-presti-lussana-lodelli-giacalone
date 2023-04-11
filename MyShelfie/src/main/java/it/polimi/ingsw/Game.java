@@ -158,10 +158,14 @@ public class Game {
         playersConnected.add(0, firstPlayer);
     }
 
+
+    /**
+     * OVERVIEW: this method draws 2 common goal cards from the deck
+     */
     private void drawCommonGoalCards(){
         CommonGoalCard[] commonGoalCards = new CommonGoalCard[2];
-        commonGoalCards[0] = commonDeck.drawCommon();
-        commonGoalCards[1] = commonDeck.drawCommon();
+        commonGoalCards[0] = CommonGoalDeck.drawCommon();
+        commonGoalCards[1] = CommonGoalDeck.drawCommon();
         board.setCommonGoalCards(commonGoalCards);
     }
 
