@@ -5,6 +5,8 @@ import java.util.Arrays;
 
 /**
  * This class represents a single personal goal card with its specific color pattern.
+ *
+ * @author Riccardo Lodelli
  */
 public class PersonalGoalCard {
 

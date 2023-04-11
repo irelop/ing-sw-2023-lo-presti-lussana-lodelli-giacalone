@@ -69,7 +69,7 @@ public class Game {
 
         do{
             try {
-                System.out.println("choose the Colomn:");
+                System.out.println("choose the Column:");
                 Scanner scanner = new Scanner(System.in);
                 int columnChosen = scanner.nextInt();
 

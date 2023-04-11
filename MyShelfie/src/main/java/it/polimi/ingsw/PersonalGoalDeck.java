@@ -6,6 +6,8 @@ import java.util.Random;
 /**
  * Draft of class PersonalGoalCardDeck: this version wraps the base structure and a method that allows to randomly
  * draw a common goal card among the possible ones.
+ *
+ * @author Riccardo Lodelli
  */
 public class PersonalGoalDeck {
 
