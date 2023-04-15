@@ -21,7 +21,7 @@ public class Shelf {
      * beenThere that is a matrix 6x5 of int that used to control the adjacent tiles of the same color.
      *
      * @see Tile
-     * @authors Irene Lo Presti, Matteo Lussana
+     * @author Irene Lo Presti, Matteo Lussana
      */
     public Shelf(){
         this.grid = new Tile[6][5];
@@ -40,7 +40,7 @@ public class Shelf {
      * beenThere that is a matrix 6x5 of int that used to control the adjacent tiles of the same color.
      *
      * @see Tile
-     * @authors Matteo Lussana
+     * @author Irene Lo Presti, Matteo Lussana
      */
     public Shelf(Tile[][] grid){
         //the index (0;0) indicates the first cell top left
@@ -55,13 +55,13 @@ public class Shelf {
 
     /**
      * OVERVIEW: this method takes the tiles in the player's hand (lttleHand), that are already in the
-     * right order, and puts them in the player's shelf. If the players chooses a column that has not
-     * enough free cells, this method throws NotEnoughSpaceInChosenColumnException
-     * @param columnIndex : int
-     * @param littleHand : ArrayList<Tile>
+     * right order, and puts them in the player's shelf.
+     * @param columnIndex : index of the column where the player wants to insert the tiles
+     * @param littleHand : ArrayList of the tiles that the player has chosen from the board
      * @see Player
-     * @throws NotEnoughSpaceInChosenColumnException e
-     * @authors Irene Lo Presti, Matteo Lussana
+     * @throws NotEnoughSpaceInChosenColumnException If the players chooses a column that has not
+     *    enough free cells
+     * @author Irene Lo Presti, Matteo Lussana
      */
     public void insert(int columnIndex, ArrayList<Tile> littleHand)
             throws NotEnoughSpaceInChosenColumnException {
@@ -76,8 +76,8 @@ public class Shelf {
     }
 
     /**
-     * OVERVIEW: this methods checks how many adiancent tiles of the same color there are (calling the
-     * spotDimention method) and returns the right score
+     * OVERVIEW: this method checks how many adjacent tiles of the same color there are (calling the
+     * spotDimension method) and returns the right score
      * @return score >= 0
      * @author Matteo Lussana
      */
@@ -87,7 +87,7 @@ public class Shelf {
         for(int r=0; r<6; r++)
             for(int c=0; c<5; c++){
                 if(beenThere[r][c]==0 && !grid[r][c].equals(Tile.BLANK)){
-                    dimension = spotDimention(grid[r][c],r,c,1);
+                    dimension = spotDimension(grid[r][c],r,c,1);
                     switch(dimension){
                         case 1: break;
                         case 2: break;
@@ -106,36 +106,36 @@ public class Shelf {
 
     /**
      * OVERVIEW: recursive function to count the adjacent tiles of the same color
-     * @param tile : int
-     * @param startRow : int
-     * @param startColumn : int
-     * @param counter : int
      * @see Tile
+     * @param tile : tile to compare with
+     * @param startRow : starting row
+     * @param startColumn : starting column
+     * @param counter : how many tiles of the same color are near
      * @return counter >= 0
      * @author Matteo Lussana
      */
-    private int spotDimention(Tile tile, int startRow, int startColumn, int counter){
+    private int spotDimension(Tile tile, int startRow, int startColumn, int counter){
         beenThere[startRow][startColumn] = 1;
 
         //right
         if(startColumn+1<5 && beenThere[startRow][startColumn+1]!=1 &&
                 grid[startRow][startColumn+1].equals(tile))
-            counter = 1 + spotDimention(tile, startRow, startColumn+1, counter);
+            counter = 1 + spotDimension(tile, startRow, startColumn+1, counter);
 
         //left
         if(startColumn-1>=0 && beenThere[startRow][startColumn-1]!=1 &&
                 grid[startRow][startColumn-1].equals(tile))
-            counter = 1 + spotDimention(tile, startRow, startColumn-1, counter);
+            counter = 1 + spotDimension(tile, startRow, startColumn-1, counter);
 
         //down
         if(startRow+1<6 && beenThere[startRow+1][startColumn]!=1 &&
                 grid[startRow+1][startColumn].equals(tile))
-            counter = 1 + spotDimention(tile, startRow+1, startColumn, counter);
+            counter = 1 + spotDimension(tile, startRow+1, startColumn, counter);
 
         //up
         if(startRow-1>=0 && beenThere[startRow-1][startColumn]!=1 &&
                 grid[startRow-1][startColumn].equals(tile))
-            counter = 1 + spotDimention(tile, startRow-1, startColumn, counter);
+            counter = 1 + spotDimension(tile, startRow-1, startColumn, counter);
 
 
         return counter;
@@ -144,9 +144,9 @@ public class Shelf {
     /**
      * OVERVIEW: this method counts the number of free cell in the column with the index 'columnIndex'
      * @see Tile
-     * @param columnIndex : int
-     * @return r >= 0
-     * @authors Irene Lo Presti, Matteo Lussana
+     * @param columnIndex : index of the column chosen
+     * @return the maximum number of tiles that the player can choose from the board
+     * @author Irene Lo Presti, Matteo Lussana
      */
     private int columnFreeSpace(int columnIndex){
         int r=0;
@@ -159,7 +159,7 @@ public class Shelf {
      * OVERVIEW: this method checks if the shelf is completely full
      * @see Tile
      * @return true if the shelf is full, false otherwise
-     * @authors Irene Lo Presti, Matteo Lussana
+     * @author Irene Lo Presti, Matteo Lussana
      */
     public boolean isShelfFull(){
         for(int c=0; c<5; c++)
@@ -172,7 +172,7 @@ public class Shelf {
      * example if all the columns have 2 free cells, the player can pick only 2 tiles.
      * @see Tile
      * @return freeSpace >= 1 (not zero because it would mean that the shelf is full)
-     * @authors Irene Lo Presti, Matteo Lussana
+     * @author Irene Lo Presti, Matteo Lussana
      */
     public int maxTilesPickable(){
         int freeSpace=0;
@@ -191,7 +191,7 @@ public class Shelf {
     /**
      * OVERVIEW: getter method
      * @return grid
-     * @authors Irene Lo Presti, Matteo Lussana
+     * @author Irene Lo Presti, Matteo Lussana
      */
     public Tile[][] getGrid(){
         return grid;
