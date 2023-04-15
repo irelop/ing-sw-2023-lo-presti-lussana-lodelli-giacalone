@@ -22,7 +22,7 @@ public class Board {
 
     /**
      * OVERVIEW: this method returns the singleton instance of the Board class.
-     * @return the instacce of the game board.
+     * @return the instance of the game board.
      * @author Andrea Giacalone
      */
     public static Board getBoardInstance(){
@@ -40,8 +40,8 @@ public class Board {
      * OVERVIEW: in the class Game there is the common deck where there is the draw of the two common
      * cards. This method saves the common cards in board.
      * @see CommonGoalCard
-     * @param commonCards : CommonGoalCard[]
-     * @authors Irene Lo Presti, Matteo Lussana
+     * @param commonCards: the two drawn commonGoalCards
+     * @author Irene Lo Presti, Matteo Lussana
      */
     public void setCommonGoalCards(CommonGoalCard[] commonCards){
         System.arraycopy(commonCards, 0, commonGoalCards, 0, MAX_DRAWABLE_COMMON);
@@ -62,7 +62,7 @@ public class Board {
     /**
      * OVERVIEW: getter method
      * @see CommonGoalCard
-     * @param index: int
+     * @param index: indicates which commonGoalCard is (the number 0 or the number 1)
      * @return commonGoalCard in the position 'index'
      * @author Irene Lo Presti
      */
@@ -89,7 +89,7 @@ public class Board {
      * that move in the board: ns (north - south), sn (south-north), w (west), e (est), we (west-est),
      * ew (est-west).
      * @deprecated
-     * @param numPlayers : int
+     * @param numPlayers: number of player playing
      * @author Irene Lo Presti
      */
     public void initGrid(int numPlayers){
@@ -246,7 +246,7 @@ public class Board {
      * OVERVIEW: this method sets the position of the first tile, the number of tiles that the player wants and
      * which direction (north, south, est, west) the player wants to follow in order to pick the other one/s.
      * Then it call the method pickTilesFromBoard to pick the tiles.
-     * @param maxTilesPickable : int
+     * @param maxTilesPickable: the maximum number of tiles that the player can pick
      * @return ArrayList<Tile> chosenTiles != null
      * @author Irene Lo Presti
      */
@@ -287,11 +287,11 @@ public class Board {
     /**
      * OVERVIEW: this method picks the tiles from the board, and it returns them to the player's hand.
      * @see Tile
-     * @param initialPositionR : int
-     * @param initialPositionC : int
-     * @param numberOfTiles : int
-     * @param direction : char
-     * @return ArrayList<Tile> chosenTiles != null
+     * @param initialPositionR : index of the initial row
+     * @param initialPositionC : index of the initial column
+     * @param numberOfTiles : number of tiles chosen
+     * @param direction : direction in which the player chooses the tiles
+     * @return ArrayList<Tile> chosenTiles != null : the chosen tiles from the board
      * @author Irene Lo Presti
      */
     public ArrayList<Tile> pickTilesFromBoard(int initialPositionR, int initialPositionC, int numberOfTiles, char direction){
@@ -315,10 +315,9 @@ public class Board {
 
     /**
      * OVERVIEW: this method asks the index of the row of the initial position
-     * (if the chosen row is not between 0 and MAX_ROWS-1 it throws an exception)
      * WITH SCANNER FROM INPUT
      * @return row >=0 || row < MAX_ROWS
-     * @throws OutOfBoardException e
+     * @throws OutOfBoardException if the chosen row is not between 0 and MAX_ROWS-1
      * @author Irene Lo Presti
      */
     public int getInitialRow() throws OutOfBoardException {
@@ -331,11 +330,10 @@ public class Board {
     }
     /**
      * OVERVIEW: this method asks the index of the row of the initial position
-     * (if the chosen row is not between 0 and MAX_ROWS-1 it throws an exception)
      * WITHOUT SCANNER, now we used it for testing
      * @param r : int
      * @return row >=0 || row < MAX_ROWS
-     * @throws OutOfBoardException e
+     * @throws OutOfBoardException if the chosen row is not between 0 and MAX_ROWS-1
      * @author Irene Lo Presti
      */
     public int getInitialRow(int r) throws OutOfBoardException {
@@ -346,10 +344,9 @@ public class Board {
 
     /**
      * OVERVIEW: this method asks the index of the column of the initial position,
-     * if the chosen column is not between 0 and MAX_ROWS-1
      * WITH SCANNER
      * @return row >=0 || row < MAX_COLUMN
-     * @throws OutOfBoardException e
+     * @throws OutOfBoardException if the chosen column is not between 0 and MAX_ROWS-1
      * @author Irene Lo Presti
      */
     private int getInitialColumn() throws OutOfBoardException {
@@ -361,11 +358,10 @@ public class Board {
         else return c;
     }
     /**
-     * OVERVIEW: this method asks the index of the column of the initial position,
-     * if the chosen column is not between 0 and MAX_ROWS-1
+     * OVERVIEW: this method asks the index of the column of the initial position
      * WITHOUT SCANNER, now we used it for testing
      * @return row >=0 || row < MAX_COLUMN
-     * @throws OutOfBoardException e
+     * @throws OutOfBoardException if the chosen column is not between 0 and MAX_ROWS-1
      * @author Irene Lo Presti
      */
     public int getInitialColumn(int c) throws OutOfBoardException {
@@ -375,12 +371,12 @@ public class Board {
     }
 
     /**
-     * OVERVIEW: this method throws exceptions if the position chosen is not valid, is blank or if the tile has
-     * not a free side
+     * OVERVIEW: this method checks if the cells are valid and not empty and if the tiles have a free side
      * @param r : int
      * @param c : int
-     * @throws InvalidPositionException e
-     * @throws InvalidCellException e
+     * @throws InvalidPositionException if the tile has not a free side
+     * @throws InvalidCellException if the cell is not valid
+     * @throws EmptyCellException if the cell is empty
      * @author Irene Lo Presti
      */
     public void checkPosition(int r, int c) throws InvalidPositionException, InvalidCellException, EmptyCellException {
@@ -401,12 +397,12 @@ public class Board {
     }
 
     /**
-     * OVERVIEW: this method get the number of tiles and throws an exception if the number of tiles chosen is not between 1 and
-     * the maximum number of tiles pickable
+     * OVERVIEW: this method get the number of tiles
      * SCANNER
      * @param maxTilesPickable : int
      * @return numberOfTiles > 0 && numberOfTiles <= maxTilesPickable
-     * @throws InvalidNumberOfTilesException e
+     * @throws InvalidNumberOfTilesException if the number of tiles chosen is not between 1 and
+     *              the maximum number of tiles pickable
      * @author Irene Lo Presti
      */
     private int getNumberOfTiles(int maxTilesPickable) throws InvalidNumberOfTilesException {
@@ -418,12 +414,12 @@ public class Board {
     }
 
     /**
-     * OVERVIEW: this method get the number of tiles and throws an exception if the number of tiles chosen is not between 1 and
-     * the maximum number of tiles pickable
+     * OVERVIEW: this method get the number of tiles
      * NO SCANNER, for test
      * @param maxTilesPickable : int
      * @return numberOfTiles > 0 && numberOfTiles <= maxTilesPickable
-     * @throws InvalidNumberOfTilesException e
+     * @throws InvalidNumberOfTilesException if the number of tiles chosen is not between 1 and
+     *               the maximum number of tiles pickable
      * @author Irene Lo Presti
      */
     public int getNumberOfTiles(int maxTilesPickable, int numberOfTiles) throws InvalidNumberOfTilesException {
@@ -432,10 +428,10 @@ public class Board {
     }
 
     /**
-     * OVERVIEW: this method gets the direction and throws an exception if the direction chosen is not n, s, e or w
+     * OVERVIEW: this method gets the direction
      * SCANNER
      * @return direction
-     * @throws InvalidDirectionException e
+     * @throws InvalidDirectionException  if the direction chosen is not n, s, e or w
      * @author Irene Lo Presti
      */
     private char getDirection() throws InvalidDirectionException{
@@ -449,10 +445,10 @@ public class Board {
     }
 
     /**
-     * OVERVIEW: this method gets the direction and throws an exception if the direction chosen is not n, s, e or w
+     * OVERVIEW: this method gets the direction
      * NO SCANNER, for test
      * @return direction
-     * @throws InvalidDirectionException e
+     * @throws InvalidDirectionException if the direction chosen is not n, s, e or w
      * @author Irene Lo Presti
      */
     public char getDirection(char direction) throws InvalidDirectionException{
@@ -463,15 +459,16 @@ public class Board {
     }
 
     /**
-     * OVERVIEW: this method throws exception if the tiles chosen are not valid, blank, don't have a free side
-     * or the direction chosen goes out of the board.
+     * OVERVIEW: this method checks if the cells are valid and not empty, if the tiles have a free side and
+     * if the direction is correct
      * @param direction : char
      * @param numberOfTiles : int
      * @param r : int
      * @param c : int
-     * @throws InvalidPositionException e
-     * @throws InvalidDirectionException e
-     * @throws InvalidCellException e
+     * @throws InvalidPositionException if the tiles don't have a free side
+     * @throws InvalidDirectionException if the direction chosen goes out of the board
+     * @throws InvalidCellException if tone of the cells is not valid
+     * @throws EmptyCellException if one of the cells is empty
      * @author Irene Lo Presti
      */
     public void checkDirectionAndNumberOfTiles(char direction, int numberOfTiles, int r, int c)
