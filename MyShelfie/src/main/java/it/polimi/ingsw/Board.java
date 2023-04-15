@@ -262,7 +262,7 @@ public class Board {
                 initialPositionC = getInitialColumn();
                 checkPosition(initialPositionR, initialPositionC);
                 break;
-            }catch(OutOfBoardException | InvalidPositionException | InvalidCellException e){
+            }catch(OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException e){
                 System.out.println(e);
             }
         }while(true);
@@ -276,7 +276,7 @@ public class Board {
                 checkDirectionAndNumberOfTiles(direction, numberOfTiles, initialPositionR, initialPositionC);
                 break;
             }catch(InvalidNumberOfTilesException | InvalidDirectionException | InvalidPositionException
-                    | InvalidCellException e){
+                    | InvalidCellException | EmptyCellException e){
                 System.out.println(e);
             }
         }while(true);
@@ -383,9 +383,12 @@ public class Board {
      * @throws InvalidCellException e
      * @author Irene Lo Presti
      */
-    public void checkPosition(int r, int c) throws InvalidPositionException, InvalidCellException {
-        if(boardGrid[r][c] == Tile.NOT_VALID || boardGrid[r][c] == Tile.BLANK) throw new InvalidCellException();
+    public void checkPosition(int r, int c) throws InvalidPositionException, InvalidCellException, EmptyCellException {
+        if(boardGrid[r][c] == Tile.NOT_VALID) throw new InvalidCellException();
 
+        if(boardGrid[r][c] == Tile.BLANK) throw new EmptyCellException();
+
+        //if it is on the boarder a side is free
         if(r == MAX_ROWS-1 || c == MAX_COLUMNS-1 || r==0 || c==0)
             return;
 
@@ -472,7 +475,7 @@ public class Board {
      * @author Irene Lo Presti
      */
     public void checkDirectionAndNumberOfTiles(char direction, int numberOfTiles, int r, int c)
-            throws InvalidPositionException, InvalidDirectionException, InvalidCellException {
+            throws InvalidPositionException, InvalidDirectionException, InvalidCellException, EmptyCellException {
         switch (direction) {
             case 'e' -> {
                 for (int i = 1; i < numberOfTiles; i++) {

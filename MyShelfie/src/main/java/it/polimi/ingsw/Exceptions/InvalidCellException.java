@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Exceptions;
 
 /**
- * Exception for the choice of the tiles from the board. It is thrown if one of the chosen tile is not valid.
+ * Exception for the choice of the tiles from the board. It is thrown if one of the chosen cell is not valid.
  *
  * @author Irene Lo Presti
  */
