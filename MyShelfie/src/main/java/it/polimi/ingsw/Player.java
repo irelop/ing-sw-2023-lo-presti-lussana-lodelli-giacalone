@@ -27,7 +27,7 @@ public class Player {
      * @see Shelf
      * @see Tile
      * @see Score
-     * @param nickname : String
+     * @param nickname : nickname chosen by the player
      */
     public Player(String nickname){
         this.nickname = nickname;
@@ -68,7 +68,7 @@ public class Player {
     /**
      * OVERVIEW: setter method for commonGoalAchived. It is called only if the player achieves a common goal.
      * @see CommonGoalCard
-     * @param indexCommonCard : int
+     * @param indexCommonCard : index of the common goal card (0 or 1)
      */
     public void setCommonGoalAchieved(int indexCommonCard){
         this.commonGoalsAchieved[indexCommonCard] = true;
@@ -95,7 +95,7 @@ public class Player {
 
     /**
      * OVERVIEW: getter method
-     * @param indexCommonCard : int
+     * @param indexCommonCard : number of the common goal card (0 or 1)
      * @return commonGoalAchieved[indexCommonCard]
      */
     public boolean isCommonGoalAchieved(int indexCommonCard){
@@ -157,7 +157,7 @@ public class Player {
      * OVERVIEW: this method manage the user input of order
      * @deprecated
      * @see Tile
-     * @param chosenTiles : ArrayList<Tile>
+     * @param chosenTiles : ArrayList of the tiles that the player has chosen from the board
      */
     public int[] askOrder(ArrayList<Tile> chosenTiles){
 
@@ -183,10 +183,11 @@ public class Player {
 
 
     /**
-     * OVERVIEW: this method gets the new order
+     * OVERVIEW: this method gets the right order
      * @deprecated
-     * @param choices : int[]
-     * @throws InvalidTileIndexInLittleHandException e
+     * @param choices : array of the indexes that represent the chosen tiles
+     * @throws InvalidTileIndexInLittleHandException if the player chooses a number that is not between
+     * 1 and the number of the tiles that he/she has chosen from the board or if he/she has already chosen it
      */
     private void getTiles(int[] choices) throws InvalidTileIndexInLittleHandException {
         Scanner scanner = new Scanner(System.in);
