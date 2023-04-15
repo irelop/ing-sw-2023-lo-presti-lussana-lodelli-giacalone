@@ -10,7 +10,6 @@ import it.polimi.ingsw.Exceptions.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-//OVERVIEW: Draft della classe BOARD: mancano i metodi per fillare e check di adiacenza
 public class Board {
     protected final static int MAX_ROWS = 9;
     protected final static int MAX_COLUMNS = 9;

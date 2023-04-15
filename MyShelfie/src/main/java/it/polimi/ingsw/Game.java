@@ -29,7 +29,7 @@ public class Game {
      * @see Board
      * @see PersonalGoalDeck
      * @see CommonGoalDeck
-     * @param playersConnected : ArrayList<Player>
+     * @param playersConnected : all the players connected
      */
     public Game(ArrayList<Player> playersConnected){
         //fill the arrayList of players
@@ -55,7 +55,7 @@ public class Game {
      *          6) check if the board needs to be refilled, if it is true it calls the refill method
      * @see Player
      * @see Board
-     * @param playerPlaying: ArrayList<Player>
+     * @param playerPlaying: players that are playing
      */
     private void turn(Player playerPlaying){
         // find max pickable tiles by the player
@@ -105,8 +105,8 @@ public class Game {
      * and it returns the right amount of points
      * @see Player
      * @see CommonGoalCard
-     * @param playerPlaying : Player
-     * @param commonGoalIndex : int
+     * @param playerPlaying : Player who is playing his/her turn
+     * @param commonGoalIndex : number of the common goal to check (0 or 1)
      * @return commonPointsEarned >= 0
      */
     private int commonPointsEarned(Player playerPlaying, int commonGoalIndex){
@@ -125,7 +125,7 @@ public class Game {
      * @see Player
      * @see PersonalGoalCard
      * @see Tile
-     * @param playerPlaying : Player
+     * @param playerPlaying : Player who is playing his/her turn
      * @return personalPointsEarned >= 0
      */
     private int personalPointsEarned(Player playerPlaying){
