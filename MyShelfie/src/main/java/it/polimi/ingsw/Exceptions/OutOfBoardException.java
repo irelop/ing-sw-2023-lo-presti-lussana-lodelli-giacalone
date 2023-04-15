@@ -14,6 +14,7 @@ public class OutOfBoardException extends Exception {
 
     @Override
     public String toString(){
-        return "You chose a position outside the board, the index must be between 1 and 9";
+        return "Chosen cells cannot be outside of the board. Remember that the index are " +
+                "between 1 and 9!";
     }
 }

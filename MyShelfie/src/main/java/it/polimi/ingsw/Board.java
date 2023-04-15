@@ -276,7 +276,7 @@ public class Board {
                 checkDirectionAndNumberOfTiles(direction, numberOfTiles, initialPositionR, initialPositionC);
                 break;
             }catch(InvalidNumberOfTilesException | InvalidDirectionException | InvalidPositionException
-                    | InvalidCellException | EmptyCellException e){
+                    | InvalidCellException | EmptyCellException | OutOfBoardException e){
                 System.out.println(e);
             }
         }while(true);
@@ -466,35 +466,35 @@ public class Board {
      * @param r : int
      * @param c : int
      * @throws InvalidPositionException if the tiles don't have a free side
-     * @throws InvalidDirectionException if the direction chosen goes out of the board
+     * @throws OutOfBoardException if the direction chosen goes out of the board
      * @throws InvalidCellException if tone of the cells is not valid
      * @throws EmptyCellException if one of the cells is empty
      * @author Irene Lo Presti
      */
     public void checkDirectionAndNumberOfTiles(char direction, int numberOfTiles, int r, int c)
-            throws InvalidPositionException, InvalidDirectionException, InvalidCellException, EmptyCellException {
+            throws InvalidPositionException, InvalidCellException, EmptyCellException, OutOfBoardException {
         switch (direction) {
             case 'e' -> {
                 for (int i = 1; i < numberOfTiles; i++) {
-                    if (c + i >= MAX_COLUMNS) throw new InvalidDirectionException();
+                    if (c + i >= MAX_COLUMNS) throw new OutOfBoardException();
                     checkPosition(r, c+i);
                 }
             }
             case 'n' -> {
                 for (int i = 1; i < numberOfTiles; i++) {
-                    if (r - i < 0) throw new InvalidDirectionException();
+                    if (r - i < 0) throw new OutOfBoardException();
                     checkPosition(r-i, c);
                 }
             }
             case 's' -> {
                 for (int i = 1; i < numberOfTiles; i++) {
-                    if (r + i >= MAX_ROWS) throw new InvalidDirectionException();
+                    if (r + i >= MAX_ROWS) throw new OutOfBoardException();
                     checkPosition(r+i, c);
                 }
             }
             case 'w' -> {
                 for (int i = 1; i < numberOfTiles; i++) {
-                    if (c - i < 0) throw new InvalidDirectionException();
+                    if (c - i < 0) throw new OutOfBoardException();
                     checkPosition(r, c-i);
                 }
             }
