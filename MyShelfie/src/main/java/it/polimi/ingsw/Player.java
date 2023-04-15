@@ -113,35 +113,12 @@ public class Player {
      * @see Tile
      * @param chosenTiles : ArrayList<Tile>
      */
-
-    //bisogna rivedere la funzione orderTiles, per come è fatta è difficile da testare
-    // IDEA: spostiamo al di fuori della funzione tutta la richiesta del nuovo ordine delle tessere,
-    // e quindi orderTiles riceverà chosenTiles (la lista delle tessere prese dalla board) e
-    // e choices (un array contenente l'ordine scelto dall'utente)
-    //
-    // in modo tale che durante il test io possa simulare un ordine scelto da un utente
     public void orderTiles(ArrayList<Tile> chosenTiles, int[] choices) {
         // if the player chooses only one tile, there is no need to order.
         if(chosenTiles.size() == 1){
             this.littleHand.add(chosenTiles.get(0));
             return;
         }
-        //choices = new int[chosenTiles.size()];
-/*
-        int tilesNumber = chosenTiles.size();
-        int[] choices = new int[tilesNumber];
-
-        System.out.print("Your tiles are: ");
-        for(int i=0; i<tilesNumber; i++)
-            System.out.println((i+1)+ ") " + chosenTiles.get(i));
-
-        System.out.println("Choose the order (the first one is the lowest):");
-        try{
-            getTiles(choices);
-        }catch(InvalidTileIndexInLittleHandException e){
-            System.out.println(e);
-        }
-*/
 
         for(int j=0; j<chosenTiles.size(); j++){
             for(int k=0; k<chosenTiles.size(); k++){
