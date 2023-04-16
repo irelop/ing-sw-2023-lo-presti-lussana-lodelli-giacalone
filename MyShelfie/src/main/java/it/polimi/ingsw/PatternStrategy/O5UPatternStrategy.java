@@ -5,6 +5,12 @@ import it.polimi.ingsw.Tile;
 
 import java.util.Arrays;
 
+/**
+ * O5UPatternStrategy class: this class represents the strategy of the common goal card which checks if there are two rows
+ *                           each one filled with 5 different types of tiles in the player's shelf.
+ *
+ * @author Andrea Giacalone
+ */
 public class O5UPatternStrategy implements StrategyInterface {
 
     @Override

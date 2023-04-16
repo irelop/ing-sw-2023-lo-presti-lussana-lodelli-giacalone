@@ -5,6 +5,13 @@ import it.polimi.ingsw.Tile;
 
 import java.util.Arrays;
 
+/**
+ * O5DPatternStrategy class: this class represents the strategy of the common goal card which checks if there are 4 rows
+ *                           each one filled by tiles of max 3 different type of tiles. Each row can have a random
+ *                           combination of different types of tiles.
+ *
+ * @author Andrea Giacalone
+ */
 public class O5DPatternStrategy implements StrategyInterface {
     @Override
     public boolean checkPattern(Tile[][] shelfSnapshot) {

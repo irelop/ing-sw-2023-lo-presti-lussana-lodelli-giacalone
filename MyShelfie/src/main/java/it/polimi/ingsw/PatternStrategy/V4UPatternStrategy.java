@@ -6,7 +6,11 @@ import it.polimi.ingsw.Tile;
 import java.util.Arrays;
 
 /**
- * a class implementing the four vertical tile with same color pattern strategy of the corresponding common goal card.
+ * V2UPatternStrategy class: this class represents the strategy of the common goal card which checks if there are 4
+ *                           separated groups, each one formed by 4 adjacent tiles of the same type.
+ *                           Different groups can be filled with different type of tiles.
+ *
+ * @author Matteo Lussana
  */
 public class V4UPatternStrategy implements StrategyInterface {
     @Override

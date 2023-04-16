@@ -3,6 +3,13 @@ package it.polimi.ingsw.PatternStrategy;
 import it.polimi.ingsw.StrategyInterface;
 import it.polimi.ingsw.Tile;
 
+/**
+ * Q2UPatternStrategy class: this class represents the strategy of the common goal card which checks if there are two
+ *                           separated groups of 4 tiles, forming a 2x2 square with the restriction that both groups
+ *                           must have the same type of tiles.
+ *
+ * @author Andrea Giacalone
+ */
 
 public class Q2UPatternStrategy implements StrategyInterface {
     @Override

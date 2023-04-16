@@ -3,6 +3,14 @@ package it.polimi.ingsw.PatternStrategy;
 import it.polimi.ingsw.StrategyInterface;
 import it.polimi.ingsw.Tile;
 
+
+/**
+ * V2UPatternStrategy class: this class represents the strategy of the common goal card which checks if there are 6
+ *                           separated groups, each one formed by 2 adjacent tiles of the same type.
+ *                           Different groups can be filled with different type of tiles.
+ *
+ * @author Andrea Giacalone
+ */
 public class V2UPatternStrategy implements StrategyInterface {
     @Override
     public boolean checkPattern(Tile[][] shelfSnapshot) {

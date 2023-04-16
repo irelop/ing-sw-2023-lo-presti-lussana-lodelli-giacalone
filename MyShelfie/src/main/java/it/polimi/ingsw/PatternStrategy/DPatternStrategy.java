@@ -4,7 +4,10 @@ import it.polimi.ingsw.StrategyInterface;
 import it.polimi.ingsw.Tile;
 
 /**
- * a class implementing the X pattern strategy of the corresponding common goal card.
+ * DPatternStrategy class: this class represents the strategy of the common goal card which checks if one of the major
+ *                         diagonal of the player's shelf are filled with tiles of the same type.
+ *
+ * @author Matteo Lussana
  */
 
 public class DPatternStrategy implements StrategyInterface {

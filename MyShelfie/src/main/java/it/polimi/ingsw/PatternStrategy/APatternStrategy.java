@@ -4,7 +4,10 @@ import it.polimi.ingsw.StrategyInterface;
 import it.polimi.ingsw.Tile;
 
 /**
- * a class implementing the Angular pattern strategy of the corresponding common goal card.
+ * APatternStrategy class: this class represents the strategy of the common goal card which checks if the 4 corners of
+ *                         the player's shelf are filled with a tile of the same type.
+ *
+ * @author Riccardo Lodelli
  */
 
 public class APatternStrategy implements StrategyInterface {

@@ -5,6 +5,12 @@ import it.polimi.ingsw.Tile;
 
 import java.util.Arrays;
 
+/**
+ * V6UPatternStrategy class: this class represents the strategy of the common goal card which checks if there are two
+ *                           columns each one filled by 6 distinct type of tiles.
+ *
+ * @author Andrea Giacalone
+ */
 public class V6UPatternStrategy implements StrategyInterface {
     @Override
     public boolean checkPattern(Tile[][] shelfSnapshot) {

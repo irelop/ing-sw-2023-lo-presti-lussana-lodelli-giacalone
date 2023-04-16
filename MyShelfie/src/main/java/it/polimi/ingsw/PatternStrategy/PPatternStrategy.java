@@ -6,7 +6,12 @@ import it.polimi.ingsw.Tile;
 import java.util.Arrays;
 
 /**
- * a class implementing the P pattern strategy of the corresponding common goal card.
+ * PPatternStrategy class: this class represents the strategy of the common goal card which checks if there are columns
+ *                         whose heights follow an ascendent or descendent order, without any restriction on the type
+ *                         of tiles filling the column: the key point is that, chosen the order, each column must have
+ *                         one ano one only tile more than the precedent one.
+ *
+ * @author Andrea Giacalone, Riccardo Lodelli
  */
 public class PPatternStrategy implements StrategyInterface {
     @Override

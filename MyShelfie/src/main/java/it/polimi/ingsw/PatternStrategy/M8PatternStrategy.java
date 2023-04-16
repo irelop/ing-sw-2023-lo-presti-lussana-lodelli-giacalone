@@ -8,7 +8,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * a class implementing the - 8 cells of the same color - pattern strategy of the corresponding common goal card.
+ * M8PatternStrategy class: this class represents the strategy of the common goal card which checks if there are 8 tiles
+ *                          of the same type in the player's shelf, without any restrictions on the position of these ones.
+ *
+ * @author Riccardo Lodelli
  */
 
 public class M8PatternStrategy implements StrategyInterface {
