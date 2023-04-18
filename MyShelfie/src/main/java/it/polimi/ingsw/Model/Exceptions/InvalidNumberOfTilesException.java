@@ -17,6 +17,6 @@ public class InvalidNumberOfTilesException extends Exception {
 
     @Override
     public String toString(){
-        return "This number is not valid. You must choose a number between 1 and "+maxTilesPickable;
+        return "This number is not valid. You must choose a number between 0 and "+(maxTilesPickable-1);
     }
 }
