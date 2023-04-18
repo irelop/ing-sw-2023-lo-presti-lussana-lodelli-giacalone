@@ -1,13 +1,11 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.PersonalGoalCard;
-import it.polimi.ingsw.ReadFileByLines;
-import it.polimi.ingsw.Tile;
+import it.polimi.ingsw.Model.PersonalGoalCard;
+import it.polimi.ingsw.Model.ReadFileByLines;
+import it.polimi.ingsw.Model.Tile;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.sql.SQLOutput;
 
 import static org.junit.Assert.*;
 

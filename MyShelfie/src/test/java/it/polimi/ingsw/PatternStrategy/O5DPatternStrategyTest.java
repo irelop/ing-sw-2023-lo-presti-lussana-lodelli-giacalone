@@ -1,10 +1,9 @@
 package it.polimi.ingsw.PatternStrategy;
 
-import it.polimi.ingsw.ReadFileByLines;
-import it.polimi.ingsw.StrategyInterface;
-import it.polimi.ingsw.Tile;
-import org.junit.After;
-import org.junit.Before;
+import it.polimi.ingsw.Model.PatternStrategy.O5DPatternStrategy;
+import it.polimi.ingsw.Model.ReadFileByLines;
+import it.polimi.ingsw.Model.StrategyInterface;
+import it.polimi.ingsw.Model.Tile;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

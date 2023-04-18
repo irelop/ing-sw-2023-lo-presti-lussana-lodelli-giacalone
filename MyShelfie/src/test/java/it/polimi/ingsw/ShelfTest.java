@@ -1,12 +1,13 @@
 package it.polimi.ingsw;
 
-        import it.polimi.ingsw.Exceptions.NotEnoughSpaceInChosenColumnException;
+        import it.polimi.ingsw.Model.Exceptions.NotEnoughSpaceInChosenColumnException;
+        import it.polimi.ingsw.Model.ReadFileByLines;
+        import it.polimi.ingsw.Model.Shelf;
+        import it.polimi.ingsw.Model.Tile;
         import org.junit.After;
-        import org.junit.Assert;
         import org.junit.Before;
         import org.junit.Test;
 
-        import java.awt.*;
         import java.util.ArrayList;
 
         import static org.junit.Assert.*;

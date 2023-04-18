@@ -5,6 +5,11 @@ package it.polimi.ingsw;
  */
 
 import it.polimi.ingsw.Exceptions.*;
+import it.polimi.ingsw.Model.Board;
+import it.polimi.ingsw.Model.CommonGoalDeck;
+import it.polimi.ingsw.Model.Exceptions.*;
+import it.polimi.ingsw.Model.ReadFileByLines;
+import it.polimi.ingsw.Model.Tile;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,11 +17,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.Assert.*;
 
 public class BoardTest {
 

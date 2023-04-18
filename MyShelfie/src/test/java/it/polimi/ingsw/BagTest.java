@@ -1,6 +1,8 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.Exceptions.EmptyBagException;
+import it.polimi.ingsw.Model.Exceptions.EmptyBagException;
+import it.polimi.ingsw.Model.Bag;
+import it.polimi.ingsw.Model.Tile;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

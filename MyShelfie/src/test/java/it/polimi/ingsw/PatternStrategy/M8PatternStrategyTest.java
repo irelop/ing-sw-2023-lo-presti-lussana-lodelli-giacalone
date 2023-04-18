@@ -1,12 +1,11 @@
 package it.polimi.ingsw.PatternStrategy;
 
-import it.polimi.ingsw.StrategyInterface;
-import it.polimi.ingsw.Tile;
+import it.polimi.ingsw.Model.PatternStrategy.M8PatternStrategy;
+import it.polimi.ingsw.Model.StrategyInterface;
+import it.polimi.ingsw.Model.Tile;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.sql.SQLOutput;
 
 import static org.junit.Assert.*;
 
