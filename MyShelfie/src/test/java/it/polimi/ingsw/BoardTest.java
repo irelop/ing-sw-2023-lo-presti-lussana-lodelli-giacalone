@@ -117,7 +117,7 @@ public class BoardTest {
 
     @Test
     void checkPosition_cellBlank(){
-        assertThrows(InvalidCellException.class, (Executable) ()->board.checkPosition(3,6));
+        assertThrows(EmptyCellException.class, (Executable) ()->board.checkPosition(3,6));
     }
 
     @Test
@@ -149,7 +149,7 @@ public class BoardTest {
         //we add a tile only to control this exception
         grid[0][4] = Tile.YELLOW;
         board.initFromMatrix(grid);
-        assertThrows(InvalidDirectionException.class, (Executable) ()->board.checkDirectionAndNumberOfTiles('n', 3, 1, 4));
+        assertThrows(OutOfBoardException.class, (Executable) ()->board.checkDirectionAndNumberOfTiles('n', 3, 1, 4));
     }
 
     @Test
