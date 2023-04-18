@@ -268,11 +268,18 @@ public class Board {
             }
         }while(true);
 
-        System.out.println("Insert the number of tiles that you want to pick and the direction " +
-                "you want to follow (north n, south s, est e, west w");
+        //One tile is chosen so the maximum number of tiles must be reduced
+        maxTilesPickable--;
+
+        System.out.println("Insert the number of tiles that you want to pick (other than the first)" +
+                " and the direction you want to follow (north n, south s, east e, west w");
         do{
             try{
                 numberOfTiles = getNumberOfTiles(maxTilesPickable);
+                if(numberOfTiles == 0){
+                    direction = '0';
+                    break;
+                }
                 direction = getDirection();
                 checkDirectionAndNumberOfTiles(direction, numberOfTiles, initialPositionR, initialPositionC);
                 break;
@@ -282,7 +289,7 @@ public class Board {
             }
         }while(true);
 
-        return pickTilesFromBoard(initialPositionR, initialPositionC, numberOfTiles, direction);
+        return pickTilesFromBoard(initialPositionR, initialPositionC, numberOfTiles+1, direction);
     }
 
     /**
@@ -307,7 +314,7 @@ public class Board {
                 initialPositionR++;
             else if(direction == 'e')
                 initialPositionC++;
-            else
+            else if(direction == 'w')
                 initialPositionC--;
         }
 
@@ -412,7 +419,7 @@ public class Board {
         Scanner scanner = new Scanner(System.in);
         int numberOfTiles;
         numberOfTiles = scanner.nextInt();
-        if(numberOfTiles>maxTilesPickable || numberOfTiles <= 0) throw new InvalidNumberOfTilesException(maxTilesPickable);   // cambia il nome perchè toomany non ha senso
+        if(numberOfTiles>maxTilesPickable || numberOfTiles < 0) throw new InvalidNumberOfTilesException(maxTilesPickable);   // cambia il nome perchè toomany non ha senso
         else return numberOfTiles;
     }
 
@@ -426,7 +433,7 @@ public class Board {
      * @author Irene Lo Presti
      */
     public int getNumberOfTiles(int maxTilesPickable, int numberOfTiles) throws InvalidNumberOfTilesException {
-        if(numberOfTiles>maxTilesPickable || numberOfTiles <= 0) throw new InvalidNumberOfTilesException(maxTilesPickable);   // cambia il nome perchè toomany non ha senso
+        if(numberOfTiles>maxTilesPickable || numberOfTiles < 0) throw new InvalidNumberOfTilesException(maxTilesPickable);   // cambia il nome perchè toomany non ha senso
         else return numberOfTiles;
     }
 
