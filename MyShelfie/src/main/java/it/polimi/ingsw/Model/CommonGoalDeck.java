@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Model;
 
 import it.polimi.ingsw.Model.PatternStrategy.*;
-import it.polimi.ingsw.PatternStrategy.*;
 
 import java.util.ArrayList;
 import java.util.Random;

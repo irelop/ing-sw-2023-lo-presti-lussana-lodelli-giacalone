@@ -4,7 +4,7 @@ package it.polimi.ingsw.Model;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import it.polimi.ingsw.Exceptions.*;
+import it.polimi.ingsw.Model.Exceptions.*;
 import it.polimi.ingsw.Model.Exceptions.EmptyBagException;
 
 /**

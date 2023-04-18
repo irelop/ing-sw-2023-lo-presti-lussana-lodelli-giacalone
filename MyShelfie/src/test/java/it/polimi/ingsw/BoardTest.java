@@ -4,7 +4,7 @@ package it.polimi.ingsw;
  * @authors Matteo Lussana, Irene Lo Presti
  */
 
-import it.polimi.ingsw.Exceptions.*;
+import it.polimi.ingsw.Model.Exceptions.*;
 import it.polimi.ingsw.Model.Board;
 import it.polimi.ingsw.Model.CommonGoalDeck;
 import it.polimi.ingsw.Model.Exceptions.*;

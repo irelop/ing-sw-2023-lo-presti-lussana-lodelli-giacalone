@@ -6,7 +6,7 @@ package it.polimi.ingsw.Model;
  *
  */
 
-import it.polimi.ingsw.Exceptions.*;
+import it.polimi.ingsw.Model.Exceptions.*;
 import it.polimi.ingsw.Model.Exceptions.*;
 
 import java.util.ArrayList;
