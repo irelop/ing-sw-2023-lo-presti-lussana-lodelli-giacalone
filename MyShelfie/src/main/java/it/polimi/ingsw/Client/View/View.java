@@ -1,4 +1,4 @@
-package it.polimi.ingsw;
+package it.polimi.ingsw.Client.View;
 
 import it.polimi.ingsw.Client.Client;
 
