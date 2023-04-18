@@ -317,6 +317,7 @@ public class Board {
     /**
      * OVERVIEW: this method asks the index of the row of the initial position
      * WITH SCANNER FROM INPUT
+     * @deprecated
      * @return row >=0 || row < MAX_ROWS
      * @throws OutOfBoardException if the chosen row is not between 0 and MAX_ROWS-1
      * @author Irene Lo Presti
@@ -346,6 +347,7 @@ public class Board {
     /**
      * OVERVIEW: this method asks the index of the column of the initial position,
      * WITH SCANNER
+     * @deprecated
      * @return row >=0 || row < MAX_COLUMN
      * @throws OutOfBoardException if the chosen column is not between 0 and MAX_ROWS-1
      * @author Irene Lo Presti
