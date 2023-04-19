@@ -3,27 +3,27 @@ package it.polimi.ingsw.PatternStrategy;
 import it.polimi.ingsw.Model.PatternStrategy.M8PatternStrategy;
 import it.polimi.ingsw.Model.StrategyInterface;
 import it.polimi.ingsw.Model.Tile;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.Assert.*;
 
-public class M8PatternStrategyTest {
+class M8PatternStrategyTest {
 
     StrategyInterface m8PatternStrategy = null;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+   void setUp() {
         m8PatternStrategy = new M8PatternStrategy();
     }
 
-    @After
-    public void tearDown() throws Exception {
+    @AfterEach
+    void tearDown() throws Exception {
     }
 
     @Test
-    public void checkPattern_true() {
+    void checkPattern_true() {
 
         Tile[][] test = {
                 {Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK},
@@ -39,7 +39,7 @@ public class M8PatternStrategyTest {
 
 
     @Test
-    public void checkPattern_false() {
+    void checkPattern_false() {
 
         Tile[][] test = {
                 {Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK},
@@ -54,7 +54,7 @@ public class M8PatternStrategyTest {
     }
 
     @Test
-    public void checkPattern_true2() {
+    void checkPattern_true2() {
 
         Tile[][] test = {
                 {Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK},
@@ -69,7 +69,7 @@ public class M8PatternStrategyTest {
     }
 
     @Test
-    public void checkPattern_false2() {
+    void checkPattern_false2() {
 
         Tile[][] test = {
                 {Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK, Tile.BLANK},
