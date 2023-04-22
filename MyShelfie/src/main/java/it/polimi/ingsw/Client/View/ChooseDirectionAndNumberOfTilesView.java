@@ -1,24 +1,36 @@
 package it.polimi.ingsw.Client.View;
-
 import it.polimi.ingsw.Model.Exceptions.InvalidDirectionException;
 import it.polimi.ingsw.Model.Exceptions.InvalidNumberOfTilesException;
 import it.polimi.ingsw.Server.Messages.DirectionAndNumberOfTilesMsg;
 import it.polimi.ingsw.Server.Messages.MaxTilesPickableMsg;
 import it.polimi.ingsw.Server.Messages.PlayerNicknameMsg;
-
 import java.util.Scanner;
+
+/**
+ * View where the client chooses the initial position of the tiles that he/she wants to choose from the board
+ * @author Irene Lo Presti
+ */
 
 public class ChooseDirectionAndNumberOfTilesView extends View{
 
     private final PlayerNicknameMsg playerPlayingNicknameMsg;
     MaxTilesPickableMsg maxTilesPickableMsg;
 
+    /**
+     * OVERVIEW: constructor method
+     * @param playerPlayingNicknameMsg: message from the server with the nickname of the player
+     * @param maxTilesPickableMsg: message from the server with the maximum number of tiles pickable
+     *                           from the board
+     */
     public ChooseDirectionAndNumberOfTilesView(PlayerNicknameMsg playerPlayingNicknameMsg,
                                                MaxTilesPickableMsg maxTilesPickableMsg){
         this.playerPlayingNicknameMsg = playerPlayingNicknameMsg;
         this.maxTilesPickableMsg = maxTilesPickableMsg;
     }
 
+    /**
+     * OVERVIEW: in this method the player chooses the numberOfTiles and the direction
+     */
     @Override
     public void run(){
 
@@ -55,6 +67,11 @@ public class ChooseDirectionAndNumberOfTilesView extends View{
             getOwner().transitionToView(nextView);
     }
 
+    /**
+     * OVERVIEW: getter method for direction
+     * @return direction (n, s, w or e)
+     * @throws InvalidDirectionException if the direction is not n, s, w or e
+     */
     private char getDirection() throws InvalidDirectionException {
 
         System.out.println(playerPlayingNicknameMsg.nickname + ", now it's time to" +
@@ -73,6 +90,11 @@ public class ChooseDirectionAndNumberOfTilesView extends View{
             return direction;
     }
 
+    /**
+     * OVERVIEW: getter method for the number of tiles
+     * @return number of tiles >= 0 && number of tiles < maxTilesPickable-1
+     * @throws InvalidNumberOfTilesException if the number of tiles is not between 0 and axTilesPickable-1
+     */
     private int getNumberOfTiles() throws InvalidNumberOfTilesException{
 
         System.out.println(playerPlayingNicknameMsg.nickname + ", now it's time to" +
