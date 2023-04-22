@@ -41,6 +41,14 @@ public class Player {
     }
 
     /**
+     * OVERVIEW: getter methof
+     * @return nickname
+     */
+    public String getNickname(){
+        return nickname;
+    }
+
+    /**
      * OVERVIEW: getter method
      * @see PersonalGoalCard
      * @return card
