@@ -11,7 +11,7 @@ public class GoalView extends View{
     }
 
     @Override
-    void run(){
+    public void run(){
         System.out.println("---------------------------------");
         System.out.println("GOAL ACHIVED IN THIS TURN:");
         if(msg.commonGoalAchived == true){
