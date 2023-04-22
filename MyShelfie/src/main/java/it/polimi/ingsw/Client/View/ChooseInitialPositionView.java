@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Client.View;
 
 import it.polimi.ingsw.Model.Exceptions.OutOfBoardException;
+import it.polimi.ingsw.Server.Messages.PlayerNicknameMsg;
 
 import java.util.Scanner;
 
@@ -20,8 +21,8 @@ public class ChooseInitialPositionView extends View{
 
         View nextView = new ChooseDirectionAndNumberOfTilesView();
 
-        System.out.println(playerNicknameMsg.nickname + ", it's your turn to pick the tiles from the board!");
-        System.out.println(playerNicknameMsg.nickname + ", choose the position of the first tile, remember that " +
+        System.out.println(playerPlayingNicknameMsg.nickname + ", it's your turn to pick the tiles from the board!");
+        System.out.println(playerPlayingNicknameMsg.nickname + ", choose the position of the first tile, remember that " +
                 "after you choose it, you have to select the number of tiles you want and" +
                 " the direction (north, south, east, west) in which" +
                 "you want to choose these other tiles");

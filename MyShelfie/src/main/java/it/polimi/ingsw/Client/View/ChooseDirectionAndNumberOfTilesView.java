@@ -2,12 +2,13 @@ package it.polimi.ingsw.Client.View;
 
 import it.polimi.ingsw.Model.Exceptions.InvalidDirectionException;
 import it.polimi.ingsw.Model.Exceptions.InvalidNumberOfTilesException;
+import it.polimi.ingsw.Server.Messages.PlayerNicknameMsg;
 
 import java.util.Scanner;
 
 public class ChooseDirectionAndNumberOfTilesView extends View{
 
-    private PlayerNicknameMsg playerPlayingNicknameMsg;
+    private final PlayerNicknameMsg playerPlayingNicknameMsg;
     MaxTilesPickableMsg maxTilesPickableMsg;
 
     public ChooseDirectionAndNumberOfTilesView(PlayerNicknameMsg playerPlayingNicknameMsg,
