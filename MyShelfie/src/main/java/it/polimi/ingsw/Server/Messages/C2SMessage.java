@@ -11,5 +11,5 @@ import java.io.IOException;
 
 
 public abstract class C2SMessage extends NetworkMessage{
-    public abstract void processMessage(ServerHandler serverHandler) throws IOException;
+    public abstract void processMessage(ServerHandler serverHandler);
 }

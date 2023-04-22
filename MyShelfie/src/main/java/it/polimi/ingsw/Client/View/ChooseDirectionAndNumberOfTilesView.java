@@ -2,6 +2,8 @@ package it.polimi.ingsw.Client.View;
 
 import it.polimi.ingsw.Model.Exceptions.InvalidDirectionException;
 import it.polimi.ingsw.Model.Exceptions.InvalidNumberOfTilesException;
+import it.polimi.ingsw.Server.Messages.DirectionAndNumberOfTilesMsg;
+import it.polimi.ingsw.Server.Messages.MaxTilesPickableMsg;
 import it.polimi.ingsw.Server.Messages.PlayerNicknameMsg;
 
 import java.util.Scanner;
@@ -47,8 +49,7 @@ public class ChooseDirectionAndNumberOfTilesView extends View{
         }
 
         DirectionAndNumberOfTilesMsg directionAndNumberOfTilesMsg = new DirectionAndNumberOfTilesMsg(direction, numberOfTiles);
-
-        getOwner().getServerHandler().sendCommandMessage(directionAndNumberOfTilesMsg);
+        directionAndNumberOfTilesMsg.processMessage(getOwner().getServerHandler());
 
         if (nextView != null)
             getOwner().transitionToView(nextView);

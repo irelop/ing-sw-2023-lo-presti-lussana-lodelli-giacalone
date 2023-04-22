@@ -10,6 +10,6 @@ import java.io.IOException;
 
 public abstract class S2CMessage extends NetworkMessage{
 
-    public abstract void processMessage(ClientHandler clientHandler) throws IOException;
+    public abstract void processMessage(ClientHandler clientHandler);
 
 }

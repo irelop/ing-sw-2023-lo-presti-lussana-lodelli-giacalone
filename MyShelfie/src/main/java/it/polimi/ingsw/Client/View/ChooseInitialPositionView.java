@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Client.View;
 
 import it.polimi.ingsw.Model.Exceptions.OutOfBoardException;
-import it.polimi.ingsw.Server.Messages.PlayerNicknameMsg;
+import it.polimi.ingsw.Server.Messages.*;
 
 import java.util.Scanner;
 
@@ -10,16 +10,18 @@ public class ChooseInitialPositionView extends View{
     int MAX_COLUMNS = 9, MAX_ROWS = 9;
 
     private PlayerNicknameMsg playerPlayingNicknameMsg;
+    private MaxTilesPickableMsg maxTilesPickableMsg;
 
-    public ChooseInitialPositionView(PlayerNicknameMsg playerPlayingNicknameMsg){
+    public ChooseInitialPositionView(PlayerNicknameMsg playerPlayingNicknameMsg, MaxTilesPickableMsg maxTilesPickableMsg){
 
         this.playerPlayingNicknameMsg = playerPlayingNicknameMsg;
+        this.maxTilesPickableMsg = maxTilesPickableMsg;
     }
 
     @Override
     public void run(){
 
-        View nextView = new ChooseDirectionAndNumberOfTilesView();
+        View nextView = new ChooseDirectionAndNumberOfTilesView(playerPlayingNicknameMsg, maxTilesPickableMsg);
 
         System.out.println(playerPlayingNicknameMsg.nickname + ", it's your turn to pick the tiles from the board!");
         System.out.println(playerPlayingNicknameMsg.nickname + ", choose the position of the first tile, remember that " +
@@ -51,7 +53,7 @@ public class ChooseInitialPositionView extends View{
         }while(true);
 
         InitialPositionMsg initialPositionMsg = new InitialPositionMsg(r, c);
-        getOwner().getServerHandler().sendCommandMessage(initialPositionMsg);
+        initialPositionMsg.processMessage(getOwner().getServerHandler());
 
         if (nextView != null)
             getOwner().transitionToView(nextView);
