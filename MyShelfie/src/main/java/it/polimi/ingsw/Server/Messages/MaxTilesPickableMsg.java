@@ -27,6 +27,6 @@ public class MaxTilesPickableMsg extends S2CMessage{
      */
     @Override
     public void processMessage(ClientHandler clientHandler) {
-        clientHandler.sendMaxTilesPickable(this);
+        clientHandler.sendMessageToClient(this);
     }
 }

@@ -29,7 +29,7 @@ public class PlayerNicknameMsg extends S2CMessage{
      */
     @Override
     public void processMessage(ClientHandler clientHandler) {
-        clientHandler.sendPlayerNickname(this);
+        clientHandler.sendMessageToClient(this);
     }
 
 

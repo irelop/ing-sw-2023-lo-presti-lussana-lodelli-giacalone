@@ -67,7 +67,7 @@ public class Client implements Runnable{
     }
 
 
-    public synchronized void transitionView(View nextView){
+    public synchronized void transitionToView(View nextView){
         this.nextView = nextView;
         currentView.setStopInteraction();
     }

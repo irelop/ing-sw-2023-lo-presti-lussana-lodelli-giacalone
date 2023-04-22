@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Client;
 
+import it.polimi.ingsw.Server.Messages.C2SMessage;
 import it.polimi.ingsw.Server.Messages.S2CMessage;
 
 import java.io.IOException;
@@ -72,7 +73,7 @@ public class ServerHandler implements Runnable{
 
 
     //funzione per mandare i mesaggi dal client al server
-    public void sendCommandMessage(C2SMsg commandMsg){
+    public void sendMessageToServer(C2SMessage commandMsg){
         try {
             output.writeObject(commandMsg);
         } catch (IOException e) {

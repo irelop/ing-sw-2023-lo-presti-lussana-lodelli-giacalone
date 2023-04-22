@@ -31,6 +31,6 @@ public class InitialPositionMsg extends C2SMessage{
      */
     @Override
     public void processMessage(ServerHandler serverHandler){
-        serverHandler.sendInitialPositionMsg(this);
+        serverHandler.sendMessageToServer(this);
     }
 }

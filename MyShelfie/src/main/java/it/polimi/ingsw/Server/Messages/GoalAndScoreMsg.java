@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Server.Messages;
 
+import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.GoalView;
 
 public class GoalAndScoreMsg extends S2CMessage{
@@ -15,7 +16,7 @@ public class GoalAndScoreMsg extends S2CMessage{
     }
 
     @Override
-    public processMessage(ServerHandler serverHandler)
+    public void processMessage(ServerHandler serverHandler)
     {
         serverHandler.getClient().transitionToView(new GoalView(this));
     }

@@ -1,4 +1,5 @@
 package it.polimi.ingsw.Server.Messages;
+import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Server.ClientHandler;
 import java.io.IOException;
 
@@ -9,7 +10,5 @@ import java.io.IOException;
  */
 
 public abstract class S2CMessage extends NetworkMessage{
-
     public abstract void processMessage(ClientHandler clientHandler);
-
 }
