@@ -24,6 +24,4 @@ public class WaitingView extends View{
                 }
             }
         }
-    }
-
 }

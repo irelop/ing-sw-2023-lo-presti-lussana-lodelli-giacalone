@@ -2,6 +2,7 @@ package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Client.View.ChooseInitialPositionView;
 import it.polimi.ingsw.Client.View.View;
+import it.polimi.ingsw.Client.View.WaitingView;
 
 import java.io.IOException;
 import java.net.Socket;
