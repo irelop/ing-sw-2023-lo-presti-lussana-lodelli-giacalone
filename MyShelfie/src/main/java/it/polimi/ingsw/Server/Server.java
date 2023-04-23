@@ -10,7 +10,7 @@ import java.net.Socket;
  * @author Andrea Giacalone
  */
 public class Server {
-    private static int serverPort;
+    public static int serverPort;
 
     /**
      * OVERVIEW: the constructor of the class which initializes the server with the its port open to receive

@@ -78,7 +78,7 @@ public class ServerHandler implements Runnable{
             output.writeObject(commandMsg);
         } catch (IOException e) {
             System.out.println("Communication error");
-            owner.terminate();
+            owner.setTrueTerminate();
         }
     }
 

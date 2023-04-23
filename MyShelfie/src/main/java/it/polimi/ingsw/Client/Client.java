@@ -1,8 +1,10 @@
 package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Client.View.ChooseInitialPositionView;
+import it.polimi.ingsw.Client.View.LoginView;
 import it.polimi.ingsw.Client.View.View;
 import it.polimi.ingsw.Client.View.WaitingView;
+import it.polimi.ingsw.Server.Server;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -26,13 +28,14 @@ public class Client implements Runnable{
 
         Socket server;
         try{
-            server = new Socket(ip, Server.SOCKET_PORT); //nel server bisogna specificare la porta per comunicare
+            server = new Socket(ip, Server.serverPort); //nel server bisogna specificare la porta per comunicare
         }catch(IOException e){
             System.out.println("server unreachable");
             return;
         }
         //dopo aver stabilito la connessione con il server, il client delega la connessione all'Handler
         serverHandler = new ServerHandler(server, this);
+        Thread serverHandlerThread = new Thread(serverHandler,"server_"+server.getInetAddress().getHostAddress());
         serverHandlerThread.start();
 
         nextView = new LoginView();
