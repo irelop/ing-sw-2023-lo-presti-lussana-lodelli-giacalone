@@ -85,28 +85,28 @@ public class ChooseDirectionAndNumberOfTilesView extends View{
     /**
      * OVERVIEW: this method prints the board and marks the initial position with a star
      */
-    private void printBoard(){
+    public void printBoard(){
 
         String code;
 
-        //printing the index of the columns
+        //printing the indexes of the columns
+        System.out.print("\u2716\t");
         for(int i=0; i<MAX_COLUMNS; i++)
             System.out.print((i+1)+"\t");
         System.out.println();
 
         for(int r=0; r<MAX_ROWS; r++){
-            //printing the index of the rows
+            //printing the indexes of the rows
             System.out.print((r+1)+"\t");
 
             //printing the tiles
             for(int c=0; c<MAX_COLUMNS; c++){
 
                 if(r == initialPositionMsg.row-1 && c == initialPositionMsg.column-1)
-                    code = "/u2B50";
+                    code = "*";
                 else
-                    code = "/u25A1";
+                    code = "\u25CF";
 
-                System.out.println();
                 switch (boardMsg.boardSnapshot[r][c]) {
                     case NOT_VALID -> System.out.print(" ");
                     case BLANK -> System.out.print(ANSI_BLACK + code + ANSI_RESET);
@@ -117,7 +117,7 @@ public class ChooseDirectionAndNumberOfTilesView extends View{
                     case WHITE -> System.out.print(ANSI_WHITE + code + ANSI_RESET);
                     case YELLOW -> System.out.print(ANSI_YELLOW + code + ANSI_RESET);
                 }
-                System.out.println("\t");
+                System.out.print("\t");
             }
             System.out.println();
         }
