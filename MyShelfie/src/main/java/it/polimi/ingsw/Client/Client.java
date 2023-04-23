@@ -34,7 +34,7 @@ public class Client implements Runnable{
         serverHandler = new ServerHandler(server, this);
         serverHandlerThread.start();
 
-        nextView = new ChooseInitialPositionView();
+        nextView = new LoginView();
         runViewStateMachine();
 
         serverHandler.stop();
