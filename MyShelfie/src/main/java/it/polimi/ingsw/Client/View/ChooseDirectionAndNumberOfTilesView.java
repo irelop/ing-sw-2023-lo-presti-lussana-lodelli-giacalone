@@ -61,7 +61,7 @@ public class ChooseDirectionAndNumberOfTilesView extends View{
         }
 
         DirectionAndNumberOfTilesMsg directionAndNumberOfTilesMsg = new DirectionAndNumberOfTilesMsg(direction, numberOfTiles);
-        directionAndNumberOfTilesMsg.processMessage(getOwner().getServerHandler());
+        getOwner().getServerHandler().sendMessageToServer(directionAndNumberOfTilesMsg);
 
         if (nextView != null)
             getOwner().transitionToView(nextView);

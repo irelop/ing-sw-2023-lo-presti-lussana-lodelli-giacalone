@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Server.Messages;
 import it.polimi.ingsw.Client.ServerHandler;
+import it.polimi.ingsw.Server.ClientHandler;
+
 import java.io.IOException;
 
 /**
@@ -26,11 +28,11 @@ public class InitialPositionMsg extends C2SMessage{
 
     /**
      * OVERVIEW: this method sends the message to the server with the server handler
-     * @see ServerHandler
-     * @param serverHandler instance of ServerHandler
+     * @see ClientHandler
+     * @param clientHandler instance of ServerHandler
      */
     @Override
-    public void processMessage(ServerHandler serverHandler){
-        serverHandler.sendMessageToServer(this);
+    public void processMessage(ClientHandler clientHandler){
+        clientHandler.sendMessageToServer(this);
     }
 }

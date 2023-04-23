@@ -1,4 +1,5 @@
 package it.polimi.ingsw.Server.Messages;
+import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Server.ClientHandler;
 
 /**
@@ -23,10 +24,11 @@ public class MaxTilesPickableMsg extends S2CMessage{
 
     /**
      * OVERVIEW: this method sends the message to the client with the client handler
-     * @param clientHandler: instance of the ClientHandler
+     * @see ServerHandler
+     * @param serverHandler: instance of the ClientHandler
      */
     @Override
-    public void processMessage(ClientHandler clientHandler) {
-        clientHandler.sendMessageToClient(this);
+    public void processMessage(ServerHandler serverHandler) {
+        serverHandler.sendMessageToClient(this);
     }
 }

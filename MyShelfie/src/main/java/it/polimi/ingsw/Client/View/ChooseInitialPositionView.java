@@ -66,7 +66,7 @@ public class ChooseInitialPositionView extends View{
         }while(true);
 
         InitialPositionMsg initialPositionMsg = new InitialPositionMsg(r, c);
-        initialPositionMsg.processMessage(getOwner().getServerHandler());
+        getOwner().getServerHandler().sendMessageToServer(initialPositionMsg);
 
         if (nextView != null)
             getOwner().transitionToView(nextView);

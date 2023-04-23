@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Server.Messages;
 import it.polimi.ingsw.Client.ServerHandler;
+import it.polimi.ingsw.Server.ClientHandler;
 
 /**
  * This class creates a message with the direction and the number of tiles chosen by the player and
@@ -25,10 +26,11 @@ public class DirectionAndNumberOfTilesMsg extends C2SMessage{
 
     /**
      * OVERVIEW: this method sends the message to the server with the server handler
-     * @param serverHandler: instance of the ServerHandler
+     * @see ClientHandler
+     * @param clientHandler: instance of the ServerHandler
      */
     @Override
-    public void processMessage(ServerHandler serverHandler){
-        serverHandler.sendMessageToServer(this);
+    public void processMessage(ClientHandler clientHandler){
+        clientHandler.sendMessageToServer(this);
     }
 }

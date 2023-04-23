@@ -1,4 +1,5 @@
 package it.polimi.ingsw.Server.Messages;
+import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Model.Player;
 import it.polimi.ingsw.Server.ClientHandler;
 
@@ -24,14 +25,12 @@ public class PlayerNicknameMsg extends S2CMessage{
 
     /**
      * OVERVIEW: this method sends the message to the client (with the client handler)
-     * @see ClientHandler
-     * @param clientHandler is the instance of ClientHandler
+     * @see ServerHandler
+     * @param serverHandler is the instance of ClientHandler
      */
     @Override
-    public void processMessage(ClientHandler clientHandler) {
-        clientHandler.sendMessageToClient(this);
+    public void processMessage(ServerHandler serverHandler) {
+        serverHandler.sendMessageToClient(this);
     }
-
-
 
 }
