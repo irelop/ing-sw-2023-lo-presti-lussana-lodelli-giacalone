@@ -1,9 +1,8 @@
 package it.polimi.ingsw.Client.View;
 import it.polimi.ingsw.Model.Exceptions.InvalidDirectionException;
 import it.polimi.ingsw.Model.Exceptions.InvalidNumberOfTilesException;
-import it.polimi.ingsw.Server.Messages.DirectionAndNumberOfTilesMsg;
-import it.polimi.ingsw.Server.Messages.MaxTilesPickableMsg;
-import it.polimi.ingsw.Server.Messages.PlayerNicknameMsg;
+import it.polimi.ingsw.Server.Messages.*;
+
 import java.util.Scanner;
 
 /**
@@ -13,19 +12,35 @@ import java.util.Scanner;
 
 public class ChooseDirectionAndNumberOfTilesView extends View{
 
+    public int MAX_COLUMNS = 9, MAX_ROWS = 9;
     private final PlayerNicknameMsg playerPlayingNicknameMsg;
-    MaxTilesPickableMsg maxTilesPickableMsg;
+    private final MaxTilesPickableMsg maxTilesPickableMsg;
+    private final BoardMsg boardMsg;
+    private final InitialPositionMsg initialPositionMsg;
+
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_LIGHTBLUE = "\u001B[36m";
+    public static final String ANSI_YELLOW = "\u001B[34m";
+    public static final String ANSI_WHITE = "\u001B[37m";
+    public static final String ANSI_PINK = "\u001B[35m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+
 
     /**
      * OVERVIEW: constructor method
      * @param playerPlayingNicknameMsg: message from the server with the nickname of the player
      * @param maxTilesPickableMsg: message from the server with the maximum number of tiles pickable
      *                           from the board
+     * @param boardMsg : message from the server with a snapshot of the board
      */
     public ChooseDirectionAndNumberOfTilesView(PlayerNicknameMsg playerPlayingNicknameMsg,
-                                               MaxTilesPickableMsg maxTilesPickableMsg){
+           MaxTilesPickableMsg maxTilesPickableMsg, BoardMsg boardMsg, InitialPositionMsg initialPositionMsg){
         this.playerPlayingNicknameMsg = playerPlayingNicknameMsg;
         this.maxTilesPickableMsg = maxTilesPickableMsg;
+        this.boardMsg = boardMsg;
+        this.initialPositionMsg = initialPositionMsg;
     }
 
     /**
@@ -34,7 +49,9 @@ public class ChooseDirectionAndNumberOfTilesView extends View{
     @Override
     public void run(){
 
-        View nextView = new InsertInShelfView();
+        printBoard();
+        System.out.println("The initial position is marked with a star");
+
         int numberOfTiles;
         char direction;
 
@@ -63,8 +80,48 @@ public class ChooseDirectionAndNumberOfTilesView extends View{
         DirectionAndNumberOfTilesMsg directionAndNumberOfTilesMsg = new DirectionAndNumberOfTilesMsg(direction, numberOfTiles);
         getOwner().getServerHandler().sendMessageToServer(directionAndNumberOfTilesMsg);
 
-        if (nextView != null)
-            getOwner().transitionToView(nextView);
+    }
+
+    /**
+     * OVERVIEW: this method prints the board and marks the initial position with a star
+     */
+    private void printBoard(){
+
+        String code;
+
+        //printing the index of the columns
+        for(int i=0; i<MAX_COLUMNS; i++)
+            System.out.print((i+1)+"\t");
+        System.out.println();
+
+        for(int r=0; r<MAX_ROWS; r++){
+            //printing the index of the rows
+            System.out.print((r+1)+"\t");
+
+            //printing the tiles
+            for(int c=0; c<MAX_COLUMNS; c++){
+
+                if(r == initialPositionMsg.row-1 && c == initialPositionMsg.column-1)
+                    code = "/u2B50";
+                else
+                    code = "/u25A1";
+
+                System.out.println();
+                switch (boardMsg.boardSnapshot[r][c]) {
+                    case NOT_VALID -> System.out.print(" ");
+                    case BLANK -> System.out.print(ANSI_BLACK + code + ANSI_RESET);
+                    case PINK -> System.out.print(ANSI_PINK + code + ANSI_RESET);
+                    case GREEN -> System.out.print(ANSI_GREEN + code + ANSI_RESET);
+                    case BLUE -> System.out.print(ANSI_BLUE + code + ANSI_RESET);
+                    case LIGHTBLUE -> System.out.print(ANSI_LIGHTBLUE + code + ANSI_RESET);
+                    case WHITE -> System.out.print(ANSI_WHITE + code + ANSI_RESET);
+                    case YELLOW -> System.out.print(ANSI_YELLOW + code + ANSI_RESET);
+                }
+                System.out.println("\t");
+            }
+            System.out.println();
+        }
+
     }
 
     /**
