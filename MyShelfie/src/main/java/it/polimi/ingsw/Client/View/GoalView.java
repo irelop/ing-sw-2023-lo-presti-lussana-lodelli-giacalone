@@ -2,6 +2,8 @@ package it.polimi.ingsw.Client.View;
 
 import it.polimi.ingsw.Server.Messages.GoalAndScoreMsg;
 
+import java.util.Scanner;
+
 public class GoalView extends View{
 
     private GoalAndScoreMsg msg;
@@ -12,6 +14,12 @@ public class GoalView extends View{
 
     @Override
     public void run(){
+
+        View nextView = null;
+        Integer goOn = null;
+
+        Scanner scanner = new Scanner(System.in);
+
         System.out.println("---------------------------------");
         System.out.println("GOAL ACHIVED IN THIS TURN:");
         if(msg.commonGoalAchived == true){
@@ -23,7 +31,11 @@ public class GoalView extends View{
 
         System.out.println("Total score: "+ msg.score);
         System.out.println("---------------------------------");
-
+        System.out.println("[press any key to continue]");
+        goOn = scanner.nextInt();
+        if(goOn != null){
+            getOwner().transitionToView(nextView);
+        }
     }
 
 
