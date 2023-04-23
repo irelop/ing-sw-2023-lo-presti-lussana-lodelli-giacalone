@@ -18,7 +18,7 @@ public class MyShelfMsg extends S2CMessage {
     }
 
     /**
-     * OVERVIEW: this method sends the message to the client
+     * this method set the current view to InsertInShelfView
      * @param serverHandler: instance of the ServerHandler
      */
     @Override
