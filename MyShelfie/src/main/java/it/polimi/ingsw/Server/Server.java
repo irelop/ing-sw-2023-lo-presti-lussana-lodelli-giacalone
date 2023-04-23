@@ -10,7 +10,7 @@ import java.net.Socket;
  * @author Andrea Giacalone
  */
 public class Server {
-    private final static int serverPort;
+    private static int serverPort;
 
     /**
      * OVERVIEW: the constructor of the class which initializes the server with the its port open to receive
@@ -29,10 +29,11 @@ public class Server {
     public static void main(String[] args) {
         Server server = new Server(serverPort);
         //qui metteremo due scelte a seconda che venga selezionata la tecnologia di comunicazione RMI o socket
-        this.manageServerSocket();
+        manageServerSocket();
         //else manageServerRMI();
 
     }
+
 
     /**
      * OVERVIEW: this method allows to manage a connection using socket technology.
@@ -51,9 +52,9 @@ public class Server {
         while(true){
             try{
                 Socket client =socket.accept();
-                ClientHandler clientHandler = new ClientHandler(client);
+                ClientHandler clientHandler = new SocketClientHandler(client);
 
-                Thread clientHandlerThread = new Thread(clientHandler,"server_"+clientHandler.getInetAddress());
+                Thread clientHandlerThread = new Thread(clientHandler,"server_"+client.getInetAddress());
                 clientHandlerThread.start();
             }catch (IOException ex){
                 System.out.println("Connection with server dropped");
