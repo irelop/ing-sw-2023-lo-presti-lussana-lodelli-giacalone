@@ -16,7 +16,7 @@ public class GoalView extends View{
     public void run(){
 
         View nextView = null;
-        Integer goOn = null;
+        Integer goOn;
 
         Scanner scanner = new Scanner(System.in);
 
