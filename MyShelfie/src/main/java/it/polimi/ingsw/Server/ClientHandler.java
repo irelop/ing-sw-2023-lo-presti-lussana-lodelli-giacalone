@@ -24,7 +24,7 @@ public abstract class ClientHandler implements Runnable {
 
     }
 
-    void sendMessageToClient(S2CMessage message) throws IOException {
+    public void sendMessageToClient(S2CMessage message) {
 
     }
 
