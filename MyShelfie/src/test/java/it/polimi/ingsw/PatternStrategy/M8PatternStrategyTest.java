@@ -1,8 +1,8 @@
 package it.polimi.ingsw.PatternStrategy;
 
-import it.polimi.ingsw.Model.PatternStrategy.M8PatternStrategy;
-import it.polimi.ingsw.Model.StrategyInterface;
-import it.polimi.ingsw.Model.Tile;
+import it.polimi.ingsw.Server.Model.PatternStrategy.M8PatternStrategy;
+import it.polimi.ingsw.Server.Model.StrategyInterface;
+import it.polimi.ingsw.Server.Model.Tile;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Client.View.LoginRequestView;
-import it.polimi.ingsw.Client.View.SocketServerHandler;
+import it.polimi.ingsw.Client.View.LoginView;
 import it.polimi.ingsw.Client.View.View;
 import it.polimi.ingsw.Client.View.WaitingView;
 import it.polimi.ingsw.Server.Server;
@@ -38,7 +38,7 @@ public class Client implements Runnable{
         Thread serverHandlerThread = new Thread(serverHandler,"server_"+server.getInetAddress().getHostAddress());
         serverHandlerThread.start();
 
-        nextView = new LoginRequestView();
+        nextView = new LoginView();
         runViewStateMachine();
 
         serverHandler.stop();

@@ -1,10 +1,9 @@
 package it.polimi.ingsw.Client.View;
 
 import it.polimi.ingsw.Model.*;
-import it.polimi.ingsw.Server.Messages.BoardMsg;
-import it.polimi.ingsw.Server.Messages.MaxTilesPickableMsg;
 import it.polimi.ingsw.Server.Messages.MyShelfMsg;
-import it.polimi.ingsw.Server.Messages.PlayerNicknameMsg;
+import it.polimi.ingsw.Server.Model.ReadFileByLines;
+import it.polimi.ingsw.Server.Model.Tile;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

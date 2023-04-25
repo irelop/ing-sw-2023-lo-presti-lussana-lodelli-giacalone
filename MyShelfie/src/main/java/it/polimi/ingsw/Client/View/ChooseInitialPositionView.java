@@ -1,5 +1,5 @@
 package it.polimi.ingsw.Client.View;
-import it.polimi.ingsw.Model.Exceptions.OutOfBoardException;
+import it.polimi.ingsw.Server.Model.Exceptions.OutOfBoardException;
 import it.polimi.ingsw.Server.Messages.*;
 import java.util.Scanner;
 

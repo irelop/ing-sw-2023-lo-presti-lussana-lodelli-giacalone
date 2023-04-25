@@ -22,7 +22,7 @@ public class GoalAndScoreMsg extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler){
-        serverHandler.sendMessageToClient(this);
+        //serverHandler.sendMessageToClient(this);
     }
 
 }

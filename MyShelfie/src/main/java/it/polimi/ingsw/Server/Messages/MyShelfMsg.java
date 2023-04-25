@@ -2,7 +2,7 @@ package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.InsertInShelfView;
-import it.polimi.ingsw.Model.Tile;
+import it.polimi.ingsw.Server.Model.Tile;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,7 @@ public class MyShelfMsg extends S2CMessage {
     private ArrayList<Tile> littleHand;
 
     public MyShelfMsg(Tile[][] shelf,ArrayList<Tile> littleHand) {
-        //super(parent);
+        super(parent);
         this.shelf = shelf;
         this.littleHand = littleHand;
     }

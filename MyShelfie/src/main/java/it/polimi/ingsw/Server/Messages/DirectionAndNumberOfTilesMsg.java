@@ -31,6 +31,6 @@ public class DirectionAndNumberOfTilesMsg extends C2SMessage{
      */
     @Override
     public void processMessage(ClientHandler clientHandler){
-        clientHandler.sendMessageToServer(this);
+       // clientHandler.sendMessageToServer(this);
     }
 }

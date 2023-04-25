@@ -1,8 +1,13 @@
 package it.polimi.ingsw.Server;
 
+import it.polimi.ingsw.Server.Model.MyShelfie;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import static it.polimi.ingsw.Server.Model.MyShelfie.*;
+
 
 /**
  * Server class: this class represents the server of the game.
@@ -11,6 +16,7 @@ import java.net.Socket;
  */
 public class Server {
     public static int serverPort;
+    private MyShelfie game;
 
     /**
      * OVERVIEW: the constructor of the class which initializes the server with the its port open to receive
@@ -38,7 +44,7 @@ public class Server {
     /**
      * OVERVIEW: this method allows to manage a connection using socket technology.
      */
-    public static void manageServerSocket(){
+    public void manageServerSocket(){
         ServerSocket socket;
 
         try{
@@ -52,7 +58,8 @@ public class Server {
         while(true){
             try{
                 Socket client =socket.accept();
-                ClientHandler clientHandler = new SocketClientHandler(client);
+                game = getMyShelfie();
+                ClientHandler clientHandler = new SocketClientHandler(client, game);
 
                 Thread clientHandlerThread = new Thread(clientHandler,"server_"+client.getInetAddress());
                 clientHandlerThread.start();

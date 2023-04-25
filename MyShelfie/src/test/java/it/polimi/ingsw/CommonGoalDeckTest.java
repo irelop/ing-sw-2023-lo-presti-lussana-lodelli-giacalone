@@ -1,8 +1,8 @@
 package it.polimi.ingsw;
 
 
-import it.polimi.ingsw.Model.CommonGoalCard;
-import it.polimi.ingsw.Model.CommonGoalDeck;
+import it.polimi.ingsw.Server.Model.CommonGoalCard;
+import it.polimi.ingsw.Server.Model.CommonGoalDeck;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

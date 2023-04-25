@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Server.Messages;
 import it.polimi.ingsw.Client.ServerHandler;
-import it.polimi.ingsw.Model.Player;
-import it.polimi.ingsw.Server.ClientHandler;
+import it.polimi.ingsw.Server.Model.Player;
 
 /**
  * This class creates a message with the player's nickname and, it sends it to the client
@@ -30,7 +29,7 @@ public class PlayerNicknameMsg extends S2CMessage{
      */
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        serverHandler.sendMessageToClient(this);
+        //serverHandler.sendMessageToClient(this);
     }
 
 }

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Server.Messages;
 import it.polimi.ingsw.Client.ServerHandler;
-import it.polimi.ingsw.Model.Board;
-import it.polimi.ingsw.Model.Tile;
+import it.polimi.ingsw.Server.Model.Board;
+import it.polimi.ingsw.Server.Model.Tile;
 
 /**
  * This class creates a message with a snapshot of the board and it sends it to the client

@@ -4,12 +4,11 @@ package it.polimi.ingsw;
  * @authors Matteo Lussana, Irene Lo Presti
  */
 
-import it.polimi.ingsw.Model.Exceptions.*;
-import it.polimi.ingsw.Model.Board;
-import it.polimi.ingsw.Model.CommonGoalDeck;
-import it.polimi.ingsw.Model.Exceptions.*;
-import it.polimi.ingsw.Model.ReadFileByLines;
-import it.polimi.ingsw.Model.Tile;
+import it.polimi.ingsw.Server.Model.Board;
+import it.polimi.ingsw.Server.Model.CommonGoalDeck;
+import it.polimi.ingsw.Server.Model.Exceptions.*;
+import it.polimi.ingsw.Server.Model.ReadFileByLines;
+import it.polimi.ingsw.Server.Model.Tile;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

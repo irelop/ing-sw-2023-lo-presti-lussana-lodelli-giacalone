@@ -1,8 +1,8 @@
 package it.polimi.ingsw.PatternStrategy;
 
-import it.polimi.ingsw.Model.PatternStrategy.APatternStrategy;
-import it.polimi.ingsw.Model.StrategyInterface;
-import it.polimi.ingsw.Model.Tile;
+import it.polimi.ingsw.Server.Model.PatternStrategy.APatternStrategy;
+import it.polimi.ingsw.Server.Model.StrategyInterface;
+import it.polimi.ingsw.Server.Model.Tile;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

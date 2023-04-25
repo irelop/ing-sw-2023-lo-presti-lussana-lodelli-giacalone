@@ -2,6 +2,7 @@ package it.polimi.ingsw.Server;
 
 import it.polimi.ingsw.Server.Messages.C2SMessage;
 import it.polimi.ingsw.Server.Messages.S2CMessage;
+import it.polimi.ingsw.Server.Model.MyShelfie;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,9 +20,9 @@ public class SocketClientHandler extends ClientHandler{
     //the socket used for communicate with the connected client.
     private Socket client;
 
-    SocketClientHandler(Socket client){
+    SocketClientHandler(Socket client, MyShelfie game){
         this.client = client;
-        //super.controller = controller;
+        this.game = game;
     }
 
 

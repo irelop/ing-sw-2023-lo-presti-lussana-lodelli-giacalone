@@ -1,17 +1,13 @@
 package it.polimi.ingsw.Client.View;
 
-import it.polimi.ingsw.Model.Exceptions.InvalidNumberOfTilesException;
-import it.polimi.ingsw.Model.Exceptions.InvalidShelfColumnException;
-import it.polimi.ingsw.Model.Exceptions.InvalidTileIndexInLittleHandException;
-import it.polimi.ingsw.Model.Shelf;
-import it.polimi.ingsw.Model.Tile;
+import it.polimi.ingsw.Server.Model.Exceptions.InvalidShelfColumnException;
+import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
+import it.polimi.ingsw.Server.Model.Tile;
 import it.polimi.ingsw.Server.Messages.InsertingTilesMsg;
 import it.polimi.ingsw.Server.Messages.MyShelfMsg;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-
-import static it.polimi.ingsw.Model.Tile.*;
 
 // prima bozza
 

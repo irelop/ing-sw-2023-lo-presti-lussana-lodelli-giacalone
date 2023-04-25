@@ -29,10 +29,10 @@ public class InitialPositionMsg extends C2SMessage{
     /**
      * OVERVIEW: this method sends the message to the server with the server handler
      * @see ClientHandler
-     * @param clientHandler instance of ServerHandler
+     * @param clientHandler instance of ClientHandler
      */
     @Override
     public void processMessage(ClientHandler clientHandler){
-        clientHandler.sendMessageToServer(this);
+        //chiamo clientHandler.getController().funzione che controlla la pos iniziale
     }
 }

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.Client.View;
-import it.polimi.ingsw.Model.Exceptions.InvalidDirectionException;
-import it.polimi.ingsw.Model.Exceptions.InvalidNumberOfTilesException;
+import it.polimi.ingsw.Server.Model.Exceptions.InvalidDirectionException;
+import it.polimi.ingsw.Server.Model.Exceptions.InvalidNumberOfTilesException;
 import it.polimi.ingsw.Server.Messages.*;
 
 import java.util.Scanner;
