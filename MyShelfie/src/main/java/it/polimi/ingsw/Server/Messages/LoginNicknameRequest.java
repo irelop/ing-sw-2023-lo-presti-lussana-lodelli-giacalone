@@ -16,6 +16,10 @@ public class LoginNicknameRequest extends C2SMessage{
 
     }
 
+    public String getInsertedNickname() {
+        return insertedNickname;
+    }
+
     /*@Override
     public void processMessage(ClientHandler clientHandler) {
 

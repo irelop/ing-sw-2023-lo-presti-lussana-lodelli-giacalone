@@ -5,6 +5,14 @@ import it.polimi.ingsw.Client.View.AskLobbySizeView;
 import it.polimi.ingsw.Client.View.WaitingLobbyView;
 
 public class LoginNicknameAnswer extends S2CMessage{
+    public LoginNicknameRequest getParent() {
+        return parent;
+    }
+
+    public Status getNicknameStatus() {
+        return nicknameStatus;
+    }
+
     public enum Status{
         INVALID,
         ACCEPTED,
@@ -23,10 +31,6 @@ public class LoginNicknameAnswer extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        if(this.nicknameStatus == Status.FIRST_ACCEPTED) {
-            serverHandler.getClient().transitionToView(new AskLobbySizeView());
-        }else{
-            serverHandler.getClient().transitionToView(new WaitingLobbyView());
-        }
+        //serverHandler.getClient.getCurrentView.notifyView();
     }
 }
