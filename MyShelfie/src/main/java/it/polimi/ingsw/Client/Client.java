@@ -1,6 +1,7 @@
 package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Client.View.LoginRequestView;
+import it.polimi.ingsw.Client.View.SocketServerHandler;
 import it.polimi.ingsw.Client.View.View;
 import it.polimi.ingsw.Client.View.WaitingView;
 import it.polimi.ingsw.Server.Server;
@@ -33,7 +34,7 @@ public class Client implements Runnable{
             return;
         }
         //dopo aver stabilito la connessione con il server, il client delega la connessione all'Handler
-        serverHandler = new ServerHandler(server, this);
+        serverHandler = new SocketServerHandler(server, this);
         Thread serverHandlerThread = new Thread(serverHandler,"server_"+server.getInetAddress().getHostAddress());
         serverHandlerThread.start();
 
