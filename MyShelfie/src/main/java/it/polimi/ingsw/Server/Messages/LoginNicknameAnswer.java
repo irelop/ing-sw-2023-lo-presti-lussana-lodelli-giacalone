@@ -1,8 +1,9 @@
 package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
-import it.polimi.ingsw.Client.View.AskLobbySizeView;
-import it.polimi.ingsw.Client.View.WaitingLobbyView;
+import it.polimi.ingsw.Client.View.LoginView;
+import it.polimi.ingsw.Client.View.ObservableView;
+import it.polimi.ingsw.Client.View.View;
 
 public class LoginNicknameAnswer extends S2CMessage{
     public LoginNicknameRequest getParent() {
@@ -31,6 +32,6 @@ public class LoginNicknameAnswer extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        //serverHandler.getClient.getCurrentView.notifyView();
+        serverHandler.getClient().getCurrentView().notifyView();
     }
 }
