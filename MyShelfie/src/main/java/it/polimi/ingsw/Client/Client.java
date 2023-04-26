@@ -1,9 +1,9 @@
 package it.polimi.ingsw.Client;
 
-import it.polimi.ingsw.Client.View.LoginRequestView;
 import it.polimi.ingsw.Client.View.LoginView;
 import it.polimi.ingsw.Client.View.View;
 import it.polimi.ingsw.Client.View.WaitingView;
+import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.Server;
 
 import java.io.IOException;
@@ -44,7 +44,6 @@ public class Client implements Runnable{
         serverHandler.stop();
     }
 
-    public ServerHandler getServerHandler(){return serverHandler;}
 
     private void runViewStateMachine(){
         boolean stop;
@@ -84,4 +83,19 @@ public class Client implements Runnable{
     }
 
 
+    public View getCurrentView() {
+        return currentView;
+    }
+
+    public ServerHandler getServerHandler() {
+        return serverHandler;
+    }
+
+    public boolean isTerminate() {
+        return terminate;
+    }
+
+    public View getNextView() {
+        return nextView;
+    }
 }
