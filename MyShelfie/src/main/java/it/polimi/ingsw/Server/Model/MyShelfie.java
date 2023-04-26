@@ -37,7 +37,22 @@ public class MyShelfie {
         return myShelfieInstance;
     }
 
+    //- - - - - - - - - - - - - - - - - - - -| L O G I N   M E T H O D S |- - - - - - - - - - - - - - - - - - - - - - - -
+
+    public boolean checkNickname(String insertedString) {
+        return(!(this.playersConnected.contains(insertedString)));
+    }
+
+    public boolean isFirstConnected(String insertedString){
+        return (this.playersConnected.indexOf(insertedString) == 0);
+    }
+
+
     //chiamata dal messaggio di login con il nickname del player
+
+    /*
+        edit ANDREA: nel processMessage() di LoginNicknameAnswer se il nickname è valido lo chiamo così da aggiungerlo.
+     */
     public void addPlayer(String playerNickname){
         //creo player
         Player newPlayer = new Player(playerNickname);
@@ -53,6 +68,8 @@ public class MyShelfie {
 
     //la gestiamo con un'eccezione o va bene così????
     //chiamata da login view SOLO con il primo giocatore connesso
+
+    //edit ANDREA: ho gestito lato view i casi in cui l'input non sia valido con annessa stampa all'utente quindi direi ok.
     public void setNumberOfPlayers(int numberOfPlayers) {
         if(numberOfPlayers == -1)
             this.numberOfPlayers = numberOfPlayers;
@@ -108,9 +125,9 @@ public class MyShelfie {
                 // or if that is the last lap
                 if(!isOver || !playerPlaying.hasChair()){
                     for(Player playerWaiting : playersConnected){
-                        if(playerWaiting != playerPlaying)
+                        if(playerWaiting != playerPlaying); // edit ANDREA: e' incompleto?
                     }
-                    turn(player);
+                    //turn(player);
                 }
             }
         }
@@ -118,7 +135,7 @@ public class MyShelfie {
             int spotScore = player.myShelfie.spotCheck();
             player.myScore.addScore(spotScore);
         }
-        endGame();
+        //endGame();
     }
 
     private void turn(Player playerPlaying){
