@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Server.Model;
 
-import it.polimi.ingsw.Model.PatternStrategy.*;
 import it.polimi.ingsw.Server.Model.PatternStrategy.*;
 
 import java.util.ArrayList;
