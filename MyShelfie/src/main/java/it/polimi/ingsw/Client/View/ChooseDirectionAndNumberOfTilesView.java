@@ -13,10 +13,7 @@ import java.util.Scanner;
 public class ChooseDirectionAndNumberOfTilesView extends View{
 
     public int MAX_COLUMNS = 9, MAX_ROWS = 9;
-    private final PlayerNicknameMsg playerPlayingNicknameMsg;
-    private final MaxTilesPickableMsg maxTilesPickableMsg;
-    private final BoardMsg boardMsg;
-    private final InitialPositionMsg initialPositionMsg;
+    private final ChooseDirectionAndNumberOfTilesMsg chooseDirectionAndNumberOfTilesMsg;
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32m";
@@ -30,17 +27,10 @@ public class ChooseDirectionAndNumberOfTilesView extends View{
 
     /**
      * OVERVIEW: constructor method
-     * @param playerPlayingNicknameMsg: message from the server with the nickname of the player
-     * @param maxTilesPickableMsg: message from the server with the maximum number of tiles pickable
-     *                           from the board
-     * @param boardMsg : message from the server with a snapshot of the board
-     */
-    public ChooseDirectionAndNumberOfTilesView(PlayerNicknameMsg playerPlayingNicknameMsg,
-           MaxTilesPickableMsg maxTilesPickableMsg, BoardMsg boardMsg, InitialPositionMsg initialPositionMsg){
-        this.playerPlayingNicknameMsg = playerPlayingNicknameMsg;
-        this.maxTilesPickableMsg = maxTilesPickableMsg;
-        this.boardMsg = boardMsg;
-        this.initialPositionMsg = initialPositionMsg;
+     * @param chooseDirectionAndNumberOfTilesMsg :
+     **/
+    public ChooseDirectionAndNumberOfTilesView(ChooseDirectionAndNumberOfTilesMsg chooseDirectionAndNumberOfTilesMsg){
+        this.chooseDirectionAndNumberOfTilesMsg = chooseDirectionAndNumberOfTilesMsg;
     }
 
     /**
@@ -102,12 +92,12 @@ public class ChooseDirectionAndNumberOfTilesView extends View{
             //printing the tiles
             for(int c=0; c<MAX_COLUMNS; c++){
 
-                if(r == initialPositionMsg.row-1 && c == initialPositionMsg.column-1)
+                if(r == chooseDirectionAndNumberOfTilesMsg.initialRow-1 && c == chooseDirectionAndNumberOfTilesMsg.initialColumn-1)
                     code = "*";
                 else
                     code = "\u25CF";
 
-                switch (boardMsg.boardSnapshot[r][c]) {
+                switch (chooseDirectionAndNumberOfTilesMsg.boardSnapshot[r][c]) {
                     case NOT_VALID -> System.out.print(" ");
                     case BLANK -> System.out.print(ANSI_BLACK + code + ANSI_RESET);
                     case PINK -> System.out.print(ANSI_PINK + code + ANSI_RESET);
@@ -131,7 +121,7 @@ public class ChooseDirectionAndNumberOfTilesView extends View{
      */
     private char getDirection() throws InvalidDirectionException {
 
-        System.out.println(playerPlayingNicknameMsg.nickname + ", now it's time to" +
+        System.out.println(chooseDirectionAndNumberOfTilesMsg.nickname + ", now it's time to" +
                 " insert the direction that you in which you want to choose those tiles.");
         System.out.println("Remember: you can chose between n (north), s (south), e (east), w (west).");
         System.out.print("Please insert the direction: ");
@@ -154,19 +144,19 @@ public class ChooseDirectionAndNumberOfTilesView extends View{
      */
     private int getNumberOfTiles() throws InvalidNumberOfTilesException{
 
-        System.out.println(playerPlayingNicknameMsg.nickname + ", now it's time to" +
+        System.out.println(chooseDirectionAndNumberOfTilesMsg.nickname + ", now it's time to" +
                 " insert the number of tiles that you " +
                 "want to chose (other than the one that you have already chose).");
         System.out.println("Remember: you can chose between 0 (if you don't want to pick others tiles)" +
-                "and "+(maxTilesPickableMsg.maxTilesPickable-1)+".");
+                "and "+(chooseDirectionAndNumberOfTilesMsg.maxTilesPickable-1)+".");
         System.out.print("Please insert the number of tiles: ");
 
         Scanner scanner = new Scanner(System.in);
         int numberOfTiles;
         numberOfTiles = scanner.nextInt();
 
-        if(numberOfTiles<0 || numberOfTiles>maxTilesPickableMsg.maxTilesPickable-1)
-            throw new InvalidNumberOfTilesException(maxTilesPickableMsg.maxTilesPickable);
+        if(numberOfTiles<0 || numberOfTiles>chooseDirectionAndNumberOfTilesMsg.maxTilesPickable-1)
+            throw new InvalidNumberOfTilesException(chooseDirectionAndNumberOfTilesMsg.maxTilesPickable);
 
         else
             return numberOfTiles;

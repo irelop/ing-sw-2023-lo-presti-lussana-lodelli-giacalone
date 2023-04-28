@@ -14,9 +14,7 @@ public class ChooseInitialPositionView extends View{
     public int MAX_COLUMNS = 9;
     public int MAX_ROWS = 9;
 
-    private final PlayerNicknameMsg playerPlayingNicknameMsg;
-    private final MaxTilesPickableMsg maxTilesPickableMsg;
-    private final BoardMsg boardMsg;
+    private final YourTurnMsg yourTurnMsg;
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32m";
@@ -30,17 +28,10 @@ public class ChooseInitialPositionView extends View{
 
     /**
      * OVERVIEW: constructor method
-     * @param playerPlayingNicknameMsg: message from the server with the nickname of the player
-     * @param maxTilesPickableMsg: message from the server with the maximum number of tiles pickable
-     *                           from the board
-     * @param boardMsg : message from the server with a snapshot of the board
+     * @param yourTurnMsg
      */
-    public ChooseInitialPositionView(PlayerNicknameMsg playerPlayingNicknameMsg,
-                                     MaxTilesPickableMsg maxTilesPickableMsg, BoardMsg boardMsg){
-
-        this.playerPlayingNicknameMsg = playerPlayingNicknameMsg;
-        this.maxTilesPickableMsg = maxTilesPickableMsg;
-        this.boardMsg = boardMsg;
+    public ChooseInitialPositionView(YourTurnMsg yourTurnMsg){
+        this.yourTurnMsg = yourTurnMsg;
     }
 
     /**
@@ -53,8 +44,8 @@ public class ChooseInitialPositionView extends View{
 
         printBoard();
 
-        System.out.println(playerPlayingNicknameMsg.nickname + ", it's your turn to pick the tiles from the board!");
-        System.out.println(playerPlayingNicknameMsg.nickname + ", choose the position of the first tile, remember that " +
+        System.out.println(yourTurnMsg.nickname + ", it's your turn to pick the tiles from the board!");
+        System.out.println(yourTurnMsg.nickname + ", choose the position of the first tile, remember that " +
                 "after you choose it, you have to select the number of tiles you want and" +
                 " the direction (north, south, east, west) in which" +
                 "you want to choose these other tiles");
@@ -85,7 +76,10 @@ public class ChooseInitialPositionView extends View{
         InitialPositionMsg initialPositionMsg = new InitialPositionMsg(r, c);
         getOwner().getServerHandler().sendMessageToServer(initialPositionMsg);
 
-        nextView = new ChooseDirectionAndNumberOfTilesView(playerPlayingNicknameMsg, maxTilesPickableMsg, boardMsg, initialPositionMsg);
+        ChooseDirectionAndNumberOfTilesMsg chooseDirectionAndNumberOfTilesMsg = new ChooseDirectionAndNumberOfTilesMsg(yourTurnMsg.nickname,
+                yourTurnMsg.numberOfTiles, yourTurnMsg.boardSnapshot, r, c);
+
+        nextView = new ChooseDirectionAndNumberOfTilesView(chooseDirectionAndNumberOfTilesMsg);
 
         if (nextView != null)
             getOwner().transitionToView(nextView);
@@ -110,7 +104,7 @@ public class ChooseInitialPositionView extends View{
 
             //printing the tiles
             for(int c=0; c<MAX_COLUMNS; c++){
-                switch (boardMsg.boardSnapshot[r][c]) {
+                switch (yourTurnMsg.boardSnapshot[r][c]) {
                     case NOT_VALID -> System.out.print(" ");
                     case BLANK -> System.out.print(ANSI_BLACK + code + ANSI_RESET);
                     case PINK -> System.out.print(ANSI_PINK + code + ANSI_RESET);
