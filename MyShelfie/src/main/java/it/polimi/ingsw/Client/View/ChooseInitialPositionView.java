@@ -77,7 +77,7 @@ public class ChooseInitialPositionView extends View{
         getOwner().getServerHandler().sendMessageToServer(initialPositionMsg);
 
         ChooseDirectionAndNumberOfTilesMsg chooseDirectionAndNumberOfTilesMsg = new ChooseDirectionAndNumberOfTilesMsg(yourTurnMsg.nickname,
-                yourTurnMsg.numberOfTiles, yourTurnMsg.boardSnapshot, r, c);
+                yourTurnMsg.maxTilesPickable, yourTurnMsg.boardSnapshot, r, c);
 
         nextView = new ChooseDirectionAndNumberOfTilesView(chooseDirectionAndNumberOfTilesMsg);
 

@@ -389,7 +389,9 @@ public class Board {
      * @throws EmptyCellException if the cell is empty
      * @author Irene Lo Presti
      */
-    public void checkPosition(int r, int c) throws InvalidPositionException, InvalidCellException, EmptyCellException {
+    public void checkPosition(int r, int c) throws InvalidPositionException, InvalidCellException, EmptyCellException, OutOfBoardException {
+        if(r<0 || r>=MAX_ROWS || c<0 || c>=MAX_COLUMNS) throw new OutOfBoardException();
+
         if(boardGrid[r][c] == Tile.NOT_VALID) throw new InvalidCellException();
 
         if(boardGrid[r][c] == Tile.BLANK) throw new EmptyCellException();
