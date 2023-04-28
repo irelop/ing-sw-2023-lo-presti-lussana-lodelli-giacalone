@@ -1,16 +1,17 @@
 package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
+import it.polimi.ingsw.Client.View.ExceptionView;
 
 public class ExceptionMsg extends S2CMessage{
-    public Exception exceptionToBeForwarded;
+    public String exceptionString;
 
-    public ExceptionMsg(Exception exceptionToBeForwarded){
-        this.exceptionToBeForwarded = exceptionToBeForwarded;
+    public ExceptionMsg(String exceptionString){
+        this.exceptionString = exceptionString;
     }
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        this.exceptionToBeForwarded.getMessage();
+        serverHandler.getClient().transitionToView(new ExceptionView(this));
     }
 }
