@@ -32,6 +32,8 @@ public class LoginNicknameAnswer extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
+        LoginView loginView = (LoginView) serverHandler.getClient().getCurrentView();
+        loginView.setLoginNicknameAnswer(this);
         serverHandler.getClient().getCurrentView().notifyView();
     }
 }
