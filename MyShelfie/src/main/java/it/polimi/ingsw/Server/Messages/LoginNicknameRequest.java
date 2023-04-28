@@ -26,7 +26,7 @@ public class LoginNicknameRequest extends C2SMessage{
 
 
         if(controller.checkNickname(insertedNickname) == true){
-            controller.addPlayer(insertedNickname);
+            controller.addPlayer(insertedNickname,clientHandler);
             if(controller.isFirstConnected(insertedNickname) == true ){
                 loginNicknameAnswer = new LoginNicknameAnswer(this, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
 
