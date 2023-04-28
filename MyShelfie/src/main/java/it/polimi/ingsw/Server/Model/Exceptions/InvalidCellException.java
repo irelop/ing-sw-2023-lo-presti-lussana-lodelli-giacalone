@@ -7,7 +7,7 @@ package it.polimi.ingsw.Server.Model.Exceptions;
  */
 
 
-public class InvalidCellException extends Throwable {
+public class InvalidCellException extends Exception {
     public InvalidCellException(){
         super();
     }

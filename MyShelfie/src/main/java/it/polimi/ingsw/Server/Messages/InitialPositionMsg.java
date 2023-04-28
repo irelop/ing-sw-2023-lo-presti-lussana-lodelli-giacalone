@@ -1,6 +1,10 @@
 package it.polimi.ingsw.Server.Messages;
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Server.ClientHandler;
+import it.polimi.ingsw.Server.Model.Exceptions.EmptyCellException;
+import it.polimi.ingsw.Server.Model.Exceptions.InvalidCellException;
+import it.polimi.ingsw.Server.Model.Exceptions.InvalidPositionException;
+import it.polimi.ingsw.Server.Model.Exceptions.OutOfBoardException;
 
 import java.io.IOException;
 
@@ -33,6 +37,13 @@ public class InitialPositionMsg extends C2SMessage{
      */
     @Override
     public void processMessage(ClientHandler clientHandler){
-        //chiamo clientHandler.getController().funzione che controlla la pos iniziale
+        try{
+            clientHandler.getController().getBoard().checkPosition(row, column);
+
+        }catch(OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException e){
+
+        }
+
+
     }
 }

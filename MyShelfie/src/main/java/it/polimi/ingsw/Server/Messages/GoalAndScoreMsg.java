@@ -2,6 +2,8 @@ package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.GoalView;
+import it.polimi.ingsw.Client.View.InsertInShelfView;
+
 /**
  * This class creates a message with the score and information about the commonGoal and the personalGoal,
  * and send it to the client.
@@ -22,7 +24,7 @@ public class GoalAndScoreMsg extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler){
-        //serverHandler.sendMessageToClient(this);
+        serverHandler.getClient().transitionToView(new GoalView(this));
     }
 
 }

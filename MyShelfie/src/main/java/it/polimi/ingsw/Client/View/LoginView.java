@@ -49,7 +49,7 @@ public class LoginView extends View implements ObservableView{
     public void askNicknameRequest(){
             Scanner input = new Scanner(System.in);
             System.out.println("Please select your nickname:\n");
-            String insertedNickname = input.nextLine().replace(" ", "");
+            String insertedNickname = input.nextLine().replace(" ", "").toUpperCase();
 
             C2SMessage nicknameRequest = new LoginNicknameRequest(insertedNickname);
             getOwner().getServerHandler().sendMessageToServer(nicknameRequest);
