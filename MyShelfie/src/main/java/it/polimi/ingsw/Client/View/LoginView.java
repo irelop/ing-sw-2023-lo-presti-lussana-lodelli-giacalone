@@ -5,6 +5,13 @@ import it.polimi.ingsw.Server.Messages.*;
 import java.util.Scanner;
 
 /**
+ package it.polimi.ingsw.Client.View;
+
+ import it.polimi.ingsw.Server.Messages.*;
+
+ import java.util.Scanner;
+
+ /**
  * LoginView class: this class manages the user interaction during the login phase. It is followed by the WaitingView,
  *                  in which the player will wait until the other players are ready.
  *
@@ -26,6 +33,7 @@ public class LoginView extends View implements ObservableView{
     @Override
     public void run() {
         synchronized (lock){
+
             while(!goOn){
                 askNicknameRequest();
                 try {
@@ -35,24 +43,39 @@ public class LoginView extends View implements ObservableView{
                 }
                 showNicknameAnswer(answerToShow);
             }
-            nextView = new WaitingView(); // lobby
+            nextView = new WaitingView();
 
         }
     }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+    public void showTitleScreen(){
+
+        System.out.println("\nWelcome to:\n");
+        System.out.println("\n  __  __              _____   _              _    __   _        \n" +
+                " |  \\/  |            / ____| | |            | |  / _| (_)       \n" +
+                " | \\  / |  _   _    | (___   | |__     ___  | | | |_   _    ___ \n" +
+                " | |\\/| | | | | |    \\___ \\  | '_ \\   / _ \\ | | |  _| | |  / _ \\\n" +
+                " | |  | | | |_| |    ____) | | | | | |  __/ | | | |   | | |  __/\n" +
+                " |_|  |_|  \\__, |   |_____/  |_| |_|  \\___| |_| |_|   |_|  \\___|\n" +
+                "            __/ |                                               \n" +
+                "           |___/                                                \n");
+    }
+
+
+
     /**
      * OVERVIEW: this method allows the user to insert its nickname and checks its validity through a request forwarded
      *           to the server.
      */
     public void askNicknameRequest(){
-            Scanner input = new Scanner(System.in);
-            System.out.println("Please select your nickname:\n");
-            String insertedNickname = input.nextLine().replace(" ", "").toUpperCase();
+        Scanner input = new Scanner(System.in);
+        System.out.println("\nPlease select your nickname:\n");
+        String insertedNickname = input.nextLine().replace(" ", "");
 
-            C2SMessage nicknameRequest = new LoginNicknameRequest(insertedNickname);
-            getOwner().getServerHandler().sendMessageToServer(nicknameRequest);
+        C2SMessage nicknameRequest = new LoginNicknameRequest(insertedNickname);
+        getOwner().getServerHandler().sendMessageToServer(nicknameRequest);
     }
 
     /**
@@ -63,14 +86,14 @@ public class LoginView extends View implements ObservableView{
     private void showNicknameAnswer(LoginNicknameAnswer nicknameAnswer){
         switch (nicknameAnswer.getNicknameStatus()){
             case ACCEPTED ->{
-                System.out.println("Great! So you are: " +nicknameAnswer.getParent().getInsertedNickname()+ "nice to meet you!");
+                System.out.println("\nGreat! So you are: " +nicknameAnswer.getParent().getInsertedNickname()+ "nice to meet you!\n");
                 goOn = true;
             }
             case INVALID -> {
-                System.out.println("Sorry, your nickname has already been chosen - please select another one");
+                System.out.println("\nSorry, your nickname has already been chosen - please select another one\n");
             }
             case FIRST_ACCEPTED -> {
-                System.out.println("Great! So you are: " + nicknameAnswer.getParent().getInsertedNickname()+ "nice to meet you!");
+                System.out.println("\nGreat! So you are: " + nicknameAnswer.getParent().getInsertedNickname()+ "nice to meet you!\n");
                 goOn = true;
                 askNumPlayersRequest();
             }
@@ -81,25 +104,28 @@ public class LoginView extends View implements ObservableView{
      * OVERVIEW: this method allows to ask the number of players of the game and to forward the request to the server.
      */
     public void askNumPlayersRequest(){
-            Scanner input = new Scanner(System.in);
-            int insertedNumPlayers;
+        Scanner input = new Scanner(System.in);
+        int insertedNumPlayers;
 
-            System.out.println("Please select the number of the players for the game\n");
-            do{
+        System.out.println("\nPlease select the number of the players for the game\n");
+        do{
             insertedNumPlayers = input.nextInt();
-                System.out.println("\nThe number inserted isn't correct: please insert another one\n");
-            }while(insertedNumPlayers <=1 || insertedNumPlayers >4);
+            System.out.println("\nThe number inserted isn't correct: please insert another one\n");
+        }while(insertedNumPlayers <=1 || insertedNumPlayers >4);
 
-            C2SMessage numPlayersRequest = new LoginNumPlayersRequest(insertedNumPlayers);
-            getOwner().getServerHandler().sendMessageToServer(numPlayersRequest);
-        }
+        C2SMessage numPlayersRequest = new LoginNumPlayersRequest(insertedNumPlayers);
+        getOwner().getServerHandler().sendMessageToServer(numPlayersRequest);
+    }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-        public void notifyView(){
-            this.lock.notify();
-        }
+    public void notifyView(){
+        this.lock.notify();
+    }
+
+    public void setLoginNicknameAnswer(LoginNicknameAnswer answerToShow) {
+        this.answerToShow = answerToShow;
+    }
 
 
 }
-
