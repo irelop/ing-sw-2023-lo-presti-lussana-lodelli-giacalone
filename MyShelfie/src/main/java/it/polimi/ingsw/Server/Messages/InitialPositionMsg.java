@@ -34,5 +34,6 @@ public class InitialPositionMsg extends C2SMessage{
     @Override
     public void processMessage(ClientHandler clientHandler){
         //chiamo clientHandler.getController().funzione che controlla la pos iniziale
+
     }
 }
