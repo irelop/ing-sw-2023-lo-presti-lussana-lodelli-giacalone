@@ -12,7 +12,7 @@ public class MyShelfMsg extends S2CMessage {
     private ArrayList<Tile> littleHand;
 
     public MyShelfMsg(Tile[][] shelf,ArrayList<Tile> littleHand) {
-        super(parent);
+        //super(parent);
         this.shelf = shelf;
         this.littleHand = littleHand;
     }

@@ -35,7 +35,7 @@ public class LoginView extends View implements ObservableView{
                 }
                 showNicknameAnswer(answerToShow);
             }
-            nextView = new WaitingView();
+            nextView = new WaitingView(); // lobby
 
         }
     }

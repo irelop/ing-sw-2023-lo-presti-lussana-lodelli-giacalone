@@ -20,6 +20,8 @@ public class InitialPositionMsg extends C2SMessage{
     public int row;
     public int column;
 
+    public /*S2CMessage*/ InitialPositionAnswer initialPositionAnswer;
+
     /**
      * OVERVIEW: constructor method, it creates the message with the initial row and the initial column
      * @param row: int for the initial row
@@ -28,6 +30,7 @@ public class InitialPositionMsg extends C2SMessage{
     public InitialPositionMsg(int row, int column){
         this.row = row;
         this.column = column;
+        initialPositionAnswer = null;
     }
 
     /**
@@ -37,13 +40,15 @@ public class InitialPositionMsg extends C2SMessage{
      */
     @Override
     public void processMessage(ClientHandler clientHandler){
+
         try{
             clientHandler.getController().getBoard().checkPosition(row, column);
+            initialPositionAnswer = new InitialPositionAnswer("",this,true);
 
         }catch(OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException e){
-
+            initialPositionAnswer = new InitialPositionAnswer(e.toString(),this,false);
         }
-
+        clientHandler.sendMessageToClient(initialPositionAnswer);
 
     }
 }

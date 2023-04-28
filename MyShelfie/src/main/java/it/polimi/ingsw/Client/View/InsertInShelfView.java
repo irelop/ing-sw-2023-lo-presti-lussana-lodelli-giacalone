@@ -82,6 +82,8 @@ public class InsertInShelfView extends View {
     @Override
     public void run(){
 
+        //CONTROLLI SPOSTATI DI 1
+
         int columnChosen;
         int[] chosenOrderIndexes;
         ArrayList<Tile> chosenTiles = msg.getLittleHand();

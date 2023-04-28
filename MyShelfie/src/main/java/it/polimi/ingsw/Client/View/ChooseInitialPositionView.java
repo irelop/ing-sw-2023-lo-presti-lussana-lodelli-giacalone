@@ -13,8 +13,9 @@ public class ChooseInitialPositionView extends View{
 
     public int MAX_COLUMNS = 9;
     public int MAX_ROWS = 9;
-
     private final YourTurnMsg yourTurnMsg;
+    private boolean goOn; //in order to check if the answer is valid and so we can go ahead.
+    private Object lock; //in order to stop and continue the run() method computation.
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32m";
@@ -32,6 +33,7 @@ public class ChooseInitialPositionView extends View{
      */
     public ChooseInitialPositionView(YourTurnMsg yourTurnMsg){
         this.yourTurnMsg = yourTurnMsg;
+        this.goOn = false;
     }
 
     /**
@@ -39,8 +41,6 @@ public class ChooseInitialPositionView extends View{
      */
     @Override
     public void run(){
-
-        View nextView;
 
         printBoard();
 
@@ -52,37 +52,47 @@ public class ChooseInitialPositionView extends View{
         System.out.println("Remember also that the board is 9x9 and that you have to choose a cell" +
                 "with a tile (so it has to be valid and not empty) with a free side");
 
-        int r;
-        int c;
+        int r,c;
 
-        do{
-            try{
-                r = getInitialRow();
-                break;
-            }catch(OutOfBoardException e){
-                System.out.println(e);
-            }
-        }while(true);
+        synchronized (lock) {
+             do {
 
-        do{
-            try{
-                c = getInitialColumn();
-                break;
-            }catch(OutOfBoardException e){
-                System.out.println(e);
-            }
-        }while(true);
+                 // client side exception management
+                do {
+                    try {
+                        r = getInitialRow();
+                        break;
+                    } catch (OutOfBoardException e) {
+                        System.out.println(e);
+                    }
+                } while (true);
 
-        InitialPositionMsg initialPositionMsg = new InitialPositionMsg(r, c);
-        getOwner().getServerHandler().sendMessageToServer(initialPositionMsg);
+                 // client side exception management
+                do {
+                    try {
+                        c = getInitialColumn();
+                        break;
+                    } catch (OutOfBoardException e) {
+                        System.out.println(e);
+                    }
+                } while (true);
 
-        ChooseDirectionAndNumberOfTilesMsg chooseDirectionAndNumberOfTilesMsg = new ChooseDirectionAndNumberOfTilesMsg(yourTurnMsg.nickname,
-                yourTurnMsg.maxTilesPickable, yourTurnMsg.boardSnapshot, r, c);
+                 InitialPositionMsg initialPositionMsg = new InitialPositionMsg(r, c);
+                 getOwner().getServerHandler().sendMessageToServer(initialPositionMsg);
+                 try {
+                     lock.wait();
+                 } catch (InterruptedException e) {
+                     throw new RuntimeException(e);
+                 }
+                 System.out.println(initialPositionMsg.initialPositionAnswer.answer);
+                 if (initialPositionMsg.initialPositionAnswer.valid)
+                     goOn = true;
 
-        nextView = new ChooseDirectionAndNumberOfTilesView(chooseDirectionAndNumberOfTilesMsg);
+             } while(!goOn);
+        }
 
-        if (nextView != null)
-            getOwner().transitionToView(nextView);
+        // transition to next view ??
+
     }
 
     /**
@@ -148,4 +158,5 @@ public class ChooseInitialPositionView extends View{
         if(c<=0 || c>MAX_COLUMNS) throw new OutOfBoardException();
         else return c;
     }
+
 }
