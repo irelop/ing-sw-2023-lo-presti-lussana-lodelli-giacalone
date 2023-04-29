@@ -302,7 +302,7 @@ public class Board {
      * @return ArrayList<Tile> chosenTiles != null : the chosen tiles from the board
      * @author Irene Lo Presti
      */
-    public ArrayList<Tile> pickTilesFromBoard(int initialPositionR, int initialPositionC, int numberOfTiles, char direction){
+    public void pickTilesFromBoard(int initialPositionR, int initialPositionC, int numberOfTiles, char direction, Player player){
         ArrayList<Tile> chosenTiles = new ArrayList<>();
 
         for(int i=0; i<numberOfTiles; i++){
@@ -318,7 +318,7 @@ public class Board {
                 initialPositionC--;
         }
 
-        return chosenTiles;
+        player.setLittleHand(chosenTiles);
     }
 
     /**
