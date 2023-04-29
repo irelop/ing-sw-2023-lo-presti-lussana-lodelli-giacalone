@@ -16,7 +16,7 @@ import static it.polimi.ingsw.Server.Model.MyShelfie.*;
  */
 public class Server {
     public static int serverPort;
-    private MyShelfie game;
+    private static MyShelfie game;
 
     /**
      * OVERVIEW: the constructor of the class which initializes the server with the its port open to receive
@@ -44,7 +44,7 @@ public class Server {
     /**
      * OVERVIEW: this method allows to manage a connection using socket technology.
      */
-    public void manageServerSocket(){
+    public static void manageServerSocket(){
         ServerSocket socket;
 
         try{

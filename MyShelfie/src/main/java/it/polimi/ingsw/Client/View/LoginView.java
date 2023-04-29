@@ -19,10 +19,17 @@ import java.util.Scanner;
  */
 public class LoginView extends View implements ObservableView{
     private Object lock; //in order to stop and continue the run() method computation.
-    private boolean goOn = false; //in order to check if the nickname is valid and so we can go ahead.
-    private LoginNicknameAnswer answerToShow = null; //the answer received by the server which needs to be shown.
+    private boolean goOn; //in order to check if the nickname is valid and so we can go ahead.
+    private LoginNicknameAnswer answerToShow; //the answer received by the server which needs to be shown.
 
     private View nextView; //the next view in the Machine State pattern: in this case it's the Waiting view
+
+    public LoginView() {
+        this.lock = new Object();
+        this.goOn = false;
+        this.answerToShow = null;
+        this.nextView = new LobbyView();
+    }
 
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -43,7 +50,7 @@ public class LoginView extends View implements ObservableView{
                 }
                 showNicknameAnswer(answerToShow);
             }
-            nextView = new WaitingView();
+            //nextView = new WaitingView();
 
         }
     }
