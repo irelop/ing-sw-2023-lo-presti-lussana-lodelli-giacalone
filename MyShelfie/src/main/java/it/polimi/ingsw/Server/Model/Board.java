@@ -421,10 +421,11 @@ public class Board {
         Scanner scanner = new Scanner(System.in);
         int numberOfTiles;
         numberOfTiles = scanner.nextInt();
-        if(numberOfTiles>maxTilesPickable || numberOfTiles < 0) throw new InvalidNumberOfTilesException(maxTilesPickable);   // cambia il nome perchè toomany non ha senso
+        if(numberOfTiles>maxTilesPickable || numberOfTiles < 0)
+            throw new InvalidNumberOfTilesException(maxTilesPickable);   // cambia il nome perchè toomany non ha senso
         else return numberOfTiles;
     }
-
+c
     /**
      * OVERVIEW: this method get the number of tiles
      * NO SCANNER, for test
@@ -483,8 +484,13 @@ public class Board {
      * @throws EmptyCellException if one of the cells is empty
      * @author Irene Lo Presti
      */
-    public void checkDirectionAndNumberOfTiles(char direction, int numberOfTiles, int r, int c)
-            throws InvalidPositionException, InvalidCellException, EmptyCellException, OutOfBoardException {
+    public void checkDirectionAndNumberOfTiles(char direction, int numberOfTiles, int r, int c, int maxTilesPickable)
+            throws InvalidPositionException, InvalidCellException, EmptyCellException, OutOfBoardException, InvalidNumberOfTilesException, InvalidDirectionException {
+        if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w')
+            throw new InvalidDirectionException();
+        if(numberOfTiles>maxTilesPickable || numberOfTiles < 0)
+            throw new InvalidNumberOfTilesException(maxTilesPickable);
+
         switch (direction) {
             case 'e' -> {
                 for (int i = 1; i < numberOfTiles; i++) {

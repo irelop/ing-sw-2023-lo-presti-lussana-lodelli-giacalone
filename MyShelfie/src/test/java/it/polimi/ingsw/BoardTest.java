@@ -148,7 +148,7 @@ public class BoardTest {
         //we add a tile only to control this exception
         grid[0][4] = Tile.YELLOW;
         board.initFromMatrix(grid);
-        assertThrows(OutOfBoardException.class, (Executable) ()->board.checkDirectionAndNumberOfTiles('n', 3, 1, 4));
+        assertThrows(OutOfBoardException.class, (Executable) ()->board.checkDirectionAndNumberOfTiles('n', 3, 1, 4,3));
     }
 
     @Test
