@@ -93,6 +93,15 @@ public class Player {
         this.card = card;
     }
 
+    public void setLittleHand(ArrayList<Tile> tilesChosen){
+        if(littleHand.size()==0)
+            littleHand.addAll(tilesChosen);
+        else{
+            littleHand.clear();
+            littleHand.addAll(tilesChosen);
+        }
+    }
+
     /**
      * OVERVIEW: getter method
      * @see Tile

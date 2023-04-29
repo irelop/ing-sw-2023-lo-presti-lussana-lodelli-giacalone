@@ -67,8 +67,8 @@ public class ChooseDirectionAndNumberOfTilesView extends View{
             }while(true);
         }
 
-        DirectionAndNumberOfTilesMsg directionAndNumberOfTilesMsg = new DirectionAndNumberOfTilesMsg(direction, numberOfTiles);
-        getOwner().getServerHandler().sendMessageToServer(directionAndNumberOfTilesMsg);
+        //PlayerChoiceMsg playerChoiceMsg = new PlayerChoiceMsg(direction, numberOfTiles, );
+       // getOwner().getServerHandler().sendMessageToServer(playerChoiceMsg);
 
     }
 

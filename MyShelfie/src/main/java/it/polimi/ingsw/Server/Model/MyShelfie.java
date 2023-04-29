@@ -1,20 +1,15 @@
 package it.polimi.ingsw.Server.Model;
-
 import it.polimi.ingsw.Server.ClientHandler;
-import it.polimi.ingsw.Server.Messages.ExceptionMsg;
 import it.polimi.ingsw.Server.Messages.YourTurnMsg;
-import it.polimi.ingsw.Server.Model.Exceptions.*;
-
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 
 /**
  * CONTROLLER
  *
  * @author Matteo Lussana, Irene Lo Presti
  */
-public class MyShelfie {
+public class MyShelfie /*implements Runnable*/ {
     private final ArrayList<Player> playersConnected;
     private boolean isOver;
     private final PersonalGoalDeck personalDeck;
@@ -23,7 +18,7 @@ public class MyShelfie {
     private int numberOfPlayers;
     private boolean started;
     private ArrayList<ClientHandler> clientHandlers;
-
+    private int currentPlayerIndex;
     private static MyShelfie myShelfieInstance;
 
     public MyShelfie(){
@@ -142,7 +137,10 @@ public class MyShelfie {
                 // or if that is the last lap
                 if(!isOver || !playersConnected.get(i).hasChair()){
                     //call the turn for the player, sending him and his clientHandler
-                    turn(playersConnected.get(i), clientHandlers.get(i));
+                    currentPlayerIndex = i;
+                    //synchronize(this){
+                        turn();
+                    //}
                 }
             }
         }
@@ -150,7 +148,7 @@ public class MyShelfie {
             int spotScore = player.myShelfie.spotCheck();
             player.myScore.addScore(spotScore);
         }
-        //endGame();
+        //dobbiamo creare un messaggio per far vedere a tutti i giocatori la EndgameView
     }
 
     /**
@@ -163,80 +161,76 @@ public class MyShelfie {
      *          6) check if the board needs to be refilled, if it is true it calls the refill method
      * @see Player
      * @see Board
-     * @param playerPlaying: players that are playing
      */
-    private void turn(Player playerPlaying, ClientHandler clientHandler){
+    private void turn() {
 
         // find max pickable tiles by the player
-        int maxTilesPickable = playerPlaying.myShelfie.maxTilesPickable();
+        int maxTilesPickable = playersConnected.get(currentPlayerIndex).myShelfie.maxTilesPickable();
 
         YourTurnMsg yourTurnMsg;
-        yourTurnMsg = new YourTurnMsg(playerPlaying.getNickname(), maxTilesPickable, Board.getBoardGrid());
-        clientHandler.sendMessageToClient(yourTurnMsg);
+        yourTurnMsg = new YourTurnMsg(playersConnected.get(currentPlayerIndex).getNickname(), maxTilesPickable, Board.getBoardGrid());
+        clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
+    }
 
-
-        chooseTilesFromBoard();
-
-        // the player chooses the tiles from the board
-        ArrayList<Tile> chosenTiles = board.chooseTilesFromBoard(maxTilesPickable);
-
-        //copy of the tiles chosen in the player littleHand already in the correct order
-        playerPlaying.orderTiles(chosenTiles, playerPlaying.askOrder(chosenTiles));
-
-        do{
-            try {
-                System.out.println("choose the Column:");
-                Scanner scanner = new Scanner(System.in);
-                int columnChosen = scanner.nextInt();
-
-                playerPlaying.myShelfie.insert(columnChosen, playerPlaying.getLittleHand());
-                break;
-            } catch (NotEnoughSpaceInChosenColumnException e){
-                System.out.println(e);
-            }
-        }while(true);
+    //funzione chiamata dal process message del messaggio creato alla fine dell'inserimento delle
+    //tessere nella shelf del giocatore
+    public void endOfTheTurn(){
 
         //checking goals and adding score if necessary
-        playerPlaying.myScore.addScore(personalPointsEarned(playerPlaying));
+        playersConnected.get(currentPlayerIndex).myScore.addScore(personalPointsEarned());
 
-        if(!playerPlaying.isCommonGoalAchieved(0))
-            playerPlaying.myScore.addScore(commonPointsEarned(playerPlaying, 0));
-        if(!playerPlaying.isCommonGoalAchieved(1))
-            playerPlaying.myScore.addScore(commonPointsEarned(playerPlaying, 1));
+        if(!playersConnected.get(currentPlayerIndex).isCommonGoalAchieved(0))
+            playersConnected.get(currentPlayerIndex).myScore.addScore(commonPointsEarned(0));
+        if(!playersConnected.get(currentPlayerIndex).isCommonGoalAchieved(1))
+            playersConnected.get(currentPlayerIndex).myScore.addScore(commonPointsEarned(1));
 
         //checking if a player's shelf is full,
         // if true add +1pt and set the last lap
-        if(playerPlaying.myShelfie.isShelfFull()) {
-            playerPlaying.myScore.addScore(1);
+        if(playersConnected.get(currentPlayerIndex).myShelfie.isShelfFull()) {
+            playersConnected.get(currentPlayerIndex).myScore.addScore(1);
             this.isOver = true;
         }
-
         //checking if the board need to be refilled
         if(board.needRefill())
             board.refill();
+
+        //notify();
     }
 
-
-
-    public void chooseTilesFromBoard(){
-        do{
-            try{
-                int initialPositionR = getInitialRow();
-                int initialPositionC = getInitialColumn();
-                checkPosition(initialPositionR, initialPositionC);
-                break;
-            }catch(OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException e){
-                System.out.println(e);
-            }
-        }while(true);
+    public void getPlayerChoice(int initialRow, int initialColumn, char direction, int numberOfTiles){
+        board.pickTilesFromBoard(initialRow, initialColumn, numberOfTiles, direction, playersConnected.get(currentPlayerIndex));
     }
-    public void checkPosition(int row, int column){
-        try{
-            row--; column--;
-            board.checkPosition(row, column);
-        }catch(OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException e){
-            ExceptionMsg exceptionMsg = new ExceptionMsg(e.toString());
+
+    /**
+     * OVERVIEW: this method checks if the player playing has achieved the number commonGoalIndex common goal,
+     * and it returns the right amount of points
+     * @see Player
+     * @see CommonGoalCard
+     * @param commonGoalIndex : number of the common goal to check (0 or 1)
+     * @return commonPointsEarned >= 0
+     */
+    private int commonPointsEarned(int commonGoalIndex){
+        CommonGoalCard card = Board.getCommonGoalCard(commonGoalIndex);
+        Tile[][] playerShelfSnapshot = playersConnected.get(currentPlayerIndex).myShelfie.getGrid();
+        if(card.checkPattern(playerShelfSnapshot)) {
+            playersConnected.get(currentPlayerIndex).setCommonGoalAchieved(commonGoalIndex);
+            return card.getScore();
         }
+        else return 0;
+    }
+
+    /**
+     * OVERVIEW: this method checks if the player playing has achieved some personal goals, and it returns
+     * the right amount of points
+     * @see Player
+     * @see PersonalGoalCard
+     * @see Tile
+     * @return personalPointsEarned >= 0
+     */
+    private int personalPointsEarned(){
+        PersonalGoalCard card = playersConnected.get(currentPlayerIndex).getPersonalGoalCard();
+        Tile[][] playerShelfSnapshot = playersConnected.get(currentPlayerIndex).myShelfie.getGrid();
+        return card.getPersonalGoalScore(playerShelfSnapshot);
     }
 
 }
