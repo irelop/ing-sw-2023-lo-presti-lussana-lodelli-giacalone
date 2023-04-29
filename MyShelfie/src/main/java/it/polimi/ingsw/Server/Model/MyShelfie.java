@@ -216,6 +216,8 @@ public class MyShelfie {
             board.refill();
     }
 
+
+
     public void chooseTilesFromBoard(){
         do{
             try{

@@ -47,8 +47,10 @@ public class InitialPositionMsg extends C2SMessage{
 
         }catch(OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException e){
             initialPositionAnswer = new InitialPositionAnswer(e.toString(),this,false);
+        }finally{
+            clientHandler.sendMessageToClient(initialPositionAnswer);
         }
-        clientHandler.sendMessageToClient(initialPositionAnswer);
+
 
     }
 }
