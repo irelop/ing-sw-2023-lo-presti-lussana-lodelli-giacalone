@@ -29,7 +29,7 @@ public class MyShelfie /*implements Runnable*/ {
         this.started = false;
         this.playersConnected = new ArrayList<>();
         this.numberOfPlayers = -1;
-        this.clientHandlers = new ArrayList<ClientHandler>();
+        this.clientHandlers = new ArrayList<>();
     }
 
     public static MyShelfie getMyShelfie(){
@@ -78,10 +78,13 @@ public class MyShelfie /*implements Runnable*/ {
     //la gestiamo con un'eccezione o va bene così????
     //chiamata da login view SOLO con il primo giocatore connesso
 
-    //edit ANDREA: ho gestito lato view i casi in cui l'input non sia valido con annessa stampa all'utente quindi direi ok.
+    //edit ANDREA: ho gestito lato view i casi in cui l'input non sia valido con
+    // annessa stampa all'utente quindi direi ok.
     public void setNumberOfPlayers(int numberOfPlayers) {
-        if(numberOfPlayers == -1)
+        if(numberOfPlayers == -1){
             this.numberOfPlayers = numberOfPlayers;
+            board.initGridParabolic(numberOfPlayers);
+        }
     }
 
     /**
@@ -94,7 +97,7 @@ public class MyShelfie /*implements Runnable*/ {
         for(Player player : playersConnected){
             player.setCard(personalDeck.drawPersonal());
         }
-    }
+    }//dobbiamo farla vedere al player!
 
     /**
      * OVERVIEW: this method gives, randomly, a chair to one player
@@ -121,13 +124,14 @@ public class MyShelfie /*implements Runnable*/ {
         commonGoalCards[0] = CommonGoalDeck.drawCommon();
         commonGoalCards[1] = CommonGoalDeck.drawCommon();
         board.setCommonGoalCards(commonGoalCards);
-    }
+    }//le facciamo vedere ai giocatori????
 
     /**
      * OVERVIEW: this method manages the game: a player can play his/her turn if the match is not over
      *       or if that is the last lap
      */
     public void manageTurn(){
+        board.refill();
         setChair();
         dealPersonalCards();
         drawCommonGoalCards();
@@ -136,7 +140,7 @@ public class MyShelfie /*implements Runnable*/ {
                 //a player can play his/her turn if the match is not over
                 // or if that is the last lap
                 if(!isOver || !playersConnected.get(i).hasChair()){
-                    //call the turn for the player, sending him and his clientHandler
+                    //saving the index of the player playing
                     currentPlayerIndex = i;
                     //synchronize(this){
                         turn();
@@ -144,6 +148,7 @@ public class MyShelfie /*implements Runnable*/ {
                 }
             }
         }
+        //adding spot points
         for (Player player : playersConnected) {
             int spotScore = player.myShelfie.spotCheck();
             player.myScore.addScore(spotScore);
@@ -152,15 +157,8 @@ public class MyShelfie /*implements Runnable*/ {
     }
 
     /**
-     * OVERVIEW: it manages all the moves of a single player during his turn:
-     *          1) find max pickable tiles by the player
-     *          2) the player chooses the tiles from the board
-     *          3) copy of the tiles chosen in the player littleHand already in the correct order
-     *          4) check of the goals and adding score if necessary
-     *          5) check if a player's shelf is full, if it is the method adds one point
-     *          6) check if the board needs to be refilled, if it is true it calls the refill method
-     * @see Player
-     * @see Board
+     * OVERVIEW: it finds max pickable tiles by the player and creates a message to send to
+     * ChooseTilesFromBoardView
      */
     private void turn() {
 

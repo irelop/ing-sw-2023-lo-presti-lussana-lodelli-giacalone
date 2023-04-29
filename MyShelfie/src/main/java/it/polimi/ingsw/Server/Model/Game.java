@@ -4,7 +4,7 @@ package it.polimi.ingsw.Server.Model;
  * Game class: this class manages the single game, composed by 2 to 4 players, a board,
  * a deck of common goal cards and a deck of personal goal card. This class manages the turn of every single
  * player and the end of the game.
- *
+ * @deprecated
  * @authors Matteo Lussana, Irene Lo Presti
  */
 

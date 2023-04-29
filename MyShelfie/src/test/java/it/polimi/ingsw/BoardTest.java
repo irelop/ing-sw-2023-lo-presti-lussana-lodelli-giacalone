@@ -4,11 +4,8 @@ package it.polimi.ingsw;
  * @authors Matteo Lussana, Irene Lo Presti
  */
 
-import it.polimi.ingsw.Server.Model.Board;
-import it.polimi.ingsw.Server.Model.CommonGoalDeck;
+import it.polimi.ingsw.Server.Model.*;
 import it.polimi.ingsw.Server.Model.Exceptions.*;
-import it.polimi.ingsw.Server.Model.ReadFileByLines;
-import it.polimi.ingsw.Server.Model.Tile;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,6 +70,7 @@ public class BoardTest {
 
     }
 
+
     @Test
     void pickTilesFromBoard_correctTilesChosen() {
         int inPosR = 1;
@@ -82,7 +80,7 @@ public class BoardTest {
         ArrayList<Tile> chosenTiles = new ArrayList<>();
         ArrayList<Tile> correctTiles = new ArrayList<>();
 
-        chosenTiles = board.pickTilesFromBoard(inPosR,inPosC,numTiles,dir);
+        chosenTiles = board.pickTilesFromBoard(inPosR,inPosC,numTiles,dir,new Player("player"));
         correctTiles.add(Tile.GREEN);
         correctTiles.add(Tile.GREEN);
 

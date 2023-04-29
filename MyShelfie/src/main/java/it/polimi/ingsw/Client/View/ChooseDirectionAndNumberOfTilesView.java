@@ -10,6 +10,8 @@ import java.util.Scanner;
  * @author Irene Lo Presti
  */
 
+//DA CANCELLARE
+    /*
 public class ChooseDirectionAndNumberOfTilesView extends View{
 
     public int MAX_COLUMNS = 9, MAX_ROWS = 9;
@@ -28,14 +30,14 @@ public class ChooseDirectionAndNumberOfTilesView extends View{
     /**
      * OVERVIEW: constructor method
      * @param chooseDirectionAndNumberOfTilesMsg :
-     **/
+     **//*
     public ChooseDirectionAndNumberOfTilesView(ChooseDirectionAndNumberOfTilesMsg chooseDirectionAndNumberOfTilesMsg){
         this.chooseDirectionAndNumberOfTilesMsg = chooseDirectionAndNumberOfTilesMsg;
     }
 
     /**
      * OVERVIEW: in this method the player chooses the numberOfTiles and the direction
-     */
+     *//*
     @Override
     public void run(){
 
@@ -74,7 +76,7 @@ public class ChooseDirectionAndNumberOfTilesView extends View{
 
     /**
      * OVERVIEW: this method prints the board and marks the initial position with a star
-     */
+     *//*
     public void printBoard(){
 
         String code;
@@ -118,7 +120,7 @@ public class ChooseDirectionAndNumberOfTilesView extends View{
      * OVERVIEW: getter method for direction
      * @return direction (n, s, w or e)
      * @throws InvalidDirectionException if the direction is not n, s, w or e
-     */
+     *//*
     private char getDirection() throws InvalidDirectionException {
 
         System.out.println(chooseDirectionAndNumberOfTilesMsg.nickname + ", now it's time to" +
@@ -141,7 +143,7 @@ public class ChooseDirectionAndNumberOfTilesView extends View{
      * OVERVIEW: getter method for the number of tiles
      * @return number of tiles >= 0 && number of tiles < maxTilesPickable-1
      * @throws InvalidNumberOfTilesException if the number of tiles is not between 0 and axTilesPickable-1
-     */
+     *//*
     private int getNumberOfTiles() throws InvalidNumberOfTilesException{
 
         System.out.println(chooseDirectionAndNumberOfTilesMsg.nickname + ", now it's time to" +
@@ -164,3 +166,4 @@ public class ChooseDirectionAndNumberOfTilesView extends View{
 
 
 }
+*/

@@ -43,10 +43,10 @@ public class InitialPositionMsg extends C2SMessage{
 
         try{
             clientHandler.getController().getBoard().checkPosition(row, column);
-            initialPositionAnswer = new InitialPositionAnswer("",this,true);
+            initialPositionAnswer = new InitialPositionAnswer("",true);
 
         }catch(OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException e){
-            initialPositionAnswer = new InitialPositionAnswer(e.toString(),this,false);
+            initialPositionAnswer = new InitialPositionAnswer(e.toString(),false);
         }finally{
             clientHandler.sendMessageToClient(initialPositionAnswer);
         }

@@ -4,13 +4,12 @@ import it.polimi.ingsw.Server.Model.Board;
 import it.polimi.ingsw.Server.Model.Player;
 import it.polimi.ingsw.Server.Model.ReadFileByLines;
 import it.polimi.ingsw.Server.Model.Tile;
-import it.polimi.ingsw.Server.Messages.BoardMsg;
 import it.polimi.ingsw.Server.Messages.InitialPositionMsg;
-import it.polimi.ingsw.Server.Messages.MaxTilesPickableMsg;
-import it.polimi.ingsw.Server.Messages.PlayerNicknameMsg;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+//da cancellaree
+
 
 public class ChooseDirectionAndNumberOfTilesViewTest {
 

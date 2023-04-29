@@ -1,6 +1,6 @@
 package it.polimi.ingsw.Client.View;
 
-import it.polimi.ingsw.Model.*;
+import it.polimi.ingsw.Server.Model.*;
 import it.polimi.ingsw.Server.Messages.MyShelfMsg;
 import it.polimi.ingsw.Server.Model.ReadFileByLines;
 import it.polimi.ingsw.Server.Model.Tile;

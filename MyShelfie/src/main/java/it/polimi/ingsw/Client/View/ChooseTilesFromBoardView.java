@@ -11,11 +11,6 @@ import java.util.Scanner;
 
 public class ChooseTilesFromBoardView extends View {
 
-    public int MAX_COLUMNS = 9;
-    public int MAX_ROWS = 9;
-    private final YourTurnMsg yourTurnMsg;
-
-
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_BLUE = "\u001B[34m";
@@ -24,7 +19,10 @@ public class ChooseTilesFromBoardView extends View {
     public static final String ANSI_WHITE = "\u001B[37m";
     public static final String ANSI_PINK = "\u001B[35m";
     public static final String ANSI_BLACK = "\u001B[30m";
+    public int MAX_COLUMNS = 9;
+    public int MAX_ROWS = 9;
 
+    private final YourTurnMsg yourTurnMsg;
 
     public ChooseTilesFromBoardView(YourTurnMsg yourTurnMsg){
         this.yourTurnMsg = yourTurnMsg;
@@ -85,17 +83,16 @@ public class ChooseTilesFromBoardView extends View {
             } while (!goOn);
         }
 
-            printBoard(r, c);
-            System.out.println("The initial position is marked with a star");
-
+        printBoard(r, c);
+        System.out.println("The initial position is marked with a star");
 
         synchronized (this) {
             goOn = false;
             do {
                 do {
-                        try {
-                            numberOfTiles = getNumberOfTiles();
-                            break;
+                    try {
+                        numberOfTiles = getNumberOfTiles();
+                        break;
                         } catch (InvalidNumberOfTilesException e) {
                             System.out.println(e);
                         }
@@ -114,7 +111,8 @@ public class ChooseTilesFromBoardView extends View {
                     } while (true);
                 }
 
-                PlayerChoiceMsg playerChoiceMsg = new PlayerChoiceMsg(r, c, direction, numberOfTiles, yourTurnMsg.maxTilesPickable);
+                PlayerChoiceMsg playerChoiceMsg = new PlayerChoiceMsg(r, c, direction, numberOfTiles,
+                        yourTurnMsg.maxTilesPickable);
                 getOwner().getServerHandler().sendMessageToServer(playerChoiceMsg);
 
                 try {
@@ -204,29 +202,6 @@ public class ChooseTilesFromBoardView extends View {
     }
 
     /**
-     * OVERVIEW: getter method for direction
-     * @return direction (n, s, w or e)
-     * @throws InvalidDirectionException if the direction is not n, s, w or e
-     */
-    private char getDirection() throws InvalidDirectionException {
-
-        System.out.println(yourTurnMsg.nickname + ", now it's time to" +
-                " insert the direction that you in which you want to choose those tiles.");
-        System.out.println("Remember: you can chose between n (north), s (south), e (east), w (west).");
-        System.out.print("Please insert the direction: ");
-
-        Scanner scanner = new Scanner(System.in);
-        char direction;
-        direction = scanner.next().charAt(0);
-
-        if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w')
-            throw new InvalidDirectionException();
-
-        else
-            return direction;
-    }
-
-    /**
      * OVERVIEW: getter method for the number of tiles
      * @return number of tiles >= 0 && number of tiles < maxTilesPickable-1
      * @throws InvalidNumberOfTilesException if the number of tiles is not between 0 and axTilesPickable-1
@@ -249,6 +224,29 @@ public class ChooseTilesFromBoardView extends View {
 
         else
             return numberOfTiles;
+    }
+
+    /**
+     * OVERVIEW: getter method for direction
+     * @return direction (n, s, w or e)
+     * @throws InvalidDirectionException if the direction is not n, s, w or e
+     */
+    private char getDirection() throws InvalidDirectionException {
+
+        System.out.println(yourTurnMsg.nickname + ", now it's time to" +
+                " insert the direction in which you want to choose those tiles.");
+        System.out.println("Remember: you can chose between n (north), s (south), e (east), w (west).");
+        System.out.print("Please insert the direction: ");
+
+        Scanner scanner = new Scanner(System.in);
+        char direction;
+        direction = scanner.next().charAt(0);
+
+        if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w')
+            throw new InvalidDirectionException();
+
+        else
+            return direction;
     }
 
 }

@@ -8,7 +8,7 @@ import java.util.Scanner;
  * @author Irene Lo Presti
  */
 
-
+//DA CANCELLARE
 public class ChooseInitialPositionView extends View{
 
     public int MAX_COLUMNS = 9;
