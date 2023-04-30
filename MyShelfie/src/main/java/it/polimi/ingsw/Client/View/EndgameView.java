@@ -1,7 +1,9 @@
 package it.polimi.ingsw.Client.View;
 
+import it.polimi.ingsw.Server.Messages.FinishTurnMsg;
 import it.polimi.ingsw.Server.Messages.ScoreBoardMsg;
 import java.util.Collections;
+import java.util.Scanner;
 
 public class EndgameView extends View{
     private ScoreBoardMsg msg;
@@ -12,6 +14,7 @@ public class EndgameView extends View{
 
     @Override
     public void run(){
+        Integer goOn;
         View nextView = null;
 
         //sorting arrayList
@@ -26,10 +29,16 @@ public class EndgameView extends View{
         System.out.println("---------------------------------");
         System.out.println("SCORE BOARD:");
         for(int i=0; i<msg.playerName.size(); i++){
-            System.out.println((i+1)+"° - "+msg.playerName+" with "+msg.totalScore);
+            System.out.println((i+1)+"° - "+msg.playerName.get(i).getNickname()+" with "+msg.totalScore.get(i));
         }
         System.out.println("---------------------------------");
+        System.out.println("[press any key to continue]");
+        Scanner scanner = new Scanner(System.in);
+        goOn = scanner.nextInt();
+
+        if(goOn != null){
+            getOwner().transitionToView(nextView);
+            FinishTurnMsg finishTurnMsg = new FinishTurnMsg();
+        }
     }
-
-
 }
