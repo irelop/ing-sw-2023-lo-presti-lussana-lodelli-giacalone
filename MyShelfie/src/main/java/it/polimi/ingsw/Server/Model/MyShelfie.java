@@ -1,5 +1,8 @@
 package it.polimi.ingsw.Server.Model;
 import it.polimi.ingsw.Server.ClientHandler;
+import it.polimi.ingsw.Server.Messages.GoalAndScoreMsg;
+import it.polimi.ingsw.Server.Messages.MyShelfMsg;
+import it.polimi.ingsw.Server.Messages.ScoreBoardMsg;
 import it.polimi.ingsw.Server.Messages.YourTurnMsg;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
 import it.polimi.ingsw.Server.Model.Exceptions.NotEnoughSpaceInChosenColumnException;
@@ -145,9 +148,14 @@ public class MyShelfie /*implements Runnable*/ {
                 if(!isOver || !playersConnected.get(i).hasChair()){
                     //saving the index of the player playing
                     currentPlayerIndex = i;
-                    //synchronize(this){
+                    synchronized(this){
                         turn();
-                    //}
+                        try {
+                            this.wait();
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
                 }
             }
         }
@@ -157,6 +165,15 @@ public class MyShelfie /*implements Runnable*/ {
             player.myScore.addScore(spotScore);
         }
         //dobbiamo creare un messaggio per far vedere a tutti i giocatori la EndgameView
+        ArrayList<Integer> scoreList = new ArrayList<Integer>();
+        for (Player player : playersConnected) {
+            scoreList.add(playersConnected.get(currentPlayerIndex).myScore.getScore());
+        }
+        ScoreBoardMsg scoreBoardMsg = new ScoreBoardMsg(playersConnected, scoreList);
+
+        for (Player player : playersConnected) {
+            clientHandlers.get(currentPlayerIndex).sendMessageToClient(scoreBoardMsg);
+        }
     }
 
     /**
@@ -177,17 +194,38 @@ public class MyShelfie /*implements Runnable*/ {
     //tessere nella shelf del giocatore
     public void endOfTheTurn(){
 
-        //checking goals and adding score if necessary
-        playersConnected.get(currentPlayerIndex).myScore.addScore(personalPointsEarned());
+        boolean isCommonGoalAchived = false;
+        boolean isPersonalGoalAchived = false;
+        boolean isShelfFull = false;
 
-        if(!playersConnected.get(currentPlayerIndex).isCommonGoalAchieved(0))
-            playersConnected.get(currentPlayerIndex).myScore.addScore(commonPointsEarned(0));
-        if(!playersConnected.get(currentPlayerIndex).isCommonGoalAchieved(1))
-            playersConnected.get(currentPlayerIndex).myScore.addScore(commonPointsEarned(1));
+        //checking goals and adding score if necessary
+        int personalPointsEarned = personalPointsEarned();
+        if(personalPointsEarned != 0) {
+            isPersonalGoalAchived = true;
+            playersConnected.get(currentPlayerIndex).myScore.addScore(personalPointsEarned());
+        }
+
+        if(!playersConnected.get(currentPlayerIndex).isCommonGoalAchieved(0)) {
+            int commonPointsEarned = commonPointsEarned(0);
+            if(commonPointsEarned != 0) {
+                isCommonGoalAchived = true;
+                playersConnected.get(currentPlayerIndex).myScore.addScore(commonPointsEarned);
+            }
+        }
+        if(!playersConnected.get(currentPlayerIndex).isCommonGoalAchieved(1)) {
+            int commonPointsEarned = commonPointsEarned(1);
+            if(commonPointsEarned != 0) {
+                isCommonGoalAchived = true;
+                playersConnected.get(currentPlayerIndex).myScore.addScore(commonPointsEarned);
+            }
+        }
+
+
 
         //checking if a player's shelf is full,
         // if true add +1pt and set the last lap
-        if(playersConnected.get(currentPlayerIndex).myShelfie.isShelfFull()) {
+        if(playersConnected.get(currentPlayerIndex).myShelfie.isShelfFull() && !isOver) {
+            isShelfFull = true;
             playersConnected.get(currentPlayerIndex).myScore.addScore(1);
             this.isOver = true;
         }
@@ -195,11 +233,13 @@ public class MyShelfie /*implements Runnable*/ {
         if(board.needRefill())
             board.refill();
 
-        //notify();
+        GoalAndScoreMsg goalAndScoreMsg = new GoalAndScoreMsg(isCommonGoalAchived, isPersonalGoalAchived, playersConnected.get(currentPlayerIndex).myScore.getScore(), isShelfFull);
     }
 
     public void getPlayerChoice(int initialRow, int initialColumn, char direction, int numberOfTiles){
         board.pickTilesFromBoard(initialRow, initialColumn, numberOfTiles, direction, playersConnected.get(currentPlayerIndex));
+        MyShelfMsg myShelfMsg = new MyShelfMsg(playersConnected.get(currentPlayerIndex).myShelfie.getGrid(), playersConnected.get(currentPlayerIndex).getLittleHand());
+        clientHandlers.get(currentPlayerIndex).sendMessageToClient(myShelfMsg);
     }
 
     public void insertingTiles(int columnIdx,int[] orderIdxs) throws InvalidTileIndexInLittleHandException, NotEnoughSpaceInChosenColumnException {
@@ -237,6 +277,10 @@ public class MyShelfie /*implements Runnable*/ {
         PersonalGoalCard card = playersConnected.get(currentPlayerIndex).getPersonalGoalCard();
         Tile[][] playerShelfSnapshot = playersConnected.get(currentPlayerIndex).myShelfie.getGrid();
         return card.getPersonalGoalScore(playerShelfSnapshot);
+    }
+
+    public void finishTurn(){
+        this.notify();
     }
 
 }

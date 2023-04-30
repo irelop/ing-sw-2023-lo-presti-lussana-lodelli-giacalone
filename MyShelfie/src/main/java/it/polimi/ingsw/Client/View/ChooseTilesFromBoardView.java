@@ -251,6 +251,10 @@ public class ChooseTilesFromBoardView extends View {
             return direction;
     }
 
-
+    public void notifyView(){
+        synchronized (this) {
+            this.notify();
+        }
+    }
 
 }
