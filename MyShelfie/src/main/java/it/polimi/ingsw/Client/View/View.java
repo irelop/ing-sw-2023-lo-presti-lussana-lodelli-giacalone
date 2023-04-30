@@ -6,7 +6,7 @@ import it.polimi.ingsw.Client.Client;
   other clients and in general I need the view to be responsive when it has to be and locked where it cannot accept any
   valid input.
  */
-public abstract class View implements Runnable,ObservableView{
+public abstract class View implements Runnable, ObserverView {
     private Client owner;
     /* a boolean used for managing interactions with other thread: if false, it locks the view and no other can interact
        with it, otherwise when it will be true, this thread will be free to open new possible interactions.

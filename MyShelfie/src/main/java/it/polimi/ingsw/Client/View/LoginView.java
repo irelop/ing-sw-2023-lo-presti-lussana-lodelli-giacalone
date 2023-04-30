@@ -4,12 +4,6 @@ import it.polimi.ingsw.Server.Messages.*;
 
 import java.util.Scanner;
 
-/**
- package it.polimi.ingsw.Client.View;
-
- import it.polimi.ingsw.Server.Messages.*;
-
- import java.util.Scanner;
 
  /**
  * LoginView class: this class manages the user interaction during the login phase. It is followed by the WaitingView,
@@ -17,7 +11,7 @@ import java.util.Scanner;
  *
  * @author Andrea Giacalone
  */
-public class LoginView extends View implements ObservableView{
+public class LoginView extends View implements ObserverView {
     private Object lock; //in order to stop and continue the run() method computation.
     private boolean goOn; //in order to check if the nickname is valid and so we can go ahead.
     private LoginNicknameAnswer answerToShow; //the answer received by the server which needs to be shown.
@@ -40,7 +34,7 @@ public class LoginView extends View implements ObservableView{
     @Override
     public void run() {
         synchronized (lock){
-
+            showTitleScreen();
             while(!goOn){
                 askNicknameRequest();
                 try {
@@ -50,7 +44,8 @@ public class LoginView extends View implements ObservableView{
                 }
                 showNicknameAnswer(answerToShow);
             }
-            //nextView = new WaitingView();
+            getOwner().transitionToView(nextView);
+            getOwner().getServerHandler().sendMessageToServer(new LobbyUpdateRequest());
 
         }
     }
@@ -58,16 +53,13 @@ public class LoginView extends View implements ObservableView{
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     public void showTitleScreen(){
-
-        System.out.println("\nWelcome to:\n");
-        System.out.println("\n  __  __              _____   _              _    __   _        \n" +
-                " |  \\/  |            / ____| | |            | |  / _| (_)       \n" +
-                " | \\  / |  _   _    | (___   | |__     ___  | | | |_   _    ___ \n" +
-                " | |\\/| | | | | |    \\___ \\  | '_ \\   / _ \\ | | |  _| | |  / _ \\\n" +
-                " | |  | | | |_| |    ____) | | | | | |  __/ | | | |   | | |  __/\n" +
-                " |_|  |_|  \\__, |   |_____/  |_| |_|  \\___| |_| |_|   |_|  \\___|\n" +
-                "            __/ |                                               \n" +
-                "           |___/                                                \n");
+        System.out.println("\n,   .     .                     .         .   ,        ,-.  .       .          \n" +
+                "| . |     |                     |         |\\ /|       (   ` |       |  ,- o    \n" +
+                "| ) ) ,-. | ,-. ,-. ;-.-. ,-.   |-  ,-.   | V | . .    `-.  |-. ,-. |  |  . ,-.\n" +
+                "|/|/  |-' | |   | | | | | |-'   |   | |   |   | | |   .   ) | | |-' |  |- | |-'\n" +
+                "' '   `-' ' `-' `-' ' ' ' `-'   `-' `-'   '   ' `-|    `-'  ' ' `-' '  |  ' `-'\n" +
+                "                                                `-'                   -'       \n" +
+                "\n");
     }
 
 
@@ -79,7 +71,7 @@ public class LoginView extends View implements ObservableView{
     public void askNicknameRequest(){
         Scanner input = new Scanner(System.in);
         System.out.println("\nPlease select your nickname:\n");
-        String insertedNickname = input.nextLine().replace(" ", "");
+        String insertedNickname = input.nextLine().replace(" ", "").toUpperCase();
 
         C2SMessage nicknameRequest = new LoginNicknameRequest(insertedNickname);
         getOwner().getServerHandler().sendMessageToServer(nicknameRequest);
@@ -93,7 +85,7 @@ public class LoginView extends View implements ObservableView{
     private void showNicknameAnswer(LoginNicknameAnswer nicknameAnswer){
         switch (nicknameAnswer.getNicknameStatus()){
             case ACCEPTED ->{
-                System.out.println("\nGreat! So you are: " +nicknameAnswer.getParent().getInsertedNickname()+ "nice to meet you!\n");
+                System.out.println("\nGreat! So you are: " +nicknameAnswer.getParent().getInsertedNickname()+ " : nice to meet you!\n");
                 goOn = true;
             }
             case INVALID -> {
@@ -115,10 +107,11 @@ public class LoginView extends View implements ObservableView{
         int insertedNumPlayers;
 
         System.out.println("\nPlease select the number of the players for the game\n");
-        do{
+        insertedNumPlayers = input.nextInt();
+        while(insertedNumPlayers <=1 || insertedNumPlayers > 4){
+            System.out.println("\nSorry, the number inserted is not valid: please select another one\n");
             insertedNumPlayers = input.nextInt();
-            System.out.println("\nThe number inserted isn't correct: please insert another one\n");
-        }while(insertedNumPlayers <=1 || insertedNumPlayers >4);
+        }
 
         C2SMessage numPlayersRequest = new LoginNumPlayersRequest(insertedNumPlayers);
         getOwner().getServerHandler().sendMessageToServer(numPlayersRequest);
@@ -127,7 +120,9 @@ public class LoginView extends View implements ObservableView{
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     public void notifyView(){
-        this.lock.notify();
+        synchronized (lock) {
+            this.lock.notifyAll();
+        }
     }
 
     public void setLoginNicknameAnswer(LoginNicknameAnswer answerToShow) {

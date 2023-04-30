@@ -1,10 +1,8 @@
 package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Client.View.LoginView;
-import it.polimi.ingsw.Client.View.ObservableView;
 import it.polimi.ingsw.Client.View.View;
 import it.polimi.ingsw.Client.View.WaitingView;
-import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.Server;
 
 import java.io.IOException;
