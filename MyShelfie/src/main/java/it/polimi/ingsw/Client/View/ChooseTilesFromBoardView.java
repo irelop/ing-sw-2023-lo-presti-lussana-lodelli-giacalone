@@ -6,6 +6,7 @@ import it.polimi.ingsw.Server.Messages.YourTurnMsg;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidDirectionException;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidNumberOfTilesException;
 import it.polimi.ingsw.Server.Model.Exceptions.OutOfBoardException;
+import it.polimi.ingsw.Server.Model.Tile;
 
 import java.util.Scanner;
 
@@ -13,14 +14,6 @@ import static it.polimi.ingsw.Client.View.ColorCode.*;
 
 public class ChooseTilesFromBoardView extends View {
 
-    /*public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_LIGHTBLUE = "\u001B[36m";
-    public static final String ANSI_YELLOW = "\u001B[34m";
-    public static final String ANSI_WHITE = "\u001B[37m";
-    public static final String ANSI_PINK = "\u001B[35m";
-    public static final String ANSI_BLACK = "\u001B[30m";*/
     public int MAX_COLUMNS = 9;
     public int MAX_ROWS = 9;
 
@@ -39,6 +32,7 @@ public class ChooseTilesFromBoardView extends View {
         //Object lock = new Object();
 
         printBoard(-1, -1);
+        printGoalCardsInfo();
 
         System.out.println(yourTurnMsg.nickname + ", it's your turn to pick the tiles from the board!");
         System.out.println(yourTurnMsg.nickname + ", choose the position of the first tile, remember that " +
@@ -133,6 +127,42 @@ public class ChooseTilesFromBoardView extends View {
             // transition to next view ??
 
     }
+
+    public void printGoalCardsInfo(){
+        System.out.println("Common goal cards:");
+        for(int i=0; i<yourTurnMsg.commonGoalCards.length; i++){
+            printMatrixOfTiles(6,5, yourTurnMsg.commonGoalCards[i].getCardInfo().getSchema());
+            System.out.println("x"+yourTurnMsg.commonGoalCards[i].getCardInfo().getTimes());
+            System.out.println(yourTurnMsg.commonGoalCards[i].getCardInfo().getDescription());
+        }
+
+        System.out.println("Personal goal card:");
+        printMatrixOfTiles(6,5,yourTurnMsg.personalGoalCard.getPattern());
+    }
+
+    public void printMatrixOfTiles(int maxRow, int maxColumn, Tile[][] matrix){
+        String code = "\u25CF";
+        for(int r=0; r<maxRow; r++){
+
+            //printing the tiles
+            for(int c=0; c<maxColumn; c++){
+
+                switch (matrix[r][c]) {
+                    case NOT_VALID -> System.out.print(" ");
+                    case BLANK -> System.out.print(BLANK.code + code + RESET.code);
+                    case PINK -> System.out.print(PINK.code + code + RESET.code);
+                    case GREEN -> System.out.print(GREEN.code + code + RESET.code);
+                    case BLUE -> System.out.print(BLUE.code + code + RESET.code);
+                    case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + code + RESET.code);
+                    case WHITE -> System.out.print(WHITE.code + code + RESET.code);
+                    case YELLOW -> System.out.print(YELLOW.code + code + RESET.code);
+                }
+                System.out.print("\t");
+            }
+            System.out.println();
+        }
+    }
+
     /**
      * OVERVIEW: this method prints the board
      */

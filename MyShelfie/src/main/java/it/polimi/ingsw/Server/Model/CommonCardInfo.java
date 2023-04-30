@@ -31,4 +31,16 @@ public class CommonCardInfo {
         this.description = ReadFileByLines.getLine();
 
     }
+
+    public Tile[][] getSchema(){
+        return this.schema;
+    }
+
+    public int getTimes(){
+        return times;
+    }
+
+    public String getDescription(){
+        return description;
+    }
 }

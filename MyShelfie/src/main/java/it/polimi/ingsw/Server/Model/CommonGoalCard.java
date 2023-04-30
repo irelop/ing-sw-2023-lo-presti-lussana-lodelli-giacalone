@@ -21,6 +21,10 @@ public class CommonGoalCard {
         this.cardInfo = new CommonCardInfo(patternName);
     }
 
+    public CommonCardInfo getCardInfo(){
+        return this.cardInfo;
+    }
+
     /**
      * OVERVIEW: this method returns the score, which depends from the timing of players' gaol achievement.
      * @return score: the available score for the completed goal.
