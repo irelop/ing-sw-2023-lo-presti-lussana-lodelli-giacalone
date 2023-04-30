@@ -70,38 +70,50 @@ public class InsertInShelfView extends View {
      * It sends an InsertingTilesMsg containing player's choises (if right)
      */
     @Override
-    public void run(){
+    public void run() {
 
         int columnChosen;
         int[] chosenOrderIndexes;
         ArrayList<Tile> chosenTiles = msg.getLittleHand();
         Tile[][] myShelf = msg.getShelf();
+        boolean goOn = false;
 
-        do{
+        synchronized (this) {
+
             printShelf(myShelf);
-            try{
-                columnChosen = chooseColumn();
-                break;
-            }catch(InvalidShelfColumnException e){
-                System.out.println(e);
-            }
-        }while(true);
+            do {
+                do {
+                    // client side exception management
+                    try {
+                        columnChosen = chooseColumn();
+                        break;
+                    } catch (InvalidShelfColumnException e) {
+                        System.out.println(e);
+                    }
+                } while (true);
 
-        do{
-            try{
-                chosenOrderIndexes = askOrder(chosenTiles);
-                break;
-            }catch(InvalidTileIndexInLittleHandException e){
-                System.out.println(e);
-            }
-        }while(true);
+                do {
+                    // client side exception management
+                    try {
+                        chosenOrderIndexes = askOrder(chosenTiles);
+                        break;
+                    } catch (InvalidTileIndexInLittleHandException e) {
+                        System.out.println(e);
+                    }
+                } while (true);
 
-        InsertingTilesMsg insertingMsg = new InsertingTilesMsg(columnChosen, chosenOrderIndexes);
-        getOwner().getServerHandler().sendMessageToServer(insertingMsg);
-
-        // per passare alla Goal View bisogna usare il metodo processMessage in GoalAndScoreMsg
-        //if (nextView != null)
-        //    getOwner().transitionToView(nextView);
+                InsertingTilesMsg insertingMsg = new InsertingTilesMsg(columnChosen, chosenOrderIndexes);
+                getOwner().getServerHandler().sendMessageToServer(insertingMsg);
+                try {
+                    this.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                System.out.println(insertingMsg.answer.answer);
+                if (insertingMsg.answer.valid)
+                    goOn = true;
+            } while (!goOn);
+        }
     }
 
     /**
@@ -181,8 +193,8 @@ public class InsertInShelfView extends View {
 
 
     public void notifyView(){
-        synchronized (lock) {
-            this.lock.notifyAll();
+        synchronized (this) {
+            this.notify();
         }
     }
 }

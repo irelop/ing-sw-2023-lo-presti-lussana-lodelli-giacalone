@@ -126,7 +126,7 @@ public class ChooseTilesFromBoardView extends View {
                 if (playerChoiceMsg.playerChoiceAnswer.valid)
                     goOn = true;
 
-                } while (goOn);
+                } while (!goOn);
             }
 
 
