@@ -37,3 +37,83 @@ Q2UPatternStrategy
 {BLANK, BLANK, BLANK, BLANK, BLANK}
 2
 Description: 2 groups each containing 4 tiles of the same type in a 2x2 square. The tiles of one square can be different from those of another square.
+-
+V6DPatternStrategy
+{BLANK, BLANK, WHITE, BLANK, BLANK}
+{BLANK, BLANK, WHITE, BLANK, BLANK}
+{BLANK, BLANK, WHITE, BLANK, BLANK}
+{BLANK, BLANK, WHITE, BLANK, BLANK}
+{BLANK, BLANK, WHITE, BLANK, BLANK}
+{BLANK, BLANK, WHITE, BLANK, BLANK}
+3
+Description: 3 columns each formed by 6 tiles of maximum three different types. One column can show the same or a different combination of another column.
+-
+M8PatternStrategy
+{BLANK, BLANK, BLANK, BLANK, BLANK}
+{BLANK, WHITE, BLANK, WHITE, BLANK}
+{WHITE, BLANK, WHITE, BLANK, WHITE}
+{BLANK, WHITE, BLANK, WHITE, BLANK}
+{BLANK, BLANK, WHITE, BLANK, BLANK}
+{BLANK, BLANK, BLANK, BLANK, BLANK}
+1
+Description: 8 tiles of the same type. There's no restriction about the position of these tiles.
+-
+DPatternStrategy
+{WHITE, BLANK, BLANK, BLANK, BLANK}
+{BLANK, WHITE, BLANK, BLANK, BLANK}
+{BLANK, BLANK, WHITE, BLANK, BLANK}
+{BLANK, BLANK, BLANK, WHITE, BLANK}
+{BLANK, BLANK, BLANK, BLANK, WHITE}
+{BLANK, BLANK, BLANK, BLANK, BLANK}
+1
+Description: 5 tiles of the same type forming a diagonal.
+-
+O5DPatternStrategy
+{BLANK, BLANK, BLANK, BLANK, BLANK}
+{BLANK, BLANK, BLANK, BLANK, BLANK}
+{WHITE, WHITE, WHITE, WHITE, WHITE}
+{BLANK, BLANK, BLANK, BLANK, BLANK}
+{BLANK, BLANK, BLANK, BLANK, BLANK}
+{BLANK, BLANK, BLANK, BLANK, BLANK}
+4
+Description: 4 lines each formed by 5 tiles of maximum three different types. One line can show the same or a different combination of another line.
+-
+V6UPatternStrategy
+{BLANK, BLANK, WHITE, BLANK, BLANK}
+{BLANK, BLANK, PINK, BLANK, BLANK}
+{BLANK, BLANK, GREEN, BLANK, BLANK}
+{BLANK, BLANK, BLUE, BLANK, BLANK}
+{BLANK, BLANK, LIGHTBLUE, BLANK, BLANK}
+{BLANK, BLANK, YELLOW, BLANK, BLANK}
+2
+Description: 2 columns each formed by 6 different types of tiles.
+-
+O5UPatternStrategy
+{BLANK, BLANK, BLANK, BLANK, BLANK}
+{BLANK, BLANK, BLANK, BLANK, BLANK}
+{WHITE, PINK, GREEN, BLUE, LIGHTBLUE}
+{BLANK, BLANK, BLANK, BLANK, BLANK}
+{BLANK, BLANK, BLANK, BLANK, BLANK}
+{BLANK, BLANK, BLANK, BLANK, BLANK}
+2
+Description: 2 lines each formed by 5 different types of tiles. One line can show the same or a different combination of the other line.
+-
+XPatternStrategy
+{BLANK, BLANK, BLANK, BLANK, BLANK}
+{BLANK, WHITE, BLANK, WHITE, BLANK}
+{BLANK, BLANK, WHITE, BLANK, BLANK}
+{BLANK, WHITE, BLANK, WHITE, BLANK}
+{BLANK, BLANK, BLANK, BLANK, BLANK}
+{BLANK, BLANK, BLANK, BLANK, BLANK}
+1
+Description: 5 tiles of the same type forming an X.
+-
+XPatternStrategy
+{BLANK, BLANK, BLANK, BLANK, BLANK}
+{WHITE, BLANK, BLANK, BLANK, BLANK}
+{WHITE, WHITE, BLANK, BLANK, BLANK}
+{WHITE, WHITE, WHITE, BLANK, BLANK}
+{WHITE, WHITE, WHITE, WHITE, BLANK}
+{WHITE, WHITE, WHITE, WHITE, WHITE}
+1
+Description: 5 columns of increasing or decreasing height. Starting from the first column on the left on the right, each next column must be made of exactly one more tile. Tiles can be of any type.
