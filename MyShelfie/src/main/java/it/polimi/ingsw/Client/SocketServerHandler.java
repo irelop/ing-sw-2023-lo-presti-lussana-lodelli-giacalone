@@ -81,6 +81,8 @@ public class SocketServerHandler extends ServerHandler {
         shouldStop.set(true);
         try {
             server.shutdownInput();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
