@@ -7,16 +7,17 @@ import it.polimi.ingsw.Server.Model.Tile;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-//DA CANCELLARE
-public class ChooseInitialPositionViewTest {
-   public ChooseInitialPositionView chooseInitialPositionView;
 
-   public YourTurnMsg yourTurnMsg;
+import static org.junit.jupiter.api.Assertions.*;
 
+class ChooseTilesFromBoardViewTest {
+
+    private ChooseTilesFromBoardView chooseTilesFromBoardView;
     ReadFileByLines reader;
 
     @BeforeEach
     void setUp() {
+        YourTurnMsg yourTurnMsg;
         Board board;
         Tile[][] grid = new Tile[9][9];
 
@@ -41,9 +42,7 @@ public class ChooseInitialPositionViewTest {
         board.initFromMatrix(grid);
 
         yourTurnMsg = new YourTurnMsg("player1", 3, Board.getBoardGrid());
-
-        chooseInitialPositionView = new ChooseInitialPositionView(yourTurnMsg);
-
+        chooseTilesFromBoardView = new ChooseTilesFromBoardView(yourTurnMsg);
     }
 
     @AfterEach
@@ -51,10 +50,12 @@ public class ChooseInitialPositionViewTest {
     }
 
     @Test
-    public void printBoard_visualTest(){
-        chooseInitialPositionView.printBoard();
+    public void printInitialBoard_visualTest(){
+        chooseTilesFromBoardView.printBoard(-1,-1);
     }
 
     @Test
-    public void run_visualTest(){chooseInitialPositionView.run();}
+    public void printBoardWithStar_visualTest(){
+        chooseTilesFromBoardView.printBoard(2,4);
+    }
 }

@@ -8,7 +8,8 @@ public enum ColorCode {
     YELLOW("\u001B[34m"),
     WHITE("\u001B[37m"),
     BLANK("\u001B[30m"),
-    NOT_VALID(" ");
+    NOT_VALID(" "),
+    RESET("\u001B[0m");
 
     public final String code;
 
