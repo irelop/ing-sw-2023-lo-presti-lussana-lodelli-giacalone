@@ -14,10 +14,7 @@ public class InitialPositionAnswer extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-
         serverHandler.getClient().getCurrentView().notifyView();
-
-        // transition to next view ??
     }
 
 }
