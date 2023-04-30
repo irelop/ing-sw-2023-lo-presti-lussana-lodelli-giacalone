@@ -10,7 +10,7 @@ import it.polimi.ingsw.Server.Model.Exceptions.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class    Board {
+public class Board {
     protected final static int MAX_ROWS = 9;
     protected final static int MAX_COLUMNS = 9;
     protected final static int MAX_DRAWABLE_COMMON = 2;
@@ -187,7 +187,12 @@ public class    Board {
      * @return ArrayList<Tile> chosenTiles != null
      * @author Irene Lo Presti
      */
-    /*public ArrayList<Tile> chooseTilesFromBoard(int maxTilesPickable){
+
+    // Ho tolto i commenti che circondavano il metodo perchè sennò ogni volta che
+    // scrivevamo Board usciva la scritta rigata. Tanto 90/100 sto metodo andrà cancellato
+    // (=> non guardate gli errori causati da questo). Cordiali saluti, Riccardo KEKW
+
+    public ArrayList<Tile> chooseTilesFromBoard(int maxTilesPickable){
         int initialPositionR, initialPositionC, numberOfTiles;
         char direction;
         ArrayList<Tile> chosenTiles = new ArrayList<>();
@@ -226,7 +231,7 @@ public class    Board {
         }while(true);
 
         return pickTilesFromBoard(initialPositionR, initialPositionC, numberOfTiles+1, direction);
-    }*/
+    }
 
     /**
      * OVERVIEW: this method picks the tiles from the board, and it returns them to the player's hand.

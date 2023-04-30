@@ -240,7 +240,12 @@ public class MyShelfie /*implements Runnable*/ {
 
     public void getPlayerChoice(int initialRow, int initialColumn, char direction, int numberOfTiles){
         board.pickTilesFromBoard(initialRow, initialColumn, numberOfTiles, direction, playersConnected.get(currentPlayerIndex));
-        MyShelfMsg myShelfMsg = new MyShelfMsg(playersConnected.get(currentPlayerIndex).myShelfie.getGrid(), playersConnected.get(currentPlayerIndex).getLittleHand());
+        MyShelfMsg myShelfMsg = new MyShelfMsg(
+                playersConnected.get(currentPlayerIndex).myShelfie.getGrid(),
+                playersConnected.get(currentPlayerIndex).getLittleHand(),
+                Board.getCommonGoalCards(),
+                playersConnected.get(currentPlayerIndex).getPersonalGoalCard()
+                );
         clientHandlers.get(currentPlayerIndex).sendMessageToClient(myShelfMsg);
     }
 

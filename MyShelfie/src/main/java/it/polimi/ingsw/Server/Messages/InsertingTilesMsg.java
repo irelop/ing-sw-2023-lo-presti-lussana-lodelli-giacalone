@@ -20,8 +20,6 @@ public class InsertingTilesMsg extends C2SMessage {
     @Override
     public void processMessage(ClientHandler clientHandler){
 
-        // insert in shelf
-        // getTiles in player
         try{
             clientHandler.getController().insertingTiles(columnChosen,chosenOrderIndexes);
             answer = new InsertingTilesAnswer("",true);
