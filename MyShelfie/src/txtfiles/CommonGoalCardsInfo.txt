@@ -1,3 +1,4 @@
+V2UPatternStrategy
 {BLANK, BLANK, BLANK, BLANK, BLANK}
 {BLANK, WHITE, BLANK, BLANK, BLANK}
 {BLANK, WHITE, BLANK, BLANK, BLANK}
@@ -6,6 +7,8 @@
 {BLANK, BLANK, BLANK, BLANK, BLANK}
 6
 Description: 6 groups each containing at least 2 tiles of the same type (not necessarily the depicted shape). The tiles of one group can be different from those of another group.
+-
+V4UPatternStrategy
 {BLANK, BLANK, BLANK, BLANK, BLANK}
 {BLANK, WHITE, BLANK, BLANK, BLANK}
 {BLANK, WHITE, BLANK, BLANK, BLANK}
@@ -14,6 +17,8 @@ Description: 6 groups each containing at least 2 tiles of the same type (not nec
 {BLANK, BLANK, BLANK, BLANK, BLANK}
 4
 Description: 4 groups each containing at least 4 tiles of the same type (not necessarily the depicted shape). The tiles of one group can be different from those of another group.
+-
+APatternStrategy
 {WHITE, BLANK, BLANK, BLANK, WHITE}
 {BLANK, BLANK, BLANK, BLANK, BLANK}
 {BLANK, BLANK, BLANK, BLANK, BLANK}
@@ -22,6 +27,8 @@ Description: 4 groups each containing at least 4 tiles of the same type (not nec
 {WHITE, BLANK, BLANK, BLANK, WHITE}
 1
 Description: 4 tiles of the same type in the 4 corners of the bookshelf
+-
+Q2UPatternStrategy
 {BLANK, BLANK, BLANK, BLANK, BLANK}
 {BLANK, WHITE, WHITE, BLANK, BLANK}
 {BLANK, WHITE, WHITE, BLANK, BLANK}

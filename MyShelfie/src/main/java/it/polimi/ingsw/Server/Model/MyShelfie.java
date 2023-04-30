@@ -186,7 +186,9 @@ public class MyShelfie /*implements Runnable*/ {
         int maxTilesPickable = playersConnected.get(currentPlayerIndex).myShelfie.maxTilesPickable();
 
         YourTurnMsg yourTurnMsg;
-        yourTurnMsg = new YourTurnMsg(playersConnected.get(currentPlayerIndex).getNickname(), maxTilesPickable, Board.getBoardGrid());
+        yourTurnMsg = new YourTurnMsg(playersConnected.get(currentPlayerIndex).getNickname(), maxTilesPickable,
+                Board.getBoardGrid(), Board.getCommonGoalCards(),
+                playersConnected.get(currentPlayerIndex).getPersonalGoalCard());
         clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
     }
 
