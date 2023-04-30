@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
-import it.polimi.ingsw.Client.View.ChooseInitialPositionView;
+import it.polimi.ingsw.Client.View.ChooseTilesFromBoardView;
 import it.polimi.ingsw.Server.Model.Tile;
 
 public class YourTurnMsg extends S2CMessage{
@@ -19,6 +19,6 @@ public class YourTurnMsg extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        serverHandler.getClient().transitionToView(new ChooseInitialPositionView(this));
+        serverHandler.getClient().transitionToView(new ChooseTilesFromBoardView(this));
     }
 }
