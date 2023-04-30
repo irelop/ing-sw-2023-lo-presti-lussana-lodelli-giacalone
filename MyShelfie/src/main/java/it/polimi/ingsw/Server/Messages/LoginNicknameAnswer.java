@@ -2,8 +2,6 @@ package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.LoginView;
-import it.polimi.ingsw.Client.View.ObservableView;
-import it.polimi.ingsw.Client.View.View;
 
 public class LoginNicknameAnswer extends S2CMessage{
     public LoginNicknameRequest getParent() {
