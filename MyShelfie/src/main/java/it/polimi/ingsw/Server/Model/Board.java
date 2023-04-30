@@ -10,7 +10,7 @@ import it.polimi.ingsw.Server.Model.Exceptions.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Board {
+public class    Board {
     protected final static int MAX_ROWS = 9;
     protected final static int MAX_COLUMNS = 9;
     protected final static int MAX_DRAWABLE_COMMON = 2;

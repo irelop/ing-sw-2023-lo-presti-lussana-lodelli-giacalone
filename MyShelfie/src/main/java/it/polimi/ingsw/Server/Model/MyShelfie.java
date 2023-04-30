@@ -1,6 +1,9 @@
 package it.polimi.ingsw.Server.Model;
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.Messages.YourTurnMsg;
+import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
+import it.polimi.ingsw.Server.Model.Exceptions.NotEnoughSpaceInChosenColumnException;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -197,6 +200,11 @@ public class MyShelfie /*implements Runnable*/ {
 
     public void getPlayerChoice(int initialRow, int initialColumn, char direction, int numberOfTiles){
         board.pickTilesFromBoard(initialRow, initialColumn, numberOfTiles, direction, playersConnected.get(currentPlayerIndex));
+    }
+
+    public void insertingTiles(int columnIdx,int[] orderIdxs) throws InvalidTileIndexInLittleHandException, NotEnoughSpaceInChosenColumnException {
+        playersConnected.get(currentPlayerIndex).getTiles(orderIdxs);
+        playersConnected.get(currentPlayerIndex).myShelfie.insert(columnIdx,playersConnected.get(currentPlayerIndex).getLittleHand());
     }
 
     /**

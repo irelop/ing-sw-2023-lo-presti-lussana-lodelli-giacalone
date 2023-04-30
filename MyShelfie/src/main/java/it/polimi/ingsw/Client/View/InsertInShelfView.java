@@ -5,11 +5,14 @@ import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandExcep
 import it.polimi.ingsw.Server.Model.Tile;
 import it.polimi.ingsw.Server.Messages.InsertingTilesMsg;
 import it.polimi.ingsw.Server.Messages.MyShelfMsg;
+import static it.polimi.ingsw.Client.View.ColorCode.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 // prima bozza
+// DEVO MOSTRARE LE CARTE OBIETTIVO COMUNE E PERSONALE
+// Manca la gestione delle eccezioni lato server
 
 /**
  * This view is shown when the current player has to insert the tiles he/she took from the board into
@@ -20,17 +23,6 @@ import java.util.Scanner;
  */
 
 public class InsertInShelfView extends View {
-
-
-    // colors to stamp the shelf
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_LIGHTBLUE = "\u001B[36m";
-    public static final String ANSI_YELLOW = "\u001B[34m";
-    public static final String ANSI_WHITE = "\u001B[37m";
-    public static final String ANSI_PINK = "\u001B[35m";
-    public static final String ANSI_BLACK = "\u001B[30m";
 
     private final MyShelfMsg msg;
 
@@ -58,13 +50,13 @@ public class InsertInShelfView extends View {
             for (int j = 0; j < myShelf[0].length; j++) {
                 switch (myShelf[i][j]) {
                     case NOT_VALID -> System.out.print(" ");
-                    case BLANK -> System.out.print(ANSI_BLACK + circle + ANSI_RESET);
-                    case PINK -> System.out.print(ANSI_PINK + circle + ANSI_RESET);
-                    case GREEN -> System.out.print(ANSI_GREEN + circle + ANSI_RESET);
-                    case BLUE -> System.out.print(ANSI_BLUE + circle + ANSI_RESET);
-                    case LIGHTBLUE -> System.out.print(ANSI_LIGHTBLUE + circle + ANSI_RESET);
-                    case WHITE -> System.out.print(ANSI_WHITE + circle + ANSI_RESET);
-                    case YELLOW -> System.out.print(ANSI_YELLOW + circle + ANSI_RESET);
+                    case BLANK -> System.out.print(BLANK.code + circle + RESET.code);
+                    case PINK -> System.out.print(PINK.code + circle + RESET.code);
+                    case GREEN -> System.out.print(GREEN.code + circle + RESET.code);
+                    case BLUE -> System.out.print(BLUE.code + circle + RESET.code);
+                    case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + circle + RESET.code);
+                    case WHITE -> System.out.print(WHITE.code + circle + RESET.code);
+                    case YELLOW -> System.out.print(YELLOW.code + circle + RESET.code);
                 }
                 System.out.print("\t");
             }
@@ -73,16 +65,12 @@ public class InsertInShelfView extends View {
         System.out.println();
     }
 
-    // Manca la gestione delle eccezioni lato server
-
     /**
      * The main method of the view, overrided form thread run() method
      * It sends an InsertingTilesMsg containing player's choises (if right)
      */
     @Override
     public void run(){
-
-        //CONTROLLI SPOSTATI DI 1
 
         int columnChosen;
         int[] chosenOrderIndexes;
@@ -121,13 +109,12 @@ public class InsertInShelfView extends View {
      * @return the index of the column chosen by the player
      * @throws InvalidShelfColumnException: thrown to avoid wrong indexes for the column
      */
-    // Manca la gestione dell'eccezione "colonna piena"
     public int chooseColumn() throws InvalidShelfColumnException {
         int columnChosen;
         System.out.println("choose the Column:");
         Scanner scanner = new Scanner(System.in);
-        columnChosen = scanner.nextInt();
-        if (columnChosen < 0 || columnChosen >= 5)  throw new InvalidShelfColumnException();
+        columnChosen = scanner.nextInt() - 1; // user's indexes start from one
+        if (columnChosen < 0 || columnChosen >= 5) throw new InvalidShelfColumnException();
         return columnChosen;
     }
 
@@ -144,7 +131,7 @@ public class InsertInShelfView extends View {
         boolean sameColors = true;
 
         if(chosenTiles.size()==1){
-            choices[0] = 1;
+            choices[0] = 0;
             return choices;
         }
 
@@ -156,7 +143,7 @@ public class InsertInShelfView extends View {
         }
         if(sameColors) {
             for(int i=0;i<tilesNumber;i++){
-                choices[i] = i+1;
+                choices[i] = i;
             }
             return choices;
         }
@@ -182,13 +169,20 @@ public class InsertInShelfView extends View {
         Scanner scanner = new Scanner(System.in);
 
         for(int i=0; i<choices.length; i++){
-            choices[i] = scanner.nextInt();
-            if(choices[i]<0 || choices[i]> choices.length) throw new InvalidTileIndexInLittleHandException(choices.length);
+            choices[i] = scanner.nextInt() - 1; // user's indexes start from one
+            if(choices[i] < 0 || choices[i] >= choices.length) throw new InvalidTileIndexInLittleHandException(choices.length);
         }
         for(int i=0; i< choices.length-1; i++){
             for(int j=i+1; j<choices.length; j++){
                 if(choices[i]==choices[j]) throw new InvalidTileIndexInLittleHandException(choices.length);
             }
+        }
+    }
+
+
+    public void notifyView(){
+        synchronized (lock) {
+            this.lock.notifyAll();
         }
     }
 }
