@@ -1,9 +1,16 @@
 package it.polimi.ingsw.Client.View;
 
+import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Server.Messages.*;
 
 import java.util.Scanner;
 
+/**
+ package it.polimi.ingsw.Client.View;
+
+ import it.polimi.ingsw.Server.Messages.*;
+
+ import java.util.Scanner;
 
  /**
  * LoginView class: this class manages the user interaction during the login phase. It is followed by the WaitingView,
@@ -12,16 +19,16 @@ import java.util.Scanner;
  * @author Andrea Giacalone
  */
 public class LoginView extends View implements ObserverView {
-    private final Object lock; //in order to stop and continue the run() method computation.
-    private boolean goOn; //in order to check if the nickname is valid, and so we can go ahead.
+    private Object lock; //in order to stop and continue the run() method computation.
+    private boolean goOn; //in order to check if the nickname is valid and so we can go ahead.
+    private boolean isFull;
     private LoginNicknameAnswer answerToShow; //the answer received by the server which needs to be shown.
-
-    //private View nextView; the next view in the Machine State pattern: in this case it's the Waiting view
 
     public LoginView() {
         this.lock = new Object();
         this.goOn = false;
         this.answerToShow = null;
+        this.isFull = false;
     }
 
 
@@ -34,7 +41,7 @@ public class LoginView extends View implements ObserverView {
     public void run() {
         synchronized (lock){
             showTitleScreen();
-            while(!goOn){
+            while(!goOn && !isFull){
                 askNicknameRequest();
                 try {
                     lock.wait();
@@ -43,24 +50,21 @@ public class LoginView extends View implements ObserverView {
                 }
                 showNicknameAnswer(answerToShow);
             }
-            getOwner().getServerHandler().sendMessageToServer(new LobbyUpdateRequest());
-
+            if(!isFull) getOwner().getServerHandler().sendMessageToServer(new LobbyUpdateRequest());
         }
+
     }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     public void showTitleScreen(){
-        System.out.println("""
-
-                ,   .     .                     .         .   ,        ,-.  .       .         \s
-                | . |     |                     |         |\\ /|       (   ` |       |  ,- o   \s
-                | ) ) ,-. | ,-. ,-. ;-.-. ,-.   |-  ,-.   | V | . .    `-.  |-. ,-. |  |  . ,-.
-                |/|/  |-' | |   | | | | | |-'   |   | |   |   | | |   .   ) | | |-' |  |- | |-'
-                ' '   `-' ' `-' `-' ' ' ' `-'   `-' `-'   '   ' `-|    `-'  ' ' `-' '  |  ' `-'
-                                                                `-'                   -'      \s
-
-                """);
+        System.out.println("\n,   .     .                     .         .   ,        ,-.  .       .          \n" +
+                "| . |     |                     |         |\\ /|       (   ` |       |  ,- o    \n" +
+                "| ) ) ,-. | ,-. ,-. ;-.-. ,-.   |-  ,-.   | V | . .    `-.  |-. ,-. |  |  . ,-.\n" +
+                "|/|/  |-' | |   | | | | | |-'   |   | |   |   | | |   .   ) | | |-' |  |- | |-'\n" +
+                "' '   `-' ' `-' `-' ' ' ' `-'   `-' `-'   '   ' `-|    `-'  ' ' `-' '  |  ' `-'\n" +
+                "                                                `-'                   -'       \n" +
+                "\n");
     }
 
 
@@ -81,7 +85,7 @@ public class LoginView extends View implements ObserverView {
     /**
      * OVERVIEW: this method allows to show the answer received by the server and, for the first player,
      *           calls the method responsible for the request of the number of players of the game.
-     * @param nicknameAnswer : the message received from server
+     * @param nicknameAnswer
      */
     private void showNicknameAnswer(LoginNicknameAnswer nicknameAnswer){
         switch (nicknameAnswer.getNicknameStatus()){
@@ -89,11 +93,18 @@ public class LoginView extends View implements ObserverView {
                 System.out.println("\nGreat! So you are: " +nicknameAnswer.getParent().getInsertedNickname()+ " : nice to meet you!\n");
                 goOn = true;
             }
-            case INVALID -> System.out.println("\nSorry, your nickname has already been chosen - please select another one\n");
+            case INVALID -> {
+                System.out.println("\nSorry, your nickname has already been chosen - please select another one\n");
+            }
             case FIRST_ACCEPTED -> {
-                System.out.println("\nGreat! So you are: " + nicknameAnswer.getParent().getInsertedNickname()+ "nice to meet you!\n");
+                System.out.println("\nGreat! So you are: " + nicknameAnswer.getParent().getInsertedNickname()+ " nice to meet you!\n");
                 goOn = true;
                 askNumPlayersRequest();
+            }
+            case FULL_LOBBY -> {
+                System.out.println("\nDeeply sorry! We cannot let you join because the game lobby is already full\n");
+                isFull = true;
+                goOn = true;
             }
         }
     }

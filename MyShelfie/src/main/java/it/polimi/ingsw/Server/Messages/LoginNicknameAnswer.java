@@ -15,7 +15,8 @@ public class LoginNicknameAnswer extends S2CMessage{
     public enum Status{
         INVALID,
         ACCEPTED,
-        FIRST_ACCEPTED;
+        FIRST_ACCEPTED,
+        FULL_LOBBY;
     }
 
     LoginNicknameRequest parent;
@@ -35,3 +36,4 @@ public class LoginNicknameAnswer extends S2CMessage{
         serverHandler.getClient().getCurrentView().notifyView();
     }
 }
+

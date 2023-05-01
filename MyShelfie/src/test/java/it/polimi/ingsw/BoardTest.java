@@ -53,7 +53,7 @@ public class BoardTest {
     void tearDown() {
     }
 
-  /*  @Test
+   @Test
     void pickTilesFromBoard_correctEliminationOfTiles() {
         int inPosR = 1;
         int inPosC = 3;
@@ -85,7 +85,7 @@ public class BoardTest {
         correctTiles.add(Tile.GREEN);
 
         Assertions.assertEquals(chosenTiles, correctTiles);
-    }*/
+    }
 
     @Test
     void getInitialRow_correctInputCorrectOutput() throws OutOfBoardException {

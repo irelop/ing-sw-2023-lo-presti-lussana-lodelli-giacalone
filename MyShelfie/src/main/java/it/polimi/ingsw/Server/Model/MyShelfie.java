@@ -20,7 +20,7 @@ public class MyShelfie /*implements Runnable*/ {
     private final CommonGoalDeck commonDeck;
     private final Board board;
     private int numberOfPlayers;
-    private boolean started;
+    private boolean isStarted;
     private ArrayList<ClientHandler> clientHandlers;
     private int currentPlayerIndex;
     private static MyShelfie myShelfieInstance;
@@ -30,7 +30,7 @@ public class MyShelfie /*implements Runnable*/ {
         this.commonDeck = new CommonGoalDeck();
         this.personalDeck = new PersonalGoalDeck();
         this.isOver = false;
-        this.started = false;
+        this.isStarted = false;
         this.playersConnected = new ArrayList<>();
         this.numberOfPlayers = -1;
         this.clientHandlers = new ArrayList<>();
@@ -64,7 +64,7 @@ public class MyShelfie /*implements Runnable*/ {
     /*
         edit ANDREA: nel processMessage() di LoginNicknameAnswer se il nickname è valido lo chiamo così da aggiungerlo.
      */
-    public void addPlayer(String playerNickname, ClientHandler clientHandler){
+    public void addPlayer(String playerNickname, ClientHandler clientHandler) {
         //creo player
         Player newPlayer = new Player(playerNickname);
         //aggiungo all'arraylist
@@ -72,12 +72,15 @@ public class MyShelfie /*implements Runnable*/ {
         clientHandlers.add(clientHandler);
 
 
-        if(playersConnected.size()==numberOfPlayers){
-            this.started = true;
+        if (playersConnected.size() == numberOfPlayers) {
+            this.isStarted = true;
             manageTurn();
         }
-
     }
+        public boolean isStarted(){
+            return this.isStarted;
+        }
+
 
     //la gestiamo con un'eccezione o va bene così????
     //chiamata da login view SOLO con il primo giocatore connesso
