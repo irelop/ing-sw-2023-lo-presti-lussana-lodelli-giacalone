@@ -23,26 +23,29 @@ public class CommonCardInfo {
     public CommonCardInfo(String name){
         this.schema = new Tile[6][5];
         this.name = name;
+        int index = 0;
         ReadFileByLines reader = new ReadFileByLines();
         reader.readFrom("src/txtfiles/CommonGoalCardsInfo.txt");
         for(int w=0; w<120; w=w+10){
-            String row = ReadFileByLines.getLine();
-            if(row.equals(name))
-                for (int i = w+1; i < w+6; i++) {
+            String row = ReadFileByLines.getLineByIndex(w);
+            if(row.equals(name)) {
+                index = w;
+                for (int i = w + 1; i < 6 + w + 1; i++) {
 
-                    row = ReadFileByLines.getLine();
+                    row = ReadFileByLines.getLineByIndex(i);
 
                     String[] values = row.replaceAll("\\{", "")
                             .replaceAll("}", "")
                             .split(", ");
 
-                    for (int j = 0; j < 6; j++)
-                        schema[i][j] = Tile.valueOf(values[j]);
+                    for (int j = 0; j < 5; j++)
+                        schema[i - w - 1][j] = Tile.valueOf(values[j]);
                 }
+            }
 
         }
-        this.times = Integer.parseInt(ReadFileByLines.getLine());
-        this.description = ReadFileByLines.getLine();
+        this.times = Integer.parseInt(ReadFileByLines.getLineByIndex(index+7));
+        this.description = ReadFileByLines.getLineByIndex(index+8);
     }
     public Tile[][] getSchema(){
         return this.schema;
@@ -53,6 +56,6 @@ public class CommonCardInfo {
     }
 
     public String getDescription(){
-        return description;
+        return description.replaceAll("\\. ",".\n");
     }
 }

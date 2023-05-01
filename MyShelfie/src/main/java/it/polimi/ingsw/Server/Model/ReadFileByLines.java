@@ -16,6 +16,9 @@ public class ReadFileByLines {
     public static String getLine() {
         return text.remove(0);
     }
+    public static String getLineByIndex(int index) {
+        return text.get(index);
+    }
 
     /**
      * Scan all the file line by line and put them into text
