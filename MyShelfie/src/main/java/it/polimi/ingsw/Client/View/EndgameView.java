@@ -19,17 +19,17 @@ public class EndgameView extends View{
 
         //sorting arrayList
         for(int i=0; i<msg.playerName.size(); i++)
-            for(int j=1; j<msg.playerName.size()-1; j++){
-                if(msg.totalScore.get(i)<msg.totalScore.get(j)){
-                    Collections.swap(msg.totalScore,i,j);
-                    Collections.swap(msg.playerName,i,j);
+            for(int j=0; j<msg.playerName.size()-1; j++){
+                if(msg.totalScore.get(j)<msg.totalScore.get(j+1) && i!=j){
+                    Collections.swap(msg.totalScore,j,j+1);
+                    Collections.swap(msg.playerName,j,j+1);
                 }
             }
 
         System.out.println("---------------------------------");
         System.out.println("SCORE BOARD:");
         for(int i=0; i<msg.playerName.size(); i++){
-            System.out.println((i+1)+"° - "+msg.playerName.get(i).getNickname()+" with "+msg.totalScore.get(i));
+            System.out.println((i+1)+"° - "+msg.playerName.get(i).getNickname()+" with "+msg.totalScore.get(i)+" pt.");
         }
         System.out.println("---------------------------------");
         System.out.println("[press any key to continue]");
