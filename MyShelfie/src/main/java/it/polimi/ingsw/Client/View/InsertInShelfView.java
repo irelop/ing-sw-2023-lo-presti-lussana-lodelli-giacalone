@@ -59,7 +59,6 @@ public class InsertInShelfView extends View {
             }
             System.out.println();
         }
-        System.out.println();
     }
 
 
@@ -71,12 +70,14 @@ public class InsertInShelfView extends View {
         System.out.println("Common goal cards:");
         for(int i=0; i<msg.commonGoalCards.length; i++){
             printShelf(msg.commonGoalCards[i].getCardInfo().getSchema());
-            System.out.println("x"+msg.commonGoalCards[i].getCardInfo().getTimes());
+            System.out.println("x"+msg.commonGoalCards[i].getCardInfo().getTimes()+" times");
             System.out.println(msg.commonGoalCards[i].getCardInfo().getDescription());
         }
+        System.out.println();
 
         System.out.println("Personal goal card:");
         printShelf(msg.personalGoalCard.getPattern());
+        System.out.println();
     }
 
     /**

@@ -8,6 +8,14 @@ import it.polimi.ingsw.Server.Model.Tile;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a message sent from server to client.
+ * It sends some info to InsertInShelf view, such as current player's shelf, goal cards
+ * and tiles picked from the board
+ *
+ * @author Riccardo Lodelli
+ */
+
 public class MyShelfMsg extends S2CMessage {
 
     private Tile[][] shelf;
@@ -16,7 +24,6 @@ public class MyShelfMsg extends S2CMessage {
     public PersonalGoalCard personalGoalCard;
 
     public MyShelfMsg(Tile[][] shelf,ArrayList<Tile> littleHand,CommonGoalCard[] commonGoalCards, PersonalGoalCard personalGoalCard) {
-        //super(parent);
         this.shelf = shelf;
         this.littleHand = littleHand;
         this.commonGoalCards = commonGoalCards;
