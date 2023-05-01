@@ -22,5 +22,5 @@ class GoalViewTest {
     }
 
     @Test
-    void visual_test_function() { view.visual_test(msg); }
+    void visual_test_function() { view.run(); }
 }
