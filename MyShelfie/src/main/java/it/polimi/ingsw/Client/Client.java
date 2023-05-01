@@ -73,7 +73,9 @@ public class Client implements Runnable{
 
     public synchronized void transitionToView(View nextView){
         this.nextView = nextView;
-        currentView.setStopInteraction();
+        //currentView.setStopInteraction(); //ho commentato questo commentato questa istruzione perchè dava problemi
+                                            //con l'owner della view alla fine della lobbyView
+                                            //bisogna capire come fixare
     }
 
     public synchronized void setTrueTerminate(){
