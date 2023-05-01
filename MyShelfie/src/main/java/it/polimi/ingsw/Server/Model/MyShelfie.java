@@ -1,11 +1,12 @@
 package it.polimi.ingsw.Server.Model;
 import it.polimi.ingsw.Server.ClientHandler;
-import it.polimi.ingsw.Server.Messages.GoalAndScoreMsg;
-import it.polimi.ingsw.Server.Messages.MyShelfMsg;
-import it.polimi.ingsw.Server.Messages.ScoreBoardMsg;
-import it.polimi.ingsw.Server.Messages.YourTurnMsg;
+import it.polimi.ingsw.Server.Messages.*;
+import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
+import it.polimi.ingsw.Server.Model.Exceptions.NotEnoughSpaceInChosenColumnException;
+
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * CONTROLLER
@@ -87,6 +88,15 @@ public class MyShelfie /*implements Runnable*/ {
         if(numberOfPlayers == -1){
             this.numberOfPlayers = numberOfPlayers;
             board.initGridParabolic(numberOfPlayers);
+        }
+    }
+
+
+    public void updateLobby(){
+        ArrayList<String> lobbyPlayers = new ArrayList<>(playersConnected.stream().map(x->x.getNickname()).collect(Collectors.toList()));
+        LobbyUpdateAnswer lobbyUpdateAnswer = new LobbyUpdateAnswer(lobbyPlayers);
+        for(ClientHandler clientHandler:clientHandlers){
+            clientHandler.sendMessageToClient(lobbyUpdateAnswer);
         }
     }
 
@@ -237,8 +247,18 @@ public class MyShelfie /*implements Runnable*/ {
 
     public void getPlayerChoice(int initialRow, int initialColumn, char direction, int numberOfTiles){
         board.pickTilesFromBoard(initialRow, initialColumn, numberOfTiles, direction, playersConnected.get(currentPlayerIndex));
-        MyShelfMsg myShelfMsg = new MyShelfMsg(playersConnected.get(currentPlayerIndex).myShelfie.getGrid(), playersConnected.get(currentPlayerIndex).getLittleHand());
+        MyShelfMsg myShelfMsg = new MyShelfMsg(
+                playersConnected.get(currentPlayerIndex).myShelfie.getGrid(),
+                playersConnected.get(currentPlayerIndex).getLittleHand(),
+                Board.getCommonGoalCards(),
+                playersConnected.get(currentPlayerIndex).getPersonalGoalCard()
+                );
         clientHandlers.get(currentPlayerIndex).sendMessageToClient(myShelfMsg);
+    }
+
+    public void insertingTiles(int columnIdx,int[] orderIdxs) throws InvalidTileIndexInLittleHandException, NotEnoughSpaceInChosenColumnException {
+        playersConnected.get(currentPlayerIndex).getTiles(orderIdxs);
+        playersConnected.get(currentPlayerIndex).myShelfie.insert(columnIdx,playersConnected.get(currentPlayerIndex).getLittleHand());
     }
 
     /**

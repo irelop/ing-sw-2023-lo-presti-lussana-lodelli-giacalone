@@ -12,17 +12,16 @@ import java.util.Scanner;
  * @author Andrea Giacalone
  */
 public class LoginView extends View implements ObserverView {
-    private Object lock; //in order to stop and continue the run() method computation.
-    private boolean goOn; //in order to check if the nickname is valid and so we can go ahead.
+    private final Object lock; //in order to stop and continue the run() method computation.
+    private boolean goOn; //in order to check if the nickname is valid, and so we can go ahead.
     private LoginNicknameAnswer answerToShow; //the answer received by the server which needs to be shown.
 
-    private View nextView; //the next view in the Machine State pattern: in this case it's the Waiting view
+    //private View nextView; the next view in the Machine State pattern: in this case it's the Waiting view
 
     public LoginView() {
         this.lock = new Object();
         this.goOn = false;
         this.answerToShow = null;
-        this.nextView = new LobbyView();
     }
 
 
@@ -44,7 +43,6 @@ public class LoginView extends View implements ObserverView {
                 }
                 showNicknameAnswer(answerToShow);
             }
-            getOwner().transitionToView(nextView);
             getOwner().getServerHandler().sendMessageToServer(new LobbyUpdateRequest());
 
         }
@@ -53,13 +51,16 @@ public class LoginView extends View implements ObserverView {
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     public void showTitleScreen(){
-        System.out.println("\n,   .     .                     .         .   ,        ,-.  .       .          \n" +
-                "| . |     |                     |         |\\ /|       (   ` |       |  ,- o    \n" +
-                "| ) ) ,-. | ,-. ,-. ;-.-. ,-.   |-  ,-.   | V | . .    `-.  |-. ,-. |  |  . ,-.\n" +
-                "|/|/  |-' | |   | | | | | |-'   |   | |   |   | | |   .   ) | | |-' |  |- | |-'\n" +
-                "' '   `-' ' `-' `-' ' ' ' `-'   `-' `-'   '   ' `-|    `-'  ' ' `-' '  |  ' `-'\n" +
-                "                                                `-'                   -'       \n" +
-                "\n");
+        System.out.println("""
+
+                ,   .     .                     .         .   ,        ,-.  .       .         \s
+                | . |     |                     |         |\\ /|       (   ` |       |  ,- o   \s
+                | ) ) ,-. | ,-. ,-. ;-.-. ,-.   |-  ,-.   | V | . .    `-.  |-. ,-. |  |  . ,-.
+                |/|/  |-' | |   | | | | | |-'   |   | |   |   | | |   .   ) | | |-' |  |- | |-'
+                ' '   `-' ' `-' `-' ' ' ' `-'   `-' `-'   '   ' `-|    `-'  ' ' `-' '  |  ' `-'
+                                                                `-'                   -'      \s
+
+                """);
     }
 
 
@@ -80,7 +81,7 @@ public class LoginView extends View implements ObserverView {
     /**
      * OVERVIEW: this method allows to show the answer received by the server and, for the first player,
      *           calls the method responsible for the request of the number of players of the game.
-     * @param nicknameAnswer
+     * @param nicknameAnswer : the message received from server
      */
     private void showNicknameAnswer(LoginNicknameAnswer nicknameAnswer){
         switch (nicknameAnswer.getNicknameStatus()){
@@ -88,9 +89,7 @@ public class LoginView extends View implements ObserverView {
                 System.out.println("\nGreat! So you are: " +nicknameAnswer.getParent().getInsertedNickname()+ " : nice to meet you!\n");
                 goOn = true;
             }
-            case INVALID -> {
-                System.out.println("\nSorry, your nickname has already been chosen - please select another one\n");
-            }
+            case INVALID -> System.out.println("\nSorry, your nickname has already been chosen - please select another one\n");
             case FIRST_ACCEPTED -> {
                 System.out.println("\nGreat! So you are: " + nicknameAnswer.getParent().getInsertedNickname()+ "nice to meet you!\n");
                 goOn = true;

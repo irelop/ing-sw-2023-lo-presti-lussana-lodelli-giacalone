@@ -179,19 +179,16 @@ public class Player {
 
     /**
      * OVERVIEW: this method gets the right order
-     * @deprecated
      * @param choices : array of the indexes that represent the chosen tiles
      * @throws InvalidTileIndexInLittleHandException if the player chooses a number that is not between
      * 1 and the number of the tiles that he/she has chosen from the board or if he/she has already chosen it
      */
-    private void getTiles(int[] choices) throws InvalidTileIndexInLittleHandException {
-        Scanner scanner = new Scanner(System.in);
+    public void getTiles(int[] choices) throws InvalidTileIndexInLittleHandException {
 
-        for(int i=0; i<choices.length; i++){
-            choices[i] = scanner.nextInt();
-            if(choices[i]<0 || choices[i]> choices.length) throw new InvalidTileIndexInLittleHandException(choices.length);
-        }
-        for(int i=0; i< choices.length-1; i++){
+        for(int i=0; i<choices.length; i++)
+            if (choices[i] < 0 || choices[i] >= choices.length)
+                throw new InvalidTileIndexInLittleHandException(choices.length);
+        for(int i=0; i<choices.length-1; i++){
             for(int j=i+1; j<choices.length; j++){
                 if(choices[i]==choices[j]) throw new InvalidTileIndexInLittleHandException(choices.length);
             }

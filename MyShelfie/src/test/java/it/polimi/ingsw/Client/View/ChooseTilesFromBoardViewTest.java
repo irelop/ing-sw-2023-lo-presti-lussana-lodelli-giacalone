@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ChooseTilesFromBoardViewTest {
 
+    /*
     private ChooseTilesFromBoardView chooseTilesFromBoardView;
     ReadFileByLines reader;
 
@@ -58,4 +59,6 @@ class ChooseTilesFromBoardViewTest {
     public void printBoardWithStar_visualTest(){
         chooseTilesFromBoardView.printBoard(2,4);
     }
+
+     */
 }

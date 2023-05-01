@@ -5,11 +5,11 @@ import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandExcep
 import it.polimi.ingsw.Server.Model.Tile;
 import it.polimi.ingsw.Server.Messages.InsertingTilesMsg;
 import it.polimi.ingsw.Server.Messages.MyShelfMsg;
+import static it.polimi.ingsw.Client.View.ColorCode.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// prima bozza
 
 /**
  * This view is shown when the current player has to insert the tiles he/she took from the board into
@@ -20,17 +20,6 @@ import java.util.Scanner;
  */
 
 public class InsertInShelfView extends View {
-
-
-    // colors to stamp the shelf
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_LIGHTBLUE = "\u001B[36m";
-    public static final String ANSI_YELLOW = "\u001B[34m";
-    public static final String ANSI_WHITE = "\u001B[37m";
-    public static final String ANSI_PINK = "\u001B[35m";
-    public static final String ANSI_BLACK = "\u001B[30m";
 
     private final MyShelfMsg msg;
 
@@ -58,62 +47,100 @@ public class InsertInShelfView extends View {
             for (int j = 0; j < myShelf[0].length; j++) {
                 switch (myShelf[i][j]) {
                     case NOT_VALID -> System.out.print(" ");
-                    case BLANK -> System.out.print(ANSI_BLACK + circle + ANSI_RESET);
-                    case PINK -> System.out.print(ANSI_PINK + circle + ANSI_RESET);
-                    case GREEN -> System.out.print(ANSI_GREEN + circle + ANSI_RESET);
-                    case BLUE -> System.out.print(ANSI_BLUE + circle + ANSI_RESET);
-                    case LIGHTBLUE -> System.out.print(ANSI_LIGHTBLUE + circle + ANSI_RESET);
-                    case WHITE -> System.out.print(ANSI_WHITE + circle + ANSI_RESET);
-                    case YELLOW -> System.out.print(ANSI_YELLOW + circle + ANSI_RESET);
+                    case BLANK -> System.out.print(BLANK.code + circle + RESET.code);
+                    case PINK -> System.out.print(PINK.code + circle + RESET.code);
+                    case GREEN -> System.out.print(GREEN.code + circle + RESET.code);
+                    case BLUE -> System.out.print(BLUE.code + circle + RESET.code);
+                    case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + circle + RESET.code);
+                    case WHITE -> System.out.print(WHITE.code + circle + RESET.code);
+                    case YELLOW -> System.out.print(YELLOW.code + circle + RESET.code);
                 }
                 System.out.print("\t");
             }
             System.out.println();
         }
+    }
+
+
+    /**
+     * This method prints both common goal cards and player's personal
+     * goal card in order to help him to decide the best move to achieve points
+     */
+    public void printGoalCardsInfo(){
+        System.out.println("Common goal cards:");
+        for(int i=0; i<msg.commonGoalCards.length; i++){
+            printShelf(msg.commonGoalCards[i].getCardInfo().getSchema());
+            System.out.println("x"+msg.commonGoalCards[i].getCardInfo().getTimes()+" times");
+            System.out.println(msg.commonGoalCards[i].getCardInfo().getDescription());
+        }
+        System.out.println();
+
+        System.out.println("Personal goal card:");
+        printShelf(msg.personalGoalCard.getPattern());
         System.out.println();
     }
 
-    // Manca la gestione delle eccezioni lato server
-
     /**
      * The main method of the view, overrided form thread run() method
-     * It sends an InsertingTilesMsg containing player's choises (if right)
+     * It sends an InsertingTilesMsg to the server in order to validate user's inputs,
+     * modify the model and switch to the next view
      */
     @Override
-    public void run(){
-
-        //CONTROLLI SPOSTATI DI 1
+    public void run() {
 
         int columnChosen;
         int[] chosenOrderIndexes;
         ArrayList<Tile> chosenTiles = msg.getLittleHand();
         Tile[][] myShelf = msg.getShelf();
+        boolean goOn = false;
 
-        do{
+        synchronized (this) {
+
             printShelf(myShelf);
-            try{
-                columnChosen = chooseColumn();
-                break;
-            }catch(InvalidShelfColumnException e){
-                System.out.println(e);
-            }
-        }while(true);
+            printGoalCardsInfo();
 
-        do{
-            try{
-                chosenOrderIndexes = askOrder(chosenTiles);
-                break;
-            }catch(InvalidTileIndexInLittleHandException e){
-                System.out.println(e);
-            }
-        }while(true);
+            do {
 
-        InsertingTilesMsg insertingMsg = new InsertingTilesMsg(columnChosen, chosenOrderIndexes);
-        getOwner().getServerHandler().sendMessageToServer(insertingMsg);
+                // client side exception management
+                do {
+                    try {
+                        columnChosen = chooseColumn();
+                        break;
+                    } catch (InvalidShelfColumnException e) {
+                        System.out.println(e);
+                    }
+                } while (true);
 
-        // per passare alla Goal View bisogna usare il metodo processMessage in GoalAndScoreMsg
-        //if (nextView != null)
-        //    getOwner().transitionToView(nextView);
+                // client side exception management
+                do {
+                    try {
+                        chosenOrderIndexes = askOrder(chosenTiles);
+                        break;
+                    } catch (InvalidTileIndexInLittleHandException e) {
+                        System.out.println(e);
+                    }
+                } while (true);
+
+                // generating message and waiting for an answer
+                InsertingTilesMsg insertingMsg = new InsertingTilesMsg(columnChosen, chosenOrderIndexes);
+                getOwner().getServerHandler().sendMessageToServer(insertingMsg);
+                try {
+                    this.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                System.out.println(insertingMsg.answer.answer);
+                if (insertingMsg.answer.valid)
+                    goOn = true;
+
+            } while (!goOn);
+        }
+    }
+
+    public void notifyView(){
+        synchronized (this) {
+            this.notify();
+        }
     }
 
     /**
@@ -121,13 +148,12 @@ public class InsertInShelfView extends View {
      * @return the index of the column chosen by the player
      * @throws InvalidShelfColumnException: thrown to avoid wrong indexes for the column
      */
-    // Manca la gestione dell'eccezione "colonna piena"
     public int chooseColumn() throws InvalidShelfColumnException {
         int columnChosen;
-        System.out.println("choose the Column:");
+        System.out.println("Insert the index of the column you want to fill with tiles:");
         Scanner scanner = new Scanner(System.in);
-        columnChosen = scanner.nextInt();
-        if (columnChosen < 0 || columnChosen >= 5)  throw new InvalidShelfColumnException();
+        columnChosen = scanner.nextInt() - 1; // user's indexes start from one
+        if (columnChosen < 0 || columnChosen >= 5) throw new InvalidShelfColumnException();
         return columnChosen;
     }
 
@@ -143,11 +169,13 @@ public class InsertInShelfView extends View {
         int[] choices = new int[tilesNumber];
         boolean sameColors = true;
 
+        // 1 tile to insert -> user doesn't have to choose the order
         if(chosenTiles.size()==1){
-            choices[0] = 1;
+            choices[0] = 0;
             return choices;
         }
 
+        // 2 or 3 tiles of the same color to insert -> user doesn't have to choose the order
         for(int i=0;i<tilesNumber-1;i++){
             if (chosenTiles.get(i) != chosenTiles.get(i+1)) {
                 sameColors = false;
@@ -156,11 +184,12 @@ public class InsertInShelfView extends View {
         }
         if(sameColors) {
             for(int i=0;i<tilesNumber;i++){
-                choices[i] = i+1;
+                choices[i] = i;
             }
             return choices;
         }
 
+        // 2 or 3 tiles of different colors to insert -> user must choose the order
         System.out.println("You picked this tiles:");
         for(int i=0; i<tilesNumber; i++)
             System.out.println((i+1)+ ") " + chosenTiles.get(i));
@@ -182,8 +211,8 @@ public class InsertInShelfView extends View {
         Scanner scanner = new Scanner(System.in);
 
         for(int i=0; i<choices.length; i++){
-            choices[i] = scanner.nextInt();
-            if(choices[i]<0 || choices[i]> choices.length) throw new InvalidTileIndexInLittleHandException(choices.length);
+            choices[i] = scanner.nextInt() - 1; // user's indexes start from one
+            if(choices[i] < 0 || choices[i] >= choices.length) throw new InvalidTileIndexInLittleHandException(choices.length);
         }
         for(int i=0; i< choices.length-1; i++){
             for(int j=i+1; j<choices.length; j++){
@@ -191,4 +220,5 @@ public class InsertInShelfView extends View {
             }
         }
     }
+
 }

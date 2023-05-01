@@ -7,6 +7,7 @@ import it.polimi.ingsw.Server.Server;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Client implements Runnable{
     private ServerHandler serverHandler;
@@ -22,8 +23,9 @@ public class Client implements Runnable{
 
     @Override
     public void run(){
-        //Prendo l'ip dall'utente o lo inserisco io
-        String ip = "xxxxxx";
+        Scanner input = new Scanner(System.in);
+        System.out.println("Please insert the IP address of the client:\n");
+        String ip = input.nextLine();
 
         Socket server;
         try{

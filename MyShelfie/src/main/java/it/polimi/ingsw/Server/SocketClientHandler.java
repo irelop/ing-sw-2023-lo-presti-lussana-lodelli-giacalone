@@ -77,6 +77,7 @@ public class SocketClientHandler extends ClientHandler{
     public void sendMessageToClient(S2CMessage message) {
         try {
             outputStream.writeObject((Object) message);
+            outputStream.flush();
         }catch (IOException ex){
             System.out.println("Failed to send the message to client" + client.getInetAddress());
         }
