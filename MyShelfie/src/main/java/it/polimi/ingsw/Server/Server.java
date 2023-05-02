@@ -58,6 +58,8 @@ public class Server {
         while(true){
             try{
                 Socket client =socket.accept();
+                // gestione partite multiple
+
                 game = getMyShelfie();
                 ClientHandler clientHandler = new SocketClientHandler(client, game);
 
