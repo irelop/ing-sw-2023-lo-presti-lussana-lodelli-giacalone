@@ -24,7 +24,7 @@ public class Server {
      * @param serverPort: the port chosen for the connection.
      */
     public Server(int serverPort){
-        this.serverPort = serverPort;
+        this.serverPort = 9999;
     }
 
     /**

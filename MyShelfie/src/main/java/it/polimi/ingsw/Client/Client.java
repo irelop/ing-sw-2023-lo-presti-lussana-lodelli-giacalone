@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class Client implements Runnable{
     private ServerHandler serverHandler;
-    private boolean terminate;
+    private boolean terminate = false;
 
     private View currentView;
     private View nextView;
@@ -29,16 +29,16 @@ public class Client implements Runnable{
 
         Socket server;
         try{
-            server = new Socket(ip, Server.serverPort); //nel server bisogna specificare la porta per comunicare
+            server = new Socket(ip, 9999); //nel server bisogna specificare la porta per comunicare
         }catch(IOException e){
             System.out.println("server unreachable");
             return;
         }
         //dopo aver stabilito la connessione con il server, il client delega la connessione all'Handler
         serverHandler = new SocketServerHandler(server, this);
+
         Thread serverHandlerThread = new Thread(serverHandler,"server_"+server.getInetAddress().getHostAddress());
         serverHandlerThread.start();
-
         nextView = new LoginView();
         runViewStateMachine();
 
@@ -54,7 +54,7 @@ public class Client implements Runnable{
             currentView = nextView;
             nextView = null;
         }
-        while(stop!=false){
+        while(stop==false){
             if(currentView==null){
                 currentView = new WaitingView();  //questa view viene mostrata quando nessun altra view è disponibile
                                                   //ovvero quando stanno giocando il turno gli altri

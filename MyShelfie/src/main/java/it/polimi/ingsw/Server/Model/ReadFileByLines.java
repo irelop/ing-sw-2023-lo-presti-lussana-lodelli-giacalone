@@ -21,7 +21,7 @@ public class ReadFileByLines {
     }
 
     /**
-     * Scan all the file line by line and put them into text
+     * Scan all the file line by line and put them into text attribute
      * @param fileName: the name of the path to the file
      */
     public void readFrom(String fileName) {

@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CommonCardInfoTest {
 
-    CommonCardInfo commonCardInfo = new CommonCardInfo("Q2UPatternStrategy");
+    CommonCardInfo commonCardInfo = new CommonCardInfo("M8PatternStrategy");
 
 
     @BeforeEach
