@@ -192,7 +192,7 @@ public class Board {
     // scrivevamo Board usciva la scritta rigata. Tanto 90/100 sto metodo andrà cancellato
     // (=> non guardate gli errori causati da questo). Cordiali saluti, Riccardo KEKW
 
-    public ArrayList<Tile> chooseTilesFromBoard(int maxTilesPickable){
+    public void chooseTilesFromBoard(int maxTilesPickable){
         int initialPositionR, initialPositionC, numberOfTiles;
         char direction;
         ArrayList<Tile> chosenTiles = new ArrayList<>();
@@ -222,7 +222,7 @@ public class Board {
                     break;
                 }
                 direction = getDirection();
-                checkDirectionAndNumberOfTiles(direction, numberOfTiles, initialPositionR, initialPositionC);
+                checkDirectionAndNumberOfTiles(direction, numberOfTiles, initialPositionR, initialPositionC, maxTilesPickable);
                 break;
             }catch(InvalidNumberOfTilesException | InvalidDirectionException | InvalidPositionException
                    | InvalidCellException | EmptyCellException | OutOfBoardException e){
@@ -230,7 +230,7 @@ public class Board {
             }
         }while(true);
 
-        return pickTilesFromBoard(initialPositionR, initialPositionC, numberOfTiles+1, direction);
+        //return pickTilesFromBoard(initialPositionR, initialPositionC, numberOfTiles+1, direction);
     }
 
     /**
@@ -437,8 +437,10 @@ public class Board {
         if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w')
             throw new InvalidDirectionException();
 
-        if(numberOfTiles>maxTilesPickable || numberOfTiles < 0)
+        if(numberOfTiles > maxTilesPickable || numberOfTiles < 0)
             throw new InvalidNumberOfTilesException(maxTilesPickable);
+
+        numberOfTiles++; //aumento di uno per avere il totale delle tessere (così conto anche la prima)
 
         switch (direction) {
             case 'e' -> {
