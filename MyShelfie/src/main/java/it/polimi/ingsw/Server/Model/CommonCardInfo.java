@@ -14,21 +14,22 @@ public class CommonCardInfo {
      * @param description: short commonGoalCard description
      */
     public CommonCardInfo(String name,Tile[][] schema,int times, String description) {
-        this.name = name;
+        this.name = name.replaceAll("it.polimi.ingsw.Server.Model.PatternStrategy.","");
         this.schema = schema;
         this.times = times;
         this.description = description;
     }
-
+    //it.polimi.ingsw.Server.Model.PatternStrategy.
     public CommonCardInfo(String name){
         this.schema = new Tile[6][5];
-        this.name = name;
+        this.name = name.replaceAll("it.polimi.ingsw.Server.Model.PatternStrategy.","");;
         int index = 0;
+        System.out.println(this.name);
         ReadFileByLines reader = new ReadFileByLines();
-        reader.readFrom("src/txtfiles/CommonGoalCardsInfo.txt");
+        reader.readFrom("MyShelfie/src/txtfiles/CommonGoalCardsInfo.txt");
         for(int w=0; w<120; w=w+10){
             String row = ReadFileByLines.getLineByIndex(w);
-            if(row.equals(name)) {
+            if(row.equals(this.name)) {
                 index = w;
                 for (int i = w + 1; i < 6 + w + 1; i++) {
 

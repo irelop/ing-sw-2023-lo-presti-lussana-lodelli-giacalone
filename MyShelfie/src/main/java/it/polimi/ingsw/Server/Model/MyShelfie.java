@@ -27,8 +27,8 @@ public class MyShelfie /*implements Runnable*/ {
 
     public MyShelfie(){
         this.board = Board.getBoardInstance();
-        this.commonDeck = new CommonGoalDeck();
         this.personalDeck = new PersonalGoalDeck();
+        this.commonDeck = new CommonGoalDeck();
         this.isOver = false;
         this.isStarted = false;
         this.playersConnected = new ArrayList<>();
@@ -189,7 +189,7 @@ public class MyShelfie /*implements Runnable*/ {
             int spotScore = player.myShelfie.spotCheck();
             player.myScore.addScore(spotScore);
         }
-        //dobbiamo creare un messaggio per far vedere a tutti i giocatori la EndgameView
+
         ArrayList<Integer> scoreList = new ArrayList<Integer>();
         for (Player player : playersConnected) {
             scoreList.add(playersConnected.get(currentPlayerIndex).myScore.getScore());
