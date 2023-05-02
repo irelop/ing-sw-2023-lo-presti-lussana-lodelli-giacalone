@@ -1,27 +1,28 @@
 package it.polimi.ingsw.Client.View;
 
-public class WaitingView extends View{
+import static java.lang.Thread.sleep;
+
+public class WaitingView extends View implements ObserverView {
+
+    private final Object lock = new Object();
+    @Override
+    public void run() {
+        synchronized (lock) {
+            try {
+                String wait = " Please wait...";
+                System.out.println(wait);
+                lock.wait();
+            } catch (InterruptedException e) {
+            }
+
+
+        }
+    }
 
     @Override
-    public void run()
-    {
-        synchronized (this) {
-            try {
-                this.wait(100);
-            } catch (InterruptedException e) {}
-
-            while (!getStopInteraction()) {
-                String wait = " Please wait...";
-                System.out.print(wait);
-
-                try {
-                    this.wait(500);
-                } catch (InterruptedException e) {}
-
-                for (int i=0; i<wait.length(); i++)
-                    System.out.print("\010");
-
-                }
-            }
+    public void notifyView() {
+        synchronized (lock){
+            lock.notify();
         }
+    }
 }

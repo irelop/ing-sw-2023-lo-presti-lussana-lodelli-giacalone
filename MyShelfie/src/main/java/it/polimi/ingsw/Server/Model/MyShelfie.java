@@ -55,7 +55,7 @@ public class MyShelfie /*implements Runnable*/ {
     }
 
     public boolean isFirstConnected(String insertedString){
-        return (this.playersConnected.indexOf(insertedString) == 0);
+        return (this.playersConnected.size() == 1);
     }
 
 
@@ -98,8 +98,9 @@ public class MyShelfie /*implements Runnable*/ {
     public void updateLobby(){
         ArrayList<String> lobbyPlayers = new ArrayList<>(playersConnected.stream().map(x->x.getNickname()).collect(Collectors.toList()));
         LobbyUpdateAnswer lobbyUpdateAnswer = new LobbyUpdateAnswer(lobbyPlayers);
-        for(ClientHandler clientHandler:clientHandlers){
-            clientHandler.sendMessageToClient(lobbyUpdateAnswer);
+
+        for(int i=0; i< clientHandlers.size(); i++){
+            clientHandlers.get(i).sendMessageToClient(lobbyUpdateAnswer);
         }
     }
 

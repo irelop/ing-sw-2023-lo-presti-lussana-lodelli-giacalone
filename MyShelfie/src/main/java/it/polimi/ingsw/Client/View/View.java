@@ -53,7 +53,7 @@ public abstract class View implements Runnable, ObserverView {
     public void setStopInteraction(){
         stopInteraction = true;
         //all waiting threads are awaken and the first will get lock, setting the flag again to false in the run method.
-        notifyAll();
+        //notifyAll();
     }
 
     @Override
