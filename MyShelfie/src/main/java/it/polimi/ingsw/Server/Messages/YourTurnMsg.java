@@ -19,8 +19,8 @@ public class YourTurnMsg extends S2CMessage{
         this.nickname = nickname;
         this.maxTilesPickable = maxTilesPickable;
         this.boardSnapshot = boardSnapshot;
-        System.arraycopy(commonGoalCards, 0, this.commonGoalCards, 0, commonGoalCards.length);
         this.personalGoalCard = personalGoalCard;
+        this.commonGoalCards = commonGoalCards;
     }
 
 

@@ -131,23 +131,23 @@ public class ChooseTilesFromBoardView extends View {
     public void printGoalCardsInfo(){
         System.out.println("Common goal cards:");
         for(int i=0; i<yourTurnMsg.commonGoalCards.length; i++){
-            printMatrixOfTiles(6,5, yourTurnMsg.commonGoalCards[i].getCardInfo().getSchema());
+            printCard(yourTurnMsg.commonGoalCards[i].getCardInfo().getSchema());
             System.out.println("x"+yourTurnMsg.commonGoalCards[i].getCardInfo().getTimes());
             System.out.println(yourTurnMsg.commonGoalCards[i].getCardInfo().getDescription());
         }
 
         System.out.println("Personal goal card:");
-        printMatrixOfTiles(6,5,yourTurnMsg.personalGoalCard.getPattern());
+        printCard(yourTurnMsg.personalGoalCard.getPattern());
     }
 
-    public void printMatrixOfTiles(int maxRow, int maxColumn, Tile[][] matrix){
+    public void printCard(Tile[][] pattern){
         String code = "\u25CF";
-        for(int r=0; r<maxRow; r++){
+        for(int r=0; r<6; r++){
 
             //printing the tiles
-            for(int c=0; c<maxColumn; c++){
+            for(int c=0; c<5; c++){
 
-                switch (matrix[r][c]) {
+                switch (pattern[r][c]) {
                     case NOT_VALID -> System.out.print(" ");
                     case BLANK -> System.out.print(BLANK.code + code + RESET.code);
                     case PINK -> System.out.print(PINK.code + code + RESET.code);
