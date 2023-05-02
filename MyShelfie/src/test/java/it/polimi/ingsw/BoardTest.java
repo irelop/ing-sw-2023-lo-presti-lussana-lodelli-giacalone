@@ -52,15 +52,14 @@ public class BoardTest {
     @AfterEach
     void tearDown() {
     }
-/*
+
    @Test
     void pickTilesFromBoard_correctEliminationOfTiles() {
         int inPosR = 1;
         int inPosC = 3;
         int numTiles = 2;
         char dir = 's';
-        ArrayList<Tile> chosenTiles = new ArrayList<>();
-        chosenTiles = board.pickTilesFromBoard(inPosR,inPosC,numTiles,dir,);
+        board.pickTilesFromBoard(inPosR,inPosC,numTiles,dir,new Player("player1"));
         grid[1][3] = Tile.BLANK;
         grid[2][3] = Tile.BLANK;
 
@@ -70,23 +69,24 @@ public class BoardTest {
 
     }
 
-
     @Test
     void pickTilesFromBoard_correctTilesChosen() {
         int inPosR = 1;
         int inPosC = 3;
         int numTiles = 2;
         char dir = 's';
-        ArrayList<Tile> chosenTiles = new ArrayList<>();
+        Player player = new Player("player1");
         ArrayList<Tile> correctTiles = new ArrayList<>();
 
-        chosenTiles = board.pickTilesFromBoard(inPosR,inPosC,numTiles,dir,new Player("player"));
+        board.pickTilesFromBoard(inPosR,inPosC,numTiles,dir,player);
+
+
         correctTiles.add(Tile.GREEN);
         correctTiles.add(Tile.GREEN);
 
-        Assertions.assertEquals(chosenTiles, correctTiles);
+        Assertions.assertEquals(player.getLittleHand(), correctTiles);
     }
-*/
+
     @Test
     void getInitialRow_correctInputCorrectOutput() throws OutOfBoardException {
         assertEquals(0, board.getInitialRow(1));
