@@ -27,8 +27,8 @@ public class MyShelfie /*implements Runnable*/ {
 
     public MyShelfie(){
         this.board = Board.getBoardInstance();
-        this.commonDeck = new CommonGoalDeck();
         this.personalDeck = new PersonalGoalDeck();
+        this.commonDeck = new CommonGoalDeck();
         this.isOver = false;
         this.isStarted = false;
         this.playersConnected = new ArrayList<>();
@@ -36,6 +36,10 @@ public class MyShelfie /*implements Runnable*/ {
         this.clientHandlers = new ArrayList<>();
     }
 
+    /**
+     * Method used for singleton design pattern
+     * @return myShelfieInstance: the one that already exists or a new one
+     */
     public static MyShelfie getMyShelfie(){
         //oppure abbiamo raggiunto max giocatori => nuova partita
         if(myShelfieInstance == null){
@@ -50,28 +54,39 @@ public class MyShelfie /*implements Runnable*/ {
 
     //- - - - - - - - - - - - - - - - - - - -| L O G I N   M E T H O D S |- - - - - - - - - - - - - - - - - - - - - - - -
 
+
+    /**
+     * Method that checks if player's nickname already exists
+     * @param insertedString: new player's name
+     * @return true if nickname is valid, false otherwise
+     */
     public boolean checkNickname(String insertedString) {
         return(!(this.playersConnected.contains(insertedString)));
     }
 
+    /**
+     * Checks if one player is already connected
+     * @param insertedString: new player's nickname
+     * @return true if the new player is the first one
+     */
     public boolean isFirstConnected(String insertedString){
         return (this.playersConnected.indexOf(insertedString) == 0);
     }
 
-
-    //chiamata dal messaggio di login con il nickname del player
-
-    /*
-        edit ANDREA: nel processMessage() di LoginNicknameAnswer se il nickname è valido lo chiamo così da aggiungerlo.
+    /**
+     * This method creates a player and add him to players list
+     * @param playerNickname
+     * @param clientHandler
      */
     public void addPlayer(String playerNickname, ClientHandler clientHandler) {
-        //creo player
-        Player newPlayer = new Player(playerNickname);
-        //aggiungo all'arraylist
-        playersConnected.add(newPlayer);
-        clientHandlers.add(clientHandler);
 
+        if (playersConnected.size() < numberOfPlayers) {
+            Player newPlayer = new Player(playerNickname);
 
+            //aggiungo all'arraylist
+            playersConnected.add(newPlayer);
+            clientHandlers.add(clientHandler);
+        }
         if (playersConnected.size() == numberOfPlayers) {
             this.isStarted = true;
             manageTurn();
@@ -174,7 +189,7 @@ public class MyShelfie /*implements Runnable*/ {
             int spotScore = player.myShelfie.spotCheck();
             player.myScore.addScore(spotScore);
         }
-        //dobbiamo creare un messaggio per far vedere a tutti i giocatori la EndgameView
+
         ArrayList<Integer> scoreList = new ArrayList<Integer>();
         for (Player player : playersConnected) {
             scoreList.add(playersConnected.get(currentPlayerIndex).myScore.getScore());

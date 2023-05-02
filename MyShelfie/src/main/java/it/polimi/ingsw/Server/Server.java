@@ -24,7 +24,7 @@ public class Server {
      * @param serverPort: the port chosen for the connection.
      */
     public Server(int serverPort){
-        this.serverPort = serverPort;
+        this.serverPort = 9999;
     }
 
     /**
@@ -58,6 +58,8 @@ public class Server {
         while(true){
             try{
                 Socket client =socket.accept();
+                // gestione partite multiple
+
                 game = getMyShelfie();
                 ClientHandler clientHandler = new SocketClientHandler(client, game);
 

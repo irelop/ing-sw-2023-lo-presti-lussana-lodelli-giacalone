@@ -12,26 +12,16 @@ import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SocketServerHandler extends ServerHandler {
-    private Socket server;
+    //private Socket server;
     private AtomicBoolean shouldStop = new AtomicBoolean(false);
 
     public SocketServerHandler(Socket server, Client owner){
-        this.server = server;
-        this.owner = owner;
+       super(server,owner);
     }
 
     //questa run fa andare l'event loop che servirà per ricevere i pacchetti in arrivo dal server
     @Override
-    public void run(){
-        try{
-            output = new ObjectOutputStream(server.getOutputStream());
-            input = new ObjectInputStream(server.getInputStream());
-        }catch(IOException e){
-            System.out.println("can't open the connection to: "+server.getInetAddress());
-            owner.setTrueTerminate();
-            return;
-        }
-
+        public void run(){
         try{
             handleClientConnection();
         }catch(IOException e){
