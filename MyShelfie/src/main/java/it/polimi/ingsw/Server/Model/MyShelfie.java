@@ -62,7 +62,7 @@ public class MyShelfie /*implements Runnable*/ {
      * @return true if nickname is valid, false otherwise
      */
     public boolean checkNickname(String insertedString) {
-        return(!(this.playersConnected.contains(insertedString)));
+        return(!(new ArrayList<String>(this.playersConnected.stream().map(x->x.getNickname()).collect(Collectors.toList()))).contains(insertedString));
     }
 
     /**
