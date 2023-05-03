@@ -74,16 +74,15 @@ public class MyShelfie /*implements Runnable*/ {
     }
 
     /**
-     * This method creates a player and add him to players list
-     * @param playerNickname
-     * @param clientHandler
+     * This method creates a player and add him to players list if lobby is not full
+     * If there are enough players game starts
+     * @param playerNickname: new player's nickname
+     * @param clientHandler: new player's clientHandler
      */
     public void addPlayer(String playerNickname, ClientHandler clientHandler) {
 
         if (playersConnected.size() < numberOfPlayers) {
             Player newPlayer = new Player(playerNickname);
-
-            //aggiungo all'arraylist
             playersConnected.add(newPlayer);
             clientHandlers.add(clientHandler);
         }
@@ -96,12 +95,10 @@ public class MyShelfie /*implements Runnable*/ {
             return this.isStarted;
         }
 
-
-    //la gestiamo con un'eccezione o va bene così????
-    //chiamata da login view SOLO con il primo giocatore connesso
-
-    //edit ANDREA: ho gestito lato view i casi in cui l'input non sia valido con
-    // annessa stampa all'utente quindi direi ok.
+    /**
+     * This method sets the number of players only if hasn't been already set
+     * @param numberOfPlayers: number of players
+     */
     public void setNumberOfPlayers(int numberOfPlayers) {
         if(numberOfPlayers == -1){
             this.numberOfPlayers = numberOfPlayers;
@@ -109,7 +106,10 @@ public class MyShelfie /*implements Runnable*/ {
         }
     }
 
-
+    /**
+     * This method visually updates the lobby: this allows you to see a list of
+     * players connected in the lobby
+     */
     public void updateLobby(){
         ArrayList<String> lobbyPlayers = new ArrayList<>(playersConnected.stream().map(x->x.getNickname()).collect(Collectors.toList()));
         LobbyUpdateAnswer lobbyUpdateAnswer = new LobbyUpdateAnswer(lobbyPlayers);
@@ -128,7 +128,7 @@ public class MyShelfie /*implements Runnable*/ {
         for(Player player : playersConnected){
             player.setCard(personalDeck.drawPersonal());
         }
-    }//dobbiamo farla vedere al player!
+    }
 
     /**
      * OVERVIEW: this method gives, randomly, a chair to one player
