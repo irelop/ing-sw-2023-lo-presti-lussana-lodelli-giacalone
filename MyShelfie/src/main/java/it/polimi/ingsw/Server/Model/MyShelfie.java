@@ -70,7 +70,7 @@ public class MyShelfie /*implements Runnable*/ {
      * @return true if the new player is the first one
      */
     public boolean isFirstConnected(String insertedString){
-        return (this.playersConnected.indexOf(insertedString) == 0);
+        return (this.playersConnected.playersConnected.size() == 1);
     }
 
     /**
@@ -81,14 +81,15 @@ public class MyShelfie /*implements Runnable*/ {
      */
     public void addPlayer(String playerNickname, ClientHandler clientHandler) {
 
-        if (playersConnected.size() < numberOfPlayers) {
+        if (playersConnected.size() < numberOfPlayers || numberOfPlayers==-1) {
             Player newPlayer = new Player(playerNickname);
             playersConnected.add(newPlayer);
             clientHandlers.add(clientHandler);
-        }
-        if (playersConnected.size() == numberOfPlayers) {
-            this.isStarted = true;
-            manageTurn();
+
+            if (playersConnected.size() == numberOfPlayers) {
+                this.isStarted = true;
+                //manageTurn();
+            }
         }
     }
         public boolean isStarted(){
@@ -100,10 +101,9 @@ public class MyShelfie /*implements Runnable*/ {
      * @param numberOfPlayers: number of players
      */
     public void setNumberOfPlayers(int numberOfPlayers) {
-        if(numberOfPlayers == -1){
             this.numberOfPlayers = numberOfPlayers;
-            board.initGridParabolic(numberOfPlayers);
-        }
+            //board.initGrid(numberOfPlayers);
+
     }
 
     /**

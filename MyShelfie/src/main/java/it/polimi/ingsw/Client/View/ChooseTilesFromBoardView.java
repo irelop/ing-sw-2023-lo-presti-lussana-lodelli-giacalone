@@ -29,7 +29,9 @@ public class ChooseTilesFromBoardView extends View {
         int r, c, numberOfTiles;
         char direction;
         boolean goOn = false;
-        //Object lock = new Object();
+
+        if(yourTurnMsg.turnNumber==0)
+            printOrderOfPlayers();
 
         printBoard(-1, -1);
         printGoalCardsInfo();
@@ -126,6 +128,14 @@ public class ChooseTilesFromBoardView extends View {
 
             // transition to next view ??
 
+    }
+
+    public void printOrderOfPlayers(){
+        if(yourTurnMsg.nickname == yourTurnMsg.playersNames.get(0))
+            System.out.println(yourTurnMsg.nickname + ", you have the chair so you are the first one to play!");
+        System.out.println("This is the order of playing:");
+        for(int i=0; i<yourTurnMsg.playersNames.size(); i++)
+            System.out.println((i+1)+") "+yourTurnMsg.playersNames.get(i));
     }
 
     public void printGoalCardsInfo(){

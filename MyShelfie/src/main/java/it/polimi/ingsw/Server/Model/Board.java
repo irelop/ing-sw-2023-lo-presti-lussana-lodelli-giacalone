@@ -93,13 +93,13 @@ public class Board {
      *  @author Matteo Lussana
      */
     private void init2PlayesParabolic(){
-        int x;
+        float x;
         for(int i=3; i<MAX_ROWS-1; i++){
             if(i!=3){
                 x = (int) Math.pow(1.24,i);
                 int j=0;
                 while(j<x-1){
-                    boardGrid[i-(MAX_ROWS/2)-1][(MAX_COLUMNS/2)-1-j] = Tile.BLANK;
+                    boardGrid[i-((MAX_ROWS/2)-1)][((MAX_COLUMNS/2)-1)-j] = Tile.BLANK;
                     j++;
                 }
             }
@@ -117,7 +117,7 @@ public class Board {
                 x = (int) (0.03 + Math.pow(1.256,i));
                 int j=0;
                 while(j<x-1){
-                    boardGrid[i-(MAX_ROWS/2)-1][(MAX_COLUMNS/2)-1-j] = Tile.BLANK;
+                    boardGrid[i-((MAX_ROWS/2)-1)][((MAX_COLUMNS/2)-1)-j] = Tile.BLANK;
                     j++;
                 }
             }
@@ -135,7 +135,7 @@ public class Board {
                 x = (int) Math.pow(1.27,i);
                 int j=0;
                 while(j<x-1){
-                    boardGrid[i-(MAX_ROWS/2)-1][(MAX_COLUMNS/2)-1-j] = Tile.BLANK;
+                    boardGrid[i-((MAX_ROWS/2)-1)][((MAX_COLUMNS/2)-1)-j] = Tile.BLANK;
                     j++;
                 }
             }
@@ -516,6 +516,7 @@ public class Board {
      */
     public void initGrid(int numPlayers){
 
+        System.out.println(numPlayers);
         for(int r=0; r<MAX_ROWS; r++) {
             for (int c = 0; c < MAX_COLUMNS; c++) {
                 boardGrid[r][c] = Tile.NOT_VALID;
@@ -544,11 +545,11 @@ public class Board {
         }
 
         switch (numPlayers){
-            case 2:init2Players();
+            case 2:init2Players(); break;
 
-            case 3:init3Players();
+            case 3:init3Players(); break;
 
-            case 4:init4Players();
+            case 4:init4Players(); break;
         }
     }
 

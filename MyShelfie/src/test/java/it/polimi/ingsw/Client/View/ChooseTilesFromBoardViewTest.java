@@ -9,6 +9,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ChooseTilesFromBoardViewTest {
@@ -89,7 +91,12 @@ class ChooseTilesFromBoardViewTest {
         }
         PersonalGoalCard personalGoalCard = new PersonalGoalCard(personalCardPattern);
 
-        yourTurnMsg = new YourTurnMsg("player1", 3, boardGrid, commonGoalCards, personalGoalCard);
+        ArrayList<String> playersNames = new ArrayList<>();
+        playersNames.add("player1");
+        playersNames.add("player2");
+
+        yourTurnMsg = new YourTurnMsg("player1", 3, boardGrid, commonGoalCards,
+                personalGoalCard, 0, playersNames);
         chooseTilesFromBoardView = new ChooseTilesFromBoardView(yourTurnMsg);
     }
 
@@ -110,6 +117,11 @@ class ChooseTilesFromBoardViewTest {
     @Test
     public void printCards_visualTest(){
         chooseTilesFromBoardView.printGoalCardsInfo();
+    }
+
+    @Test
+    public void printPlayersOrder_visualTest(){
+        chooseTilesFromBoardView.printOrderOfPlayers();
     }
 
 }

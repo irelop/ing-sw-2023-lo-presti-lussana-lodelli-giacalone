@@ -6,6 +6,8 @@ import it.polimi.ingsw.Server.Model.CommonGoalCard;
 import it.polimi.ingsw.Server.Model.PersonalGoalCard;
 import it.polimi.ingsw.Server.Model.Tile;
 
+import java.util.ArrayList;
+
 public class YourTurnMsg extends S2CMessage{
 
     public String nickname;
@@ -13,14 +15,19 @@ public class YourTurnMsg extends S2CMessage{
     public Tile[][] boardSnapshot;
     public CommonGoalCard[] commonGoalCards;
     public PersonalGoalCard personalGoalCard;
+    public int turnNumber;
+    public ArrayList<String> playersNames;
 
     public YourTurnMsg(String nickname, int maxTilesPickable, Tile[][] boardSnapshot,
-                       CommonGoalCard[] commonGoalCards, PersonalGoalCard personalGoalCard){
+                       CommonGoalCard[] commonGoalCards, PersonalGoalCard personalGoalCard, int turnNumber,
+                        ArrayList<String> playersNames){
         this.nickname = nickname;
         this.maxTilesPickable = maxTilesPickable;
         this.boardSnapshot = boardSnapshot;
         this.personalGoalCard = personalGoalCard;
         this.commonGoalCards = commonGoalCards;
+        this.turnNumber = turnNumber;
+        this.playersNames = playersNames;
     }
 
 
