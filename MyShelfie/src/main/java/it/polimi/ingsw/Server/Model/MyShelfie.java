@@ -179,7 +179,7 @@ public class MyShelfie /*implements Runnable*/ {
                     //saving the index of the player playing
                     currentPlayerIndex = i;
                     synchronized(this){
-                        turn();
+                        turn(i);
                         try {
                             this.wait();
                         } catch (InterruptedException e) {
@@ -210,16 +210,21 @@ public class MyShelfie /*implements Runnable*/ {
      * OVERVIEW: it finds max pickable tiles by the player and creates a message to send to
      * ChooseTilesFromBoardView
      */
-    private void turn() {
+    private void turn(int turnNumber) {
 
         // find max pickable tiles by the player
         int maxTilesPickable = playersConnected.get(currentPlayerIndex).myShelfie.maxTilesPickable();
 
-        YourTurnMsg yourTurnMsg;
-        yourTurnMsg = new YourTurnMsg(playersConnected.get(currentPlayerIndex).getNickname(), maxTilesPickable,
-                Board.getBoardGrid(), Board.getCommonGoalCards(),
-                playersConnected.get(currentPlayerIndex).getPersonalGoalCard());
-        clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
+        ArrayList<String> playersNames = new ArrayList<>();
+        for (int i = 0; i < numberOfPlayers; i++) {
+            playersNames.add(playersConnected.get(i).getNickname());
+            YourTurnMsg yourTurnMsg;
+            yourTurnMsg = new YourTurnMsg(playersConnected.get(currentPlayerIndex).getNickname(), maxTilesPickable,
+                    Board.getBoardGrid(), Board.getCommonGoalCards(),
+                    playersConnected.get(currentPlayerIndex).getPersonalGoalCard(), turnNumber, playersNames);
+            clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
+
+        }
     }
 
     //funzione chiamata dal process message del messaggio creato alla fine dell'inserimento delle
