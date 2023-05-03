@@ -1,10 +1,8 @@
 package it.polimi.ingsw.Client;
 
-import it.polimi.ingsw.Client.View.IdelView;
 import it.polimi.ingsw.Client.View.LoginView;
 import it.polimi.ingsw.Client.View.View;
 import it.polimi.ingsw.Client.View.WaitingView;
-import it.polimi.ingsw.Server.Server;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -74,7 +72,7 @@ public class Client implements Runnable{
 
     public synchronized void transitionToView(View nextView){
         this.nextView = nextView;
-        currentView.setStopInteraction(); //ho commentato questo commentato questa istruzione perchè dava problemi
+        //currentView.setStopInteraction(); //ho commentato questa istruzione perchè dava problemi
                                             //con l'owner della view alla fine della lobbyView
                                             //bisogna capire come fixare
     }

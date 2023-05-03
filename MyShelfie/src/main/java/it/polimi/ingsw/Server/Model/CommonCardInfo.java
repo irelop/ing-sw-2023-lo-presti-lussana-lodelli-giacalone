@@ -24,7 +24,6 @@ public class CommonCardInfo {
         this.schema = new Tile[6][5];
         this.name = name.replaceAll("it.polimi.ingsw.Server.Model.PatternStrategy.","");;
         int index = 0;
-        System.out.println(this.name);
         ReadFileByLines reader = new ReadFileByLines();
         reader.readFrom("MyShelfie/src/txtfiles/CommonGoalCardsInfo.txt");
         for(int w=0; w<120; w=w+10){

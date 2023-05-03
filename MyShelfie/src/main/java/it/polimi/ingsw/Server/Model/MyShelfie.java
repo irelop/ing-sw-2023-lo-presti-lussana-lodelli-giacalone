@@ -79,17 +79,18 @@ public class MyShelfie /*implements Runnable*/ {
      * @param clientHandler
      */
     public void addPlayer(String playerNickname, ClientHandler clientHandler) {
-
-        if (playersConnected.size() < numberOfPlayers) {
+        if (playersConnected.size() <= numberOfPlayers || numberOfPlayers==-1) {
             Player newPlayer = new Player(playerNickname);
 
             //aggiungo all'arraylist
+            System.out.println("aggiungo il player...");
             playersConnected.add(newPlayer);
             clientHandlers.add(clientHandler);
-        }
-        if (playersConnected.size() == numberOfPlayers) {
-            this.isStarted = true;
-            manageTurn();
+
+            if (playersConnected.size() == numberOfPlayers) {
+                this.isStarted = true;
+                manageTurn();
+            }
         }
     }
         public boolean isStarted(){
@@ -103,10 +104,10 @@ public class MyShelfie /*implements Runnable*/ {
     //edit ANDREA: ho gestito lato view i casi in cui l'input non sia valido con
     // annessa stampa all'utente quindi direi ok.
     public void setNumberOfPlayers(int numberOfPlayers) {
-        if(numberOfPlayers == -1){
+
             this.numberOfPlayers = numberOfPlayers;
-            board.initGridParabolic(numberOfPlayers);
-        }
+            board.initGrid(numberOfPlayers);
+
     }
 
 
@@ -163,6 +164,9 @@ public class MyShelfie /*implements Runnable*/ {
      *       or if that is the last lap
      */
     public void manageTurn(){
+        System.out.println("sono in manage turn");
+        //board.initGridParabolic(numberOfPlayers);
+        board.initGrid(numberOfPlayers);
         board.refill();
         setChair();
         dealPersonalCards();

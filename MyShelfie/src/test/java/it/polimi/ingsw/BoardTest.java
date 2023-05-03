@@ -30,7 +30,7 @@ public class BoardTest {
         grid = new Tile[9][9];
         board = new Board();
         Board.getBoardInstance();
-
+/*
         reader = new ReadFileByLines();
         reader.readFrom("src/test/testFiles/board_3p.txt");
 
@@ -47,10 +47,22 @@ public class BoardTest {
         }
         //set the grid in board with constructor from file
         board.initFromMatrix(grid);
+        */
+        board.initGridParabolic(2);
     }
 
     @AfterEach
     void tearDown() {
+    }
+
+    @Test
+    void stampaggio(){
+        for(int i=0; i<9; i++) {
+            for (int j = 0; j < 9; j++) {
+                System.out.print(board.getBoardGrid()[i][j]+"\t");
+            }
+            System.out.println();
+        }
     }
 
    @Test
