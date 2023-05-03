@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
  * @author Matteo Lussana, Irene Lo Presti
  */
 public class MyShelfie /*implements Runnable*/ {
+    
     private final ArrayList<Player> playersConnected;
     private boolean isOver;
     private final PersonalGoalDeck personalDeck;
@@ -89,7 +90,7 @@ public class MyShelfie /*implements Runnable*/ {
 
             if (playersConnected.size() == numberOfPlayers) {
                 this.isStarted = true;
-                manageTurn();
+                //manageTurn();
             }
         }
     }
@@ -106,9 +107,10 @@ public class MyShelfie /*implements Runnable*/ {
     public void setNumberOfPlayers(int numberOfPlayers) {
 
             this.numberOfPlayers = numberOfPlayers;
-            board.initGrid(numberOfPlayers);
+            //board.initGrid(numberOfPlayers);
 
     }
+    public int getNumberOfPlayers(){return this.numberOfPlayers;}
 
 
     public void updateLobby(){
