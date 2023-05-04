@@ -76,7 +76,7 @@ public class SocketClientHandler extends ClientHandler{
     @Override
     public void sendMessageToClient(S2CMessage message) {
         try {
-            //outputStream.flush();
+            outputStream.flush();
 
             //System.out.println(message);
             outputStream.writeObject(message);

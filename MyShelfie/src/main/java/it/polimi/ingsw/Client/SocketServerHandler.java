@@ -60,6 +60,7 @@ public class SocketServerHandler extends ServerHandler {
     //funzione per mandare i mesaggi dal client al server
     public void sendMessageToServer(C2SMessage msg){
         try {
+            output.flush();
             output.writeObject(msg);
         } catch (IOException e) {
             System.out.println("Communication error");
