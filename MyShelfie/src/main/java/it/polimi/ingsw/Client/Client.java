@@ -25,7 +25,7 @@ public class Client implements Runnable{
     @Override
     public void run(){
         Scanner input = new Scanner(System.in);
-        System.out.println("Please insert the IP address of the client:\n");
+        System.out.println("Please insert the IP address of the server:\n");
         String ip = input.nextLine();
 
         Socket server;

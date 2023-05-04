@@ -27,8 +27,8 @@ public class LoginView extends View implements ObserverView {
     public LoginView() {
         this.lock = new Object();
         this.goOn = false;
-        this.answerToShow = null;
         this.isFull = false;
+        //this.answerToShow = null;
     }
 
 
