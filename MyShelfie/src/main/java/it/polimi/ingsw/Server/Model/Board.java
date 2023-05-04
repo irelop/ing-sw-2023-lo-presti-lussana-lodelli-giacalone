@@ -74,9 +74,9 @@ public class Board {
         boardGrid[MAX_ROWS/2][MAX_COLUMNS/2] = Tile.BLANK;
 
         switch(numPlayers){
-            case 2: init2PlayesParabolic();
-            case 3: init3PlayesParabolic();
-            case 4: init4PlayesParabolic();
+            case 2: init2PlayesParabolic(); break;
+            case 3: init3PlayesParabolic(); break;
+            case 4: init4PlayesParabolic(); break;
         }
 
         //rotate
