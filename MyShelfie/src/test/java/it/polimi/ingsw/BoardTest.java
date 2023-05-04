@@ -281,5 +281,21 @@ public class BoardTest {
 
     }
 
+    @Test
+    public void initGridParabolic_visualTest(){
+        Board boardVisual = new Board();
+
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                boardVisual.getBoardGrid()[i][j] = null;
+            }
+        }
+        boardVisual.getBoardGrid()[9 / 2][9 / 2] = Tile.BLANK;
+
+        boardVisual.initGridParabolic(2);
+
+
+    }
+
 
 }
