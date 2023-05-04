@@ -28,8 +28,9 @@ public class MyShelfie /*implements Runnable*/ {
 
     public MyShelfie(){
         this.board = Board.getBoardInstance();
-        this.personalDeck = new PersonalGoalDeck();
         this.commonDeck = new CommonGoalDeck();
+        this.personalDeck = new PersonalGoalDeck();
+
         this.isOver = false;
         this.isStarted = false;
         this.playersConnected = new ArrayList<>();
@@ -225,6 +226,7 @@ public class MyShelfie /*implements Runnable*/ {
                     Board.getBoardGrid(), Board.getCommonGoalCards(),
                     playersConnected.get(currentPlayerIndex).getPersonalGoalCard(), turnNumber, playersNames);
             clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
+            
 
         }
     }
