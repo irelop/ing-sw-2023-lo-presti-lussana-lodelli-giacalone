@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
  * @author Matteo Lussana, Irene Lo Presti
  */
 public class MyShelfie /*implements Runnable*/ {
+    
     private final ArrayList<Player> playersConnected;
     private boolean isOver;
     private final PersonalGoalDeck personalDeck;
@@ -27,8 +28,9 @@ public class MyShelfie /*implements Runnable*/ {
 
     public MyShelfie(){
         this.board = Board.getBoardInstance();
-        this.personalDeck = new PersonalGoalDeck();
         this.commonDeck = new CommonGoalDeck();
+        this.personalDeck = new PersonalGoalDeck();
+
         this.isOver = false;
         this.isStarted = false;
         this.playersConnected = new ArrayList<>();
@@ -61,7 +63,7 @@ public class MyShelfie /*implements Runnable*/ {
      * @return true if nickname is valid, false otherwise
      */
     public boolean checkNickname(String insertedString) {
-        return(!(this.playersConnected.contains(insertedString)));
+        return(!(new ArrayList<String>(this.playersConnected.stream().map(x->x.getNickname()).collect(Collectors.toList()))).contains(insertedString));
     }
 
     /**
@@ -70,19 +72,20 @@ public class MyShelfie /*implements Runnable*/ {
      * @return true if the new player is the first one
      */
     public boolean isFirstConnected(String insertedString){
-        return (this.playersConnected.playersConnected.size() == 1);
+        return (this.playersConnected.size() == 1);
     }
 
     /**
-     * This method creates a player and add him to players list if lobby is not full
-     * If there are enough players game starts
-     * @param playerNickname: new player's nickname
-     * @param clientHandler: new player's clientHandler
+     * This method creates a player and add him to players list
+     * @param playerNickname
+     * @param clientHandler
      */
     public void addPlayer(String playerNickname, ClientHandler clientHandler) {
-
-        if (playersConnected.size() < numberOfPlayers || numberOfPlayers==-1) {
+        if (playersConnected.size() <= numberOfPlayers || numberOfPlayers==-1) {
             Player newPlayer = new Player(playerNickname);
+
+            //aggiungo all'arraylist
+            System.out.println("aggiungo il player...");
             playersConnected.add(newPlayer);
             clientHandlers.add(clientHandler);
 
@@ -96,25 +99,27 @@ public class MyShelfie /*implements Runnable*/ {
             return this.isStarted;
         }
 
-    /**
-     * This method sets the number of players only if hasn't been already set
-     * @param numberOfPlayers: number of players
-     */
+
+    //la gestiamo con un'eccezione o va bene così????
+    //chiamata da login view SOLO con il primo giocatore connesso
+
+    //edit ANDREA: ho gestito lato view i casi in cui l'input non sia valido con
+    // annessa stampa all'utente quindi direi ok.
     public void setNumberOfPlayers(int numberOfPlayers) {
+
             this.numberOfPlayers = numberOfPlayers;
             //board.initGrid(numberOfPlayers);
 
     }
+    public int getNumberOfPlayers(){return this.numberOfPlayers;}
 
-    /**
-     * This method visually updates the lobby: this allows you to see a list of
-     * players connected in the lobby
-     */
+
     public void updateLobby(){
         ArrayList<String> lobbyPlayers = new ArrayList<>(playersConnected.stream().map(x->x.getNickname()).collect(Collectors.toList()));
         LobbyUpdateAnswer lobbyUpdateAnswer = new LobbyUpdateAnswer(lobbyPlayers);
-        for(ClientHandler clientHandler:clientHandlers){
-            clientHandler.sendMessageToClient(lobbyUpdateAnswer);
+
+        for(int i=0; i< clientHandlers.size(); i++){
+            clientHandlers.get(i).sendMessageToClient(lobbyUpdateAnswer);
         }
     }
 
@@ -128,7 +133,7 @@ public class MyShelfie /*implements Runnable*/ {
         for(Player player : playersConnected){
             player.setCard(personalDeck.drawPersonal());
         }
-    }
+    }//dobbiamo farla vedere al player!
 
     /**
      * OVERVIEW: this method gives, randomly, a chair to one player
@@ -162,6 +167,9 @@ public class MyShelfie /*implements Runnable*/ {
      *       or if that is the last lap
      */
     public void manageTurn(){
+        System.out.println("sono in manage turn");
+        //board.initGridParabolic(numberOfPlayers);
+        board.initGrid(numberOfPlayers);
         board.refill();
         setChair();
         dealPersonalCards();
@@ -174,7 +182,7 @@ public class MyShelfie /*implements Runnable*/ {
                     //saving the index of the player playing
                     currentPlayerIndex = i;
                     synchronized(this){
-                        turn();
+                        turn(i);
                         try {
                             this.wait();
                         } catch (InterruptedException e) {
@@ -205,16 +213,22 @@ public class MyShelfie /*implements Runnable*/ {
      * OVERVIEW: it finds max pickable tiles by the player and creates a message to send to
      * ChooseTilesFromBoardView
      */
-    private void turn() {
+    private void turn(int turnNumber) {
 
         // find max pickable tiles by the player
         int maxTilesPickable = playersConnected.get(currentPlayerIndex).myShelfie.maxTilesPickable();
 
-        YourTurnMsg yourTurnMsg;
-        yourTurnMsg = new YourTurnMsg(playersConnected.get(currentPlayerIndex).getNickname(), maxTilesPickable,
-                Board.getBoardGrid(), Board.getCommonGoalCards(),
-                playersConnected.get(currentPlayerIndex).getPersonalGoalCard());
-        clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
+        ArrayList<String> playersNames = new ArrayList<>();
+        for (int i = 0; i < numberOfPlayers; i++) {
+            playersNames.add(playersConnected.get(i).getNickname());
+            YourTurnMsg yourTurnMsg;
+            yourTurnMsg = new YourTurnMsg(playersConnected.get(currentPlayerIndex).getNickname(), maxTilesPickable,
+                    Board.getBoardGrid(), Board.getCommonGoalCards(),
+                    playersConnected.get(currentPlayerIndex).getPersonalGoalCard(), turnNumber, playersNames);
+            clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
+            
+
+        }
     }
 
     //funzione chiamata dal process message del messaggio creato alla fine dell'inserimento delle
