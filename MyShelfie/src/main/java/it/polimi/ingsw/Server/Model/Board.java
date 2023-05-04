@@ -510,7 +510,6 @@ public class Board {
      * OVERVIEW: a first draft of the initialization of the board. In this method we use some variables
      * that move in the board: ns (north - south), sn (south-north), w (west), e (est), we (west-est),
      * ew (est-west).
-     * @deprecated
      * @param numPlayers: number of player playing
      * @author Irene Lo Presti
      */
@@ -555,7 +554,6 @@ public class Board {
 
     /**
      * OVERVIEW: initialization of the board for 2 players
-     * @deprecated
      * @author Irene Lo Presti
      */
     private void init2Players(){
@@ -585,7 +583,6 @@ public class Board {
 
     /**
      * OVERVIEW: initialization of the board for 3 players
-     * @deprecated
      * @author Irene Lo Presti
      */
     private void init3Players() {
@@ -600,7 +597,7 @@ public class Board {
         boardGrid[sn][e] = Tile.BLANK;
 
         ns++;
-        sn++;
+        sn--;
 
         while (ns <= 4) {
             we = w;
@@ -629,21 +626,20 @@ public class Board {
 
     /**
      * OVERVIEW: initialization of the board for 4 players
-     * @deprecated
      * @author Irene Lo Presti
      */
     private void init4Players() {
         int ns, e, w, sn, we, ew;
-        ns = 1;
-        w = (MAX_COLUMNS-1)/2 - 1;
-        e = (MAX_COLUMNS-1)/2 + 1;
-        sn = MAX_ROWS-2;
+        ns = 0;
+        w = (MAX_COLUMNS-1)/2;
+        e = (MAX_COLUMNS-1)/2;
+        sn = MAX_ROWS-1;
 
         boardGrid[ns][w] = Tile.BLANK;
         boardGrid[sn][e] = Tile.BLANK;
 
-        ns++;
-        sn++;
+        w++;
+        e--;
 
         while (ns <= 4) {
             we = w;

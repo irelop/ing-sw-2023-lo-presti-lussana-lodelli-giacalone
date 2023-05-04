@@ -1,5 +1,10 @@
 package it.polimi.ingsw.Client.View;
 
+/**
+ * VIEW that prints the board, the common goal cards and the personal card of the player.
+ * @author Irene Lo Presti
+ */
+
 import it.polimi.ingsw.Server.Messages.PlayerChoiceMsg;
 import it.polimi.ingsw.Server.Messages.InitialPositionMsg;
 import it.polimi.ingsw.Server.Messages.YourTurnMsg;
@@ -19,6 +24,11 @@ public class ChooseTilesFromBoardView extends View {
 
     private final YourTurnMsg yourTurnMsg;
 
+    /**
+     * Constructor method
+     * @param yourTurnMsg: message from the server that contains the player's nickname, his/her personal card,
+     *                 the board, the common cards, the number of turn and the order in which the players will play.
+     */
     public ChooseTilesFromBoardView(YourTurnMsg yourTurnMsg){
         this.yourTurnMsg = yourTurnMsg;
     }
@@ -30,6 +40,7 @@ public class ChooseTilesFromBoardView extends View {
         char direction;
         boolean goOn = false;
 
+        //If it's the first turn, it prints the order in which the players will play
         if(yourTurnMsg.turnNumber==0)
             printOrderOfPlayers();
 
@@ -84,6 +95,7 @@ public class ChooseTilesFromBoardView extends View {
         printBoard(r, c);
         System.out.println("The initial position is marked with a star");
 
+        //choosing the number of tiles to pick and the direction
         synchronized (this) {
             goOn = false;
             do {
@@ -125,19 +137,23 @@ public class ChooseTilesFromBoardView extends View {
                 } while (!goOn);
             }
 
-
-            // transition to next view ??
-
     }
 
+
+    /**
+     * this method prints the order of the players
+     */
     public void printOrderOfPlayers(){
-        if(yourTurnMsg.nickname == yourTurnMsg.playersNames.get(0))
+        if(yourTurnMsg.nickname.equals(yourTurnMsg.playersNames.get(0)))
             System.out.println(yourTurnMsg.nickname + ", you have the chair so you are the first one to play!");
         System.out.println("This is the order of playing:");
         for(int i=0; i<yourTurnMsg.playersNames.size(); i++)
             System.out.println((i+1)+") "+yourTurnMsg.playersNames.get(i));
     }
 
+    /**
+     * this method prints the common cards and the personal card
+     */
     public void printGoalCardsInfo(){
         System.out.println("Common goal cards:");
         for(int i=0; i<yourTurnMsg.commonGoalCards.length; i++){
@@ -150,11 +166,14 @@ public class ChooseTilesFromBoardView extends View {
         printCard(yourTurnMsg.personalGoalCard.getPattern());
     }
 
+    /**
+     * This method prints the pattern of the cards
+     * @param pattern: matrix of tiles with the pattern to follow in order to achieve the goal (personal or common)
+     */
     public void printCard(Tile[][] pattern){
         String code = "\u25CF";
         for(int r=0; r<6; r++){
 
-            //printing the tiles
             for(int c=0; c<5; c++){
 
                 switch (pattern[r][c]) {
@@ -174,7 +193,7 @@ public class ChooseTilesFromBoardView extends View {
     }
 
     /**
-     * OVERVIEW: this method prints the board
+     * This method prints the board
      */
     public void printBoard(int initialRow, int initialColumn){
 
@@ -216,7 +235,7 @@ public class ChooseTilesFromBoardView extends View {
     }
 
     /**
-     * OVERVIEW: getter method for the initial row
+     * Getter method for the initial row
      * @return row>=1 && row<MAX_ROWS
      * @throws OutOfBoardException if the row is not between 1 and MAX_ROWS
      */
@@ -230,7 +249,7 @@ public class ChooseTilesFromBoardView extends View {
     }
 
     /**
-     * OVERVIEW: getter method for the initial column
+     * Getter method for the initial column
      * @return column>=1 && column<MAX_ROW
      * @throws OutOfBoardException if the column is not between 1 and MAX_COLUMNS
      */
@@ -244,7 +263,7 @@ public class ChooseTilesFromBoardView extends View {
     }
 
     /**
-     * OVERVIEW: getter method for the number of tiles
+     * Getter method for the number of tiles
      * @return number of tiles >= 0 && number of tiles < maxTilesPickable-1
      * @throws InvalidNumberOfTilesException if the number of tiles is not between 0 and axTilesPickable-1
      */
@@ -269,7 +288,7 @@ public class ChooseTilesFromBoardView extends View {
     }
 
     /**
-     * OVERVIEW: getter method for direction
+     * Getter method for direction
      * @return direction (n, s, w or e)
      * @throws InvalidDirectionException if the direction is not n, s, w or e
      */

@@ -22,14 +22,15 @@ public class MyShelfie /*implements Runnable*/ {
     private final Board board;
     private int numberOfPlayers;
     private boolean isStarted;
-    private ArrayList<ClientHandler> clientHandlers;
+    private final ArrayList<ClientHandler> clientHandlers;
     private int currentPlayerIndex;
     private static MyShelfie myShelfieInstance;
 
     public MyShelfie(){
         this.board = Board.getBoardInstance();
-        this.personalDeck = new PersonalGoalDeck();
         this.commonDeck = new CommonGoalDeck();
+        this.personalDeck = new PersonalGoalDeck();
+
         this.isOver = false;
         this.isStarted = false;
         this.playersConnected = new ArrayList<>();
@@ -90,7 +91,7 @@ public class MyShelfie /*implements Runnable*/ {
 
             if (playersConnected.size() == numberOfPlayers) {
                 this.isStarted = true;
-                //manageTurn();
+                manageTurn();
             }
         }
     }
@@ -148,6 +149,7 @@ public class MyShelfie /*implements Runnable*/ {
         playersConnected.add(0, firstPlayer);
         clientHandlers.remove(firstPlayerClientHandler);
         clientHandlers.add(0, firstPlayerClientHandler);
+
     }
 
 
@@ -214,6 +216,8 @@ public class MyShelfie /*implements Runnable*/ {
      */
     private void turn(int turnNumber) {
 
+        System.out.println("Sono in turn()");
+
         // find max pickable tiles by the player
         int maxTilesPickable = playersConnected.get(currentPlayerIndex).myShelfie.maxTilesPickable();
 
@@ -224,7 +228,9 @@ public class MyShelfie /*implements Runnable*/ {
             yourTurnMsg = new YourTurnMsg(playersConnected.get(currentPlayerIndex).getNickname(), maxTilesPickable,
                     Board.getBoardGrid(), Board.getCommonGoalCards(),
                     playersConnected.get(currentPlayerIndex).getPersonalGoalCard(), turnNumber, playersNames);
+            System.out.println("Ho creato il messaggio");
             clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
+            System.out.println("Ho inviato il messaggio");
 
         }
     }
