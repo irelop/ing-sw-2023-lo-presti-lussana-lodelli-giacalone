@@ -16,7 +16,6 @@ public class PlayerChoiceMsg extends C2SMessage{
     public char direction;
     public int numberOfTiles;
     public int maxTilesPickable;
-    public PlayerChoiceAnswer playerChoiceAnswer;
 
 
     public PlayerChoiceMsg(int initialRow, int initialColumn, char direction, int numberOfTiles, int maxTilesPickable){
@@ -24,7 +23,6 @@ public class PlayerChoiceMsg extends C2SMessage{
         this.initialColumn = initialColumn;
         this.direction = direction;
         this.numberOfTiles = numberOfTiles;
-        this.playerChoiceAnswer = null;
         this.maxTilesPickable = maxTilesPickable;
     }
 
@@ -36,6 +34,7 @@ public class PlayerChoiceMsg extends C2SMessage{
      */
     @Override
     public void processMessage(ClientHandler clientHandler){
+        S2CMessage playerChoiceAnswer;
         try{
             clientHandler.getController().getBoard().checkDirectionAndNumberOfTiles(direction, numberOfTiles, initialRow, initialColumn, maxTilesPickable);
             playerChoiceAnswer = new PlayerChoiceAnswer("",true);
@@ -44,8 +43,7 @@ public class PlayerChoiceMsg extends C2SMessage{
         }catch(OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException
                 | InvalidNumberOfTilesException | InvalidDirectionException e){
             playerChoiceAnswer = new PlayerChoiceAnswer(e.toString(),false);
-        }finally{
-            clientHandler.sendMessageToClient(playerChoiceAnswer);
         }
+        clientHandler.sendMessageToClient(playerChoiceAnswer);
     }
 }

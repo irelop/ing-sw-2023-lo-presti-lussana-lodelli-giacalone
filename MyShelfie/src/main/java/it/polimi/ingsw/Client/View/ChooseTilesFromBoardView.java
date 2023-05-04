@@ -5,10 +5,7 @@ package it.polimi.ingsw.Client.View;
  * @author Irene Lo Presti
  */
 
-import it.polimi.ingsw.Server.Messages.InitialPositionAnswer;
-import it.polimi.ingsw.Server.Messages.PlayerChoiceMsg;
-import it.polimi.ingsw.Server.Messages.InitialPositionMsg;
-import it.polimi.ingsw.Server.Messages.YourTurnMsg;
+import it.polimi.ingsw.Server.Messages.*;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidDirectionException;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidNumberOfTilesException;
 import it.polimi.ingsw.Server.Model.Exceptions.OutOfBoardException;
@@ -24,8 +21,8 @@ public class ChooseTilesFromBoardView extends View {
     public int MAX_ROWS = 9;
 
     private final YourTurnMsg yourTurnMsg;
-
     private InitialPositionAnswer initialPositionAnswer;
+    private PlayerChoiceAnswer playerChoiceAnswer;
 
     /**
      * Constructor method
@@ -81,6 +78,9 @@ public class ChooseTilesFromBoardView extends View {
                     }
                 } while (true);
 
+                r--;
+                c--;
+
                 InitialPositionMsg initialPositionMsg = new InitialPositionMsg(r, c);
                 getOwner().getServerHandler().sendMessageToServer(initialPositionMsg);
                 try {
@@ -133,8 +133,8 @@ public class ChooseTilesFromBoardView extends View {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                System.out.println(playerChoiceMsg.playerChoiceAnswer.answer);
-                if (playerChoiceMsg.playerChoiceAnswer.valid)
+                System.out.println(this.playerChoiceAnswer.answer);
+                if (this.playerChoiceAnswer.valid)
                     goOn = true;
 
                 } while (!goOn);
@@ -144,6 +144,9 @@ public class ChooseTilesFromBoardView extends View {
 
     public void setInitialPositionAnswer(InitialPositionAnswer answer){
         this.initialPositionAnswer = answer;
+    }
+    public void setPlayerChoiceAnswer(PlayerChoiceAnswer answer){
+        this.playerChoiceAnswer = answer;
     }
 
 
@@ -224,7 +227,7 @@ public class ChooseTilesFromBoardView extends View {
             //printing the tiles
             for(int c=0; c<MAX_COLUMNS; c++){
 
-                if(r == initialRow-1 && c == initialColumn-1)
+                if(r == initialRow && c == initialColumn)
                     code = "*";
                 else
                     code = "\u25CF";

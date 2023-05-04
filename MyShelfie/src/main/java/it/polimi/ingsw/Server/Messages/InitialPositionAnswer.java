@@ -22,7 +22,6 @@ public class InitialPositionAnswer extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-
         ChooseTilesFromBoardView chooseTilesFromBoardView = (ChooseTilesFromBoardView) serverHandler.getClient().getCurrentView();
         chooseTilesFromBoardView.setInitialPositionAnswer(this);
         serverHandler.getClient().getCurrentView().notifyView();

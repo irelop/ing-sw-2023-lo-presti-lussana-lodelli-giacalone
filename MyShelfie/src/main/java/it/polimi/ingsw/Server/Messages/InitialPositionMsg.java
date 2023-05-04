@@ -20,8 +20,6 @@ public class InitialPositionMsg extends C2SMessage{
     public int row;
     public int column;
 
-    //public InitialPositionAnswer initialPositionAnswer;
-
     /**
      * OVERVIEW: constructor method, it creates the message with the initial row and the initial column
      * @param row: int for the initial row
@@ -48,8 +46,8 @@ public class InitialPositionMsg extends C2SMessage{
             initialPositionAnswer = new InitialPositionAnswer(e.toString(),false);
         }
             clientHandler.sendMessageToClient(initialPositionAnswer);
-        }
-
-
     }
+
+
+}
 

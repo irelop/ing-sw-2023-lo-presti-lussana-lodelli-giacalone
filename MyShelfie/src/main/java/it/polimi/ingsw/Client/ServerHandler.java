@@ -31,20 +31,14 @@ public abstract class ServerHandler implements Runnable{
 
 
     //event loop che riceve i messaggi dal server e li processa
-    private void handleClientConnection() throws IOException{
-
-    }
+    private void handleClientConnection() throws IOException{}
 
     public Client getClient(){return owner;}
 
 
     //funzione per mandare i mesaggi dal client al server
-    public void sendMessageToServer(C2SMessage msg){
+    public void sendMessageToServer(C2SMessage msg){}
 
-    }
-
-    public void stop(){
-
-    }
+    public void stop(){}
 
 }

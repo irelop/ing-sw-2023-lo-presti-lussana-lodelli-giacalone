@@ -149,7 +149,7 @@ public class Shelf {
      */
     private int columnFreeSpace(int columnIndex){
         int r=0;
-        while(grid[r][columnIndex]== Tile.BLANK && r<6)
+        while(grid[r][columnIndex]== Tile.BLANK && r<=3)
             r++;
         return r;
     }

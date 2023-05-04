@@ -17,7 +17,7 @@ public class GoalView extends View{
     public void run(){
 
         View nextView = null;
-        Integer goOn;
+        String goOn;
 
         Scanner scanner = new Scanner(System.in);
 
@@ -34,7 +34,7 @@ public class GoalView extends View{
         System.out.println("Total score: "+ msg.score);
         System.out.println("---------------------------------");
         System.out.println("[press any key to continue]");
-        goOn = scanner.nextInt();
+        goOn = scanner.nextLine();
 
         if(goOn != null){
             getOwner().transitionToView(nextView);

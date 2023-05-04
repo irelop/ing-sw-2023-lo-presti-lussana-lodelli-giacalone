@@ -343,11 +343,16 @@ public class Board implements Serializable {
         if(r == MAX_ROWS-1 || c == MAX_COLUMNS-1 || r==0 || c==0)
             return;
 
-        if(boardGrid[r+1][c]!=Tile.BLANK && boardGrid[r-1][c]!=Tile.BLANK &&
-                boardGrid[r][c+1]!=Tile.BLANK && boardGrid[r][c-1]!=Tile.BLANK &&
-                boardGrid[r+1][c]!=Tile.NOT_VALID && boardGrid[r-1][c]!=Tile.NOT_VALID &&
-                boardGrid[r][c+1]!=Tile.NOT_VALID && boardGrid[r][c-1]!=Tile.NOT_VALID)
-            throw new InvalidPositionException();
+        if(boardGrid[r+1][c].equals(Tile.BLANK) || boardGrid[r-1][c].equals(Tile.BLANK) ||
+                boardGrid[r][c+1].equals(Tile.BLANK) || boardGrid[r][c-1].equals(Tile.BLANK))
+            return;
+
+        if(boardGrid[r+1][c].equals(Tile.NOT_VALID) || boardGrid[r-1][c].equals(Tile.NOT_VALID) ||
+                boardGrid[r][c+1].equals(Tile.NOT_VALID) || boardGrid[r][c-1].equals(Tile.NOT_VALID))
+            return;
+
+
+        throw new InvalidPositionException();
 
     }
 
@@ -435,6 +440,9 @@ public class Board implements Serializable {
                                                int maxTilesPickable) throws InvalidPositionException,
             InvalidCellException, EmptyCellException, OutOfBoardException, InvalidNumberOfTilesException,
             InvalidDirectionException {
+
+        if(numberOfTiles==0)
+            return;
 
         if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w')
             throw new InvalidDirectionException();

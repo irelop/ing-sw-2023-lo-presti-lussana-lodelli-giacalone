@@ -6,6 +6,7 @@ import it.polimi.ingsw.Server.Model.Exceptions.NotEnoughSpaceInChosenColumnExcep
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.Client.View.ColorCode.*;
@@ -29,6 +30,8 @@ public class MyShelfie /*implements Runnable*/ {
     private int currentPlayerIndex;
     private static MyShelfie myShelfieInstance;
 
+    private final Object lock;
+
     public MyShelfie(){
         this.board = Board.getBoardInstance();
         this.commonDeck = new CommonGoalDeck();
@@ -39,6 +42,8 @@ public class MyShelfie /*implements Runnable*/ {
         this.playersConnected = new ArrayList<>();
         this.numberOfPlayers = -1;
         this.clientHandlers = new ArrayList<>();
+
+        this.lock = new Object();
     }
 
     /**
@@ -111,7 +116,8 @@ public class MyShelfie /*implements Runnable*/ {
     public void setNumberOfPlayers(int numberOfPlayers) {
 
             this.numberOfPlayers = numberOfPlayers;
-            //board.initGrid(numberOfPlayers);
+            if(this.numberOfPlayers == playersConnected.size())
+                manageTurn();
 
     }
     public int getNumberOfPlayers(){return this.numberOfPlayers;}
@@ -175,36 +181,6 @@ public class MyShelfie /*implements Runnable*/ {
         board.initGridParabolic(numberOfPlayers);
         //board.initGrid(numberOfPlayers);
         board.refill();
-
-
-        for(int r=0; r<9; r++){
-            //printing the indexes of the rows
-            System.out.print((r+1)+"\t");
-
-            //printing the tiles
-            for(int c=0; c<9; c++){
-
-
-                   String code = "\u25CF";
-
-                switch (board.getBoardGrid()[r][c]) {
-                    case NOT_VALID -> System.out.print(" ");
-                    case BLANK -> System.out.print(BLANK.code + code + RESET.code);
-                    case PINK -> System.out.print(PINK.code + code + RESET.code);
-                    case GREEN -> System.out.print(GREEN.code + code + RESET.code);
-                    case BLUE -> System.out.print(BLUE.code + code + RESET.code);
-                    case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + code + RESET.code);
-                    case WHITE -> System.out.print(WHITE.code + code + RESET.code);
-                    case YELLOW -> System.out.print(YELLOW.code + code + RESET.code);
-                }
-                System.out.print("\t");
-            }
-            System.out.println();
-        }
-
-
-
-
         setChair();
         dealPersonalCards();
         drawCommonGoalCards();
@@ -215,10 +191,10 @@ public class MyShelfie /*implements Runnable*/ {
                 if(!isOver || !playersConnected.get(i).hasChair()){
                     //saving the index of the player playing
                     currentPlayerIndex = i;
-                    synchronized(this){
+                    synchronized(lock){
                         turn(i);
                         try {
-                            this.wait();
+                            lock.wait();
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
@@ -248,8 +224,6 @@ public class MyShelfie /*implements Runnable*/ {
      * ChooseTilesFromBoardView
      */
     private void turn(int turnNumber) {
-
-        System.out.println("Sono in turn()");
 
         // find max pickable tiles by the player
         int maxTilesPickable = playersConnected.get(currentPlayerIndex).myShelfie.maxTilesPickable();
@@ -314,6 +288,7 @@ public class MyShelfie /*implements Runnable*/ {
             board.refill();
 
         GoalAndScoreMsg goalAndScoreMsg = new GoalAndScoreMsg(isCommonGoalAchived, isPersonalGoalAchived, playersConnected.get(currentPlayerIndex).myScore.getScore(), isShelfFull);
+        clientHandlers.get(currentPlayerIndex).sendMessageToClient(goalAndScoreMsg);
     }
 
     public void getPlayerChoice(int initialRow, int initialColumn, char direction, int numberOfTiles){
@@ -365,7 +340,7 @@ public class MyShelfie /*implements Runnable*/ {
     }
 
     public void finishTurn(){
-        this.notify();
+        lock.notifyAll();
     }
 
 }

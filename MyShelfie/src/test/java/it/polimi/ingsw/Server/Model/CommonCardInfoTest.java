@@ -22,6 +22,7 @@ class CommonCardInfoTest {
     void tearDown() {
     }
 
+
     @Test
     void getSchema() {
         Tile[][] schema = commonCardInfo.getSchema();
