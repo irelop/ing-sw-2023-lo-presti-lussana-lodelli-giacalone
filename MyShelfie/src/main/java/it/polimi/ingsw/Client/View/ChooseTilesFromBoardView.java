@@ -88,7 +88,7 @@ public class ChooseTilesFromBoardView extends View {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                System.out.println(this.initialPositionAnswer);
+                System.out.println(this.initialPositionAnswer.answer);
                 if (this.initialPositionAnswer.valid)
                     goOn = true;
 

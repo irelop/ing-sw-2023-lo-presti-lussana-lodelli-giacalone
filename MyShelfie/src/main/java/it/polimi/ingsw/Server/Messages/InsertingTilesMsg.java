@@ -17,12 +17,11 @@ public class InsertingTilesMsg extends C2SMessage {
 
     public int columnChosen;
     public int[] chosenOrderIndexes;
-    public InsertingTilesAnswer answer;
+    //public InsertingTilesAnswer answer;
 
     public InsertingTilesMsg(int columnChosen, int[] chosenOrderIndexes) {
         this.columnChosen = columnChosen;
         this.chosenOrderIndexes = chosenOrderIndexes;
-        this.answer = null;
     }
 
     /**
@@ -32,15 +31,14 @@ public class InsertingTilesMsg extends C2SMessage {
      */
     @Override
     public void processMessage(ClientHandler clientHandler){
-
+        S2CMessage answer;
         try{
             clientHandler.getController().insertingTiles(columnChosen,chosenOrderIndexes);
             answer = new InsertingTilesAnswer("",true);
             clientHandler.getController().endOfTheTurn();
         }catch(InvalidTileIndexInLittleHandException | NotEnoughSpaceInChosenColumnException e){
             answer = new InsertingTilesAnswer(e.toString(),false);
-        }finally{
-            clientHandler.sendMessageToClient(answer);
         }
+        clientHandler.sendMessageToClient(answer);
     }
 }

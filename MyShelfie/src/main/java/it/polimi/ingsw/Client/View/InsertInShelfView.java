@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Client.View;
 
+import it.polimi.ingsw.Server.Messages.InsertingTilesAnswer;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidShelfColumnException;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
 import it.polimi.ingsw.Server.Model.Tile;
@@ -23,8 +24,78 @@ public class InsertInShelfView extends View {
 
     private final MyShelfMsg msg;
 
+    private InsertingTilesAnswer insertingTilesAnswer;
+
     public InsertInShelfView(MyShelfMsg msg){
         this.msg = msg;
+        this.insertingTilesAnswer = null;
+    }
+
+    /**
+     * The main method of the view, overrided form thread run() method
+     * It sends an InsertingTilesMsg to the server in order to validate user's inputs,
+     * modify the model and switch to the next view
+     */
+    @Override
+    public void run() {
+
+        int columnChosen;
+        int[] chosenOrderIndexes;
+        ArrayList<Tile> chosenTiles = msg.getLittleHand();
+        Tile[][] myShelf = msg.getShelf();
+        boolean goOn = false;
+
+        synchronized (this) {
+
+            printShelf(myShelf);
+            printGoalCardsInfo();
+
+            do {
+
+                // client side exception management
+                do {
+                    try {
+                        columnChosen = chooseColumn();
+                        break;
+                    } catch (InvalidShelfColumnException e) {
+                        System.out.println(e);
+                    }
+                } while (true);
+
+                // client side exception management
+                do {
+                    try {
+                        chosenOrderIndexes = askOrder(chosenTiles);
+                        break;
+                    } catch (InvalidTileIndexInLittleHandException e) {
+                        System.out.println(e);
+                    }
+                } while (true);
+
+                // generating message and waiting for an answer
+                InsertingTilesMsg insertingMsg = new InsertingTilesMsg(columnChosen, chosenOrderIndexes);
+                getOwner().getServerHandler().sendMessageToServer(insertingMsg);
+                try {
+                    this.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                System.out.println(this.insertingTilesAnswer.answer);
+                if (this.insertingTilesAnswer.valid)
+                    goOn = true;
+
+            } while (!goOn);
+        }
+    }
+
+    public void notifyView(){
+        synchronized (this) {
+            this.notify();
+        }
+    }
+
+    public void setInsertingTilesAnswer(InsertingTilesAnswer insertingTilesAnswer) {
+        this.insertingTilesAnswer = insertingTilesAnswer;
     }
 
     /**
@@ -78,69 +149,6 @@ public class InsertInShelfView extends View {
         System.out.println("Personal goal card:");
         printShelf(msg.personalGoalCard.getPattern());
         System.out.println();
-    }
-
-    /**
-     * The main method of the view, overrided form thread run() method
-     * It sends an InsertingTilesMsg to the server in order to validate user's inputs,
-     * modify the model and switch to the next view
-     */
-    @Override
-    public void run() {
-
-        int columnChosen;
-        int[] chosenOrderIndexes;
-        ArrayList<Tile> chosenTiles = msg.getLittleHand();
-        Tile[][] myShelf = msg.getShelf();
-        boolean goOn = false;
-
-        synchronized (this) {
-
-            printShelf(myShelf);
-            printGoalCardsInfo();
-
-            do {
-
-                // client side exception management
-                do {
-                    try {
-                        columnChosen = chooseColumn();
-                        break;
-                    } catch (InvalidShelfColumnException e) {
-                        System.out.println(e);
-                    }
-                } while (true);
-
-                // client side exception management
-                do {
-                    try {
-                        chosenOrderIndexes = askOrder(chosenTiles);
-                        break;
-                    } catch (InvalidTileIndexInLittleHandException e) {
-                        System.out.println(e);
-                    }
-                } while (true);
-
-                // generating message and waiting for an answer
-                InsertingTilesMsg insertingMsg = new InsertingTilesMsg(columnChosen, chosenOrderIndexes);
-                getOwner().getServerHandler().sendMessageToServer(insertingMsg);
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                System.out.println(insertingMsg.answer.answer);
-                if (insertingMsg.answer.valid)
-                    goOn = true;
-
-            } while (!goOn);
-        }
-    }
-
-    public void notifyView(){
-        synchronized (this) {
-            this.notify();
-        }
     }
 
     /**
