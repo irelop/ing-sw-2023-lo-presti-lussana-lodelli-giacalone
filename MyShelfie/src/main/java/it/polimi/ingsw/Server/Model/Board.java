@@ -525,7 +525,6 @@ public class Board implements Serializable {
      */
     public void initGrid(int numPlayers){
 
-        System.out.println(numPlayers);
         for(int r=0; r<MAX_ROWS; r++) {
             for (int c = 0; c < MAX_COLUMNS; c++) {
                 boardGrid[r][c] = Tile.NOT_VALID;
