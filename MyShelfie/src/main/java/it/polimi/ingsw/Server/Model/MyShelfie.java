@@ -340,7 +340,10 @@ public class MyShelfie /*implements Runnable*/ {
     }
 
     public void finishTurn(){
-        lock.notifyAll();
+        synchronized (lock){
+            System.out.println("finito, chiamo l'altro");
+            lock.notify();
+        }
     }
 
 }
