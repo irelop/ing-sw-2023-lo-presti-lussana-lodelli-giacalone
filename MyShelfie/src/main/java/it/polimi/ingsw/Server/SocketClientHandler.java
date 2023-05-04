@@ -76,10 +76,14 @@ public class SocketClientHandler extends ClientHandler{
     @Override
     public void sendMessageToClient(S2CMessage message) {
         try {
-            outputStream.writeObject((Object) message);
-            outputStream.flush();
+            //outputStream.flush();
+
+            //System.out.println(message);
+            outputStream.writeObject(message);
+
         }catch (IOException ex){
             System.out.println("Failed to send the message to client" + client.getInetAddress());
+            ex.printStackTrace();
         }
     }
 }

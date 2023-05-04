@@ -16,6 +16,14 @@ public class LobbyView extends View implements ObserverView {
     public void run() {
         synchronized (lock){
             showPlayerTable();
+            /*
+            try {
+                lock.wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            */
+
         }
 
 

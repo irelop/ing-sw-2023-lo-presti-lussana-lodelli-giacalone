@@ -7,14 +7,16 @@ package it.polimi.ingsw.Server.Model;
  */
 
 import it.polimi.ingsw.Server.Model.Exceptions.*;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Board {
+public class Board implements Serializable {
     protected final static int MAX_ROWS = 9;
     protected final static int MAX_COLUMNS = 9;
     protected final static int MAX_DRAWABLE_COMMON = 2;
-    private static Board boardInstance;
+    private static Board boardInstance = null;
     private static Bag bag;
     private static Tile[][] boardGrid;
     private static CommonGoalCard[] commonGoalCards;
@@ -68,7 +70,7 @@ public class Board {
         int max_col = MAX_COLUMNS, max_raw = MAX_ROWS;
         for(int i=0; i<MAX_ROWS; i++) {
             for (int j = 0; j < MAX_COLUMNS; j++) {
-                boardGrid[i][j] = null;
+                boardGrid[i][j] = Tile.NOT_VALID;
             }
         }
         boardGrid[MAX_ROWS/2][MAX_COLUMNS/2] = Tile.BLANK;
@@ -177,6 +179,8 @@ public class Board {
     public static Tile[][] getBoardGrid(){
         return boardGrid;
     }
+
+
 
     /**
      * OVERVIEW: this method sets the position of the first tile, the number of tiles that the player wants and

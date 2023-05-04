@@ -8,6 +8,7 @@ package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.ChooseTilesFromBoardView;
+import it.polimi.ingsw.Server.Model.Board;
 import it.polimi.ingsw.Server.Model.CommonGoalCard;
 import it.polimi.ingsw.Server.Model.PersonalGoalCard;
 import it.polimi.ingsw.Server.Model.Tile;
@@ -18,18 +19,18 @@ public class YourTurnMsg extends S2CMessage{
 
     public String nickname;
     public int maxTilesPickable;
-    public Tile[][] boardSnapshot;
+    public Board board;
     public CommonGoalCard[] commonGoalCards;
     public PersonalGoalCard personalGoalCard;
     public int turnNumber;
     public ArrayList<String> playersNames;
 
-    public YourTurnMsg(String nickname, int maxTilesPickable, Tile[][] boardSnapshot,
+    public YourTurnMsg(String nickname, int maxTilesPickable, Board board,
                        CommonGoalCard[] commonGoalCards, PersonalGoalCard personalGoalCard, int turnNumber,
                         ArrayList<String> playersNames){
         this.nickname = nickname;
         this.maxTilesPickable = maxTilesPickable;
-        this.boardSnapshot = boardSnapshot;
+        this.board = board;
         this.personalGoalCard = personalGoalCard;
         this.commonGoalCards = commonGoalCards;
         this.turnNumber = turnNumber;
@@ -39,6 +40,12 @@ public class YourTurnMsg extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
+
         serverHandler.getClient().transitionToView(new ChooseTilesFromBoardView(this));
+        serverHandler.getClient().getCurrentView().notifyView();
+    }
+
+    public String toString(){
+      return "de sono un messaggio eeenoooorme";
     }
 }

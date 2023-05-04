@@ -205,6 +205,9 @@ public class ChooseTilesFromBoardView extends View {
             System.out.print((i+1)+"\t");
         System.out.println();
 
+
+
+
         for(int r=0; r<MAX_ROWS; r++){
             //printing the indexes of the rows
             System.out.print((r+1)+"\t");
@@ -217,7 +220,7 @@ public class ChooseTilesFromBoardView extends View {
                 else
                     code = "\u25CF";
 
-                switch (yourTurnMsg.boardSnapshot[r][c]) {
+                switch (yourTurnMsg.board.getBoardGrid()[r][c]) {
                     case NOT_VALID -> System.out.print(" ");
                     case BLANK -> System.out.print(BLANK.code + code + RESET.code);
                     case PINK -> System.out.print(PINK.code + code + RESET.code);

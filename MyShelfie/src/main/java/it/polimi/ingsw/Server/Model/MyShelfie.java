@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.Client.View.ColorCode.*;
+import static it.polimi.ingsw.Client.View.ColorCode.RESET;
+
 /**
  * CONTROLLER
  *
@@ -172,6 +175,36 @@ public class MyShelfie /*implements Runnable*/ {
         board.initGridParabolic(numberOfPlayers);
         //board.initGrid(numberOfPlayers);
         board.refill();
+
+
+        for(int r=0; r<9; r++){
+            //printing the indexes of the rows
+            System.out.print((r+1)+"\t");
+
+            //printing the tiles
+            for(int c=0; c<9; c++){
+
+
+                   String code = "\u25CF";
+
+                switch (board.getBoardGrid()[r][c]) {
+                    case NOT_VALID -> System.out.print(" ");
+                    case BLANK -> System.out.print(BLANK.code + code + RESET.code);
+                    case PINK -> System.out.print(PINK.code + code + RESET.code);
+                    case GREEN -> System.out.print(GREEN.code + code + RESET.code);
+                    case BLUE -> System.out.print(BLUE.code + code + RESET.code);
+                    case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + code + RESET.code);
+                    case WHITE -> System.out.print(WHITE.code + code + RESET.code);
+                    case YELLOW -> System.out.print(YELLOW.code + code + RESET.code);
+                }
+                System.out.print("\t");
+            }
+            System.out.println();
+        }
+
+
+
+
         setChair();
         dealPersonalCards();
         drawCommonGoalCards();
@@ -224,15 +257,17 @@ public class MyShelfie /*implements Runnable*/ {
         ArrayList<String> playersNames = new ArrayList<>();
         for (int i = 0; i < numberOfPlayers; i++) {
             playersNames.add(playersConnected.get(i).getNickname());
+        }
             YourTurnMsg yourTurnMsg;
             yourTurnMsg = new YourTurnMsg(playersConnected.get(currentPlayerIndex).getNickname(), maxTilesPickable,
-                    Board.getBoardGrid(), Board.getCommonGoalCards(),
+                    board, Board.getCommonGoalCards(),
                     playersConnected.get(currentPlayerIndex).getPersonalGoalCard(), turnNumber, playersNames);
-            System.out.println("Ho creato il messaggio");
-            clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
-            System.out.println("Ho inviato il messaggio");
 
-        }
+            clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
+
+
+
+
     }
 
     //funzione chiamata dal process message del messaggio creato alla fine dell'inserimento delle
