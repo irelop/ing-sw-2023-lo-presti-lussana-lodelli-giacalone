@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Client;
 
+import it.polimi.ingsw.Client.View.LobbyView;
 import it.polimi.ingsw.Client.View.LoginView;
 import it.polimi.ingsw.Client.View.View;
 import it.polimi.ingsw.Client.View.WaitingView;
@@ -42,8 +43,35 @@ public class Client implements Runnable{
         runViewStateMachine();
 
         serverHandler.stop();
+    }/*
+    private void runViewStateMachine(){
+        boolean stop = false;
+        View wait = new WaitingView();
+        boolean isWaiting = false;
+
+        synchronized (this){
+            do {
+                //if(nextView!=null) isWaiting = false;
+                if (nextView != currentView && nextView != null) {
+                    currentView = nextView;
+                    nextView = null;
+
+                    if (currentView == null) {
+                        currentView = new WaitingView();
+                    }
+                    //isWaiting=true;
+
+                    currentView.setOwner(this);
+                    currentView.run();
+
+                }
+            }while(!stop);
+        }
+
     }
 
+
+*/
 
     private void runViewStateMachine(){
         boolean stop;

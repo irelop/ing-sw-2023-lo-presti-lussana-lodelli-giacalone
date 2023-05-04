@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Server.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -8,7 +9,7 @@ import java.util.Arrays;
  *
  * @author Andrea Giacalone
  */
-public class CommonGoalCard {
+public class CommonGoalCard implements Serializable {
     private final StrategyInterface commonStrategy;
     private ArrayList<Integer> availableScore;
     private String patternName;

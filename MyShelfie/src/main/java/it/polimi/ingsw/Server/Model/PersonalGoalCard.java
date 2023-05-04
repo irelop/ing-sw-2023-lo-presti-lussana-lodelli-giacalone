@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Server.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -8,7 +9,7 @@ import java.util.Arrays;
  *
  * @author Riccardo Lodelli
  */
-public class PersonalGoalCard {
+public class PersonalGoalCard implements Serializable {
 
     private final static int maxr = 6;
     private final static int maxc = 5;

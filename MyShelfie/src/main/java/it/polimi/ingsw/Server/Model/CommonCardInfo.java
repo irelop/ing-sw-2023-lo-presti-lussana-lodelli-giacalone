@@ -1,6 +1,8 @@
 package it.polimi.ingsw.Server.Model;
 
-public class CommonCardInfo {
+import java.io.Serializable;
+
+public class CommonCardInfo implements Serializable {
     private String name;
     private Tile[][] schema;
     private int times;
