@@ -1,5 +1,11 @@
 package it.polimi.ingsw.Server.Messages;
 
+/**
+ * Message that allow the player to see the ChooseTilesFromBoardView.
+ *
+ * @author Irene Lo Presti
+ */
+
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.ChooseTilesFromBoardView;
 import it.polimi.ingsw.Server.Model.CommonGoalCard;
