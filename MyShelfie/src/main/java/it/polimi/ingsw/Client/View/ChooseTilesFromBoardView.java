@@ -5,6 +5,7 @@ package it.polimi.ingsw.Client.View;
  * @author Irene Lo Presti
  */
 
+import it.polimi.ingsw.Server.Messages.InitialPositionAnswer;
 import it.polimi.ingsw.Server.Messages.PlayerChoiceMsg;
 import it.polimi.ingsw.Server.Messages.InitialPositionMsg;
 import it.polimi.ingsw.Server.Messages.YourTurnMsg;
@@ -23,6 +24,8 @@ public class ChooseTilesFromBoardView extends View {
     public int MAX_ROWS = 9;
 
     private final YourTurnMsg yourTurnMsg;
+
+    private InitialPositionAnswer initialPositionAnswer;
 
     /**
      * Constructor method
@@ -43,9 +46,9 @@ public class ChooseTilesFromBoardView extends View {
         //If it's the first turn, it prints the order in which the players will play
         if(yourTurnMsg.turnNumber==0)
             printOrderOfPlayers();
-
-        printBoard(-1, -1);
         printGoalCardsInfo();
+        //printBoard(-1, -1);
+
 
         System.out.println(yourTurnMsg.nickname + ", it's your turn to pick the tiles from the board!");
         System.out.println(yourTurnMsg.nickname + ", choose the position of the first tile, remember that " +
@@ -85,8 +88,8 @@ public class ChooseTilesFromBoardView extends View {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                System.out.println(initialPositionMsg.initialPositionAnswer.answer);
-                if (initialPositionMsg.initialPositionAnswer.valid)
+                System.out.println(this.initialPositionAnswer);
+                if (this.initialPositionAnswer.valid)
                     goOn = true;
 
             } while (!goOn);
@@ -139,6 +142,10 @@ public class ChooseTilesFromBoardView extends View {
 
     }
 
+    public void setInitialPositionAnswer(InitialPositionAnswer answer){
+        this.initialPositionAnswer = answer;
+    }
+
 
     /**
      * this method prints the order of the players
@@ -155,6 +162,9 @@ public class ChooseTilesFromBoardView extends View {
      * this method prints the common cards and the personal card
      */
     public void printGoalCardsInfo(){
+        System.out.println("Personal goal card:");
+        printCard(yourTurnMsg.personalGoalCard.getPattern());
+
         System.out.println("Common goal cards:");
         for(int i=0; i<yourTurnMsg.commonGoalCards.length; i++){
             printCard(yourTurnMsg.commonGoalCards[i].getCardInfo().getSchema());
@@ -162,8 +172,7 @@ public class ChooseTilesFromBoardView extends View {
             System.out.println(yourTurnMsg.commonGoalCards[i].getCardInfo().getDescription());
         }
 
-        System.out.println("Personal goal card:");
-        printCard(yourTurnMsg.personalGoalCard.getPattern());
+
     }
 
     /**
