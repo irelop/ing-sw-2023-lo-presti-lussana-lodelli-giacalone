@@ -510,7 +510,6 @@ public class Board {
      * OVERVIEW: a first draft of the initialization of the board. In this method we use some variables
      * that move in the board: ns (north - south), sn (south-north), w (west), e (est), we (west-est),
      * ew (est-west).
-     * @deprecated
      * @param numPlayers: number of player playing
      * @author Irene Lo Presti
      */
@@ -522,39 +521,15 @@ public class Board {
             }
         }
 
-        int ns, e, w, sn, we;
-
-        ns = 0;
-        e = (MAX_COLUMNS-1)/2;
-        w = (MAX_COLUMNS-1)/2;
-        sn = MAX_ROWS-1;
-
-
-        while(ns<=4){
-            we = w;
-            while(we<=e){
-                boardGrid[ns][we] = Tile.BLANK;
-                boardGrid[sn][we] = Tile.BLANK;
-                we++;
-            }
-            w--;
-            e++;
-            ns++;
-            sn--;
-        }
-
-        switch (numPlayers){
-            case 2:init2Players();
-
-            case 3:init3Players();
-
-            case 4:init4Players();
+        switch (numPlayers) {
+            case 2 -> init2Players();
+            case 3 -> init3Players();
+            case 4 -> init4Players();
         }
     }
 
     /**
      * OVERVIEW: initialization of the board for 2 players
-     * @deprecated
      * @author Irene Lo Presti
      */
     private void init2Players(){
@@ -563,13 +538,13 @@ public class Board {
         w = (MAX_COLUMNS-1)/2 - 1;
         e = (MAX_COLUMNS-1)/2 + 1;
         sn = MAX_ROWS-2;
-        while(ns<=4){
+        while(ns<=(MAX_ROWS-1)/2){
             we = w;
             ew = e;
             while(we<=e){
                 if(!(ns==1 && we==5) && !(ns==2 && (we==2 || we==6)) && !(ns==3 && we==1) && !(ns==4 && (we==8 || we==0))){
                     boardGrid[ns][we] = Tile.BLANK;
-                    if(sn!=4)
+                    if(sn!=(MAX_ROWS-1)/2)
                         boardGrid[sn][ew] = Tile.BLANK;
                 }
                 we++;
@@ -599,12 +574,12 @@ public class Board {
         boardGrid[sn][e] = Tile.BLANK;
 
         ns++;
-        sn++;
+        sn--;
 
-        while (ns <= 4) {
+        while (ns <= (MAX_ROWS-1)/2) {
             we = w;
             ew = e;
-            if (ns == 3) {
+            if (ns == (MAX_ROWS-1)/2-1) {
                 boardGrid[ns][e + 1] = Tile.BLANK;
                 boardGrid[sn][w - 1] = Tile.BLANK;
             }
@@ -612,7 +587,7 @@ public class Board {
                 if (!(ns == 1 && we == 5) && !(ns == 3 && we == 1) && !(ns == 4 && (we == 8 || we == 0))) {
                     boardGrid[ns][we] = Tile.BLANK;
 
-                    if (sn != 4) {
+                    if (sn != (MAX_ROWS-1)/2) {
                         boardGrid[sn][ew] = Tile.BLANK;
                     }
                 }
@@ -633,21 +608,21 @@ public class Board {
      */
     private void init4Players() {
         int ns, e, w, sn, we, ew;
-        ns = 1;
-        w = (MAX_COLUMNS-1)/2 - 1;
-        e = (MAX_COLUMNS-1)/2 + 1;
-        sn = MAX_ROWS-2;
+        ns = 0;
+        w = (MAX_COLUMNS-1)/2-1;
+        e = (MAX_COLUMNS-1)/2+1;
+        sn = MAX_ROWS-1;
 
         boardGrid[ns][w] = Tile.BLANK;
         boardGrid[sn][e] = Tile.BLANK;
 
-        ns++;
-        sn++;
+        w++;
+        e--;
 
-        while (ns <= 4) {
+        while (ns <= (MAX_ROWS-1)/2) {
             we = w;
             ew = e;
-            if (ns == 3) {
+            if (ns == (MAX_ROWS-1)/2-1) {
                 boardGrid[ns][e + 1] = Tile.BLANK;
                 boardGrid[sn][w - 1] = Tile.BLANK;
             }

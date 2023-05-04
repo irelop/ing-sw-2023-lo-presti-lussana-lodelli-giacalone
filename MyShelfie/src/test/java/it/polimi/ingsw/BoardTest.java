@@ -14,6 +14,9 @@ import org.junit.jupiter.api.function.Executable;
 
 
 import java.util.ArrayList;
+
+import static it.polimi.ingsw.Client.View.ColorCode.*;
+import static it.polimi.ingsw.Client.View.ColorCode.RESET;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTest {
@@ -47,6 +50,7 @@ public class BoardTest {
         }
         //set the grid in board with constructor from file
         board.initFromMatrix(grid);
+
     }
 
     @AfterEach
@@ -93,8 +97,8 @@ public class BoardTest {
     }
 
     @Test
-    void getInitialRow_incorrectInputCorrectOutput() throws OutOfBoardException {
-        assertThrows(OutOfBoardException.class, (Executable) ()->board.getInitialRow(13));
+    void getInitialRow_incorrectInputCorrectOutput() {
+        assertThrows(OutOfBoardException.class, ()->board.getInitialRow(13));
     }
 
     @Test
@@ -104,22 +108,22 @@ public class BoardTest {
 
     @Test
     void getInitialColumn_incorrectInputCorrectOutput(){
-        assertThrows(OutOfBoardException.class, (Executable) ()->board.getInitialColumn(13));
+        assertThrows(OutOfBoardException.class, ()->board.getInitialColumn(13));
     }
     
     @Test
     void checkPosition_cellNotValid(){
-        assertThrows(InvalidCellException.class, (Executable) ()->board.checkPosition(0,0));
+        assertThrows(InvalidCellException.class, ()->board.checkPosition(0,0));
     }
 
     @Test
     void checkPosition_cellBlank(){
-        assertThrows(EmptyCellException.class, (Executable) ()->board.checkPosition(3,6));
+        assertThrows(EmptyCellException.class, ()->board.checkPosition(3,6));
     }
 
     @Test
     void checkPosition_neighborFull(){
-        assertThrows(InvalidPositionException.class, (Executable) ()->board.checkPosition(4,4));
+        assertThrows(InvalidPositionException.class, ()->board.checkPosition(4,4));
     }
 
     @Test
@@ -128,7 +132,7 @@ public class BoardTest {
     }
     @Test
     void getDirection_incorrectInputCorrectOutput(){
-        assertThrows(InvalidDirectionException.class, (Executable) ()->board.getDirection('d'));
+        assertThrows(InvalidDirectionException.class, ()->board.getDirection('d'));
     }
 
     @Test
@@ -138,7 +142,7 @@ public class BoardTest {
 
     @Test
     void getNumberOfTiles_incorrectInputCorrectOutput_tooManyTiles(){
-        assertThrows(InvalidNumberOfTilesException.class, (Executable) ()->board.getNumberOfTiles(3,5));
+        assertThrows(InvalidNumberOfTilesException.class, ()->board.getNumberOfTiles(3,5));
     }
 
     @Test
@@ -146,7 +150,7 @@ public class BoardTest {
         //we add a tile only to control this exception
         grid[0][4] = Tile.YELLOW;
         board.initFromMatrix(grid);
-        assertThrows(OutOfBoardException.class, (Executable) ()->board.checkDirectionAndNumberOfTiles('n', 3, 1, 4,3));
+        assertThrows(OutOfBoardException.class, ()->board.checkDirectionAndNumberOfTiles('n', 3, 1, 4,3));
     }
 
     @Test
@@ -198,4 +202,84 @@ public class BoardTest {
             for(int j=0; j<9; j++)
                 Assertions.assertNotEquals(Board.getBoardGrid()[i][j], Tile.BLANK);
     }
+
+    @Test
+    public void initGrid2Players_visualTest(){
+        Board boardVisual = new Board();
+        boardVisual.initGrid(2);
+
+        String code = "\u25CF";
+        for(int r=0; r<9; r++){
+            for(int c=0; c<9; c++){
+
+                switch (boardVisual.getBoardGrid()[r][c]) {
+                    case NOT_VALID -> System.out.print(" ");
+                    case BLANK -> System.out.print(BLANK.code + code + RESET.code);
+                    case PINK -> System.out.print(PINK.code + code + RESET.code);
+                    case GREEN -> System.out.print(GREEN.code + code + RESET.code);
+                    case BLUE -> System.out.print(BLUE.code + code + RESET.code);
+                    case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + code + RESET.code);
+                    case WHITE -> System.out.print(WHITE.code + code + RESET.code);
+                    case YELLOW -> System.out.print(YELLOW.code + code + RESET.code);
+                }
+                System.out.print("\t");
+            }
+            System.out.println();
+        }
+
+    }
+
+    @Test
+    public void initGrid3Players_visualTest(){
+        Board boardVisual = new Board();
+        boardVisual.initGrid(3);
+
+        String code = "\u25CF";
+        for(int r=0; r<9; r++){
+            for(int c=0; c<9; c++){
+
+                switch (boardVisual.getBoardGrid()[r][c]) {
+                    case NOT_VALID -> System.out.print(" ");
+                    case BLANK -> System.out.print(BLANK.code + code + RESET.code);
+                    case PINK -> System.out.print(PINK.code + code + RESET.code);
+                    case GREEN -> System.out.print(GREEN.code + code + RESET.code);
+                    case BLUE -> System.out.print(BLUE.code + code + RESET.code);
+                    case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + code + RESET.code);
+                    case WHITE -> System.out.print(WHITE.code + code + RESET.code);
+                    case YELLOW -> System.out.print(YELLOW.code + code + RESET.code);
+                }
+                System.out.print("\t");
+            }
+            System.out.println();
+        }
+
+    }
+
+    @Test
+    public void initGrid4Players_visualTest(){
+        Board boardVisual = new Board();
+        boardVisual.initGrid(4);
+
+        String code = "\u25CF";
+        for(int r=0; r<9; r++){
+            for(int c=0; c<9; c++){
+
+                switch (boardVisual.getBoardGrid()[r][c]) {
+                    case NOT_VALID -> System.out.print(" ");
+                    case BLANK -> System.out.print(BLANK.code + code + RESET.code);
+                    case PINK -> System.out.print(PINK.code + code + RESET.code);
+                    case GREEN -> System.out.print(GREEN.code + code + RESET.code);
+                    case BLUE -> System.out.print(BLUE.code + code + RESET.code);
+                    case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + code + RESET.code);
+                    case WHITE -> System.out.print(WHITE.code + code + RESET.code);
+                    case YELLOW -> System.out.print(YELLOW.code + code + RESET.code);
+                }
+                System.out.print("\t");
+            }
+            System.out.println();
+        }
+
+    }
+
+
 }
