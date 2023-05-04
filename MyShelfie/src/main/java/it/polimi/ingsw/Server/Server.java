@@ -34,6 +34,7 @@ public class Server {
      */
     public static void main(String[] args) {
         Server server = new Server(serverPort);
+        System.out.println("Server is open: listening for new clients...");
         //qui metteremo due scelte a seconda che venga selezionata la tecnologia di comunicazione RMI o socket
         manageServerSocket();
         //else manageServerRMI();

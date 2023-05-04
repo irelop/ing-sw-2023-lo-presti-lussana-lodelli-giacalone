@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
  * @author Matteo Lussana, Irene Lo Presti
  */
 public class MyShelfie /*implements Runnable*/ {
+    
     private final ArrayList<Player> playersConnected;
     private boolean isOver;
     private final PersonalGoalDeck personalDeck;
@@ -61,7 +62,7 @@ public class MyShelfie /*implements Runnable*/ {
      * @return true if nickname is valid, false otherwise
      */
     public boolean checkNickname(String insertedString) {
-        return(!(this.playersConnected.contains(insertedString)));
+        return(!(new ArrayList<String>(this.playersConnected.stream().map(x->x.getNickname()).collect(Collectors.toList()))).contains(insertedString));
     }
 
     /**
@@ -79,17 +80,18 @@ public class MyShelfie /*implements Runnable*/ {
      * @param clientHandler
      */
     public void addPlayer(String playerNickname, ClientHandler clientHandler) {
-
-        if (playersConnected.size() < numberOfPlayers) {
+        if (playersConnected.size() <= numberOfPlayers || numberOfPlayers==-1) {
             Player newPlayer = new Player(playerNickname);
 
             //aggiungo all'arraylist
+            System.out.println("aggiungo il player...");
             playersConnected.add(newPlayer);
             clientHandlers.add(clientHandler);
-        }
-        if (playersConnected.size() == numberOfPlayers) {
-            this.isStarted = true;
-            manageTurn();
+
+            if (playersConnected.size() == numberOfPlayers) {
+                this.isStarted = true;
+                //manageTurn();
+            }
         }
     }
         public boolean isStarted(){
@@ -103,11 +105,12 @@ public class MyShelfie /*implements Runnable*/ {
     //edit ANDREA: ho gestito lato view i casi in cui l'input non sia valido con
     // annessa stampa all'utente quindi direi ok.
     public void setNumberOfPlayers(int numberOfPlayers) {
-        if(numberOfPlayers == -1){
+
             this.numberOfPlayers = numberOfPlayers;
-            board.initGridParabolic(numberOfPlayers);
-        }
+            //board.initGrid(numberOfPlayers);
+
     }
+    public int getNumberOfPlayers(){return this.numberOfPlayers;}
 
 
     public void updateLobby(){
@@ -163,6 +166,9 @@ public class MyShelfie /*implements Runnable*/ {
      *       or if that is the last lap
      */
     public void manageTurn(){
+        System.out.println("sono in manage turn");
+        //board.initGridParabolic(numberOfPlayers);
+        board.initGrid(numberOfPlayers);
         board.refill();
         setChair();
         dealPersonalCards();
