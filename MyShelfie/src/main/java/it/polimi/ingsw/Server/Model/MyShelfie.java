@@ -172,8 +172,8 @@ public class MyShelfie /*implements Runnable*/ {
      */
     public void manageTurn(){
         System.out.println("sono in manage turn");
-        board.initGridParabolic(numberOfPlayers);
-        //board.initGrid(numberOfPlayers);
+        //board.initGridParabolic(numberOfPlayers);
+        board.initGrid(numberOfPlayers);
         board.refill();
 
 

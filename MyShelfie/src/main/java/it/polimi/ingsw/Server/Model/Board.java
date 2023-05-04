@@ -18,7 +18,7 @@ public class Board implements Serializable {
     protected final static int MAX_DRAWABLE_COMMON = 2;
     private static Board boardInstance = null;
     private static Bag bag;
-    private static Tile[][] boardGrid;
+    private Tile[][] boardGrid;
     private static CommonGoalCard[] commonGoalCards;
 
     public Board(){
@@ -35,9 +35,11 @@ public class Board implements Serializable {
     public static Board getBoardInstance(){
         if(boardInstance == null){
             boardInstance = new Board();
-            /*boardGrid = new Tile[MAX_ROWS][MAX_COLUMNS];
+            /*
+            boardGrid = new Tile[MAX_ROWS][MAX_COLUMNS];
             bag = new Bag();
-            commonGoalCards = new CommonGoalCard[MAX_DRAWABLE_COMMON];*/
+            commonGoalCards = new CommonGoalCard[MAX_DRAWABLE_COMMON];
+            */
         }
 
         return boardInstance;
@@ -52,7 +54,7 @@ public class Board implements Serializable {
     public void initFromMatrix(Tile[][] matrix){
         for(int i=0; i<matrix.length; i++)
             for(int j=0; j<matrix[0].length; j++){
-                this.boardGrid[i][j] = matrix[i][j];
+                boardGrid[i][j] = matrix[i][j];
             }
     }
 
@@ -176,7 +178,7 @@ public class Board implements Serializable {
      * @return boardGrid (matrix of Tile)
      * @author Irene Lo Presti
      */
-    public static Tile[][] getBoardGrid(){
+    public Tile[][] getBoardGrid(){
         return boardGrid;
     }
 
