@@ -47,7 +47,7 @@ public class ChooseTilesFromBoardView extends View {
         if(yourTurnMsg.turnNumber==0)
             printOrderOfPlayers();
         printGoalCardsInfo();
-        //printBoard(-1, -1);
+        printBoard(-1, -1);
 
 
         System.out.println(yourTurnMsg.nickname + ", it's your turn to pick the tiles from the board!");

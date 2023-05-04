@@ -108,7 +108,7 @@ XPatternStrategy
 1
 Description: 5 tiles of the same type forming an X.
 -
-XPatternStrategy
+PPatternStrategy
 {BLANK, BLANK, BLANK, BLANK, BLANK}
 {WHITE, BLANK, BLANK, BLANK, BLANK}
 {WHITE, WHITE, BLANK, BLANK, BLANK}

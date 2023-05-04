@@ -117,14 +117,12 @@ public class Board implements Serializable {
     private void init3PlayesParabolic(){
         int x;
         for(int i=3; i<MAX_ROWS-1; i++){
-            if(i!=3){
                 x = (int) (0.03 + Math.pow(1.256,i));
                 int j=0;
                 while(j<x-1){
                     boardGrid[i-((MAX_ROWS/2)-1)][((MAX_COLUMNS/2)-1)-j] = Tile.BLANK;
                     j++;
                 }
-            }
         }
     }
 
@@ -135,14 +133,12 @@ public class Board implements Serializable {
     private void init4PlayesParabolic(){
         int x;
         for(int i=3; i<MAX_ROWS-1; i++){
-            if(i!=3){
                 x = (int) Math.pow(1.27,i);
                 int j=0;
                 while(j<x-1){
                     boardGrid[i-((MAX_ROWS/2)-1)][((MAX_COLUMNS/2)-1)-j] = Tile.BLANK;
                     j++;
                 }
-            }
         }
     }
 
