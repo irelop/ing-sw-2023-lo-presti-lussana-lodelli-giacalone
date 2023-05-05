@@ -38,7 +38,7 @@ public class PlayerChoiceMsg extends C2SMessage{
         try{
             clientHandler.getController().getBoard().checkDirectionAndNumberOfTiles(direction, numberOfTiles, initialRow, initialColumn, maxTilesPickable);
             playerChoiceAnswer = new PlayerChoiceAnswer("",true);
-            clientHandler.getController().getPlayerChoice(initialRow, initialColumn, direction, numberOfTiles);
+            clientHandler.getController().getPlayerChoice(initialRow, initialColumn, direction, numberOfTiles+1);
 
         }catch(OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException
                 | InvalidNumberOfTilesException | InvalidDirectionException e){

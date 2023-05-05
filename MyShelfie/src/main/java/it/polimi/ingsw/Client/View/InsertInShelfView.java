@@ -51,6 +51,10 @@ public class InsertInShelfView extends View {
             printShelf(myShelf);
             printGoalCardsInfo();
 
+            System.out.println("You picked these tiles:");
+            for(int i=0; i<chosenTiles.size(); i++)
+                System.out.println((i+1)+ ") " + chosenTiles.get(i));
+
             do {
 
                 // client side exception management
@@ -160,7 +164,7 @@ public class InsertInShelfView extends View {
      */
     public int chooseColumn() throws InvalidShelfColumnException {
         int columnChosen;
-        System.out.println("Insert the index of the column you want to fill with tiles:");
+        System.out.print("Please insert the index of the column you want to fill with tiles: ");
         Scanner scanner = new Scanner(System.in);
         columnChosen = scanner.nextInt() - 1; // user's indexes start from one
         if (columnChosen < 0 || columnChosen >= 5) throw new InvalidShelfColumnException();
@@ -173,7 +177,7 @@ public class InsertInShelfView extends View {
      * @return an array of indexes which indicates the order wanted by the player
      * @throws InvalidTileIndexInLittleHandException: thrown to avoid wrong order indexes
      */
-    public int[] askOrder(ArrayList<Tile> chosenTiles) throws InvalidTileIndexInLittleHandException {
+    private int[] askOrder(ArrayList<Tile> chosenTiles) throws InvalidTileIndexInLittleHandException {
 
         int tilesNumber = chosenTiles.size();
         int[] choices = new int[tilesNumber];
@@ -200,12 +204,14 @@ public class InsertInShelfView extends View {
         }
 
         // 2 or 3 tiles of different colors to insert -> user must choose the order
+        /*
         System.out.println("You picked this tiles:");
         for(int i=0; i<tilesNumber; i++)
             System.out.println((i+1)+ ") " + chosenTiles.get(i));
-        System.out.println("You can reorder them before inserting them in your shelf: \n" +
-                "Please enter indexes in the order you want to insert tiles " +
-                "(remember: first index will be the lowest in the shelf)");
+         */
+        System.out.print("You can reorder tiles before inserting them in your shelf: \n" +
+                "Please enter indexes in the order you want to insert tiles, divided by a space" +
+                "\n(remember: first index will be the lowest in the shelf) ");
         getTiles(choices);
 
         return choices;

@@ -68,7 +68,7 @@ public class Shelf {
             throw new NotEnoughSpaceInChosenColumnException();
         for(int r=5; r>=0; r--){
             if(grid[r][columnIndex]== Tile.BLANK){
-                for(int i=0; i<littleHand.size(); i++){ grid[r+i][columnIndex] = littleHand.get(i);}
+                for(int i=0; i<littleHand.size(); i++){ grid[r-i][columnIndex] = littleHand.get(i);}
                 break;
             }
         }

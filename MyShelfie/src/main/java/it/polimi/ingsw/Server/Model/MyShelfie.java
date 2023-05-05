@@ -252,7 +252,7 @@ public class MyShelfie /*implements Runnable*/ {
         int personalPointsEarned = personalPointsEarned();
         if(personalPointsEarned != 0) {
             isPersonalGoalAchived = true;
-            playersConnected.get(currentPlayerIndex).myScore.addScore(personalPointsEarned());
+            playersConnected.get(currentPlayerIndex).myScore.addScore(personalPointsEarned);
         }
 
         if(!playersConnected.get(currentPlayerIndex).isCommonGoalAchieved(0)) {
@@ -296,12 +296,16 @@ public class MyShelfie /*implements Runnable*/ {
      * @param numberOfTiles: user choice tiles number
      */
     public void getPlayerChoice(int initialRow, int initialColumn, char direction, int numberOfTiles){
-        board.pickTilesFromBoard(initialRow, initialColumn, numberOfTiles, direction, playersConnected.get(currentPlayerIndex));
+
+        Player currentPlayer = playersConnected.get(currentPlayerIndex);
+
+        board.pickTilesFromBoard(initialRow, initialColumn, numberOfTiles, direction, currentPlayer);
+
         MyShelfMsg myShelfMsg = new MyShelfMsg(
-                playersConnected.get(currentPlayerIndex).myShelfie.getGrid(),
-                playersConnected.get(currentPlayerIndex).getLittleHand(),
+                currentPlayer.myShelfie.getGrid(),
+                currentPlayer.getLittleHand(),
                 Board.getCommonGoalCards(),
-                playersConnected.get(currentPlayerIndex).getPersonalGoalCard()
+                currentPlayer.getPersonalGoalCard()
                 );
         clientHandlers.get(currentPlayerIndex).sendMessageToClient(myShelfMsg);
     }
@@ -315,8 +319,29 @@ public class MyShelfie /*implements Runnable*/ {
      * @throws NotEnoughSpaceInChosenColumnException: thrown if chosen column is full of tiles
      */
     public void insertingTiles(int columnIdx,int[] orderIdxs) throws InvalidTileIndexInLittleHandException, NotEnoughSpaceInChosenColumnException {
-        playersConnected.get(currentPlayerIndex).getTiles(orderIdxs);
-        playersConnected.get(currentPlayerIndex).myShelfie.insert(columnIdx,playersConnected.get(currentPlayerIndex).getLittleHand());
+
+        Player currentPlayer = playersConnected.get(currentPlayerIndex);
+
+        /*
+        System.out.println(currentPlayer.getLittleHand());
+        for (int orderIdx : orderIdxs) {
+            System.out.print(orderIdx + " ");
+        }
+        System.out.println();
+        */
+
+        currentPlayer.getTiles(orderIdxs);
+        currentPlayer.orderTiles(currentPlayer.getLittleHand(),orderIdxs);
+        currentPlayer.myShelfie.insert(columnIdx,playersConnected.get(currentPlayerIndex).getLittleHand());
+
+        /*
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 5; j++) {
+                System.out.print(currentPlayer.myShelfie.getGrid()[i][j] + "\t");
+            }
+            System.out.println();
+        }
+        */
     }
 
     /**

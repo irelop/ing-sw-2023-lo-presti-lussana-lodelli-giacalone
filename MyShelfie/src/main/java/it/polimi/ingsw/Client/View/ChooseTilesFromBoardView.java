@@ -48,10 +48,10 @@ public class ChooseTilesFromBoardView extends View {
 
 
         System.out.println(yourTurnMsg.nickname + ", it's your turn to pick the tiles from the board!");
-        System.out.println(yourTurnMsg.nickname + ", choose the position of the first tile, remember that " +
-                "after you choose it, you have to select the number of tiles you want and" +
+        System.out.println(yourTurnMsg.nickname + ", choose the position of the first tile, remember that" +
+                " after you choose it, you have to select the number of tiles you want and" +
                 " the direction (north, south, east, west) in which" +
-                "you want to choose these other tiles");
+                " you want to choose these other tiles");
         System.out.println("Remember also that the board is 9x9 and that you have to choose a cell" +
                 "with a tile (so it has to be valid and not empty) with a free side");
 
@@ -287,7 +287,7 @@ public class ChooseTilesFromBoardView extends View {
         System.out.println(yourTurnMsg.nickname + ", now it's time to" +
                 " insert the number of tiles that you " +
                 "want to chose (other than the one that you have already chose).");
-        System.out.println("Remember: you can chose between 0 (if you don't want to pick others tiles)" +
+        System.out.println("Remember: you can chose between 0 (if you don't want to pick others tiles) " +
                 "and "+(yourTurnMsg.maxTilesPickable-1)+".");
         System.out.print("Please insert the number of tiles: ");
 

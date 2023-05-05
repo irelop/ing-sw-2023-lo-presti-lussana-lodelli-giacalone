@@ -11,7 +11,6 @@ package it.polimi.ingsw.Server.Model;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Player {
     private final String nickname;
@@ -133,6 +132,7 @@ public class Player {
      */
     public void orderTiles(ArrayList<Tile> chosenTiles, int[] choices) {
         // if the player chooses only one tile, there is no need to order.
+/*
         if(chosenTiles.size() == 1){
             this.littleHand.add(chosenTiles.get(0));
             return;
@@ -146,6 +146,19 @@ public class Player {
                 }
             }
         }
+*/
+        if (chosenTiles.size() == 1)
+            return;
+        //System.out.println("Before order " + littleHand);
+        for (int idx : choices) {
+            littleHand.add(chosenTiles.get(idx));
+        }
+        //System.out.println("Before removing " + littleHand);
+        for (int i : choices) {
+            // remove head #choises times
+            littleHand.remove(0);
+        }
+        //System.out.println("After order " + littleHand);
     }
 
     /**
