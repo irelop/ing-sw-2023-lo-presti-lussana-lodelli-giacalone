@@ -50,7 +50,8 @@ public class LoginView extends View implements ObserverView {
                 }
                 showNicknameAnswer(answerToShow);
             }
-            if(!isFull) getOwner().getServerHandler().sendMessageToServer(new LobbyUpdateRequest());
+            if(answerToShow.getNicknameStatus()== LoginNicknameAnswer.Status.ACCEPTED || answerToShow.getNicknameStatus()== LoginNicknameAnswer.Status.FIRST_ACCEPTED)
+                getOwner().getServerHandler().sendMessageToServer(new LobbyUpdateRequest());
         }
 
     }

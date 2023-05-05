@@ -21,32 +21,6 @@ public class LoginNicknameRequest extends C2SMessage{
     public void processMessage(ClientHandler clientHandler) {
 
         MyShelfie controller = clientHandler.getController();
-        S2CMessage loginNicknameAnswer;
-
-        if (controller.isStarted()==true) {
-            loginNicknameAnswer = new LoginNicknameAnswer(this, LoginNicknameAnswer.Status.FULL_LOBBY);
-            clientHandler.sendMessageToClient(loginNicknameAnswer);
-            return;
-        }
-
-
-
-
-        if (controller.checkNickname(insertedNickname) == true){
-            controller.addPlayer(insertedNickname,clientHandler);
-            if(controller.isFirstConnected(insertedNickname) == true ){
-                loginNicknameAnswer = new LoginNicknameAnswer(this, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
-
-
-            }else{
-                loginNicknameAnswer = new LoginNicknameAnswer(this, LoginNicknameAnswer.Status.ACCEPTED);
-            }
-
-
-        }else {
-            loginNicknameAnswer = new LoginNicknameAnswer(this, LoginNicknameAnswer.Status.INVALID);
-        }
-
-        clientHandler.sendMessageToClient(loginNicknameAnswer);
+        controller.manageLogin(clientHandler,this);
     }
 }

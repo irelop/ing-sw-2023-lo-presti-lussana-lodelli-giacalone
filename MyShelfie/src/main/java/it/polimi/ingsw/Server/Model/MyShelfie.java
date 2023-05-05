@@ -80,7 +80,7 @@ public class MyShelfie /*implements Runnable*/ {
      * @return true if the new player is the first one
      */
     public boolean isFirstConnected(String insertedString){
-        return (this.playersConnected.size() == 1);
+        return (this.playersConnected.size() == 0);
     }
 
     /**
@@ -113,11 +113,38 @@ public class MyShelfie /*implements Runnable*/ {
 
     public void setNumberOfPlayers(int numberOfPlayers) {
             this.numberOfPlayers = numberOfPlayers;
-            if(this.numberOfPlayers == playersConnected.size())
-                manageTurn();
     }
-    public int getNumberOfPlayers() {
-        return this.numberOfPlayers;
+
+    public void manageLogin(ClientHandler clientHandler,LoginNicknameRequest loginNicknameRequest){
+        S2CMessage loginNicknameAnswer;
+
+        if (isStarted()==true) {
+            loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FULL_LOBBY);
+            clientHandler.sendMessageToClient(loginNicknameAnswer);
+            return;
+        }
+
+
+        if (checkNickname(loginNicknameRequest.getInsertedNickname()) == true){
+
+            if(isFirstConnected(loginNicknameRequest.getInsertedNickname()) == true ){
+                loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
+                clientHandler.sendMessageToClient(loginNicknameAnswer);
+                addPlayer(loginNicknameRequest.getInsertedNickname(),clientHandler);
+
+
+            }else{
+                loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.ACCEPTED);
+                clientHandler.sendMessageToClient(loginNicknameAnswer);
+                addPlayer(loginNicknameRequest.getInsertedNickname(),clientHandler);
+            }
+
+
+        }else {
+            loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.INVALID);
+            clientHandler.sendMessageToClient(loginNicknameAnswer);
+        }
+
     }
 
     public void updateLobby(){
