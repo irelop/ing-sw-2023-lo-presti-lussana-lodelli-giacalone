@@ -47,6 +47,7 @@ public class InsertInShelfView extends View {
 
         synchronized (this) {
 
+            System.out.println("Your shelf:");
             printShelf(myShelf);
             printGoalCardsInfo();
 
@@ -106,7 +107,7 @@ public class InsertInShelfView extends View {
         String circle = "\u25CF";
 
         // Printing column's indexes...
-        System.out.print("\u2798" + "\t");
+        System.out.print("\u2716" + "\t");
         for (int i = 0; i < myShelf[0].length; i++)
             System.out.print( (i+1) + "\t" );
         System.out.println();
@@ -138,6 +139,7 @@ public class InsertInShelfView extends View {
      * goal card in order to help him to decide the best move to achieve points
      */
     public void printGoalCardsInfo(){
+        System.out.println();
         System.out.println("Common goal cards:");
         for(int i=0; i<msg.commonGoalCards.length; i++){
             printShelf(msg.commonGoalCards[i].getCardInfo().getSchema());

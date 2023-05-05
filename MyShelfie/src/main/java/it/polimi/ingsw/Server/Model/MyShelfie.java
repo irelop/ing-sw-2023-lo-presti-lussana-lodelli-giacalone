@@ -84,16 +84,18 @@ public class MyShelfie /*implements Runnable*/ {
     }
 
     /**
-     * This method creates a player and add him to players list
-     * @param playerNickname
-     * @param clientHandler
+     * This method creates a player and add him to players list.
+     * Starts the game if lobby has enough players
+     * @param playerNickname: player's nickname
+     * @param clientHandler: instance of client handler
      */
     public void addPlayer(String playerNickname, ClientHandler clientHandler) {
+
         if (playersConnected.size() <= numberOfPlayers || numberOfPlayers==-1) {
             Player newPlayer = new Player(playerNickname);
 
             //aggiungo all'arraylist
-            System.out.println("aggiungo il player...");
+            System.out.println("adding player...");
             playersConnected.add(newPlayer);
             clientHandlers.add(clientHandler);
 
@@ -103,25 +105,20 @@ public class MyShelfie /*implements Runnable*/ {
             }
         }
     }
-        public boolean isStarted(){
-            return this.isStarted;
-        }
+
+    public boolean isStarted(){
+        return this.isStarted;
+    }
 
 
-    //la gestiamo con un'eccezione o va bene così????
-    //chiamata da login view SOLO con il primo giocatore connesso
-
-    //edit ANDREA: ho gestito lato view i casi in cui l'input non sia valido con
-    // annessa stampa all'utente quindi direi ok.
     public void setNumberOfPlayers(int numberOfPlayers) {
-
             this.numberOfPlayers = numberOfPlayers;
             if(this.numberOfPlayers == playersConnected.size())
                 manageTurn();
-
     }
-    public int getNumberOfPlayers(){return this.numberOfPlayers;}
-
+    public int getNumberOfPlayers() {
+        return this.numberOfPlayers;
+    }
 
     public void updateLobby(){
         ArrayList<String> lobbyPlayers = new ArrayList<>(playersConnected.stream().map(x->x.getNickname()).collect(Collectors.toList()));
@@ -142,13 +139,12 @@ public class MyShelfie /*implements Runnable*/ {
         for(Player player : playersConnected){
             player.setCard(personalDeck.drawPersonal());
         }
-    }//dobbiamo farla vedere al player!
+    }
 
     /**
      * OVERVIEW: this method gives, randomly, a chair to one player
      */
     private void setChair(){
-        //lo diciamo al giocatore che è primo?
         Random random = new Random();
         int index = random.nextInt(playersConnected.size());
         Player firstPlayer = playersConnected.get(index);
@@ -170,14 +166,14 @@ public class MyShelfie /*implements Runnable*/ {
         commonGoalCards[0] = CommonGoalDeck.drawCommon();
         commonGoalCards[1] = CommonGoalDeck.drawCommon();
         board.setCommonGoalCards(commonGoalCards);
-    }//le facciamo vedere ai giocatori????
+    }
 
     /**
      * OVERVIEW: this method manages the game: a player can play his/her turn if the match is not over
      *       or if that is the last lap
      */
     public void manageTurn(){
-        System.out.println("sono in manage turn");
+        //System.out.println("sono in manage turn");
         board.initGridParabolic(numberOfPlayers);
         //board.initGrid(numberOfPlayers);
         board.refill();
@@ -208,7 +204,7 @@ public class MyShelfie /*implements Runnable*/ {
             player.myScore.addScore(spotScore);
         }
 
-        ArrayList<Integer> scoreList = new ArrayList<Integer>();
+        ArrayList<Integer> scoreList = new ArrayList<>();
         for (Player player : playersConnected) {
             scoreList.add(playersConnected.get(currentPlayerIndex).myScore.getScore());
         }
@@ -220,7 +216,7 @@ public class MyShelfie /*implements Runnable*/ {
     }
 
     /**
-     * OVERVIEW: it finds max pickable tiles by the player and creates a message to send to
+     * OVERVIEW: it finds max pickable tiles by the current player and creates a message to send to
      * ChooseTilesFromBoardView
      */
     private void turn(int turnNumber) {
@@ -232,16 +228,16 @@ public class MyShelfie /*implements Runnable*/ {
         for (int i = 0; i < numberOfPlayers; i++) {
             playersNames.add(playersConnected.get(i).getNickname());
         }
-            YourTurnMsg yourTurnMsg;
-            yourTurnMsg = new YourTurnMsg(playersConnected.get(currentPlayerIndex).getNickname(), maxTilesPickable,
-                    board, Board.getCommonGoalCards(),
-                    playersConnected.get(currentPlayerIndex).getPersonalGoalCard(), turnNumber, playersNames);
-
-            clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
-
-
-
-
+        YourTurnMsg yourTurnMsg;
+        yourTurnMsg = new YourTurnMsg(
+                playersConnected.get(currentPlayerIndex).getNickname(),
+                maxTilesPickable,
+                board, Board.getCommonGoalCards(),
+                playersConnected.get(currentPlayerIndex).getPersonalGoalCard(),
+                turnNumber,
+                playersNames
+        );
+        clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
     }
 
     //funzione chiamata dal process message del messaggio creato alla fine dell'inserimento delle
@@ -291,6 +287,14 @@ public class MyShelfie /*implements Runnable*/ {
         clientHandlers.get(currentPlayerIndex).sendMessageToClient(goalAndScoreMsg);
     }
 
+    /**
+     * This method collect chosen tiles from the board and creates a
+     * message which is sent to client in order to show InsertInShelfView
+     * @param initialRow: user choice initial row
+     * @param initialColumn: user choice initial column
+     * @param direction: user choice direction
+     * @param numberOfTiles: user choice tiles number
+     */
     public void getPlayerChoice(int initialRow, int initialColumn, char direction, int numberOfTiles){
         board.pickTilesFromBoard(initialRow, initialColumn, numberOfTiles, direction, playersConnected.get(currentPlayerIndex));
         MyShelfMsg myShelfMsg = new MyShelfMsg(
@@ -302,6 +306,14 @@ public class MyShelfie /*implements Runnable*/ {
         clientHandlers.get(currentPlayerIndex).sendMessageToClient(myShelfMsg);
     }
 
+    /**
+     * This method calls other methods to reorder the tiles that the player hold
+     * and insert them in the shelf's chosen column
+     * @param columnIdx: chosen column index
+     * @param orderIdxs: array of indexes to order tiles
+     * @throws InvalidTileIndexInLittleHandException: thrown to avoid impossible order indexes
+     * @throws NotEnoughSpaceInChosenColumnException: thrown if chosen column is full of tiles
+     */
     public void insertingTiles(int columnIdx,int[] orderIdxs) throws InvalidTileIndexInLittleHandException, NotEnoughSpaceInChosenColumnException {
         playersConnected.get(currentPlayerIndex).getTiles(orderIdxs);
         playersConnected.get(currentPlayerIndex).myShelfie.insert(columnIdx,playersConnected.get(currentPlayerIndex).getLittleHand());
@@ -340,7 +352,10 @@ public class MyShelfie /*implements Runnable*/ {
     }
 
     public void finishTurn(){
-        lock.notifyAll();
+        synchronized (lock){
+            System.out.println("finito, chiamo l'altro");
+            lock.notify();
+        }
     }
 
 }

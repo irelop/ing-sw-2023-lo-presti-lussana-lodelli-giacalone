@@ -37,8 +37,10 @@ public class GoalView extends View{
         goOn = scanner.nextLine();
 
         if(goOn != null){
-            getOwner().transitionToView(nextView);
             FinishTurnMsg finishTurnMsg = new FinishTurnMsg();
+            getOwner().getServerHandler().sendMessageToServer(finishTurnMsg);
+            getOwner().transitionToView(nextView);
+
         }
     }
 
