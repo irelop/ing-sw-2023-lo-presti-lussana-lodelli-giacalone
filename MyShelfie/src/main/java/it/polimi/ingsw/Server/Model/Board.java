@@ -447,11 +447,11 @@ public class Board implements Serializable {
         if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w')
             throw new InvalidDirectionException();
 
-        if(numberOfTiles > maxTilesPickable || numberOfTiles < 0)
-            throw new InvalidNumberOfTilesException(maxTilesPickable);
-
         numberOfTiles++; //aumento di uno per avere il totale delle tessere (così conto anche la prima)
 
+        if(numberOfTiles > maxTilesPickable || numberOfTiles < 0)
+            throw new InvalidNumberOfTilesException(maxTilesPickable);
+        
         switch (direction) {
             case 'e' -> {
                 for (int i = 1; i < numberOfTiles; i++) {
