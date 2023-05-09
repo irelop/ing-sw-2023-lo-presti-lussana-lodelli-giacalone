@@ -333,6 +333,7 @@ public class Board implements Serializable {
      * @author Irene Lo Presti
      */
     public void checkPosition(int r, int c) throws InvalidPositionException, InvalidCellException, EmptyCellException, OutOfBoardException {
+        System.out.println("sono nella check");
         if(r<0 || r>=MAX_ROWS || c<0 || c>=MAX_COLUMNS) throw new OutOfBoardException();
 
         if(boardGrid[r][c] == Tile.NOT_VALID) throw new InvalidCellException();

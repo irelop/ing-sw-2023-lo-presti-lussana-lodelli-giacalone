@@ -81,13 +81,16 @@ public class ChooseTilesFromBoardView extends View {
                 r--;
                 c--;
 
+
                 InitialPositionMsg initialPositionMsg = new InitialPositionMsg(r, c);
                 getOwner().getServerHandler().sendMessageToServer(initialPositionMsg);
+
                 try {
                     this.wait();
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+                System.out.println("Ho fatto la try and catch");
                 System.out.println(this.initialPositionAnswer.answer);
                 if (this.initialPositionAnswer.valid)
                     goOn = true;
@@ -144,6 +147,7 @@ public class ChooseTilesFromBoardView extends View {
 
     public void setInitialPositionAnswer(InitialPositionAnswer answer){
         this.initialPositionAnswer = answer;
+        System.out.println("ho settato la initial position");
     }
     public void setPlayerChoiceAnswer(PlayerChoiceAnswer answer){
         this.playerChoiceAnswer = answer;
@@ -232,7 +236,7 @@ public class ChooseTilesFromBoardView extends View {
                 else
                     code = "\u25CF";
 
-                switch (yourTurnMsg.board.getBoardGrid()[r][c]) {
+                switch (yourTurnMsg.boardSnapshot[r][c]) {
                     case NOT_VALID -> System.out.print(" ");
                     case BLANK -> System.out.print(BLANK.code + code + RESET.code);
                     case PINK -> System.out.print(PINK.code + code + RESET.code);

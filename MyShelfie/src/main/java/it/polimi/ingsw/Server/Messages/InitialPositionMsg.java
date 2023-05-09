@@ -45,9 +45,11 @@ public class InitialPositionMsg extends C2SMessage{
         }catch(OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException e){
             initialPositionAnswer = new InitialPositionAnswer(e.toString(),false);
         }
-            clientHandler.sendMessageToClient(initialPositionAnswer);
+        System.out.println(clientHandler);
+        clientHandler.sendMessageToClient(initialPositionAnswer);
     }
 
-
+    @Override
+    public String toString(){return row+" "+column+" messaggio muissico";}
 }
 

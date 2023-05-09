@@ -1,15 +1,23 @@
 package it.polimi.ingsw.Client.View;
 
-import java.util.ArrayList;
+import it.polimi.ingsw.Server.Messages.AllPlayersReadyMsg;
+import it.polimi.ingsw.Server.Messages.LobbyUpdateAnswer;
+
 import java.util.Formatter;
+import java.util.concurrent.TimeUnit;
 
 public class LobbyView extends View implements ObserverView {
 
-    private ArrayList<String> lobbyPlayers;
+   //private ArrayList<String> lobbyPlayers;
     private Object lock = new Object();
+    private LobbyUpdateAnswer lobbyUpdateAnswer;
 
-    public LobbyView(ArrayList<String> lobbyPlayers) {
+    /*public LobbyView(ArrayList<String> lobbyPlayers) {
         this.lobbyPlayers = lobbyPlayers;
+    }*/
+
+    public LobbyView(LobbyUpdateAnswer lobbyUpdateAnswer) {
+        this.lobbyUpdateAnswer = lobbyUpdateAnswer;
     }
 
     @Override
@@ -29,7 +37,7 @@ public class LobbyView extends View implements ObserverView {
 
     }
 
-    public void showPlayerTable(){
+    /*public void showPlayerTable(){
         Formatter fmt = new Formatter();
 
         fmt.format("%s %15s %15s %s\n","╔","","","╗");
@@ -50,7 +58,31 @@ public class LobbyView extends View implements ObserverView {
             System.out.printf("╚▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬╝%n");
         }
         System.out.println("Players currently waiting:" + lobbyPlayers.size());
-         */
+
+    }*/
+
+    public void showPlayerTable(){
+        Formatter fmt = new Formatter();
+
+        fmt.format("%s %15s %15s %s\n","╔","","","╗");
+        fmt.format("%15s %15s\n","NICKNAME","ID");
+        fmt.format("  ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬  \n","","");
+        for(int i = 0; i<lobbyUpdateAnswer.lobbyPlayers.size();i++){
+            fmt.format("%15s %15s\n",lobbyUpdateAnswer.lobbyPlayers.get(i),(i+1));
+        }
+        fmt.format("%s %15s %15s %s\n","╚","","","╝");
+        System.out.println(fmt);
+
+        if(lobbyUpdateAnswer.allPlayersReady){
+            System.out.println("All players are connected! The game is starting...");
+            try {
+                TimeUnit.SECONDS.sleep(5);
+            } catch (InterruptedException ignored) { }
+
+            AllPlayersReadyMsg allPlayersReadyMsg = new AllPlayersReadyMsg();
+            getOwner().getServerHandler().sendMessageToServer(allPlayersReadyMsg);
+        }
+
     }
 
     @Override

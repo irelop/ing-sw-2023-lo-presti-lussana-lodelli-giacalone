@@ -31,7 +31,10 @@ public class MyShelfie /*implements Runnable*/ {
     private static MyShelfie myShelfieInstance;
 
     private final Object lock;
+    private final Object lockGame;
 
+    private boolean allPlayersReady;
+    private int turnNumber;
     public MyShelfie(){
         this.board = Board.getBoardInstance();
         this.commonDeck = new CommonGoalDeck();
@@ -44,6 +47,8 @@ public class MyShelfie /*implements Runnable*/ {
         this.clientHandlers = new ArrayList<>();
 
         this.lock = new Object();
+        this.allPlayersReady = false;
+        this.lockGame = new Object();
     }
 
     /**
@@ -98,11 +103,38 @@ public class MyShelfie /*implements Runnable*/ {
             System.out.println("adding player...");
             playersConnected.add(newPlayer);
             clientHandlers.add(clientHandler);
+            System.out.println(playerNickname+clientHandler);
 
-            if (playersConnected.size() == numberOfPlayers) {
-                this.isStarted = true;
-                manageTurn();
+            if (playersConnected.size() == numberOfPlayers && !this.isStarted) {
+                /*this.isStarted = true;
+                manageTurn();*/
+
+
+                /*StartGameMsg startGameMsg = new StartGameMsg();
+
+                for(int i=0; i< clientHandlers.size(); i++){
+                    clientHandlers.get(i).sendMessageToClient(startGameMsg);
+                }*/
+                this.allPlayersReady = true;
             }
+        }
+    }
+
+    public void allPlayersReady(){
+        if(!this.isStarted){
+            this.isStarted = true;
+            //manageTurn();
+            //turn(id giocatore che entra nell'if)
+            board.initGridParabolic(numberOfPlayers);
+            //board.initGrid(numberOfPlayers);
+            board.refill();
+            setChair();
+            dealPersonalCards();
+            drawCommonGoalCards();
+            currentPlayerIndex = 0;
+            turnNumber = 0;
+            turn(turnNumber);
+
         }
     }
 
@@ -149,7 +181,8 @@ public class MyShelfie /*implements Runnable*/ {
 
     public void updateLobby(){
         ArrayList<String> lobbyPlayers = new ArrayList<>(playersConnected.stream().map(x->x.getNickname()).collect(Collectors.toList()));
-        LobbyUpdateAnswer lobbyUpdateAnswer = new LobbyUpdateAnswer(lobbyPlayers);
+
+        LobbyUpdateAnswer lobbyUpdateAnswer = new LobbyUpdateAnswer(lobbyPlayers, allPlayersReady);
 
         for(int i=0; i< clientHandlers.size(); i++){
             clientHandlers.get(i).sendMessageToClient(lobbyUpdateAnswer);
@@ -200,22 +233,23 @@ public class MyShelfie /*implements Runnable*/ {
      *       or if that is the last lap
      */
     public void manageTurn(){
-        //System.out.println("sono in manage turn");
+        System.out.println("sono in manage turn");
         board.initGridParabolic(numberOfPlayers);
         //board.initGrid(numberOfPlayers);
         board.refill();
-        setChair();
+        //setChair();
         dealPersonalCards();
         drawCommonGoalCards();
+        int turnNumber=0;
         while(!isOver){
             for (int i = 0; i<numberOfPlayers; i++) {
                 //a player can play his/her turn if the match is not over
                 // or if that is the last lap
                 if(!isOver || !playersConnected.get(i).hasChair()){
-                    //saving the index of the player playing
-                    currentPlayerIndex = i;
                     synchronized(lock){
-                        turn(i);
+                        //saving the index of the player playing
+                        currentPlayerIndex = i;
+                        turn(turnNumber);
                         try {
                             lock.wait();
                         } catch (InterruptedException e) {
@@ -224,6 +258,7 @@ public class MyShelfie /*implements Runnable*/ {
                     }
                 }
             }
+            turnNumber++;
         }
         //adding spot points
         for (Player player : playersConnected) {
@@ -233,12 +268,12 @@ public class MyShelfie /*implements Runnable*/ {
 
         ArrayList<Integer> scoreList = new ArrayList<>();
         for (Player player : playersConnected) {
-            scoreList.add(playersConnected.get(currentPlayerIndex).myScore.getScore());
+            scoreList.add(player.myScore.getScore());
         }
         ScoreBoardMsg scoreBoardMsg = new ScoreBoardMsg(playersConnected, scoreList);
 
-        for (Player player : playersConnected) {
-            clientHandlers.get(currentPlayerIndex).sendMessageToClient(scoreBoardMsg);
+        for (int i=0; i<numberOfPlayers; i++) {
+            clientHandlers.get(i).sendMessageToClient(scoreBoardMsg);
         }
     }
 
@@ -256,10 +291,17 @@ public class MyShelfie /*implements Runnable*/ {
             playersNames.add(playersConnected.get(i).getNickname());
         }
         YourTurnMsg yourTurnMsg;
+
+        Tile[][] boardSnapshot = new Tile[9][9];
+
+        for(int i=0; i<9; i++)
+            for(int j=0; j<9; j++)
+                boardSnapshot[i][j] = board.getBoardGrid()[i][j];
+
         yourTurnMsg = new YourTurnMsg(
                 playersConnected.get(currentPlayerIndex).getNickname(),
                 maxTilesPickable,
-                board, Board.getCommonGoalCards(),
+                boardSnapshot, Board.getCommonGoalCards(),
                 playersConnected.get(currentPlayerIndex).getPersonalGoalCard(),
                 turnNumber,
                 playersNames
@@ -406,7 +448,38 @@ public class MyShelfie /*implements Runnable*/ {
     public void finishTurn(){
         synchronized (lock){
             System.out.println("finito, chiamo l'altro");
-            lock.notify();
+            //lock.notify();
+            //turn(id giocatore successivo)
+
+            if(currentPlayerIndex == numberOfPlayers-1)
+                currentPlayerIndex = 0;
+            else
+                currentPlayerIndex ++;
+
+            if(!isOver || !playersConnected.get(currentPlayerIndex).hasChair()){
+                if(turnNumber == 0 && currentPlayerIndex==0)
+                    turnNumber ++;
+                    turn(turnNumber);
+            }
+            else if(isOver){
+                //adding spot points
+                for (Player player : playersConnected) {
+                    int spotScore = player.myShelfie.spotCheck();
+                    player.myScore.addScore(spotScore);
+                }
+
+                ArrayList<Integer> scoreList = new ArrayList<>();
+                for (Player player : playersConnected) {
+                    scoreList.add(player.myScore.getScore());
+                }
+                ScoreBoardMsg scoreBoardMsg = new ScoreBoardMsg(playersConnected, scoreList);
+
+                for (int i=0; i<numberOfPlayers; i++) {
+                    clientHandlers.get(i).sendMessageToClient(scoreBoardMsg);
+                }
+            }
+
+
         }
     }
 
