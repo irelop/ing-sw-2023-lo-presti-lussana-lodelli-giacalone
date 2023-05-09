@@ -368,9 +368,18 @@ public class MyShelfie /*implements Runnable*/ {
 
         board.pickTilesFromBoard(initialRow, initialColumn, numberOfTiles, direction, currentPlayer);
 
+        Tile[][] matrix = new Tile[6][5];
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 5; j++) {
+                matrix[i][j] = currentPlayer.myShelfie.getGrid()[i][j];
+            }
+        }
+
+        ArrayList<Tile> littleHand = new ArrayList<>(currentPlayer.getLittleHand());
+
         MyShelfMsg myShelfMsg = new MyShelfMsg(
-                currentPlayer.myShelfie.getGrid(),
-                currentPlayer.getLittleHand(),
+                matrix,
+                littleHand,
                 Board.getCommonGoalCards(),
                 currentPlayer.getPersonalGoalCard()
                 );
