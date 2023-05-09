@@ -44,9 +44,10 @@ public class ChooseTilesFromBoardView extends View {
         if(yourTurnMsg.firstTurn)
             printOrderOfPlayers();
         printGoalCardsInfo();
+        printShelf();
         printBoard(-1, -1);
 
-
+        System.out.println();
         System.out.println(yourTurnMsg.nickname + ", it's your turn to pick the tiles from the board!");
         System.out.println(yourTurnMsg.nickname + ", choose the position of the first tile, remember that" +
                 " after you choose it, you have to select the number of tiles you want and" +
@@ -144,6 +145,12 @@ public class ChooseTilesFromBoardView extends View {
 
     }
 
+    public void printShelf(){
+        System.out.println(yourTurnMsg.nickname + ", this is your personal shelf:");
+        printSmallMatrix(yourTurnMsg.shelfSnapshot);
+        System.out.println();
+    }
+
     public void setInitialPositionAnswer(InitialPositionAnswer answer){
         this.initialPositionAnswer = answer;
     }
@@ -161,6 +168,7 @@ public class ChooseTilesFromBoardView extends View {
         System.out.println("This is the order of playing:");
         for(int i=0; i<yourTurnMsg.playersNames.size(); i++)
             System.out.println((i+1)+") "+yourTurnMsg.playersNames.get(i));
+        System.out.println();
     }
 
     /**
@@ -168,13 +176,15 @@ public class ChooseTilesFromBoardView extends View {
      */
     public void printGoalCardsInfo(){
         System.out.println("Personal goal card:");
-        printCard(yourTurnMsg.personalGoalCard.getPattern());
+        printSmallMatrix(yourTurnMsg.personalGoalCard.getPattern());
+        System.out.println();
 
         System.out.println("Common goal cards:");
         for(int i=0; i<yourTurnMsg.commonGoalCards.length; i++){
-            printCard(yourTurnMsg.commonGoalCards[i].getCardInfo().getSchema());
+            printSmallMatrix(yourTurnMsg.commonGoalCards[i].getCardInfo().getSchema());
             System.out.println("x"+yourTurnMsg.commonGoalCards[i].getCardInfo().getTimes());
             System.out.println(yourTurnMsg.commonGoalCards[i].getCardInfo().getDescription());
+            System.out.println();
         }
 
 
@@ -184,7 +194,7 @@ public class ChooseTilesFromBoardView extends View {
      * This method prints the pattern of the cards
      * @param pattern: matrix of tiles with the pattern to follow in order to achieve the goal (personal or common)
      */
-    public void printCard(Tile[][] pattern){
+    public void printSmallMatrix(Tile[][] pattern){
         String code = "\u25CF";
         for(int r=0; r<6; r++){
 
