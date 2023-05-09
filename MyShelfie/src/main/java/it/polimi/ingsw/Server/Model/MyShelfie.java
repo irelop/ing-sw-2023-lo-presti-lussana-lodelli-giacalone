@@ -30,9 +30,7 @@ public class MyShelfie /*implements Runnable*/ {
     private int currentPlayerIndex;
     private static MyShelfie myShelfieInstance;
 
-    private final Object lock;
-    private final Object lockGame;
-
+    //private final Object lock;
     private boolean allPlayersReady;
     private boolean firstTurn;
     public MyShelfie(){
@@ -46,9 +44,8 @@ public class MyShelfie /*implements Runnable*/ {
         this.numberOfPlayers = -1;
         this.clientHandlers = new ArrayList<>();
 
-        this.lock = new Object();
+        //this.lock = new Object();
         this.allPlayersReady = false;
-        this.lockGame = new Object();
     }
 
     /**
@@ -105,26 +102,15 @@ public class MyShelfie /*implements Runnable*/ {
             clientHandlers.add(clientHandler);
             System.out.println(playerNickname+clientHandler);
 
-            if (playersConnected.size() == numberOfPlayers && !this.isStarted) {
-                /*this.isStarted = true;
-                manageTurn();*/
-
-
-                /*StartGameMsg startGameMsg = new StartGameMsg();
-
-                for(int i=0; i< clientHandlers.size(); i++){
-                    clientHandlers.get(i).sendMessageToClient(startGameMsg);
-                }*/
+            if (playersConnected.size() == numberOfPlayers && !this.allPlayersReady)
                 this.allPlayersReady = true;
-            }
         }
     }
+
 
     public void allPlayersReady(){
         if(!this.isStarted){
             this.isStarted = true;
-            //manageTurn();
-            //turn(id giocatore che entra nell'if)
             board.initGridParabolic(numberOfPlayers);
             //board.initGrid(numberOfPlayers);
             board.refill();
@@ -134,7 +120,6 @@ public class MyShelfie /*implements Runnable*/ {
             currentPlayerIndex = 0;
             firstTurn = true;
             turn();
-
         }
     }
 
@@ -444,11 +429,6 @@ public class MyShelfie /*implements Runnable*/ {
     }
 
     public void finishTurn(){
-        synchronized (lock){
-            System.out.println("finito, chiamo l'altro");
-            //lock.notify();
-            //turn(id giocatore successivo)
-
             if(currentPlayerIndex == numberOfPlayers-1)
                 currentPlayerIndex = 0;
             else
@@ -457,7 +437,7 @@ public class MyShelfie /*implements Runnable*/ {
             if(!isOver || !playersConnected.get(currentPlayerIndex).hasChair()){
                 if(firstTurn && currentPlayerIndex==0)
                     firstTurn = false;
-                    turn();
+                turn();
             }
             else if(isOver){
                 //adding spot points
@@ -476,9 +456,6 @@ public class MyShelfie /*implements Runnable*/ {
                     clientHandlers.get(i).sendMessageToClient(scoreBoardMsg);
                 }
             }
-
-
-        }
     }
 
 }
