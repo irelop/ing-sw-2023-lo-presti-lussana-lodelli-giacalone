@@ -280,13 +280,20 @@ public class MyShelfie /*implements Runnable*/ {
             for(int j=0; j<9; j++)
                 boardSnapshot[i][j] = board.getBoardGrid()[i][j];
 
+        Tile[][] shelfSnapshot = new Tile[6][5];
+
+        for(int i=0; i<6; i++)
+            for(int j=0; j<5; j++)
+                shelfSnapshot[i][j] = playersConnected.get(currentPlayerIndex).myShelfie.getGrid()[i][j];
+
         yourTurnMsg = new YourTurnMsg(
                 playersConnected.get(currentPlayerIndex).getNickname(),
                 maxTilesPickable,
                 boardSnapshot, Board.getCommonGoalCards(),
                 playersConnected.get(currentPlayerIndex).getPersonalGoalCard(),
                 firstTurn,
-                playersNames
+                playersNames,
+                shelfSnapshot
         );
         clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
     }
@@ -452,11 +459,16 @@ public class MyShelfie /*implements Runnable*/ {
                     player.myScore.addScore(spotScore);
                 }
 
+                ArrayList<String> playersNames = new ArrayList<>();
+                for (int i = 0; i < numberOfPlayers; i++) {
+                    playersNames.add(playersConnected.get(i).getNickname());
+                }
+
                 ArrayList<Integer> scoreList = new ArrayList<>();
                 for (Player player : playersConnected) {
                     scoreList.add(player.myScore.getScore());
                 }
-                ScoreBoardMsg scoreBoardMsg = new ScoreBoardMsg(playersConnected, scoreList);
+                ScoreBoardMsg scoreBoardMsg = new ScoreBoardMsg(playersNames, scoreList);
 
                 for (int i=0; i<numberOfPlayers; i++) {
                     clientHandlers.get(i).sendMessageToClient(scoreBoardMsg);

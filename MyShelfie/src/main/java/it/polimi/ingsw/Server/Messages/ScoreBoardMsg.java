@@ -8,10 +8,10 @@ import it.polimi.ingsw.Server.Model.Player;
 import java.util.ArrayList;
 
 public class ScoreBoardMsg extends S2CMessage{
-    public ArrayList<Player> playerName;
+    public ArrayList<String> playerName;
     public ArrayList<Integer> totalScore;
 
-    public ScoreBoardMsg(ArrayList<Player> playerName, ArrayList<Integer> totalScore){
+    public ScoreBoardMsg(ArrayList<String> playerName, ArrayList<Integer> totalScore){
         this.playerName = playerName;
         this.totalScore = totalScore;
     }

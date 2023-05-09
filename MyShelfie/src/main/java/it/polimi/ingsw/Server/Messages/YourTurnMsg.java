@@ -24,10 +24,11 @@ public class YourTurnMsg extends S2CMessage{
     public PersonalGoalCard personalGoalCard;
     public boolean firstTurn;
     public ArrayList<String> playersNames;
+    public Tile[][] shelfSnapshot;
 
     public YourTurnMsg(String nickname, int maxTilesPickable, Tile[][] boardSnapshot,
                        CommonGoalCard[] commonGoalCards, PersonalGoalCard personalGoalCard, boolean firstTurn,
-                        ArrayList<String> playersNames){
+                        ArrayList<String> playersNames, Tile[][] shelfSnapshot){
         this.nickname = nickname;
         this.maxTilesPickable = maxTilesPickable;
         this.boardSnapshot = new Tile[9][9];
@@ -40,6 +41,10 @@ public class YourTurnMsg extends S2CMessage{
         this.commonGoalCards = commonGoalCards;
         this.firstTurn = firstTurn;
         this.playersNames = playersNames;
+
+        for(int i=0; i<6; i++)
+            for(int j=0; j<5; j++)
+                this.shelfSnapshot[i][j] = shelfSnapshot[i][j];
     }
 
 
