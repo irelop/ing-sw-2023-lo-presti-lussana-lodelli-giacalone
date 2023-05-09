@@ -34,7 +34,7 @@ public class MyShelfie /*implements Runnable*/ {
     private final Object lockGame;
 
     private boolean allPlayersReady;
-    private int turnNumber;
+    private boolean firstTurn;
     public MyShelfie(){
         this.board = Board.getBoardInstance();
         this.commonDeck = new CommonGoalDeck();
@@ -132,8 +132,8 @@ public class MyShelfie /*implements Runnable*/ {
             dealPersonalCards();
             drawCommonGoalCards();
             currentPlayerIndex = 0;
-            turnNumber = 0;
-            turn(turnNumber);
+            firstTurn = true;
+            turn();
 
         }
     }
@@ -232,7 +232,7 @@ public class MyShelfie /*implements Runnable*/ {
      * OVERVIEW: this method manages the game: a player can play his/her turn if the match is not over
      *       or if that is the last lap
      */
-    public void manageTurn(){
+    /*public void manageTurn(){
         System.out.println("sono in manage turn");
         board.initGridParabolic(numberOfPlayers);
         //board.initGrid(numberOfPlayers);
@@ -275,13 +275,13 @@ public class MyShelfie /*implements Runnable*/ {
         for (int i=0; i<numberOfPlayers; i++) {
             clientHandlers.get(i).sendMessageToClient(scoreBoardMsg);
         }
-    }
+    }*/
 
     /**
      * OVERVIEW: it finds max pickable tiles by the current player and creates a message to send to
      * ChooseTilesFromBoardView
      */
-    private void turn(int turnNumber) {
+    private void turn() {
 
         // find max pickable tiles by the player
         int maxTilesPickable = playersConnected.get(currentPlayerIndex).myShelfie.maxTilesPickable();
@@ -303,7 +303,7 @@ public class MyShelfie /*implements Runnable*/ {
                 maxTilesPickable,
                 boardSnapshot, Board.getCommonGoalCards(),
                 playersConnected.get(currentPlayerIndex).getPersonalGoalCard(),
-                turnNumber,
+                firstTurn,
                 playersNames
         );
         clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
@@ -338,8 +338,6 @@ public class MyShelfie /*implements Runnable*/ {
                 playersConnected.get(currentPlayerIndex).myScore.addScore(commonPointsEarned);
             }
         }
-
-
 
         //checking if a player's shelf is full,
         // if true add +1pt and set the last lap
@@ -457,9 +455,9 @@ public class MyShelfie /*implements Runnable*/ {
                 currentPlayerIndex ++;
 
             if(!isOver || !playersConnected.get(currentPlayerIndex).hasChair()){
-                if(turnNumber == 0 && currentPlayerIndex==0)
-                    turnNumber ++;
-                    turn(turnNumber);
+                if(firstTurn && currentPlayerIndex==0)
+                    firstTurn = false;
+                    turn();
             }
             else if(isOver){
                 //adding spot points

@@ -41,7 +41,7 @@ public class ChooseTilesFromBoardView extends View {
         boolean goOn = false;
 
         //If it's the first turn, it prints the order in which the players will play
-        if(yourTurnMsg.turnNumber==0)
+        if(yourTurnMsg.firstTurn)
             printOrderOfPlayers();
         printGoalCardsInfo();
         printBoard(-1, -1);
