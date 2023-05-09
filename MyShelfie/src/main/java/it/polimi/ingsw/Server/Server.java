@@ -5,6 +5,7 @@ import it.polimi.ingsw.Server.Model.MyShelfie;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import static it.polimi.ingsw.Server.Model.MyShelfie.*;
 
@@ -16,15 +17,19 @@ import static it.polimi.ingsw.Server.Model.MyShelfie.*;
  */
 public class Server {
     public static int serverPort;
-    private static MyShelfie game;
+    //private static MyShelfie game;
+    private static ArrayList<MyShelfie> games;
+    private static int currentGame;
+
 
     /**
      * OVERVIEW: the constructor of the class which initializes the server with the its port open to receive
      *           new possible connections with the clients.
-     * @param serverPort: the port chosen for the connection.
      */
     public Server(int serverPort){
         this.serverPort = 9999;
+        this.currentGame = -1;
+        this.games = new ArrayList<>();
     }
 
     /**
@@ -60,9 +65,13 @@ public class Server {
             try{
                 Socket client =socket.accept();
                 // gestione partite multiple
-
-                game = getMyShelfie();
-                ClientHandler clientHandler = new SocketClientHandler(client, game);
+                if(currentGame == -1 || games.get(currentGame).getAllPlayersReady()){
+                    MyShelfie game = new MyShelfie();
+                    games.add(game);
+                    currentGame++;
+                    System.out.println("creo nuovo game");
+                }
+                ClientHandler clientHandler = new SocketClientHandler(client, games.get(currentGame));
 
                 Thread clientHandlerThread = new Thread(clientHandler,"server_"+client.getInetAddress());
                 clientHandlerThread.start();

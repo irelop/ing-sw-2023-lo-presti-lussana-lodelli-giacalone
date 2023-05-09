@@ -109,6 +109,7 @@ public class Client implements Runnable{
     public synchronized void setTrueTerminate(){
         if(!terminate){
             terminate = true;
+            if(currentView!=null)
             currentView.setStopInteraction();
         }
     }

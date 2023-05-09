@@ -42,6 +42,7 @@ public class YourTurnMsg extends S2CMessage{
         this.firstTurn = firstTurn;
         this.playersNames = playersNames;
 
+        this.shelfSnapshot = new Tile[6][5];
         for(int i=0; i<6; i++)
             for(int j=0; j<5; j++)
                 this.shelfSnapshot[i][j] = shelfSnapshot[i][j];

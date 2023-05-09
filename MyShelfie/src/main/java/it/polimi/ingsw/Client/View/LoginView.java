@@ -104,6 +104,7 @@ public class LoginView extends View implements ObserverView {
             }
             case FULL_LOBBY -> {
                 System.out.println("\nDeeply sorry! We cannot let you join because the game lobby is already full\n");
+                System.out.println("Probably there is a problem with you connection. Try to restart the client\n");
                 isFull = true;
                 goOn = true;
             }

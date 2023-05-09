@@ -34,7 +34,8 @@ public class MyShelfie /*implements Runnable*/ {
     private boolean allPlayersReady;
     private boolean firstTurn;
     public MyShelfie(){
-        this.board = Board.getBoardInstance();
+        //this.board = Board.getBoardInstance();
+        this.board = new Board();
         this.commonDeck = new CommonGoalDeck();
         this.personalDeck = new PersonalGoalDeck();
 
@@ -104,6 +105,9 @@ public class MyShelfie /*implements Runnable*/ {
         }
     }
 
+    public boolean getAllPlayersReady(){
+        return allPlayersReady;
+    }
 
     public void allPlayersReady(){
         if(!this.isStarted){
