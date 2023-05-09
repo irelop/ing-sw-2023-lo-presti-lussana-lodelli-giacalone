@@ -61,7 +61,6 @@ public class SocketClientHandler extends ClientHandler{
             while(true) {
                 Object nextAction = inputStream.readObject();
                 C2SMessage messageReceived = (C2SMessage) nextAction;
-                System.out.println("ho letto il messaggio dal client "+messageReceived);
                 messageReceived.processMessage(this);
             }
             }catch(ClassNotFoundException | ClassCastException e){
@@ -77,8 +76,6 @@ public class SocketClientHandler extends ClientHandler{
     public void sendMessageToClient(S2CMessage message) {
         try {
             outputStream.flush();
-
-            //System.out.println(message);
             outputStream.writeObject(message);
 
         }catch (IOException ex){

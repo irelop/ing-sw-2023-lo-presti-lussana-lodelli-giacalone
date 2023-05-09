@@ -90,7 +90,6 @@ public class ChooseTilesFromBoardView extends View {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                System.out.println("Ho fatto la try and catch");
                 System.out.println(this.initialPositionAnswer.answer);
                 if (this.initialPositionAnswer.valid)
                     goOn = true;
@@ -147,7 +146,6 @@ public class ChooseTilesFromBoardView extends View {
 
     public void setInitialPositionAnswer(InitialPositionAnswer answer){
         this.initialPositionAnswer = answer;
-        System.out.println("ho settato la initial position");
     }
     public void setPlayerChoiceAnswer(PlayerChoiceAnswer answer){
         this.playerChoiceAnswer = answer;

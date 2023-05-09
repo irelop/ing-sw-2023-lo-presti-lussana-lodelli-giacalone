@@ -95,9 +95,6 @@ public class MyShelfie /*implements Runnable*/ {
 
         if (playersConnected.size() <= numberOfPlayers || numberOfPlayers==-1) {
             Player newPlayer = new Player(playerNickname);
-
-            //aggiungo all'arraylist
-            System.out.println("adding player...");
             playersConnected.add(newPlayer);
             clientHandlers.add(clientHandler);
             System.out.println(playerNickname+clientHandler);
