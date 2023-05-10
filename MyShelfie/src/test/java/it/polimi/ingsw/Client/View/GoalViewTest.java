@@ -13,7 +13,7 @@ class GoalViewTest {
 
     @BeforeEach
     void setUp() {
-        msg = new GoalAndScoreMsg(true, true, 12, true);
+        msg = new GoalAndScoreMsg(true, true, 12, true, false);
         view = new GoalView(msg);
     }
 

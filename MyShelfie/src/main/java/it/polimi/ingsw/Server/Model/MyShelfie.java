@@ -1,4 +1,5 @@
 package it.polimi.ingsw.Server.Model;
+import it.polimi.ingsw.Client.View.GameIsEndingView;
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.Messages.*;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.Client.View.ColorCode.*;
 import static it.polimi.ingsw.Client.View.ColorCode.RESET;
+import static java.lang.Thread.sleep;
 
 /**
  * CONTROLLER
@@ -33,6 +35,8 @@ public class MyShelfie /*implements Runnable*/ {
     //private final Object lock;
     private boolean allPlayersReady;
     private boolean firstTurn;
+    private boolean gameOver;
+    private final Object lock;
     public MyShelfie(){
         //this.board = Board.getBoardInstance();
         this.board = new Board();
@@ -47,6 +51,8 @@ public class MyShelfie /*implements Runnable*/ {
 
         //this.lock = new Object();
         this.allPlayersReady = false;
+        this.gameOver = false;
+        this.lock = new Object();
     }
 
     /**
@@ -175,6 +181,17 @@ public class MyShelfie /*implements Runnable*/ {
         }
     }
 
+    public void updateGameIsEndingView(){
+        for(int i=0; i<numberOfPlayers; i++)
+
+            //mando in gameIsEndingView solo chi ha già giocato l'ultimo turno
+            if(playersConnected.get(i).getHasFinished()){
+                System.out.println("indice: "+i); //controllo per debuggin
+                clientHandlers.get(i).sendMessageToClient(new GameIsEndingUpdateAnswer(gameOver, i));
+            }
+
+    }
+
     /**
      * OVERVIEW: this method calls the method drawPersonal for each player, so every player has his / her own
      * personal goal card
@@ -299,7 +316,22 @@ public class MyShelfie /*implements Runnable*/ {
                 playersNames,
                 shelfSnapshot
         );
+
+        //qui viene mandata la view per la scelta tessere al current player
         clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
+
+        if(isOver){
+            //se isOver = true allora siamo all'ultima mano
+
+            //settiamo a true il booleano del giocatore precedente
+            if(currentPlayerIndex==0)
+                playersConnected.get(numberOfPlayers-1).setHasFinished(true);
+            else
+                playersConnected.get(currentPlayerIndex-1).setHasFinished(true);
+
+            //aggiorniamo la game is ending view
+            updateGameIsEndingView();
+        }
     }
 
     //funzione chiamata dal process message del messaggio creato alla fine dell'inserimento delle
@@ -334,16 +366,26 @@ public class MyShelfie /*implements Runnable*/ {
 
         //checking if a player's shelf is full,
         // if true add +1pt and set the last lap
-        if(playersConnected.get(currentPlayerIndex).myShelfie.isShelfFull() && !isOver) {
+
+        //parte dell'if è commentata per poter testare subito la fine di una partita
+        //una volta risolti i problemi bisogna togliere il commento
+        if(/*playersConnected.get(currentPlayerIndex).myShelfie.isShelfFull() && */!isOver) {
             isShelfFull = true;
             playersConnected.get(currentPlayerIndex).myScore.addScore(1);
             this.isOver = true;
+
+            //se finisce un giocatore che non è il primo, settiamo che quelli prima di lui hanno
+            // già fatto l'ultimo turno
+            //es: se il giocatore 3 riempie la board, il giocatore 1 e il giocatore 2
+            //      avranno già giocato il loro ultimo turno
+            for(int i=0; i<=currentPlayerIndex; i++)
+                playersConnected.get(i).setHasFinished(true);
         }
         //checking if the board need to be refilled
         if(board.needRefill())
             board.refill();
 
-        GoalAndScoreMsg goalAndScoreMsg = new GoalAndScoreMsg(isCommonGoalAchived, isPersonalGoalAchived, playersConnected.get(currentPlayerIndex).myScore.getScore(), isShelfFull);
+        GoalAndScoreMsg goalAndScoreMsg = new GoalAndScoreMsg(isCommonGoalAchived, isPersonalGoalAchived, playersConnected.get(currentPlayerIndex).myScore.getScore(), isShelfFull, isOver);
         clientHandlers.get(currentPlayerIndex).sendMessageToClient(goalAndScoreMsg);
     }
 
@@ -452,32 +494,102 @@ public class MyShelfie /*implements Runnable*/ {
                 currentPlayerIndex ++;
 
             if(!isOver || !playersConnected.get(currentPlayerIndex).hasChair()){
-                if(firstTurn && currentPlayerIndex==0)
+                if(firstTurn && currentPlayerIndex==0) {
                     firstTurn = false;
+                }
                 turn();
             }
-            else if(isOver){
-                //adding spot points
+
+            //qui si entra quando tutti hanno giocato l'ultimo turno
+            if(isOver && playersConnected.get(currentPlayerIndex).hasChair()){
+                System.out.println("SIUM");
+
+                //spot check
                 for (Player player : playersConnected) {
                     int spotScore = player.myShelfie.spotCheck();
                     player.myScore.addScore(spotScore);
                 }
 
-                ArrayList<String> playersNames = new ArrayList<>();
-                for (int i = 0; i < numberOfPlayers; i++) {
-                    playersNames.add(playersConnected.get(i).getNickname());
-                }
+                this.gameOver = true;
 
-                ArrayList<Integer> scoreList = new ArrayList<>();
-                for (Player player : playersConnected) {
-                    scoreList.add(player.myScore.getScore());
-                }
-                ScoreBoardMsg scoreBoardMsg = new ScoreBoardMsg(playersNames, scoreList);
+                //si setta che anche l'ultimo giocatore ha finito
+                if(currentPlayerIndex==0)
+                    playersConnected.get(numberOfPlayers-1).setHasFinished(true);
+                else
+                    playersConnected.get(currentPlayerIndex-1).setHasFinished(true);
 
-                for (int i=0; i<numberOfPlayers; i++) {
-                    clientHandlers.get(i).sendMessageToClient(scoreBoardMsg);
-                }
+                //si aggiorna la ending game view
+                updateGameIsEndingView();
             }
+
+
+        /* parte di codice che non dovrebbe più servire
+        else{
+            //adding spot points
+            for (Player player : playersConnected) {
+                int spotScore = player.myShelfie.spotCheck();
+                player.myScore.addScore(spotScore);
+            }
+
+            ArrayList<String> playersNames = new ArrayList<>();
+            for (int i = 0; i < numberOfPlayers; i++) {
+                playersNames.add(playersConnected.get(i).getNickname());
+            }
+
+            ArrayList<Integer> scoreList = new ArrayList<>();
+            for (Player player : playersConnected) {
+                scoreList.add(player.myScore.getScore());
+            }
+
+            //ScoreBoardMsg scoreBoardMsg = new ScoreBoardMsg(playersNames, scoreList);
+            ScoreBoardMsg[] msgs = new ScoreBoardMsg[numberOfPlayers];
+
+            for(int i=0; i<numberOfPlayers; i++){
+                ScoreBoardMsg msg = new ScoreBoardMsg(scoreList.get(i), playersNames.get(i));
+                msgs[i] = msg;
+            }
+
+
+            for (int i=0; i<numberOfPlayers; i++) {
+                if(i!=currentPlayerIndex)
+                    clientHandlers.get(i).sendMessageToClient(msgs[i]);
+            }
+
+            //clientHandlers.get(0).sendMessageToClient(msgs[0]);
+            clientHandlers.get(currentPlayerIndex).sendMessageToClient(msgs[currentPlayerIndex]);
+
+        }*/
     }
+
+    public void endGame(int playerIndex) {
+
+        synchronized (lock){
+            System.out.println("sono in end game con "+playerIndex);
+
+            ArrayList<String> playersNames = new ArrayList<>();
+            for (int i = 0; i < numberOfPlayers; i++) {
+                playersNames.add(playersConnected.get(i).getNickname());
+            }
+
+            ArrayList<Integer> scoreList = new ArrayList<>();
+            for (Player player : playersConnected) {
+                scoreList.add(player.myScore.getScore());
+            }
+
+            clientHandlers.get(playerIndex).sendMessageToClient(new ScoreBoardMsg(playersNames, scoreList));
+            try {
+                sleep(1000L *(playerIndex+1));
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+
+    }
+
+    public void finishGame(){
+        return;
+    }
+
 
 }

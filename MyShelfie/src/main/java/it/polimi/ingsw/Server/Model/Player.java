@@ -20,6 +20,7 @@ public class Player {
     private boolean chair;
     private ArrayList<Tile> littleHand;//tiles in player's hand (the ones just picked)
     private boolean[] commonGoalsAchieved;
+    private boolean hasFinished;
 
     /**
      * OVERVIEW: Constructor: it is used to when a player joins the game. This method saves the nickname and
@@ -38,6 +39,15 @@ public class Player {
         this.commonGoalsAchieved = new boolean[2];
         this.commonGoalsAchieved[0] = false;
         this.commonGoalsAchieved[1] = false;
+        this.hasFinished = false;
+    }
+
+    public void setHasFinished(boolean hasFinished) {
+        this.hasFinished = hasFinished;
+    }
+
+    public boolean getHasFinished(){
+        return hasFinished;
     }
 
     /**

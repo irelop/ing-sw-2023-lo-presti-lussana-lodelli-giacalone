@@ -16,12 +16,15 @@ public class GoalAndScoreMsg extends S2CMessage{
     public boolean personalGoalAchived;
     public int score;
     public boolean youFullyShelf;
+    public boolean lastTurn;
 
-    public GoalAndScoreMsg(boolean commonGoalAchived, boolean personalGoalAchived, int score, boolean youFullyShelf){
+    public GoalAndScoreMsg(boolean commonGoalAchived, boolean personalGoalAchived, int score,
+                           boolean youFullyShelf, boolean lastTurn){
         this.commonGoalAchived = commonGoalAchived;
         this.personalGoalAchived = personalGoalAchived;
         this.score = score;
         this.youFullyShelf = youFullyShelf;
+        this.lastTurn = lastTurn;
     }
 
     @Override

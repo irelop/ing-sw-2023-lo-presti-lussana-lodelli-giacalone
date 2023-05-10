@@ -45,6 +45,7 @@ public class SocketServerHandler extends ServerHandler {
                 try {
                     Object next = input.readObject();
                     S2CMessage command = (S2CMessage) next;
+                    System.out.println("messaggio arrivato");
                     command.processMessage(this);
                 } catch (IOException e) {
                     if (shouldStop.get()) {
@@ -62,6 +63,7 @@ public class SocketServerHandler extends ServerHandler {
         try {
             output.flush();
             output.writeObject(msg);
+
         } catch (IOException e) {
             System.out.println("Communication error");
             owner.setTrueTerminate();

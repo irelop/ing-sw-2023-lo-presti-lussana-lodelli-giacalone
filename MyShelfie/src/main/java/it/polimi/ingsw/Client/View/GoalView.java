@@ -1,7 +1,9 @@
 package it.polimi.ingsw.Client.View;
 
 import it.polimi.ingsw.Server.Messages.FinishTurnMsg;
+import it.polimi.ingsw.Server.Messages.GameIsEndingUpdateRequest;
 import it.polimi.ingsw.Server.Messages.GoalAndScoreMsg;
+import it.polimi.ingsw.Server.Messages.ScoreBoardMsg;
 
 import java.util.Scanner;
 
@@ -35,6 +37,12 @@ public class GoalView extends View{
         System.out.println("---------------------------------");
         System.out.println("[press any key to continue]");
         goOn = scanner.nextLine();
+
+        //non l'abbiamo usata questa cosa....
+        //forse va bene così BOH
+        if(msg.lastTurn){
+            GameIsEndingUpdateRequest gameIsEndingUpdateRequest = new GameIsEndingUpdateRequest();
+        }
 
         if(goOn != null){
             FinishTurnMsg finishTurnMsg = new FinishTurnMsg();
