@@ -19,5 +19,6 @@ public class ScoreBoardMsg extends S2CMessage{
     @Override
     public void processMessage(ServerHandler serverHandler){
         serverHandler.getClient().transitionToView(new EndgameView(this));
+        serverHandler.getClient().getCurrentView().notifyView();
     }
 }

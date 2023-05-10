@@ -17,13 +17,10 @@ public class GameIsEndingView extends View{
     public void run() {
         synchronized (lock){
             System.out.println("The game is ending, the other players are playing their last turn.");
-
-
             //se la partita è finita devo andare nella view con la classifica
-            if(msg.gameOver){
-                System.out.println("sono in if di game is ending view");
 
-                //l'indice del giocatore serve per scegliere il giusto clienthandler
+            if(msg.gameOver){
+                //playerIndex needed to choose the right clientHandler
                 EndGameMsg endGameMsg = new EndGameMsg(msg.playerIndex);
                 getOwner().getServerHandler().sendMessageToServer(endGameMsg);
             }

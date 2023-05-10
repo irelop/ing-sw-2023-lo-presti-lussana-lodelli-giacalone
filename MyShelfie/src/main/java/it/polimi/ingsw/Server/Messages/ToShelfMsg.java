@@ -16,14 +16,14 @@ import java.util.ArrayList;
  * @author Riccardo Lodelli
  */
 
-public class MyShelfMsg extends S2CMessage {
+public class ToShelfMsg extends S2CMessage {
 
     private Tile[][] shelf;
     private ArrayList<Tile> littleHand;
     public CommonGoalCard[] commonGoalCards;
     public PersonalGoalCard personalGoalCard;
 
-    public MyShelfMsg(Tile[][] shelf,ArrayList<Tile> littleHand,CommonGoalCard[] commonGoalCards, PersonalGoalCard personalGoalCard) {
+    public ToShelfMsg(Tile[][] shelf, ArrayList<Tile> littleHand, CommonGoalCard[] commonGoalCards, PersonalGoalCard personalGoalCard) {
         this.shelf = shelf;
         this.littleHand = littleHand;
         this.commonGoalCards = commonGoalCards;

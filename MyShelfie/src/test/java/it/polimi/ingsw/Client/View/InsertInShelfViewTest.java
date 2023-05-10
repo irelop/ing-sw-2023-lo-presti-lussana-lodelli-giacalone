@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Client.View;
 
 import it.polimi.ingsw.Server.Model.*;
-import it.polimi.ingsw.Server.Messages.MyShelfMsg;
+import it.polimi.ingsw.Server.Messages.ToShelfMsg;
 import it.polimi.ingsw.Server.Model.PatternStrategy.V2UPatternStrategy;
 import it.polimi.ingsw.Server.Model.ReadFileByLines;
 import it.polimi.ingsw.Server.Model.Tile;
@@ -20,7 +20,7 @@ public class InsertInShelfViewTest {
     PersonalGoalCard personalGoalCard;
     InsertInShelfView view;
 
-    MyShelfMsg msg;
+    ToShelfMsg msg;
 
 
     @BeforeEach
@@ -95,7 +95,7 @@ public class InsertInShelfViewTest {
         commonGoalCards[1] = new CommonGoalCard(new V2UPatternStrategy(),name,cgc2Shelf,times,description);
 
         // myShelfMsg and view
-        msg = new MyShelfMsg(this.shelf,hand,commonGoalCards,personalGoalCard);
+        msg = new ToShelfMsg(this.shelf,hand,commonGoalCards,personalGoalCard);
         view = new InsertInShelfView(msg);
 
     }
@@ -111,6 +111,6 @@ public class InsertInShelfViewTest {
 
     @Test
     public void cards_visualTest(){
-        view.printGoalCardsInfo();
+        view.printCommonGoalCardsInfo();
     }
 }

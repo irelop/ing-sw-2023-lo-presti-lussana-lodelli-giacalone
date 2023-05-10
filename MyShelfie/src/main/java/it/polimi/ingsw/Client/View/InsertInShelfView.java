@@ -5,7 +5,7 @@ import it.polimi.ingsw.Server.Model.Exceptions.InvalidShelfColumnException;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
 import it.polimi.ingsw.Server.Model.Tile;
 import it.polimi.ingsw.Server.Messages.InsertingTilesMsg;
-import it.polimi.ingsw.Server.Messages.MyShelfMsg;
+import it.polimi.ingsw.Server.Messages.ToShelfMsg;
 import static it.polimi.ingsw.Client.View.ColorCode.*;
 
 import java.util.ArrayList;
@@ -22,13 +22,12 @@ import java.util.Scanner;
 
 public class InsertInShelfView extends View {
 
-    private final MyShelfMsg msg;
+    private final ToShelfMsg msg;
 
     private InsertingTilesAnswer insertingTilesAnswer;
 
-    public InsertInShelfView(MyShelfMsg msg){
+    public InsertInShelfView(ToShelfMsg msg){
         this.msg = msg;
-        this.insertingTilesAnswer = null;
     }
 
     /**
@@ -47,14 +46,14 @@ public class InsertInShelfView extends View {
 
         synchronized (this) {
 
-            printGoalCardsInfo();
-            System.out.println("Your shelf:");
+            printCommonGoalCardsInfo();
+            System.out.println("This is your shelf, empty circles represent where to place tiles to achieve personal goal card:");
             printShelf(myShelf);
 
             System.out.println("You picked these tiles:");
             for(int i=0; i<chosenTiles.size(); i++) {
                 System.out.print((i + 1) + ") " + chosenTiles.get(i) + " ");
-                printTile(chosenTiles.get(i));
+                printTile(chosenTiles.get(i),"\u25CF");
                 System.out.println();
             }
             do {
@@ -111,6 +110,11 @@ public class InsertInShelfView extends View {
      */
     public void printShelf(Tile[][] myShelf) {
 
+        Tile[][] personalGoalCardShelf = msg.personalGoalCard.getPattern();
+
+        // check indicates if I'm printing player's shelf
+        boolean check = (myShelf == msg.getShelf());
+
         // Printing column's indexes...
         System.out.print("\u2716" + "\t");
         for (int i = 0; i < myShelf[0].length; i++)
@@ -122,24 +126,27 @@ public class InsertInShelfView extends View {
             System.out.print( (i+1) + "\t" );
             // Printing the shelf...
             for (int j = 0; j < myShelf[0].length; j++) {
-                    printTile(myShelf[i][j]);
-                    System.out.print("\t");
+                // printing empty circles in personal goal card positions, filled circles in other cases
+                if (check && personalGoalCardShelf[i][j] != Tile.BLANK && myShelf[i][j] == Tile.BLANK)
+                    printTile(personalGoalCardShelf[i][j],"\u25cb");
+                else
+                    printTile(myShelf[i][j],"\u25CF");
+                System.out.print("\t");
             }
             System.out.println();
         }
     }
 
-    public void printTile(Tile tile) {
-        String circle = "\u25CF";
+    public void printTile(Tile tile, String code) {
         switch (tile) {
             case NOT_VALID -> System.out.print(" ");
-            case BLANK -> System.out.print(BLANK.code + circle + RESET.code);
-            case PINK -> System.out.print(PINK.code + circle + RESET.code);
-            case GREEN -> System.out.print(GREEN.code + circle + RESET.code);
-            case BLUE -> System.out.print(BLUE.code + circle + RESET.code);
-            case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + circle + RESET.code);
-            case WHITE -> System.out.print(WHITE.code + circle + RESET.code);
-            case YELLOW -> System.out.print(YELLOW.code + circle + RESET.code);
+            case BLANK -> System.out.print(BLANK.code + code + RESET.code);
+            case PINK -> System.out.print(PINK.code + code + RESET.code);
+            case GREEN -> System.out.print(GREEN.code + code + RESET.code);
+            case BLUE -> System.out.print(BLUE.code + code + RESET.code);
+            case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + code + RESET.code);
+            case WHITE -> System.out.print(WHITE.code + code + RESET.code);
+            case YELLOW -> System.out.print(YELLOW.code + code + RESET.code);
         }
     }
 
@@ -147,7 +154,7 @@ public class InsertInShelfView extends View {
      * This method prints both common goal cards and player's personal
      * goal card in order to help him to decide the best move to achieve points
      */
-    public void printGoalCardsInfo(){
+    public void printCommonGoalCardsInfo(){
         System.out.println();
         System.out.println("Common goal cards:");
         for(int i=0; i<msg.commonGoalCards.length; i++){
@@ -155,10 +162,6 @@ public class InsertInShelfView extends View {
             System.out.println("x"+msg.commonGoalCards[i].getCardInfo().getTimes()+" times");
             System.out.println(msg.commonGoalCards[i].getCardInfo().getDescription());
         }
-        System.out.println();
-
-        System.out.println("Personal goal card:");
-        printShelf(msg.personalGoalCard.getPattern());
         System.out.println();
     }
 

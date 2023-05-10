@@ -44,35 +44,7 @@ public class Client implements Runnable{
         runViewStateMachine();
 
         serverHandler.stop();
-    }/*
-    private void runViewStateMachine(){
-        boolean stop = false;
-        View wait = new WaitingView();
-        boolean isWaiting = false;
-
-        synchronized (this){
-            do {
-                //if(nextView!=null) isWaiting = false;
-                if (nextView != currentView && nextView != null) {
-                    currentView = nextView;
-                    nextView = null;
-
-                    if (currentView == null) {
-                        currentView = new WaitingView();
-                    }
-                    //isWaiting=true;
-
-                    currentView.setOwner(this);
-                    currentView.run();
-
-                }
-            }while(!stop);
-        }
-
     }
-
-
-*/
 
     private void runViewStateMachine(){
         boolean stop;
@@ -82,24 +54,41 @@ public class Client implements Runnable{
             currentView = nextView;
             nextView = null;
         }
-        while(stop==false){
+        while(!stop){
             if(currentView==null){
                 currentView = new WaitingView();  //questa view viene mostrata quando nessun altra view è disponibile
                                                   //ovvero quando stanno giocando il turno gli altri
             }
             currentView.setOwner(this);
+            //System.out.println("Running "+currentView.getClass().toString());
             currentView.run();
 
             synchronized (this){
                 stop = terminate;
                 currentView = nextView;
+                /*
+                if (currentView == null)
+                    System.out.println("set current view to blabla.WaitingView");
+                else
+                    System.out.println("Set current view to "+currentView.getClass().toString());
+
+                 */
                 nextView = null;
             }
         }
+        //System.out.println("uscito dal ciclo");
+        //per ora non usciamo mai dal ciclo
     }
 
 
     public synchronized void transitionToView(View nextView){
+        /*
+        if (nextView == null)
+            System.out.println("setting next view to blabla.WaitingView");
+        else
+            System.out.println("setting next view to " + nextView.getClass().toString());
+
+         */
         this.nextView = nextView;
         //currentView.setStopInteraction(); //ho commentato questa istruzione perchè dava problemi
                                             //con l'owner della view alla fine della lobbyView
@@ -110,7 +99,7 @@ public class Client implements Runnable{
         if(!terminate){
             terminate = true;
             if(currentView!=null)
-            currentView.setStopInteraction();
+                currentView.setStopInteraction();
         }
     }
 

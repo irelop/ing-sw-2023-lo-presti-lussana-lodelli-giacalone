@@ -1,5 +1,4 @@
 package it.polimi.ingsw.Server.Model;
-import it.polimi.ingsw.Client.View.GameIsEndingView;
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.Messages.*;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
@@ -7,11 +6,8 @@ import it.polimi.ingsw.Server.Model.Exceptions.NotEnoughSpaceInChosenColumnExcep
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.locks.Lock;
 import java.util.stream.Collectors;
 
-import static it.polimi.ingsw.Client.View.ColorCode.*;
-import static it.polimi.ingsw.Client.View.ColorCode.RESET;
 import static java.lang.Thread.sleep;
 
 /**
@@ -141,7 +137,7 @@ public class MyShelfie /*implements Runnable*/ {
     public void manageLogin(ClientHandler clientHandler,LoginNicknameRequest loginNicknameRequest){
         S2CMessage loginNicknameAnswer;
 
-        if (isStarted()==true) {
+        if (isStarted()) {
             loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FULL_LOBBY);
             clientHandler.sendMessageToClient(loginNicknameAnswer);
             return;
@@ -150,7 +146,7 @@ public class MyShelfie /*implements Runnable*/ {
 
         if (checkNickname(loginNicknameRequest.getInsertedNickname()) == true){
 
-            if(isFirstConnected(loginNicknameRequest.getInsertedNickname()) == true ){
+            if(isFirstConnected(loginNicknameRequest.getInsertedNickname())){
                 loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
                 clientHandler.sendMessageToClient(loginNicknameAnswer);
                 addPlayer(loginNicknameRequest.getInsertedNickname(),clientHandler);
@@ -175,17 +171,16 @@ public class MyShelfie /*implements Runnable*/ {
 
         LobbyUpdateAnswer lobbyUpdateAnswer = new LobbyUpdateAnswer(lobbyPlayers, allPlayersReady);
 
-        for(int i=0; i< clientHandlers.size(); i++){
-            clientHandlers.get(i).sendMessageToClient(lobbyUpdateAnswer);
+        for (ClientHandler clientHandler : clientHandlers) {
+            clientHandler.sendMessageToClient(lobbyUpdateAnswer);
         }
     }
 
     public void updateGameIsEndingView(){
-        for(int i=0; i<numberOfPlayers; i++)
 
-            //mando in gameIsEndingView solo chi ha già giocato l'ultimo turno
+        for(int i=0; i<numberOfPlayers; i++)
+            //sending to gameIsEndingView players who have played their last turn
             if(playersConnected.get(i).getHasFinished()){
-                System.out.println("indice: "+i); //controllo per debuggin
                 clientHandlers.get(i).sendMessageToClient(new GameIsEndingUpdateAnswer(gameOver, i));
             }
 
@@ -410,13 +405,13 @@ public class MyShelfie /*implements Runnable*/ {
 
         ArrayList<Tile> littleHand = new ArrayList<>(currentPlayer.getLittleHand());
 
-        MyShelfMsg myShelfMsg = new MyShelfMsg(
+        ToShelfMsg toShelfMsg = new ToShelfMsg(
                 matrix,
                 littleHand,
                 Board.getCommonGoalCards(),
                 currentPlayer.getPersonalGoalCard()
                 );
-        clientHandlers.get(currentPlayerIndex).sendMessageToClient(myShelfMsg);
+        clientHandlers.get(currentPlayerIndex).sendMessageToClient(toShelfMsg);
     }
 
     /**
@@ -431,26 +426,10 @@ public class MyShelfie /*implements Runnable*/ {
 
         Player currentPlayer = playersConnected.get(currentPlayerIndex);
 
-        /*
-        System.out.println(currentPlayer.getLittleHand());
-        for (int orderIdx : orderIdxs) {
-            System.out.print(orderIdx + " ");
-        }
-        System.out.println();
-        */
-
         currentPlayer.getTiles(orderIdxs);
         currentPlayer.orderTiles(currentPlayer.getLittleHand(),orderIdxs);
         currentPlayer.myShelfie.insert(columnIdx,playersConnected.get(currentPlayerIndex).getLittleHand());
 
-        /*
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 5; j++) {
-                System.out.print(currentPlayer.myShelfie.getGrid()[i][j] + "\t");
-            }
-            System.out.println();
-        }
-        */
     }
 
     /**
@@ -498,9 +477,8 @@ public class MyShelfie /*implements Runnable*/ {
                 turn();
             }
 
-            //qui si entra quando tutti hanno giocato l'ultimo turno
+            //entered when everyone played last turn
             if(isOver && playersConnected.get(currentPlayerIndex).hasChair()){
-                System.out.println("SIUM");
 
                 //spot check
                 for (Player player : playersConnected) {
@@ -508,15 +486,15 @@ public class MyShelfie /*implements Runnable*/ {
                     player.myScore.addScore(spotScore);
                 }
 
-                this.gameOver = true;
-
-                //si setta che anche l'ultimo giocatore ha finito
+                //setting last player has finished
                 if(currentPlayerIndex==0)
                     playersConnected.get(numberOfPlayers-1).setHasFinished(true);
                 else
                     playersConnected.get(currentPlayerIndex-1).setHasFinished(true);
 
-                //si aggiorna la ending game view
+                //setting game over
+                this.gameOver = true;
+
                 updateGameIsEndingView();
             }
 
@@ -562,7 +540,6 @@ public class MyShelfie /*implements Runnable*/ {
     public void endGame(int playerIndex) {
 
         synchronized (lock){
-            System.out.println("sono in end game con "+playerIndex);
 
             ArrayList<String> playersNames = new ArrayList<>();
             for (int i = 0; i < numberOfPlayers; i++) {
@@ -575,12 +552,6 @@ public class MyShelfie /*implements Runnable*/ {
             }
 
             clientHandlers.get(playerIndex).sendMessageToClient(new ScoreBoardMsg(playersNames, scoreList));
-            try {
-                sleep(1000L *(playerIndex+1));
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
         }
 
     }

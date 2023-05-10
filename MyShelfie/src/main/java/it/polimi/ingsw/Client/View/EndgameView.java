@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Scanner;
 
 public class EndgameView extends View{
-    private ScoreBoardMsg msg;
+    private final ScoreBoardMsg msg;
 
     public EndgameView(ScoreBoardMsg msg){
         this.msg = msg;
@@ -15,12 +15,8 @@ public class EndgameView extends View{
 
     @Override
     public void run(){
-        String goOn;
 
         //sorting arrayList
-
-        System.out.println("Sono in end game view");
-
         for(int i=0; i<msg.playerName.size(); i++)
             for(int j=0; j<msg.playerName.size()-1; j++){
                 if(msg.totalScore.get(j)<msg.totalScore.get(j+1) && i!=j){
@@ -36,13 +32,16 @@ public class EndgameView extends View{
         }
 
         System.out.println("---------------------------------");
-        System.out.println("[press any key to continue]");
+        System.out.println("[press enter to continue]");
+
         Scanner scanner = new Scanner(System.in);
+        String goOn;
         goOn = scanner.next();
 
         if(goOn != null){
             FinishGameMsg finishGameMsg = new FinishGameMsg();
             getOwner().getServerHandler().sendMessageToServer(finishGameMsg);
+            getOwner().setTrueTerminate();
         }
     }
 }
