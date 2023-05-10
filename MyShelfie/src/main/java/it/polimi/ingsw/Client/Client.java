@@ -66,13 +66,7 @@ public class Client implements Runnable{
             synchronized (this){
                 stop = terminate;
                 currentView = nextView;
-                /*
-                if (currentView == null)
-                    System.out.println("set current view to blabla.WaitingView");
-                else
-                    System.out.println("Set current view to "+currentView.getClass().toString());
 
-                 */
                 nextView = null;
             }
         }
@@ -112,11 +106,5 @@ public class Client implements Runnable{
         return serverHandler;
     }
 
-    public boolean isTerminate() {
-        return terminate;
-    }
 
-    public View getNextView() {
-        return nextView;
-    }
 }

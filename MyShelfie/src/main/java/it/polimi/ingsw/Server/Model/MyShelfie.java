@@ -1,4 +1,5 @@
 package it.polimi.ingsw.Server.Model;
+import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.Messages.*;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
@@ -556,8 +557,16 @@ public class MyShelfie /*implements Runnable*/ {
 
     }
 
-    public void finishGame(){
-        return;
+    public void finishGame(ClientHandler playerEnding){
+        FinishGameAnswer finishGameAnswer;
+        int found = clientHandlers.indexOf(playerEnding);
+        String playerNameEnding = new String(playersConnected.get(found).getNickname());
+        finishGameAnswer = new FinishGameAnswer(new String("See you soon " + playerNameEnding + "!"));
+        playerEnding.sendMessageToClient(finishGameAnswer);
+
+        playersConnected.remove(found);
+        clientHandlers.remove(found);
+
     }
 
 
