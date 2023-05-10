@@ -362,7 +362,7 @@ public class MyShelfie /*implements Runnable*/ {
 
         //parte dell'if è commentata per poter testare subito la fine di una partita
         //una volta risolti i problemi bisogna togliere il commento
-        if(/*playersConnected.get(currentPlayerIndex).myShelfie.isShelfFull() && */!isOver) {
+        if( /* playersConnected.get(currentPlayerIndex).myShelfie.isShelfFull() &&  */ !isOver) {
             isShelfFull = true;
             playersConnected.get(currentPlayerIndex).myScore.addScore(1);
             this.isOver = true;

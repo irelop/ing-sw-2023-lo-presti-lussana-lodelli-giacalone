@@ -43,8 +43,10 @@ public class ChooseTilesFromBoardView extends View {
         //If it's the first turn, it prints the order in which the players will play
         if(yourTurnMsg.firstTurn)
             printOrderOfPlayers();
-        printGoalCardsInfoSide2Side();
-        printShelf();
+        //printCommonGoalCardsInfo();
+        printCommonGoalCardsInfoSide2Side();
+        printShelfAndPersonalGoalCard();
+
         printBoard(-1, -1);
 
         System.out.println();
@@ -145,9 +147,10 @@ public class ChooseTilesFromBoardView extends View {
 
     }
 
-    public void printShelf(){
-        System.out.println(yourTurnMsg.nickname + ", this is your personal shelf:");
-        printSmallMatrix(yourTurnMsg.shelfSnapshot);
+    private void printShelfAndPersonalGoalCard(){
+
+        System.out.println("This is your shelf, empty circles represent where to place tiles to achieve personal goal card:");
+        printPersonalGoalCardOnPlayerShelf(yourTurnMsg.shelfSnapshot);
         System.out.println();
     }
 
@@ -174,10 +177,7 @@ public class ChooseTilesFromBoardView extends View {
     /**
      * this method prints the common cards and the personal card
      */
-    public void printGoalCardsInfo(){
-        System.out.println("Personal goal card:");
-        printSmallMatrix(yourTurnMsg.personalGoalCard.getPattern());
-        System.out.println();
+    public void printCommonGoalCardsInfo(){
 
         System.out.println("Common goal cards:");
         for(int i=0; i<yourTurnMsg.commonGoalCards.length; i++){
@@ -186,18 +186,13 @@ public class ChooseTilesFromBoardView extends View {
             System.out.println(yourTurnMsg.commonGoalCards[i].getCardInfo().getDescription());
             System.out.println();
         }
-
-
     }
 
     /**
      * this method allows to print the goal cards with the possibility to visualize the common cards side to side.
      */
 
-    public void printGoalCardsInfoSide2Side(){
-        System.out.println("Personal goal card:");
-        printSmallMatrix(yourTurnMsg.personalGoalCard.getPattern());
-        System.out.println();
+    private void printCommonGoalCardsInfoSide2Side(){
 
         System.out.println("Common goal cards:");
 
@@ -230,7 +225,6 @@ public class ChooseTilesFromBoardView extends View {
             System.out.println(yourTurnMsg.commonGoalCards[i].getCardInfo().getDescription());
             System.out.println();
         }
-
     }
 
 
@@ -259,6 +253,46 @@ public class ChooseTilesFromBoardView extends View {
             System.out.println();
         }
     }
+
+    public void printPersonalGoalCardOnPlayerShelf(Tile[][] myShelf) {
+
+        Tile[][] personalGoalCardShelf = yourTurnMsg.personalGoalCard.getPattern();
+
+        // Printing column's indexes...
+        System.out.print("\u2716" + "\t");
+        for (int i = 0; i < myShelf[0].length; i++)
+            System.out.print( (i+1) + "\t" );
+        System.out.println();
+
+        for (int i = 0; i < myShelf.length; i++) {
+            // Printing row's indexes...
+            System.out.print( (i+1) + "\t" );
+            // Printing the shelf...
+            for (int j = 0; j < myShelf[0].length; j++) {
+                // printing empty circles in personal goal card positions, filled circles in other cases
+                if (personalGoalCardShelf[i][j] != Tile.BLANK && myShelf[i][j] == Tile.BLANK)
+                    printTile(personalGoalCardShelf[i][j],"\u25cb");
+                else
+                    printTile(myShelf[i][j],"\u25CF");
+                System.out.print("\t");
+            }
+            System.out.println();
+        }
+    }
+
+    public void printTile(Tile tile, String code) {
+        switch (tile) {
+            case NOT_VALID -> System.out.print(" ");
+            case BLANK -> System.out.print(BLANK.code + code + RESET.code);
+            case PINK -> System.out.print(PINK.code + code + RESET.code);
+            case GREEN -> System.out.print(GREEN.code + code + RESET.code);
+            case BLUE -> System.out.print(BLUE.code + code + RESET.code);
+            case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + code + RESET.code);
+            case WHITE -> System.out.print(WHITE.code + code + RESET.code);
+            case YELLOW -> System.out.print(YELLOW.code + code + RESET.code);
+        }
+    }
+
 
     /**
      * This method prints the board
