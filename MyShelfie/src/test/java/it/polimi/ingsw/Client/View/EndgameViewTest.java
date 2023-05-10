@@ -12,13 +12,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EndgameViewTest {
-    ArrayList<Player> player = new ArrayList<>();
+    ArrayList<String> player = new ArrayList<>();
     ArrayList<Integer> score = new ArrayList<>();
-
-    Player p1 = new Player("matteo");
-    Player p2 = new Player("Pow3r");
-    Player p3 = new Player("kekkobomba");
-    Player p4 = new Player("CiccioGamer89");
 
 
     ScoreBoardMsg msg;
@@ -26,10 +21,10 @@ class EndgameViewTest {
     EndgameView view;
     @BeforeEach
     void setUp() {
-        player.add(p1);
-        player.add(p2);
-        player.add(p3);
-        player.add(p4);
+        player.add("matteo");
+        player.add("power");
+        player.add("kekkobomba");
+        player.add("cicciogamer");
 
         score.add(40);
         score.add(30);

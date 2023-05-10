@@ -29,7 +29,7 @@ public class EndgameView extends View{
         System.out.println("---------------------------------");
         System.out.println("SCORE BOARD:");
         for(int i=0; i<msg.playerName.size(); i++){
-            System.out.println((i+1)+"° - "+msg.playerName.get(i).getNickname()+" with "+msg.totalScore.get(i)+" pt.");
+            System.out.println((i+1)+"° - "+msg.playerName.get(i)+" with "+msg.totalScore.get(i)+" pt.");
         }
         System.out.println("---------------------------------");
         System.out.println("[press any key to continue]");
