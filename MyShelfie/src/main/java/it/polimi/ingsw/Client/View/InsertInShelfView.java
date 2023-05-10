@@ -52,9 +52,11 @@ public class InsertInShelfView extends View {
             printGoalCardsInfo();
 
             System.out.println("You picked these tiles:");
-            for(int i=0; i<chosenTiles.size(); i++)
-                System.out.println((i+1)+ ") " + chosenTiles.get(i));
-
+            for(int i=0; i<chosenTiles.size(); i++) {
+                System.out.print((i + 1) + ") " + chosenTiles.get(i) + " ");
+                printTile(chosenTiles.get(i));
+                System.out.println();
+            }
             do {
 
                 // client side exception management
@@ -108,7 +110,6 @@ public class InsertInShelfView extends View {
      * @param myShelf: the shelf which has to be printed
      */
     public void printShelf(Tile[][] myShelf) {
-        String circle = "\u25CF";
 
         // Printing column's indexes...
         System.out.print("\u2716" + "\t");
@@ -121,22 +122,26 @@ public class InsertInShelfView extends View {
             System.out.print( (i+1) + "\t" );
             // Printing the shelf...
             for (int j = 0; j < myShelf[0].length; j++) {
-                switch (myShelf[i][j]) {
-                    case NOT_VALID -> System.out.print(" ");
-                    case BLANK -> System.out.print(BLANK.code + circle + RESET.code);
-                    case PINK -> System.out.print(PINK.code + circle + RESET.code);
-                    case GREEN -> System.out.print(GREEN.code + circle + RESET.code);
-                    case BLUE -> System.out.print(BLUE.code + circle + RESET.code);
-                    case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + circle + RESET.code);
-                    case WHITE -> System.out.print(WHITE.code + circle + RESET.code);
-                    case YELLOW -> System.out.print(YELLOW.code + circle + RESET.code);
-                }
-                System.out.print("\t");
+                    printTile(myShelf[i][j]);
+                    System.out.print("\t");
             }
             System.out.println();
         }
     }
 
+    public void printTile(Tile tile) {
+        String circle = "\u25CF";
+        switch (tile) {
+            case NOT_VALID -> System.out.print(" ");
+            case BLANK -> System.out.print(BLANK.code + circle + RESET.code);
+            case PINK -> System.out.print(PINK.code + circle + RESET.code);
+            case GREEN -> System.out.print(GREEN.code + circle + RESET.code);
+            case BLUE -> System.out.print(BLUE.code + circle + RESET.code);
+            case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + circle + RESET.code);
+            case WHITE -> System.out.print(WHITE.code + circle + RESET.code);
+            case YELLOW -> System.out.print(YELLOW.code + circle + RESET.code);
+        }
+    }
 
     /**
      * This method prints both common goal cards and player's personal
@@ -236,5 +241,5 @@ public class InsertInShelfView extends View {
             }
         }
     }
-
+        // should insert them one per time
 }
