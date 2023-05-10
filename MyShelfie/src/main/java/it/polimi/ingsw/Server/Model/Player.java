@@ -149,18 +149,14 @@ public class Player {
 */
         if (chosenTiles.size() == 1)
             return;
-        System.out.println("Before order " + littleHand);
         for (int idx : choices) {
             littleHand.add(chosenTiles.get(idx));
         }
-        System.out.println("Before removing " + littleHand);
         for (int i : choices) {
             // remove head #choises times
             littleHand.remove(0);
         }
-        System.out.println("After order " + littleHand);
 
-        //da vedere con 3 tiles prima dobbiamo sbloccare gli altri
     }
 
     /**

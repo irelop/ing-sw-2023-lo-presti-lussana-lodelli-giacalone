@@ -98,7 +98,6 @@ public class MyShelfie /*implements Runnable*/ {
             Player newPlayer = new Player(playerNickname);
             playersConnected.add(newPlayer);
             clientHandlers.add(clientHandler);
-            System.out.println(playerNickname+clientHandler);
 
             if (playersConnected.size() == numberOfPlayers && !this.allPlayersReady)
                 this.allPlayersReady = true;
@@ -219,7 +218,6 @@ public class MyShelfie /*implements Runnable*/ {
      *       or if that is the last lap
      */
     /*public void manageTurn(){
-        System.out.println("sono in manage turn");
         board.initGridParabolic(numberOfPlayers);
         //board.initGrid(numberOfPlayers);
         board.refill();

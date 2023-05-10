@@ -47,9 +47,9 @@ public class InsertInShelfView extends View {
 
         synchronized (this) {
 
+            printGoalCardsInfo();
             System.out.println("Your shelf:");
             printShelf(myShelf);
-            printGoalCardsInfo();
 
             System.out.println("You picked these tiles:");
             for(int i=0; i<chosenTiles.size(); i++) {
@@ -208,23 +208,45 @@ public class InsertInShelfView extends View {
             return choices;
         }
 
-        // 2 or 3 tiles of different colors to insert -> user must choose the order
-        /*
-        System.out.println("You picked this tiles:");
-        for(int i=0; i<tilesNumber; i++)
-            System.out.println((i+1)+ ") " + chosenTiles.get(i));
-         */
-        System.out.print("You can reorder tiles before inserting them in your shelf: \n" +
-                "Please enter indexes in the order you want to insert tiles, divided by a space" +
-                "\n(remember: first index will be the lowest in the shelf) ");
-        getTiles(choices);
+        System.out.print("""
+                You can reorder tiles before inserting them in your shelf:\s
+                (remember: first index will be the lowest in the shelf)
+                """);
+        //getTiles(choices);
 
+        for(int i=0; i<choices.length; i++){
+            switch (i) {
+                case 0 -> System.out.print("Please insert first index: ");
+                case 1 -> System.out.print("Please insert second index: ");
+                case 2 -> System.out.print("Please insert third index: ");
+            }
+            choices[i] = getTile();
+        }
+        for(int i=0; i< choices.length-1; i++){
+            for(int j=i+1; j<choices.length; j++){
+                if(choices[i]==choices[j]) throw new InvalidTileIndexInLittleHandException(choices.length);
+            }
+        }
         return choices;
     }
 
+    /**
+     * This private method is called by askOrder(), more than once
+     * It takes player's input and check if it's right
+     * @return choice: index chosen by the player
+     * @throws InvalidTileIndexInLittleHandException: thrown to avoid wrong order indexes
+     */
+    private int getTile() throws InvalidTileIndexInLittleHandException {
+        Scanner scanner = new Scanner(System.in);
+        int size = msg.getLittleHand().size();
+        int choice = scanner.nextInt() - 1; // user's indexes start from one
+        if(choice < 0 || choice >= size) throw new InvalidTileIndexInLittleHandException(size);
+        return choice;
+    }
 
     /**
      * This private method is called by askOrder(). It takes player's inputs and check if they are right
+     * @deprecated
      * @param choices: an array of indexes
      * @throws InvalidTileIndexInLittleHandException: thrown to avoid wrong order indexes
      */
@@ -240,6 +262,7 @@ public class InsertInShelfView extends View {
                 if(choices[i]==choices[j]) throw new InvalidTileIndexInLittleHandException(choices.length);
             }
         }
+        // better insert them one per time
     }
-        // should insert them one per time
+
 }

@@ -69,7 +69,6 @@ public class Server {
                     MyShelfie game = new MyShelfie();
                     games.add(game);
                     currentGame++;
-                    System.out.println("creo nuovo game");
                 }
                 ClientHandler clientHandler = new SocketClientHandler(client, games.get(currentGame));
 
