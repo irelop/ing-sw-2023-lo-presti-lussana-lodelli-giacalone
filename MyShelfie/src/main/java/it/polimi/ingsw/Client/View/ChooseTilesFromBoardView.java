@@ -43,7 +43,7 @@ public class ChooseTilesFromBoardView extends View {
         //If it's the first turn, it prints the order in which the players will play
         if(yourTurnMsg.firstTurn)
             printOrderOfPlayers();
-        printGoalCardsInfo();
+        printGoalCardsInfoSide2Side();
         printShelf();
         printBoard(-1, -1);
 
@@ -189,6 +189,50 @@ public class ChooseTilesFromBoardView extends View {
 
 
     }
+
+    /**
+     * this method allows to print the goal cards with the possibility to visualize the common cards side to side.
+     */
+
+    public void printGoalCardsInfoSide2Side(){
+        System.out.println("Personal goal card:");
+        printSmallMatrix(yourTurnMsg.personalGoalCard.getPattern());
+        System.out.println();
+
+        System.out.println("Common goal cards:");
+
+        String code = "\u25CF";
+        for(int r=0; r<6; r++) {
+            for (int i = 0; i < yourTurnMsg.commonGoalCards.length; i++) {
+                for (int c = 0; c < 5; c++) {
+
+                    switch (yourTurnMsg.commonGoalCards[i].getCardInfo().getSchema()[r][c]) {
+                        case NOT_VALID -> System.out.print(" ");
+                        case BLANK -> System.out.print(BLANK.code + code + RESET.code);
+                        case PINK -> System.out.print(PINK.code + code + RESET.code);
+                        case GREEN -> System.out.print(GREEN.code + code + RESET.code);
+                        case BLUE -> System.out.print(BLUE.code + code + RESET.code);
+                        case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + code + RESET.code);
+                        case WHITE -> System.out.print(WHITE.code + code + RESET.code);
+                        case YELLOW -> System.out.print(YELLOW.code + code + RESET.code);
+                    }
+                    System.out.print("\t");
+                }
+                System.out.print("\t");
+                System.out.print("\t");
+            }
+            System.out.println();
+        }
+
+        for(int i=0; i<yourTurnMsg.commonGoalCards.length; i++){
+            System.out.println("Common Goal Card #" +(i+1));
+            System.out.println("x"+yourTurnMsg.commonGoalCards[i].getCardInfo().getTimes());
+            System.out.println(yourTurnMsg.commonGoalCards[i].getCardInfo().getDescription());
+            System.out.println();
+        }
+
+    }
+
 
     /**
      * This method prints the pattern of the cards

@@ -16,7 +16,6 @@ public class LoginNumPlayersRequest extends C2SMessage{
     public void processMessage(ClientHandler clientHandler) {
 
         clientHandler.getController().setNumberOfPlayers(insertedNumPlayers);
-        //System.out.println(clientHandler.getController().getNumberOfPlayers());
 
     }
 }

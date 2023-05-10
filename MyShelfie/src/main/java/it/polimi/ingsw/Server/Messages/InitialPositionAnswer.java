@@ -16,17 +16,13 @@ public class InitialPositionAnswer extends S2CMessage{
     public boolean valid;
 
     public InitialPositionAnswer(String answer, boolean valid){
-        System.out.println("sono nel costruttore");
         this.answer = answer;
         this.valid = valid;
-        System.out.println("ho finito di costruire");
     }
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        System.out.println("sono nella process");
         ChooseTilesFromBoardView chooseTilesFromBoardView = (ChooseTilesFromBoardView) serverHandler.getClient().getCurrentView();
-        System.out.println("ho preso la current view");
         chooseTilesFromBoardView.setInitialPositionAnswer(this);
         serverHandler.getClient().getCurrentView().notifyView();
     }

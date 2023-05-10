@@ -47,14 +47,16 @@ public class InsertInShelfView extends View {
 
         synchronized (this) {
 
+            printGoalCardsInfo();
             System.out.println("Your shelf:");
             printShelf(myShelf);
-            printGoalCardsInfo();
 
             System.out.println("You picked these tiles:");
-            for(int i=0; i<chosenTiles.size(); i++)
-                System.out.println((i+1)+ ") " + chosenTiles.get(i));
-
+            for(int i=0; i<chosenTiles.size(); i++) {
+                System.out.print((i + 1) + ") " + chosenTiles.get(i) + " ");
+                printTile(chosenTiles.get(i));
+                System.out.println();
+            }
             do {
 
                 // client side exception management
@@ -108,7 +110,6 @@ public class InsertInShelfView extends View {
      * @param myShelf: the shelf which has to be printed
      */
     public void printShelf(Tile[][] myShelf) {
-        String circle = "\u25CF";
 
         // Printing column's indexes...
         System.out.print("\u2716" + "\t");
@@ -121,22 +122,26 @@ public class InsertInShelfView extends View {
             System.out.print( (i+1) + "\t" );
             // Printing the shelf...
             for (int j = 0; j < myShelf[0].length; j++) {
-                switch (myShelf[i][j]) {
-                    case NOT_VALID -> System.out.print(" ");
-                    case BLANK -> System.out.print(BLANK.code + circle + RESET.code);
-                    case PINK -> System.out.print(PINK.code + circle + RESET.code);
-                    case GREEN -> System.out.print(GREEN.code + circle + RESET.code);
-                    case BLUE -> System.out.print(BLUE.code + circle + RESET.code);
-                    case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + circle + RESET.code);
-                    case WHITE -> System.out.print(WHITE.code + circle + RESET.code);
-                    case YELLOW -> System.out.print(YELLOW.code + circle + RESET.code);
-                }
-                System.out.print("\t");
+                    printTile(myShelf[i][j]);
+                    System.out.print("\t");
             }
             System.out.println();
         }
     }
 
+    public void printTile(Tile tile) {
+        String circle = "\u25CF";
+        switch (tile) {
+            case NOT_VALID -> System.out.print(" ");
+            case BLANK -> System.out.print(BLANK.code + circle + RESET.code);
+            case PINK -> System.out.print(PINK.code + circle + RESET.code);
+            case GREEN -> System.out.print(GREEN.code + circle + RESET.code);
+            case BLUE -> System.out.print(BLUE.code + circle + RESET.code);
+            case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + circle + RESET.code);
+            case WHITE -> System.out.print(WHITE.code + circle + RESET.code);
+            case YELLOW -> System.out.print(YELLOW.code + circle + RESET.code);
+        }
+    }
 
     /**
      * This method prints both common goal cards and player's personal
@@ -203,23 +208,45 @@ public class InsertInShelfView extends View {
             return choices;
         }
 
-        // 2 or 3 tiles of different colors to insert -> user must choose the order
-        /*
-        System.out.println("You picked this tiles:");
-        for(int i=0; i<tilesNumber; i++)
-            System.out.println((i+1)+ ") " + chosenTiles.get(i));
-         */
-        System.out.print("You can reorder tiles before inserting them in your shelf: \n" +
-                "Please enter indexes in the order you want to insert tiles, divided by a space" +
-                "\n(remember: first index will be the lowest in the shelf) ");
-        getTiles(choices);
+        System.out.print("""
+                You can reorder tiles before inserting them in your shelf:\s
+                (remember: first index will be the lowest in the shelf)
+                """);
+        //getTiles(choices);
 
+        for(int i=0; i<choices.length; i++){
+            switch (i) {
+                case 0 -> System.out.print("Please insert first index: ");
+                case 1 -> System.out.print("Please insert second index: ");
+                case 2 -> System.out.print("Please insert third index: ");
+            }
+            choices[i] = getTile();
+        }
+        for(int i=0; i< choices.length-1; i++){
+            for(int j=i+1; j<choices.length; j++){
+                if(choices[i]==choices[j]) throw new InvalidTileIndexInLittleHandException(choices.length);
+            }
+        }
         return choices;
     }
 
+    /**
+     * This private method is called by askOrder(), more than once
+     * It takes player's input and check if it's right
+     * @return choice: index chosen by the player
+     * @throws InvalidTileIndexInLittleHandException: thrown to avoid wrong order indexes
+     */
+    private int getTile() throws InvalidTileIndexInLittleHandException {
+        Scanner scanner = new Scanner(System.in);
+        int size = msg.getLittleHand().size();
+        int choice = scanner.nextInt() - 1; // user's indexes start from one
+        if(choice < 0 || choice >= size) throw new InvalidTileIndexInLittleHandException(size);
+        return choice;
+    }
 
     /**
      * This private method is called by askOrder(). It takes player's inputs and check if they are right
+     * @deprecated
      * @param choices: an array of indexes
      * @throws InvalidTileIndexInLittleHandException: thrown to avoid wrong order indexes
      */
@@ -235,6 +262,7 @@ public class InsertInShelfView extends View {
                 if(choices[i]==choices[j]) throw new InvalidTileIndexInLittleHandException(choices.length);
             }
         }
+        // better insert them one per time
     }
 
 }

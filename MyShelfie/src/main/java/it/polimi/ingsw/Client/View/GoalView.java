@@ -35,7 +35,7 @@ public class GoalView extends View{
 
         System.out.println("Total score: "+ msg.score);
         System.out.println("---------------------------------");
-        System.out.println("[press any key to continue]");
+        System.out.println("[press enter to continue]");
         goOn = scanner.nextLine();
 
         //non l'abbiamo usata questa cosa....
