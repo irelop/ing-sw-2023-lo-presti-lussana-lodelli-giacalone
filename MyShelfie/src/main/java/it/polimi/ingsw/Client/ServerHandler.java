@@ -11,13 +11,17 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class ServerHandler implements Runnable{
+    /*
     public ObjectInputStream input;
     public ObjectOutputStream output;
-    public Client owner;
     public Socket server;
+    */
+    public Client owner;
 
-    public ServerHandler(Socket server,Client owner) {
-            try{
+
+    public ServerHandler(/*Socket server,*/Client owner) {
+        /*
+        try{
                 output = new ObjectOutputStream(server.getOutputStream());
                 input = new ObjectInputStream(server.getInputStream());
             }catch(IOException e){
@@ -25,8 +29,11 @@ public abstract class ServerHandler implements Runnable{
                 owner.setTrueTerminate();
                 return;
             }
+            */
+
+
         this.owner = owner;
-        this.server = server;
+        //this.server = server;
     }
 
 

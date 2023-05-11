@@ -18,11 +18,13 @@ import java.net.Socket;
  */
 public class SocketClientHandler extends ClientHandler{
     //the socket used for communicate with the connected client.
+    ObjectOutputStream outputStream;
+    ObjectInputStream inputStream;
     private Socket client;
 
     SocketClientHandler(Socket client, MyShelfie game){
+        super(game);
         this.client = client;
-        this.game = game;
     }
 
 

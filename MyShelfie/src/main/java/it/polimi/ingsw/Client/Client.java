@@ -70,23 +70,15 @@ public class Client implements Runnable{
                 nextView = null;
             }
         }
-        //System.out.println("uscito dal ciclo");
-        //per ora non usciamo mai dal ciclo
     }
 
 
     public synchronized void transitionToView(View nextView){
-        /*
-        if (nextView == null)
-            System.out.println("setting next view to blabla.WaitingView");
-        else
-            System.out.println("setting next view to " + nextView.getClass().toString());
 
-         */
         this.nextView = nextView;
         //currentView.setStopInteraction(); //ho commentato questa istruzione perchè dava problemi
                                             //con l'owner della view alla fine della lobbyView
-                                            //bisogna capire come fixare
+
     }
 
     public synchronized void setTrueTerminate(){

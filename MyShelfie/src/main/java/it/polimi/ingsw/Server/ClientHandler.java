@@ -15,12 +15,16 @@ import java.io.ObjectOutputStream;
  */
 
 public abstract class ClientHandler implements Runnable {
+    /*
     ObjectOutputStream outputStream;
     ObjectInputStream inputStream;
-    Client client;
+     */
+    //Client client;
+
     protected MyShelfie game;
 
-    public ClientHandler(){
+    public ClientHandler(MyShelfie game){
+        this.game = game;
 
     }
 
