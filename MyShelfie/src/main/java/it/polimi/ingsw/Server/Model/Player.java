@@ -10,6 +10,7 @@ package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Player {

@@ -34,6 +34,7 @@ public class MyShelfie /*implements Runnable*/ {
     private boolean firstTurn;
     private boolean gameOver;
     private final Object lock;
+    private int firstToFinish;
     public MyShelfie(){
         //this.board = Board.getBoardInstance();
         this.board = new Board();
@@ -178,11 +179,19 @@ public class MyShelfie /*implements Runnable*/ {
     }
 
     public void updateGameIsEndingView(){
+        String[] players = new String[numberOfPlayers];
+        boolean[] hasFinished = new boolean[numberOfPlayers];
+        for(int j=0; j<numberOfPlayers; j++){
+            players[j] = playersConnected.get(j).getNickname();
+            hasFinished[j] = playersConnected.get(j).getHasFinished();
+        }
 
         for(int i=0; i<numberOfPlayers; i++)
             //sending to gameIsEndingView players who have played their last turn
             if(playersConnected.get(i).getHasFinished()){
-                clientHandlers.get(i).sendMessageToClient(new GameIsEndingUpdateAnswer(gameOver, i));
+                clientHandlers.get(i).sendMessageToClient(
+                        new GameIsEndingUpdateAnswer(gameOver, i, firstToFinish, players, hasFinished));
+
             }
 
     }
@@ -367,6 +376,8 @@ public class MyShelfie /*implements Runnable*/ {
             isShelfFull = true;
             playersConnected.get(currentPlayerIndex).myScore.addScore(1);
             this.isOver = true;
+
+            this.firstToFinish = currentPlayerIndex;
 
             //se finisce un giocatore che non è il primo, settiamo che quelli prima di lui hanno
             // già fatto l'ultimo turno
