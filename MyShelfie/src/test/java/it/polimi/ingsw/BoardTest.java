@@ -69,7 +69,7 @@ public class BoardTest {
 
         for(int i=0; i<9; i++)
            for(int j=0; j<9; j++)
-                Assertions.assertEquals(grid[i][j], Board.getBoardGrid()[i][j]);
+                Assertions.assertEquals(grid[i][j], board.getBoardGrid()[i][j]);
 
     }
 
@@ -200,7 +200,7 @@ public class BoardTest {
 
         for(int i=0; i<9; i++)
             for(int j=0; j<9; j++)
-                Assertions.assertNotEquals(Board.getBoardGrid()[i][j], Tile.BLANK);
+                Assertions.assertNotEquals(board.getBoardGrid()[i][j], Tile.BLANK);
     }
 
     @Test

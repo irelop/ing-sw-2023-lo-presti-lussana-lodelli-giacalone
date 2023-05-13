@@ -28,7 +28,7 @@ public class CommonCardInfo implements Serializable {
         int index = 0;
         ReadFileByLines reader = new ReadFileByLines();
        // reader.readFrom("MyShelfie/src/txtfiles/CommonGoalCardsInfo.txt");
-        reader.readFrom("MyShelfie/src/txtfiles/CommonGoalCardsInfo.txt");
+        reader.readFrom("src/txtfiles/CommonGoalCardsInfo.txt");
         for(int w=0; w<120; w=w+10){
             String row = ReadFileByLines.getLineByIndex(w);
             if(row.equals(this.name)) {

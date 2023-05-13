@@ -17,11 +17,11 @@ class ChooseTilesFromBoardViewTest {
 
 
     private ChooseTilesFromBoardView chooseTilesFromBoardView;
-    ReadFileByLines reader;
+    private ReadFileByLines reader;
+    private YourTurnMsg yourTurnMsg;
 
     @BeforeEach
     void setUp() {
-        YourTurnMsg yourTurnMsg;
 
         reader = new ReadFileByLines();
         reader.readFrom("src/test/testFiles/chooseTilesFromBoardViewTest.txt");
@@ -91,12 +91,24 @@ class ChooseTilesFromBoardViewTest {
         }
         PersonalGoalCard personalGoalCard = new PersonalGoalCard(personalCardPattern);
 
+        Tile[][] shelf = new Tile[6][5];
+        for(int i=0; i<6; i++){
+            String row = ReadFileByLines.getLine();
+
+            String[] values = row.replaceAll("\\{", "")
+                    .replaceAll("}", "")
+                    .split(", ");
+
+            for (int j = 0; j < 5; j++)
+                shelf[i][j] = Tile.valueOf(values[j]);
+        }
+
         ArrayList<String> playersNames = new ArrayList<>();
         playersNames.add("player1");
         playersNames.add("player2");
 
         yourTurnMsg = new YourTurnMsg("player1", 3, boardGrid, commonGoalCards,
-                personalGoalCard, 0, playersNames);
+                personalGoalCard, true, playersNames, shelf);
         chooseTilesFromBoardView = new ChooseTilesFromBoardView(yourTurnMsg);
     }
 
@@ -116,12 +128,17 @@ class ChooseTilesFromBoardViewTest {
 
     @Test
     public void printCards_visualTest(){
-        chooseTilesFromBoardView.printGoalCardsInfo();
+        chooseTilesFromBoardView.printCommonGoalCardsInfoSide2Side();
     }
 
     @Test
     public void printPlayersOrder_visualTest(){
         chooseTilesFromBoardView.printOrderOfPlayers();
+    }
+
+    @Test
+    public void printRules_visualTest(){
+        chooseTilesFromBoardView.printRules();
     }
 
 }
