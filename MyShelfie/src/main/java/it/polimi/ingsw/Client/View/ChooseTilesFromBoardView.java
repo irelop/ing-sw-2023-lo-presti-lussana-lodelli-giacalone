@@ -12,6 +12,7 @@ import it.polimi.ingsw.Server.Model.Exceptions.OutOfBoardException;
 import it.polimi.ingsw.Server.Model.ReadFileByLines;
 import it.polimi.ingsw.Server.Model.Tile;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import static it.polimi.ingsw.Client.View.ColorCode.*;
@@ -40,11 +41,18 @@ public class ChooseTilesFromBoardView extends View {
         int r, c, numberOfTiles;
         char direction;
         boolean goOn = false;
+        Scanner scanner = new Scanner(System.in);
+
+
 
         //If it's the first turn, it prints the order in which the players will play
-        if(yourTurnMsg.firstTurn)
-            printRules();
+        if(yourTurnMsg.firstTurn){
+            System.out.print("Do you want to read the rules? (y-n) ");
+            char answer = scanner.next().toUpperCase().charAt(0);
+            if(answer == 'Y')
+                printRules();
             printOrderOfPlayers();
+        }
         //printCommonGoalCardsInfo();
         printCommonGoalCardsInfoSide2Side();
         printShelfAndPersonalGoalCard();
@@ -53,12 +61,12 @@ public class ChooseTilesFromBoardView extends View {
 
         System.out.println();
         System.out.println(yourTurnMsg.nickname + ", it's your turn to pick the tiles from the board!");
-        System.out.println(yourTurnMsg.nickname + ", choose the position of the first tile, remember that" +
-                " after you choose it, you have to select the number of tiles you want and" +
-                " the direction (north, south, east, west) in which" +
-                " you want to choose these other tiles");
-        System.out.println("Remember also that the board is 9x9 and that you have to choose a cell" +
-                "with a tile (so it has to be valid and not empty) with a free side");
+        System.out.println(yourTurnMsg.nickname + ", choose the position of the first tile, remember that\n" +
+                " after you choose it, you have to select the number of tiles you want and\n" +
+                " the direction (north, south, east, west) in which\n" +
+                " you want to choose these other tiles\n");
+        System.out.println("Remember also that the board is 9x9 and that you have to choose a cell\n" +
+                "with a tile (so it has to be valid and not empty) with a free side\n");
 
         //choosing initial row and initial column
         synchronized (this) {
@@ -102,56 +110,64 @@ public class ChooseTilesFromBoardView extends View {
             } while (!goOn);
         }
 
-        printBoard(r, c);
-        System.out.println("The initial position is marked with a star");
+        if(yourTurnMsg.maxTilesPickable-1 != 0){
+            printBoard(r, c);
+            System.out.println("The initial position is marked with a star.\n");
 
-        //choosing the number of tiles to pick and the direction
-        synchronized (this) {
-            goOn = false;
-            do {
+            //choosing the number of tiles to pick and the direction
+            synchronized (this) {
+                goOn = false;
                 do {
-                    try {
-                        numberOfTiles = getNumberOfTiles();
-                        break;
+                    do {
+                        try {
+                            numberOfTiles = getNumberOfTiles();
+                            break;
                         } catch (InvalidNumberOfTilesException e) {
                             System.out.println(e);
                         }
                     } while (true);
 
-                if (numberOfTiles == 0)
+                    if (numberOfTiles == 0)
                         direction = '0';
-                else {
-                    do {
+                    else {
+                        do {
                             try {
                                 direction = getDirection();
                                 break;
                             } catch (InvalidDirectionException e) {
                                 System.out.println(e);
                             }
-                    } while (true);
-                }
+                        } while (true);
+                    }
 
-                PlayerChoiceMsg playerChoiceMsg = new PlayerChoiceMsg(r, c, direction, numberOfTiles,
-                        yourTurnMsg.maxTilesPickable);
-                getOwner().getServerHandler().sendMessageToServer(playerChoiceMsg);
+                    PlayerChoiceMsg playerChoiceMsg = new PlayerChoiceMsg(r, c, direction, numberOfTiles,
+                            yourTurnMsg.maxTilesPickable);
+                    getOwner().getServerHandler().sendMessageToServer(playerChoiceMsg);
 
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                System.out.println(this.playerChoiceAnswer.answer);
-                if (this.playerChoiceAnswer.valid)
-                    goOn = true;
+                    try {
+                        this.wait();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    System.out.println(this.playerChoiceAnswer.answer);
+                    if (this.playerChoiceAnswer.valid)
+                        goOn = true;
 
                 } while (!goOn);
             }
+        }
+        else{
+            PlayerChoiceMsg playerChoiceMsg = new PlayerChoiceMsg(r, c, '0', 0,
+                    yourTurnMsg.maxTilesPickable);
+            getOwner().getServerHandler().sendMessageToServer(playerChoiceMsg);
+        }
 
     }
 
     private void printShelfAndPersonalGoalCard(){
 
-        System.out.println("This is your shelf, empty circles represent where to place tiles to achieve personal goal card:");
+        System.out.println("This is your shelf, empty circles represent where to place tiles to\n" +
+                "achieve personal goal card:");
         printPersonalGoalCardOnPlayerShelf(yourTurnMsg.shelfSnapshot);
         System.out.println();
     }
@@ -351,9 +367,96 @@ public class ChooseTilesFromBoardView extends View {
         int r;
         System.out.print("Please insert the row of the initial position: ");
         Scanner scanner = new Scanner(System.in);
-        r = scanner.nextInt();
+        do{
+            try{
+                r = scanner.nextInt();
+                break;
+            }catch(InputMismatchException e){
+                System.out.println("You have to insert a number. Try again!");
+                scanner.next();
+            }
+        }while(true);
         if(r<=0 || r>MAX_ROWS) throw new OutOfBoardException();
         return r;
+    }
+
+    /**
+     * Getter method for the initial column
+     * @return column>=1 && column<MAX_ROW
+     * @throws OutOfBoardException if the column is not between 1 and MAX_COLUMNS
+     */
+    private int getInitialColumn() throws OutOfBoardException{
+        int c;
+        System.out.print("Please insert the column of the initial position: ");
+        Scanner scanner = new Scanner(System.in);
+        do{
+            try{
+                c = scanner.nextInt();
+                break;
+            }catch(InputMismatchException e){
+                System.out.println("You have to insert a number. Try again!");
+                scanner.next();
+            }
+        }while(true);
+        if(c<=0 || c>MAX_COLUMNS) throw new OutOfBoardException();
+        else return c;
+    }
+
+    /**
+     * Getter method for the number of tiles
+     * @return number of tiles >= 0 && number of tiles < maxTilesPickable-1
+     * @throws InvalidNumberOfTilesException if the number of tiles is not between 0 and axTilesPickable-1
+     */
+    private int getNumberOfTiles() throws InvalidNumberOfTilesException{
+
+        System.out.println(yourTurnMsg.nickname + ", now it's time to" +
+                " insert the number of tiles that you\n" +
+                "want to chose (other than the one that you have already chose).");
+
+        System.out.println("Remember: you can chose between 0 (if you don't want to pick others tiles)\n" +
+                "and "+(yourTurnMsg.maxTilesPickable-1)+".");
+        System.out.print("Please insert the number of tiles: ");
+
+        Scanner scanner = new Scanner(System.in);
+        int numberOfTiles;
+        do{
+            try{
+                numberOfTiles = scanner.nextInt();
+                break;
+            }catch(InputMismatchException e){
+                System.out.println("You have to insert a number. Try again!");
+                scanner.next();
+            }
+        }while(true);
+
+        if(numberOfTiles<0 || numberOfTiles>yourTurnMsg.maxTilesPickable-1)
+            throw new InvalidNumberOfTilesException(yourTurnMsg.maxTilesPickable);
+
+        else
+            return numberOfTiles;
+    }
+
+    /**
+     * Getter method for direction
+     * @return direction (n, s, w or e)
+     * @throws InvalidDirectionException if the direction is not n, s, w or e
+     */
+    private char getDirection() throws InvalidDirectionException {
+
+        System.out.println(yourTurnMsg.nickname + ", now it's time to" +
+                " insert the direction in which you want to choose those tiles.");
+        System.out.println("Remember: you can choose between n (north), s (south), e (east), w (west).");
+        System.out.print("Please insert the direction: ");
+
+        Scanner scanner = new Scanner(System.in);
+        char direction;
+        direction = scanner.next().charAt(0);
+
+        if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w')
+            throw new InvalidDirectionException();
+
+        else
+            return direction;
     }
 
     public void printRules(){
@@ -426,70 +529,13 @@ public class ChooseTilesFromBoardView extends View {
         System.out.println("Game end:");
         System.out.println("\tThe first player who fills all the spaces of their bookshelf takes the end game\n" +
                 "\ttoken. The game continues until the last player(the one before the first)\n" +
-                "\thas played their turn.");
-
-    }
-
-    /**
-     * Getter method for the initial column
-     * @return column>=1 && column<MAX_ROW
-     * @throws OutOfBoardException if the column is not between 1 and MAX_COLUMNS
-     */
-    private int getInitialColumn() throws OutOfBoardException{
-        int c;
-        System.out.print("Please insert the column of the initial position: ");
+                "\thas played their turn.\n\n");
+        System.out.println("[press enter to continue]");
         Scanner scanner = new Scanner(System.in);
-        c = scanner.nextInt();
-        if(c<=0 || c>MAX_COLUMNS) throw new OutOfBoardException();
-        else return c;
-    }
+        String goOn = scanner.nextLine();
 
-    /**
-     * Getter method for the number of tiles
-     * @return number of tiles >= 0 && number of tiles < maxTilesPickable-1
-     * @throws InvalidNumberOfTilesException if the number of tiles is not between 0 and axTilesPickable-1
-     */
-    private int getNumberOfTiles() throws InvalidNumberOfTilesException{
-
-        System.out.println(yourTurnMsg.nickname + ", now it's time to" +
-                " insert the number of tiles that you " +
-                "want to chose (other than the one that you have already chose).");
-        System.out.println("Remember: you can chose between 0 (if you don't want to pick others tiles) " +
-                "and "+(yourTurnMsg.maxTilesPickable-1)+".");
-        System.out.print("Please insert the number of tiles: ");
-
-        Scanner scanner = new Scanner(System.in);
-        int numberOfTiles;
-        numberOfTiles = scanner.nextInt();
-
-        if(numberOfTiles<0 || numberOfTiles>yourTurnMsg.maxTilesPickable-1)
-            throw new InvalidNumberOfTilesException(yourTurnMsg.maxTilesPickable);
-
-        else
-            return numberOfTiles;
-    }
-
-    /**
-     * Getter method for direction
-     * @return direction (n, s, w or e)
-     * @throws InvalidDirectionException if the direction is not n, s, w or e
-     */
-    private char getDirection() throws InvalidDirectionException {
-
-        System.out.println(yourTurnMsg.nickname + ", now it's time to" +
-                " insert the direction in which you want to choose those tiles.");
-        System.out.println("Remember: you can chose between n (north), s (south), e (east), w (west).");
-        System.out.print("Please insert the direction: ");
-
-        Scanner scanner = new Scanner(System.in);
-        char direction;
-        direction = scanner.next().charAt(0);
-
-        if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w')
-            throw new InvalidDirectionException();
-
-        else
-            return direction;
+        if(goOn != null)
+            return;
     }
 
     public void notifyView(){

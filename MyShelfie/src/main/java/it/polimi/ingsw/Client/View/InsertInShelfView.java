@@ -9,6 +9,7 @@ import it.polimi.ingsw.Server.Messages.ToShelfMsg;
 import static it.polimi.ingsw.Client.View.ColorCode.*;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
@@ -174,7 +175,17 @@ public class InsertInShelfView extends View {
         int columnChosen;
         System.out.print("Please insert the index of the column you want to fill with tiles: ");
         Scanner scanner = new Scanner(System.in);
-        columnChosen = scanner.nextInt() - 1; // user's indexes start from one
+
+        //to avoid loop if the user inserts a letter
+        do{
+            try{
+                columnChosen = scanner.nextInt() -1 ;// user's indexes start from one
+                break;
+            }catch(InputMismatchException e){
+                System.out.println("You have to insert a number. Try again!");
+                scanner.next();
+            }
+        }while(true);
         if (columnChosen < 0 || columnChosen >= 5) throw new InvalidShelfColumnException();
         return columnChosen;
     }
