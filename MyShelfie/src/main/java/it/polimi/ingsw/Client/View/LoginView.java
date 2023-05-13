@@ -1,8 +1,10 @@
 package it.polimi.ingsw.Client.View;
 
 import it.polimi.ingsw.Client.Client;
+import it.polimi.ingsw.Client.View.Exceptions.InvalidNumberOfPlayersException;
 import it.polimi.ingsw.Server.Messages.*;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -91,16 +93,26 @@ public class LoginView extends View implements ObserverView {
     private void showNicknameAnswer(LoginNicknameAnswer nicknameAnswer){
         switch (nicknameAnswer.getNicknameStatus()){
             case ACCEPTED ->{
-                System.out.println("\nGreat! So you are: " +nicknameAnswer.getParent().getInsertedNickname()+ " : nice to meet you!\n");
+                System.out.println("\nGreat! So you are: " +nicknameAnswer.getParent().getInsertedNickname()+ ", nice to meet you!\n");
                 goOn = true;
             }
             case INVALID -> {
                 System.out.println("\nSorry, your nickname has already been chosen - please select another one\n");
             }
             case FIRST_ACCEPTED -> {
-                System.out.println("\nGreat! So you are: " + nicknameAnswer.getParent().getInsertedNickname()+ " nice to meet you!\n");
+                System.out.println("\nGreat! So you are: " + nicknameAnswer.getParent().getInsertedNickname()+ ", nice to meet you!\n");
                 goOn = true;
-                askNumPlayersRequest();
+                int insertedNumPlayers;
+                do{
+                    try{
+                        insertedNumPlayers = askNumPlayersRequest();
+                        break;
+                    }catch (InvalidNumberOfPlayersException e){
+                        System.out.println(e);
+                    }
+                }while(true);
+                C2SMessage numPlayersRequest = new LoginNumPlayersRequest(insertedNumPlayers);
+                getOwner().getServerHandler().sendMessageToServer(numPlayersRequest);
             }
             case FULL_LOBBY -> {
                 System.out.println("\nDeeply sorry! We cannot let you join because the game lobby is already full\n");
@@ -114,19 +126,34 @@ public class LoginView extends View implements ObserverView {
     /**
      * OVERVIEW: this method allows to ask the number of players of the game and to forward the request to the server.
      */
-    public void askNumPlayersRequest(){
+    public int askNumPlayersRequest() throws InvalidNumberOfPlayersException {
         Scanner input = new Scanner(System.in);
         int insertedNumPlayers;
 
         System.out.println("\nPlease select the number of the players for the game\n");
-        insertedNumPlayers = input.nextInt();
+
+        do{
+            try{
+                insertedNumPlayers = input.nextInt();
+                break;
+            }catch(InputMismatchException e){
+                System.out.println("You have to insert a number. Try again!");
+                input.next();
+            }
+        }while(true);
+
+        if(insertedNumPlayers <=1 || insertedNumPlayers > 4)
+            throw new InvalidNumberOfPlayersException();
+        else
+            return insertedNumPlayers;
+        /*insertedNumPlayers = input.nextInt();
         while(insertedNumPlayers <=1 || insertedNumPlayers > 4){
             System.out.println("\nSorry, the number inserted is not valid: please select another one\n");
             insertedNumPlayers = input.nextInt();
-        }
+        }*/
 
-        C2SMessage numPlayersRequest = new LoginNumPlayersRequest(insertedNumPlayers);
-        getOwner().getServerHandler().sendMessageToServer(numPlayersRequest);
+        /*C2SMessage numPlayersRequest = new LoginNumPlayersRequest(insertedNumPlayers);
+        getOwner().getServerHandler().sendMessageToServer(numPlayersRequest);*/
     }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
