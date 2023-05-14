@@ -6,6 +6,7 @@ public class FinishGameRequest extends C2SMessage{
     //forse è inutile
     @Override
     public void processMessage(ClientHandler clientHandler){
+
         clientHandler.getController().finishGame(clientHandler);
     }
 }

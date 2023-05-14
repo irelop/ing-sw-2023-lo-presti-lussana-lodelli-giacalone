@@ -2,7 +2,6 @@ package it.polimi.ingsw.Client.View;
 
 import it.polimi.ingsw.Server.Messages.EndGameMsg;
 import it.polimi.ingsw.Server.Messages.GameIsEndingUpdateAnswer;
-import it.polimi.ingsw.Server.Model.Player;
 
 public class GameIsEndingView extends View{
 

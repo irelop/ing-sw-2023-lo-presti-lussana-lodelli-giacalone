@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * SocketClientHandler class: this class represents the handler of a possible client connected to the server using the
@@ -21,6 +23,7 @@ public class SocketClientHandler extends ClientHandler{
     ObjectOutputStream outputStream;
     ObjectInputStream inputStream;
     private Socket client;
+    private AtomicBoolean shouldStop = new AtomicBoolean(false);
 
     SocketClientHandler(Socket client, MyShelfie game){
         super(game);
@@ -47,8 +50,10 @@ public class SocketClientHandler extends ClientHandler{
         }
 
         try {
+            System.out.println("Closing connection with "+client);
             client.close();
         } catch (IOException ex) {
+            stop();
             System.out.println("Failed to close connection with client" + client.getInetAddress());
         }
     }
@@ -59,13 +64,21 @@ public class SocketClientHandler extends ClientHandler{
      */
     @Override
     void handleClientConnection() throws IOException {
-        try {
-            while(true) {
-                Object nextAction = inputStream.readObject();
-                C2SMessage messageReceived = (C2SMessage) nextAction;
-                messageReceived.processMessage(this);
+
+        try{
+            boolean stop = false;
+            while (!stop) {
+                try {
+                    Object nextAction = inputStream.readObject();
+                    C2SMessage messageReceived = (C2SMessage) nextAction;
+                    messageReceived.processMessage(this);
+                } catch (IOException e) {
+                    if (shouldStop.get()) {
+                        stop = true;
+                    }else throw e;
+                }
             }
-            }catch(ClassNotFoundException | ClassCastException e){
+        }catch(ClassNotFoundException | ClassCastException e){
             System.out.println("Invalid stream from the client");
         }
     }
@@ -83,6 +96,17 @@ public class SocketClientHandler extends ClientHandler{
         }catch (IOException ex){
             System.out.println("Failed to send the message to client" + client.getInetAddress());
             ex.printStackTrace();
+        }
+    }
+
+    public void stop() {
+        shouldStop.set(true);
+        try {
+            InetAddress i = client.getInetAddress();
+            client.shutdownInput();
+            System.out.println("Connection closed with "+i);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
