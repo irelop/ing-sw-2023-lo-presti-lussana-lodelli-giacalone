@@ -278,14 +278,14 @@ public class ChooseTilesFromBoardView extends View {
         Tile[][] personalGoalCardShelf = yourTurnMsg.personalGoalCard.getPattern();
 
         // Printing column's indexes...
-        System.out.print("\u2716" + "\t");
+        System.out.print(/*"\u2716" +*/ "\t");
         for (int i = 0; i < myShelf[0].length; i++)
             System.out.print( (i+1) + "\t" );
         System.out.println();
 
         for (int i = 0; i < myShelf.length; i++) {
             // Printing row's indexes...
-            System.out.print( (i+1) + "\t" );
+            System.out.print( /*(i+1) +*/ "\t" );
             // Printing the shelf...
             for (int j = 0; j < myShelf[0].length; j++) {
                 // printing empty circles in personal goal card positions, filled circles in other cases
@@ -321,7 +321,7 @@ public class ChooseTilesFromBoardView extends View {
         String code;
 
         //printing the indexes of the columns
-        System.out.print("\u2716\t");
+        System.out.print(/*"\u2716\t"*/ "\t");
         for(int i=0; i<MAX_COLUMNS; i++)
             System.out.print((i+1)+"\t");
         System.out.println();
@@ -353,8 +353,15 @@ public class ChooseTilesFromBoardView extends View {
                 }
                 System.out.print("\t");
             }
+            System.out.print(r+1);
             System.out.println();
         }
+
+        System.out.print(/*"\u2716\t"*/ " \t");
+        for(int r=0; r<MAX_ROWS; r++)
+            //printing the indexes of the rows
+            System.out.print((r+1)+"\t");
+        System.out.println();
 
     }
 
@@ -488,8 +495,8 @@ public class ChooseTilesFromBoardView extends View {
 
         Tile[][] example = new Tile[6][5];
         ReadFileByLines reader = new ReadFileByLines();
-        //reader.readFrom("MyShelfie/src/txtfiles/ExampleForRules.txt");
-        reader.readFrom("src/txtfiles/ExampleForRules.txt");
+        reader.readFrom("MyShelfie/src/txtfiles/ExampleForRules.txt");
+        //reader.readFrom("src/txtfiles/ExampleForRules.txt");
         for (int i = 0; i < 6; i++) {
 
             String row = ReadFileByLines.getLine();
