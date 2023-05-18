@@ -63,7 +63,7 @@ public class SocketServerHandler extends ServerHandler {
                 }
             }
         }catch(ClassNotFoundException | ClassCastException e){
-            System.out.println("invalid stream from server");
+            System.out.println("Invalid stream from server");
         }
     }
 
@@ -83,6 +83,7 @@ public class SocketServerHandler extends ServerHandler {
         shouldStop.set(true);
         try {
             server.shutdownInput();
+            System.out.println("Connection closed.");
         } catch (IOException e) {
             e.printStackTrace();
         }

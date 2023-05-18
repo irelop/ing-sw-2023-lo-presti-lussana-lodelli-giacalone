@@ -575,6 +575,8 @@ public class MyShelfie /*implements Runnable*/ {
         finishGameAnswer = new FinishGameAnswer(new String("See you soon " + playerNameEnding + "!"));
         playerEnding.sendMessageToClient(finishGameAnswer);
 
+        playerEnding.stop();
+
         playersConnected.remove(found);
         clientHandlers.remove(found);
 
