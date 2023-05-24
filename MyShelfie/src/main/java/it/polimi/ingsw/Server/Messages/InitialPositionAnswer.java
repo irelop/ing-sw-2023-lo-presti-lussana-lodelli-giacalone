@@ -2,6 +2,9 @@ package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.ChooseTilesFromBoardView;
+import it.polimi.ingsw.Server.RemoteInterface;
+
+import java.rmi.RemoteException;
 
 /**
  * This message is send by the server to the client, it contains the answer whether the initial position
@@ -25,6 +28,16 @@ public class InitialPositionAnswer extends S2CMessage{
         ChooseTilesFromBoardView chooseTilesFromBoardView = (ChooseTilesFromBoardView) serverHandler.getClient().getCurrentView();
         chooseTilesFromBoardView.setInitialPositionAnswer(this);
         serverHandler.getClient().getCurrentView().notifyView();
+    }
+    @Override
+    public void processMessage(RemoteInterface server, RemoteInterface client){
+        try{
+            ChooseTilesFromBoardView chooseTilesFromBoardView = (ChooseTilesFromBoardView) client.getCurrentView();
+            chooseTilesFromBoardView.setInitialPositionAnswer(this);
+            //client.notifyView();
+        }catch(RemoteException e){
+            e.printStackTrace();
+        }
     }
 
 }

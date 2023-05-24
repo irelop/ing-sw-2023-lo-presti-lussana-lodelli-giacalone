@@ -5,7 +5,9 @@ import it.polimi.ingsw.Client.View.InsertInShelfView;
 import it.polimi.ingsw.Server.Model.CommonGoalCard;
 import it.polimi.ingsw.Server.Model.PersonalGoalCard;
 import it.polimi.ingsw.Server.Model.Tile;
+import it.polimi.ingsw.Server.RemoteInterface;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /**
@@ -22,7 +24,13 @@ public class ToShelfMsg extends S2CMessage {
     private ArrayList<Tile> littleHand;
     public CommonGoalCard[] commonGoalCards;
     public PersonalGoalCard personalGoalCard;
+    public Tile[][] getShelf() {
+        return shelf;
+    }
 
+    public ArrayList<Tile> getLittleHand() {
+        return littleHand;
+    }
     public ToShelfMsg(Tile[][] shelf, ArrayList<Tile> littleHand, CommonGoalCard[] commonGoalCards, PersonalGoalCard personalGoalCard) {
         this.shelf = shelf;
         this.littleHand = littleHand;
@@ -39,11 +47,13 @@ public class ToShelfMsg extends S2CMessage {
         serverHandler.getClient().transitionToView(new InsertInShelfView(this));
     }
 
-    public Tile[][] getShelf() {
-        return shelf;
-    }
 
-    public ArrayList<Tile> getLittleHand() {
-        return littleHand;
+    @Override
+    public void processMessage(RemoteInterface server, RemoteInterface client){
+        try {
+            client.goToInsertInShelfView(this);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
