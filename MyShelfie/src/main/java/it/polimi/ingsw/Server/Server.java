@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * @author Andrea Giacalone
  */
 public class Server {
-    public static int serverPort;
+    public static int serverPort = 9999;
     //private static MyShelfie game;
     private static ArrayList<MyShelfie> games;
     private static int currentGame;
@@ -44,7 +44,11 @@ public class Server {
      * @param args
      */
     public static void main(String[] args) {
-        Server server = new Server(serverPort);
+        //Server server = new Server(serverPort);
+        currentGame = -1;
+        games = new ArrayList<>();
+        lock = new Object();
+        numRMIClients = 0;
         System.out.println("Server is open: listening for new clients...");
         Thread socketServer = new Thread(()->manageServerSocket());
         Thread RMIServer = new Thread(()->manageServerRMI());
@@ -77,8 +81,7 @@ public class Server {
                         games.add(game);
                         currentGame++;
                     }
-                    ClientHandler clientHandler = new SocketClientHandler(client, games.get(currentGame));
-
+                    SocketClientHandler clientHandler = new SocketClientHandler(client, games.get(currentGame));
                     Thread clientHandlerThread = new Thread(clientHandler, "server_" + client.getInetAddress());
                     clientHandlerThread.start();
                 }
