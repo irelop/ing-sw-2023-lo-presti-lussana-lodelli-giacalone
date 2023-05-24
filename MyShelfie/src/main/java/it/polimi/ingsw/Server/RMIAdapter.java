@@ -45,10 +45,10 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
     }
 
     public void sendMessageToServer(C2SMessage msg){
-        //msg.processMessage(this);
+        //msg.processMessage(this, null);
     }
     public void sendMessageToClient(S2CMessage msg){
-        //msg.processMessage(this);
+        //msg.processMessage(null, this);
     }
     public void sendMessageToServer(C2SMessage msg, RemoteInterface remoteClient){
         //msg.processMessage(this, remoteClient);
@@ -86,5 +86,8 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
 
     public Client getClient(){
         return client;
+    }
+    public int getNumClients(){
+        return remoteClients.size();
     }
 }

@@ -36,5 +36,6 @@ public interface RemoteInterface extends Remote {
         void goToGameIsEndingView(GameIsEndingUpdateAnswer msg) throws RemoteException;
         void goToEndgameView(ScoreBoardMsg msg) throws RemoteException;
         Client getClient() throws RemoteException;
+        int getNumClients() throws RemoteException;
 
 }
