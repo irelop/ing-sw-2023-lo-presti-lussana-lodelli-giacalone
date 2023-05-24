@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Client.View;
 
-import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.View.Exceptions.InvalidNumberOfPlayersException;
 import it.polimi.ingsw.Server.Messages.*;
 

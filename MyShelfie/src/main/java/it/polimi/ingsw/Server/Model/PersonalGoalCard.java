@@ -11,6 +11,7 @@ import java.util.Arrays;
  */
 public class PersonalGoalCard implements Serializable {
 
+    String id;
     private final static int maxr = 6;
     private final static int maxc = 5;
     private Tile[][] pattern;
@@ -25,13 +26,17 @@ public class PersonalGoalCard implements Serializable {
         return pattern;
     }
 
+    public String getId() {
+        return id;
+    }
+
     public PersonalGoalCard() {
-        /*
-           availableScore contains the amount of points gained when the player puts
-           the correct color in the correct position, given by the personal goal card
-         */
+        // availableScore contains the amount of points gained when the player puts
+        // the correct color in the correct position, given by the personal goal card
         availableScore = new ArrayList<>(Arrays.asList(1,1,2,2,3,3));
         pattern = new Tile[maxr][maxc];
+
+        id = ReadFileByLines.getLine();
 
         for (int i = 0; i < maxr; i++) {
 
