@@ -2,6 +2,7 @@ package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.EndgameView;
+import it.polimi.ingsw.Server.RemoteInterface;
 
 public class FinishGameAnswer extends S2CMessage{
     String farewellMessage;
@@ -15,5 +16,9 @@ public class FinishGameAnswer extends S2CMessage{
         EndgameView endgameView = (EndgameView) serverHandler.getClient().getCurrentView();
         endgameView.setFarewellFromServer(farewellMessage);
         endgameView.notifyView();
+    }
+    @Override
+    public void processMessage(RemoteInterface server, RemoteInterface client){
+        //need implementation
     }
 }

@@ -509,44 +509,6 @@ public class MyShelfie /*implements Runnable*/ {
 
                 updateGameIsEndingView();
             }
-
-
-        /* parte di codice che non dovrebbe più servire
-        else{
-            //adding spot points
-            for (Player player : playersConnected) {
-                int spotScore = player.myShelfie.spotCheck();
-                player.myScore.addScore(spotScore);
-            }
-
-            ArrayList<String> playersNames = new ArrayList<>();
-            for (int i = 0; i < numberOfPlayers; i++) {
-                playersNames.add(playersConnected.get(i).getNickname());
-            }
-
-            ArrayList<Integer> scoreList = new ArrayList<>();
-            for (Player player : playersConnected) {
-                scoreList.add(player.myScore.getScore());
-            }
-
-            //ScoreBoardMsg scoreBoardMsg = new ScoreBoardMsg(playersNames, scoreList);
-            ScoreBoardMsg[] msgs = new ScoreBoardMsg[numberOfPlayers];
-
-            for(int i=0; i<numberOfPlayers; i++){
-                ScoreBoardMsg msg = new ScoreBoardMsg(scoreList.get(i), playersNames.get(i));
-                msgs[i] = msg;
-            }
-
-
-            for (int i=0; i<numberOfPlayers; i++) {
-                if(i!=currentPlayerIndex)
-                    clientHandlers.get(i).sendMessageToClient(msgs[i]);
-            }
-
-            //clientHandlers.get(0).sendMessageToClient(msgs[0]);
-            clientHandlers.get(currentPlayerIndex).sendMessageToClient(msgs[currentPlayerIndex]);
-
-        }*/
     }
 
     public void endGame(int playerIndex) {
