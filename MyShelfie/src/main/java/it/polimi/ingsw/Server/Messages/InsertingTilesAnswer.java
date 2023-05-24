@@ -1,7 +1,11 @@
 package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
+import it.polimi.ingsw.Client.View.ChooseTilesFromBoardView;
 import it.polimi.ingsw.Client.View.InsertInShelfView;
+import it.polimi.ingsw.Server.RemoteInterface;
+
+import java.rmi.RemoteException;
 
 /**
  * This class represents a message sent from server to client.
@@ -23,12 +27,23 @@ public class InsertingTilesAnswer extends S2CMessage {
         this.valid = valid;
     }
 
+
     @Override
     public void processMessage(ServerHandler serverHandler){
-
         InsertInShelfView view = (InsertInShelfView) serverHandler.getClient().getCurrentView();
         view.setInsertingTilesAnswer(this);
         serverHandler.getClient().getCurrentView().notifyView();
+    }
+
+    @Override
+    public void processMessage(RemoteInterface server, RemoteInterface client){
+        try{
+            InsertInShelfView view = (InsertInShelfView) client.getCurrentView();
+            view.setInsertingTilesAnswer(this);
+            //client.notifyView();
+        }catch(RemoteException e){
+            e.printStackTrace();
+        }
     }
 
 }

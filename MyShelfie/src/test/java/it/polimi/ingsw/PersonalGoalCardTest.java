@@ -22,6 +22,8 @@ public class PersonalGoalCardTest {
         myCard = new PersonalGoalCard();
         playerShelf = new Tile[6][5];
 
+        String id = ReadFileByLines.getLine();
+
         for (int i = 0; i < 6; i++) {
 
             String row = ReadFileByLines.getLine();
@@ -117,5 +119,15 @@ public class PersonalGoalCardTest {
             tot += myCard.getPersonalGoalScore(playerShelf);
         }
         assertEquals(12,tot);
+    }
+    @Test
+    public void PersonalGoalCard_visualTest() {
+        System.out.println(myCard.getId());
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < 5; j++) {
+                System.out.print(myCard.getPattern()[i][j].name() + "\t");
+            }
+            System.out.println();
+        }
     }
 }

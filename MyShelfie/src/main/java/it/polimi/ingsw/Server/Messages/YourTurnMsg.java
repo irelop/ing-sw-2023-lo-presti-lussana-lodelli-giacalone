@@ -12,7 +12,9 @@ import it.polimi.ingsw.Server.Model.Board;
 import it.polimi.ingsw.Server.Model.CommonGoalCard;
 import it.polimi.ingsw.Server.Model.PersonalGoalCard;
 import it.polimi.ingsw.Server.Model.Tile;
+import it.polimi.ingsw.Server.RemoteInterface;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class YourTurnMsg extends S2CMessage{
@@ -28,7 +30,7 @@ public class YourTurnMsg extends S2CMessage{
 
     public YourTurnMsg(String nickname, int maxTilesPickable, Tile[][] boardSnapshot,
                        CommonGoalCard[] commonGoalCards, PersonalGoalCard personalGoalCard, boolean firstTurn,
-                        ArrayList<String> playersNames, Tile[][] shelfSnapshot){
+                       ArrayList<String> playersNames, Tile[][] shelfSnapshot){
         this.nickname = nickname;
         this.maxTilesPickable = maxTilesPickable;
         this.boardSnapshot = new Tile[9][9];
@@ -57,6 +59,17 @@ public class YourTurnMsg extends S2CMessage{
     }
 
     public String toString(){
-      return "de sono un messaggio eeenoooorme";
+        return "de sono un messaggio eeenoooorme";
+    }
+    @Override
+    public void processMessage(RemoteInterface server, RemoteInterface client){
+        try {
+            client.goToChooseTilesFromBoardView(this);
+            if(!(nickname.equals(playersNames.get(0))&& firstTurn)){
+                client.notifyView();
+            }
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
