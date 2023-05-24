@@ -135,6 +135,7 @@ public class Server {
                 }
             }catch(Exception e){
                 System.out.println("Problems connecting new RMI client");
+                System.exit(1);
             }
         }
     }
