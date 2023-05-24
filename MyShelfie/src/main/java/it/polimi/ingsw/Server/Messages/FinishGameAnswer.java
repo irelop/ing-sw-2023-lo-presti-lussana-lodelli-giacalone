@@ -16,4 +16,5 @@ public class FinishGameAnswer extends S2CMessage{
         endgameView.setFarewellFromServer(farewellMessage);
         endgameView.notifyView();
     }
+
 }

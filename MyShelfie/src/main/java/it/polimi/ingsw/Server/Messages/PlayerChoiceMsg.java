@@ -1,6 +1,9 @@
 package it.polimi.ingsw.Server.Messages;
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.Model.Exceptions.*;
+import it.polimi.ingsw.Server.RemoteInterface;
+
+import java.rmi.RemoteException;
 
 /**
  * This class creates a message with the initial row, the initial column, the number of tiles
@@ -45,5 +48,24 @@ public class PlayerChoiceMsg extends C2SMessage{
             playerChoiceAnswer = new PlayerChoiceAnswer(e.toString(),false);
         }
         clientHandler.sendMessageToClient(playerChoiceAnswer);
+    }
+
+    @Override
+    public void processMessage(RemoteInterface server, RemoteInterface client){
+        try{
+            S2CMessage playerChoiceAnswer;
+            try {
+                server.getController().getBoard().checkDirectionAndNumberOfTiles(direction, numberOfTiles, initialRow, initialColumn, maxTilesPickable);
+                playerChoiceAnswer = new PlayerChoiceAnswer("", true);
+                server.getController().getPlayerChoice(initialRow, initialColumn, direction, numberOfTiles + 1);
+
+            } catch (OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException
+                     | InvalidNumberOfTilesException | InvalidDirectionException e) {
+                playerChoiceAnswer = new PlayerChoiceAnswer(e.toString(), false);
+            }
+            client.sendMessageToClient(playerChoiceAnswer);
+        }catch(RemoteException e){
+            e.printStackTrace();
+        }
     }
 }

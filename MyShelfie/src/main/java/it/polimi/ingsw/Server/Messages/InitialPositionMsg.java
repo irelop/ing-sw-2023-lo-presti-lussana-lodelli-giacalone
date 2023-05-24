@@ -5,8 +5,10 @@ import it.polimi.ingsw.Server.Model.Exceptions.EmptyCellException;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidCellException;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidPositionException;
 import it.polimi.ingsw.Server.Model.Exceptions.OutOfBoardException;
+import it.polimi.ingsw.Server.RemoteInterface;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 
 /**
  * This class creates a message with the initial row and the initial column chosen by the player,
@@ -49,6 +51,20 @@ public class InitialPositionMsg extends C2SMessage{
     }
 
     @Override
-    public String toString(){return row+" "+column+" messaggio muissico";}
+    public void processMessage(RemoteInterface server, RemoteInterface client){
+        try{
+            S2CMessage initialPositionAnswer;
+            try {
+                server.getController().getBoard().checkPosition(row, column);
+                initialPositionAnswer = new InitialPositionAnswer("", true);
+
+            } catch (OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException e) {
+                initialPositionAnswer = new InitialPositionAnswer(e.toString(), false);
+            }
+            client.sendMessageToClient(initialPositionAnswer);
+        }catch(RemoteException e){
+            e.printStackTrace();
+        }
+    }
 }
 

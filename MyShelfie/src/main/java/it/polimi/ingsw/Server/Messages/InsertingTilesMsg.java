@@ -2,6 +2,9 @@ package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.Model.Exceptions.*;
+import it.polimi.ingsw.Server.RemoteInterface;
+
+import java.rmi.RemoteException;
 
 
 /**
@@ -40,5 +43,22 @@ public class InsertingTilesMsg extends C2SMessage {
             answer = new InsertingTilesAnswer(e.toString(),false);
         }
         clientHandler.sendMessageToClient(answer);
+    }
+
+    @Override
+    public void processMessage(RemoteInterface server, RemoteInterface client){
+        try{
+            S2CMessage answer;
+            try {
+                server.getController().insertingTiles(columnChosen, chosenOrderIndexes);
+                answer = new InsertingTilesAnswer("", true);
+                server.getController().endOfTheTurn();
+            } catch (InvalidTileIndexInLittleHandException | NotEnoughSpaceInChosenColumnException e) {
+                answer = new InsertingTilesAnswer(e.toString(), false);
+            }
+            client.sendMessageToClient(answer);
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
     }
 }

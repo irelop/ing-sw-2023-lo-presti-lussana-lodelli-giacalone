@@ -2,6 +2,9 @@ package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Server.ClientHandler;
+import it.polimi.ingsw.Server.RemoteInterface;
+
+import java.rmi.RemoteException;
 
 public class EndGameMsg extends C2SMessage{
 
@@ -15,5 +18,14 @@ public class EndGameMsg extends C2SMessage{
     public void processMessage(ClientHandler clientHandler){
             clientHandler.getController().endGame(playerIndex);
 
+    }
+
+    @Override
+    public void processMessage(RemoteInterface server, RemoteInterface client){
+        try {
+            server.getController().endGame(playerIndex);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

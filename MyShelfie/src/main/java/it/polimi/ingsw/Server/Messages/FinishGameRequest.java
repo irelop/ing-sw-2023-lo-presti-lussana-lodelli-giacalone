@@ -1,12 +1,14 @@
 package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Server.ClientHandler;
+import it.polimi.ingsw.Server.RemoteInterface;
 
 public class FinishGameRequest extends C2SMessage{
-    //forse è inutile
     @Override
     public void processMessage(ClientHandler clientHandler){
-
         clientHandler.getController().finishGame(clientHandler);
     }
+
+    //da sistemare quando capiamo come chiudere la connessione RMI
+    public void processMessage(RemoteInterface server, RemoteInterface client){}
 }
