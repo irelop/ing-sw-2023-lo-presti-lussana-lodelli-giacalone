@@ -38,4 +38,6 @@ public interface RemoteInterface extends Remote {
         Client getClient() throws RemoteException;
         int getNumClients() throws RemoteException;
 
+        void disconnectClient(RemoteInterface remoteClient)throws RemoteException;
+
 }

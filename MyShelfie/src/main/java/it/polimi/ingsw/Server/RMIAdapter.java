@@ -90,4 +90,9 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
     public int getNumClients(){
         return remoteClients.size();
     }
+
+    @Override
+    public void disconnectClient(RemoteInterface remoteClient) throws RemoteException {
+        this.remoteClients.remove(remoteClient);
+    }
 }

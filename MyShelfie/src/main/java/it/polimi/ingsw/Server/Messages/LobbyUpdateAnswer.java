@@ -24,6 +24,17 @@ public class LobbyUpdateAnswer extends S2CMessage{
         this.lastRMIConnected = lastRMIConnected;
     }
 
+
+
+    @Override
+    public void processMessage(ServerHandler serverHandler) {
+        //serverHandler.getClient().transitionToView(new LobbyView(lobbyPlayers));
+        serverHandler.getClient().transitionToView(new LobbyView(this));
+        serverHandler.getClient().getCurrentView().notifyView();
+
+
+    }
+
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client) {
         try {
@@ -33,15 +44,5 @@ public class LobbyUpdateAnswer extends S2CMessage{
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-
-    }
-
-    @Override
-    public void processMessage(ServerHandler serverHandler) {
-        //serverHandler.getClient().transitionToView(new LobbyView(lobbyPlayers));
-        serverHandler.getClient().transitionToView(new LobbyView(this));
-        serverHandler.getClient().getCurrentView().notifyView();
-
-
     }
 }

@@ -97,8 +97,15 @@ public class ChooseTilesFromBoardView extends View {
 
 
                 InitialPositionMsg initialPositionMsg = new InitialPositionMsg(r, c);
-                if (!getOwner().isRMI())
+                if (!getOwner().isRMI()) {
                     getOwner().getServerHandler().sendMessageToServer(initialPositionMsg);
+                    try {
+                        this.wait();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
                 else {
                     try {
                         getOwner().getRemoteServer().sendMessageToServer(initialPositionMsg, getOwner().getClient());
@@ -106,13 +113,7 @@ public class ChooseTilesFromBoardView extends View {
                         throw new RuntimeException(e);
                     }
                 }
-                if (!getOwner().isRMI()) {
-                    try {
-                        this.wait();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+
                 System.out.println(this.initialPositionAnswer.answer);
                 if (this.initialPositionAnswer.valid)
                     goOn = true;

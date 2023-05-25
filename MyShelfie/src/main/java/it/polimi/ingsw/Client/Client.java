@@ -38,6 +38,9 @@ public class Client implements Runnable{
         runViewStateMachine();
         if(!isRMI)
             serverHandler.stop();
+        else{
+            stopRMIConnection();
+        }
     }
 
 
@@ -153,5 +156,16 @@ public class Client implements Runnable{
 
     public RemoteInterface getClient() {
         return client;
+    }
+
+    public void stopRMIConnection(){
+        try {
+            this.remoteServer.disconnectClient(this.client);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+        this.remoteServer = null;
+
+        System.out.println("Connection with RMI server closed");
     }
 }

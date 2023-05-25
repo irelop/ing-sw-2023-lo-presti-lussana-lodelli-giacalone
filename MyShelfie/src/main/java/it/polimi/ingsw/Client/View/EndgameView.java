@@ -5,6 +5,7 @@ import it.polimi.ingsw.Server.Messages.FinishGameRequest;
 import it.polimi.ingsw.Server.Messages.ScoreBoardMsg;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.Collections;
 import java.util.Scanner;
 
@@ -54,10 +55,16 @@ public class EndgameView extends View {
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
+                }
+                else {
+                    try {
+                        getOwner().getRemoteServer().sendMessageToServer(finishGameRequest, getOwner().getClient());
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
                     System.out.println(farewellFromServer);
                     getOwner().setTrueTerminate();
-                }
-                //else bisogna chiudere la connessione rmi
             }
         }
     }

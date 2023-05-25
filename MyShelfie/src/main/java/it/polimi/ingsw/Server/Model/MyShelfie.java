@@ -1,10 +1,12 @@
 package it.polimi.ingsw.Server.Model;
-import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.Messages.*;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
 import it.polimi.ingsw.Server.Model.Exceptions.NotEnoughSpaceInChosenColumnException;
+import it.polimi.ingsw.Server.RMIClientHandler;
+import it.polimi.ingsw.Server.RemoteInterface;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -16,7 +18,7 @@ import static java.lang.Thread.sleep;
  *
  * @author Matteo Lussana, Irene Lo Presti
  */
-public class MyShelfie /*implements Runnable*/ {
+public class MyShelfie {
     
     private final ArrayList<Player> playersConnected;
     private boolean isOver;
@@ -35,8 +37,11 @@ public class MyShelfie /*implements Runnable*/ {
     private boolean gameOver;
     private final Object lock;
     private int firstToFinish;
+
+    //- - - R M I - - - - -
+    private ArrayList<Boolean> isRMIFirstLastLobby;
+
     public MyShelfie(){
-        //this.board = Board.getBoardInstance();
         this.board = new Board();
         this.commonDeck = new CommonGoalDeck();
         this.personalDeck = new PersonalGoalDeck();
@@ -51,14 +56,16 @@ public class MyShelfie /*implements Runnable*/ {
         this.allPlayersReady = false;
         this.gameOver = false;
         this.lock = new Object();
+        this.isRMIFirstLastLobby = new ArrayList<>();
     }
 
     /**
      * Method used for singleton design pattern
      * @return myShelfieInstance: the one that already exists or a new one
+     * @deprecated
      */
     public static MyShelfie getMyShelfie(){
-        //oppure abbiamo raggiunto max giocatori => nuova partita
+        //singleton instance of controller class
         if(myShelfieInstance == null){
             myShelfieInstance = new MyShelfie();
         }
@@ -83,10 +90,9 @@ public class MyShelfie /*implements Runnable*/ {
 
     /**
      * Checks if one player is already connected
-     * @param insertedString: new player's nickname
      * @return true if the new player is the first one
      */
-    public boolean isFirstConnected(String insertedString){
+    public boolean isFirstConnected(){
         return (this.playersConnected.size() == 0);
     }
 
@@ -102,6 +108,7 @@ public class MyShelfie /*implements Runnable*/ {
             Player newPlayer = new Player(playerNickname);
             playersConnected.add(newPlayer);
             clientHandlers.add(clientHandler);
+            isRMIFirstLastLobby.add(false);
 
             if (playersConnected.size() == numberOfPlayers && !this.allPlayersReady)
                 this.allPlayersReady = true;
@@ -116,14 +123,14 @@ public class MyShelfie /*implements Runnable*/ {
         if(!this.isStarted){
             this.isStarted = true;
             board.initGridParabolic(numberOfPlayers);
-            //board.initGrid(numberOfPlayers);
+            //board.initGrid(numberOfPlayers);              : alternative option for initialize the grid
             board.refill();
             setChair();
             dealPersonalCards();
             drawCommonGoalCards();
             currentPlayerIndex = 0;
             firstTurn = true;
-            turn();
+            startTurn();
         }
     }
 
@@ -133,7 +140,10 @@ public class MyShelfie /*implements Runnable*/ {
 
 
     public void setNumberOfPlayers(int numberOfPlayers) {
-            this.numberOfPlayers = numberOfPlayers;
+        this.numberOfPlayers = numberOfPlayers;
+        if((playersConnected.size()==numberOfPlayers) && (!this.allPlayersReady)){
+            this.allPlayersReady = true;
+        }
     }
 
     public void manageLogin(ClientHandler clientHandler,LoginNicknameRequest loginNicknameRequest){
@@ -148,7 +158,7 @@ public class MyShelfie /*implements Runnable*/ {
 
         if (checkNickname(loginNicknameRequest.getInsertedNickname()) == true){
 
-            if(isFirstConnected(loginNicknameRequest.getInsertedNickname())){
+            if(isFirstConnected()){
                 loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
                 clientHandler.sendMessageToClient(loginNicknameAnswer);
                 addPlayer(loginNicknameRequest.getInsertedNickname(),clientHandler);
@@ -168,13 +178,61 @@ public class MyShelfie /*implements Runnable*/ {
 
     }
 
+    public void manageLoginRMI(LoginNicknameRequest msg, RemoteInterface client){
+        S2CMessage loginNicknameAnswer;
+
+        try {
+            if (isStarted()) {
+                loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.FULL_LOBBY);
+                client.sendMessageToClient(loginNicknameAnswer);
+                return;
+            }
+
+
+            if (checkNickname(msg.getInsertedNickname())) {
+
+                if (isFirstConnected()) {
+                    loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
+                    client.sendMessageToClient(loginNicknameAnswer);
+                    addPlayer(msg.getInsertedNickname(), new RMIClientHandler(this, client));
+
+
+                } else {
+                    loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.ACCEPTED);
+                    client.sendMessageToClient(loginNicknameAnswer);
+                    addPlayer(msg.getInsertedNickname(), new RMIClientHandler(this, client));
+                }
+
+
+            } else {
+                loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.INVALID);
+                client.sendMessageToClient(loginNicknameAnswer);
+            }
+        }catch (RemoteException e){
+            e.printStackTrace();
+        }
+
+    }
+
     public void updateLobby(){
+        boolean lastRMIConnected = false;
         ArrayList<String> lobbyPlayers = new ArrayList<>(playersConnected.stream().map(x->x.getNickname()).collect(Collectors.toList()));
 
-        LobbyUpdateAnswer lobbyUpdateAnswer = new LobbyUpdateAnswer(lobbyPlayers, allPlayersReady);
+        for (int i = 0; i<playersConnected.size();i++) {
+            if(!clientHandlers.get(i).getIsRMI()) {
+                LobbyUpdateAnswer lobbyUpdateAnswer = new LobbyUpdateAnswer(lobbyPlayers, allPlayersReady);
+                clientHandlers.get(i).sendMessageToClient(lobbyUpdateAnswer);
+            }
+            else{
+                if(i==(clientHandlers.size()-1)) lastRMIConnected = true;
+                try {
+                    LobbyUpdateAnswer lobbyUpdateAnswer = new LobbyUpdateAnswer(lobbyPlayers, allPlayersReady,lastRMIConnected);
+                    clientHandlers.get(i).getClientInterface().sendMessageToClient(lobbyUpdateAnswer);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
 
-        for (ClientHandler clientHandler : clientHandlers) {
-            clientHandler.sendMessageToClient(lobbyUpdateAnswer);
+            }
         }
     }
 
@@ -186,13 +244,32 @@ public class MyShelfie /*implements Runnable*/ {
             hasFinished[j] = playersConnected.get(j).getHasFinished();
         }
 
-        for(int i=0; i<numberOfPlayers; i++)
+        for(int i=0; i<numberOfPlayers; i++) {
             //sending to gameIsEndingView players who have played their last turn
-            if(playersConnected.get(i).getHasFinished()){
-                clientHandlers.get(i).sendMessageToClient(
-                        new GameIsEndingUpdateAnswer(gameOver, i, firstToFinish, players, hasFinished));
+            if (playersConnected.get(i).getHasFinished()) {
+                if(!clientHandlers.get(i).getIsRMI()) {
+                    clientHandlers.get(i).sendMessageToClient(
+                            new GameIsEndingUpdateAnswer(gameOver, i, firstToFinish, players, hasFinished)
+                    );
+                }
+                else{
+                    try {
 
+                        GameIsEndingUpdateAnswer msg;
+                        if(isRMIFirstLastLobby.get(i)) {
+                            msg = new GameIsEndingUpdateAnswer(gameOver, i, firstToFinish, players, hasFinished, true);
+                            isRMIFirstLastLobby.set(i,false);
+                        }else{
+                            msg = new GameIsEndingUpdateAnswer(gameOver, i, firstToFinish, players, hasFinished);
+                        }
+                        clientHandlers.get(i).getClientInterface().sendMessageToClient(msg);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
             }
+        }
 
     }
 
@@ -236,58 +313,14 @@ public class MyShelfie /*implements Runnable*/ {
     }
 
     /**
-     * OVERVIEW: this method manages the game: a player can play his/her turn if the match is not over
-     *       or if that is the last lap
-     */
-    /*public void manageTurn(){
-        board.initGridParabolic(numberOfPlayers);
-        //board.initGrid(numberOfPlayers);
-        board.refill();
-        //setChair();
-        dealPersonalCards();
-        drawCommonGoalCards();
-        int turnNumber=0;
-        while(!isOver){
-            for (int i = 0; i<numberOfPlayers; i++) {
-                //a player can play his/her turn if the match is not over
-                // or if that is the last lap
-                if(!isOver || !playersConnected.get(i).hasChair()){
-                    synchronized(lock){
-                        //saving the index of the player playing
-                        currentPlayerIndex = i;
-                        turn(turnNumber);
-                        try {
-                            lock.wait();
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-            }
-            turnNumber++;
-        }
-        //adding spot points
-        for (Player player : playersConnected) {
-            int spotScore = player.myShelfie.spotCheck();
-            player.myScore.addScore(spotScore);
-        }
-
-        ArrayList<Integer> scoreList = new ArrayList<>();
-        for (Player player : playersConnected) {
-            scoreList.add(player.myScore.getScore());
-        }
-        ScoreBoardMsg scoreBoardMsg = new ScoreBoardMsg(playersConnected, scoreList);
-
-        for (int i=0; i<numberOfPlayers; i++) {
-            clientHandlers.get(i).sendMessageToClient(scoreBoardMsg);
-        }
-    }*/
-
-    /**
      * OVERVIEW: it finds max pickable tiles by the current player and creates a message to send to
      * ChooseTilesFromBoardView
      */
-    private void turn() {
+    private void startTurn() {
+
+        //checking if the board need to be refilled
+        if(board.needRefill())
+            board.refill();
 
         // find max pickable tiles by the player
         int maxTilesPickable = playersConnected.get(currentPlayerIndex).myShelfie.maxTilesPickable();
@@ -321,25 +354,38 @@ public class MyShelfie /*implements Runnable*/ {
         );
 
         //qui viene mandata la view per la scelta tessere al current player
-        clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
+        if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
+            clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
+        else {
+            try {
+                clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(yourTurnMsg);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         if(isOver){
             //se isOver = true allora siamo all'ultima mano
 
             //settiamo a true il booleano del giocatore precedente
-            if(currentPlayerIndex==0)
-                playersConnected.get(numberOfPlayers-1).setHasFinished(true);
-            else
-                playersConnected.get(currentPlayerIndex-1).setHasFinished(true);
+            if(currentPlayerIndex==0) {
+                playersConnected.get(numberOfPlayers - 1).setHasFinished(true);
+                isRMIFirstLastLobby.set(numberOfPlayers -1,true);
+            }else {
+                playersConnected.get(currentPlayerIndex - 1).setHasFinished(true);
+                isRMIFirstLastLobby.set(numberOfPlayers - 1,true);
+            }
 
             //aggiorniamo la game is ending view
             updateGameIsEndingView();
         }
+
+
     }
 
     //funzione chiamata dal process message del messaggio creato alla fine dell'inserimento delle
     //tessere nella shelf del giocatore
-    public void endOfTheTurn(){
+    public void computeTurnScore(){
 
         boolean isCommonGoalAchived = false;
         boolean isPersonalGoalAchived = false;
@@ -383,15 +429,23 @@ public class MyShelfie /*implements Runnable*/ {
             // già fatto l'ultimo turno
             //es: se il giocatore 3 riempie la board, il giocatore 1 e il giocatore 2
             //      avranno già giocato il loro ultimo turno
-            for(int i=0; i<=currentPlayerIndex; i++)
+            for(int i=0; i<=currentPlayerIndex; i++) {
                 playersConnected.get(i).setHasFinished(true);
+                isRMIFirstLastLobby.set(i,true);
+            }
         }
-        //checking if the board need to be refilled
-        if(board.needRefill())
-            board.refill();
+
 
         GoalAndScoreMsg goalAndScoreMsg = new GoalAndScoreMsg(isCommonGoalAchived, isPersonalGoalAchived, playersConnected.get(currentPlayerIndex).myScore.getScore(), isShelfFull, isOver);
-        clientHandlers.get(currentPlayerIndex).sendMessageToClient(goalAndScoreMsg);
+        if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
+            clientHandlers.get(currentPlayerIndex).sendMessageToClient(goalAndScoreMsg);
+        else{
+            try {
+                clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(goalAndScoreMsg);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     /**
@@ -423,7 +477,15 @@ public class MyShelfie /*implements Runnable*/ {
                 Board.getCommonGoalCards(),
                 currentPlayer.getPersonalGoalCard()
                 );
-        clientHandlers.get(currentPlayerIndex).sendMessageToClient(toShelfMsg);
+        if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
+            clientHandlers.get(currentPlayerIndex).sendMessageToClient(toShelfMsg);
+        else{
+            try {
+                clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(toShelfMsg);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     /**
@@ -486,7 +548,7 @@ public class MyShelfie /*implements Runnable*/ {
                 if(firstTurn && currentPlayerIndex==0) {
                     firstTurn = false;
                 }
-                turn();
+                startTurn();
             }
 
             //entered when everyone played last turn
@@ -525,7 +587,16 @@ public class MyShelfie /*implements Runnable*/ {
                 scoreList.add(player.myScore.getScore());
             }
 
-            clientHandlers.get(playerIndex).sendMessageToClient(new ScoreBoardMsg(playersNames, scoreList));
+            ScoreBoardMsg msg = new ScoreBoardMsg(playersNames, scoreList);
+            if(!clientHandlers.get(playerIndex).getIsRMI())
+                clientHandlers.get(playerIndex).sendMessageToClient(msg);
+            else{
+                try {
+                    clientHandlers.get(playerIndex).getClientInterface().sendMessageToClient(msg);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
 
     }
@@ -539,6 +610,26 @@ public class MyShelfie /*implements Runnable*/ {
 
         playerEnding.stop();
 
+        playersConnected.remove(found);
+        clientHandlers.remove(found);
+
+    }
+
+    public void finishGameRMI(RemoteInterface remoteClient){
+        FinishGameAnswer finishGameAnswer;
+        int found = -1;
+        for(int i = 0; i<clientHandlers.size();i++){
+            if(clientHandlers.get(i).getClientInterface().equals(remoteClient)){
+                found = i;
+            }
+        }
+        String playerNameEnding = new String(playersConnected.get(found).getNickname());
+        finishGameAnswer = new FinishGameAnswer(new String("See you soon " + playerNameEnding + "!"));
+        try {
+            remoteClient.sendMessageToClient(finishGameAnswer);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
         playersConnected.remove(found);
         clientHandlers.remove(found);
 

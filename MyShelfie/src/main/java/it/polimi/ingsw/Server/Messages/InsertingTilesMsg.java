@@ -38,7 +38,7 @@ public class InsertingTilesMsg extends C2SMessage {
         try{
             clientHandler.getController().insertingTiles(columnChosen,chosenOrderIndexes);
             answer = new InsertingTilesAnswer("",true);
-            clientHandler.getController().endOfTheTurn();
+            clientHandler.getController().computeTurnScore();
         }catch(InvalidTileIndexInLittleHandException | NotEnoughSpaceInChosenColumnException e){
             answer = new InsertingTilesAnswer(e.toString(),false);
         }
@@ -52,7 +52,7 @@ public class InsertingTilesMsg extends C2SMessage {
             try {
                 server.getController().insertingTiles(columnChosen, chosenOrderIndexes);
                 answer = new InsertingTilesAnswer("", true);
-                server.getController().endOfTheTurn();
+                server.getController().computeTurnScore();
             } catch (InvalidTileIndexInLittleHandException | NotEnoughSpaceInChosenColumnException e) {
                 answer = new InsertingTilesAnswer(e.toString(), false);
             }

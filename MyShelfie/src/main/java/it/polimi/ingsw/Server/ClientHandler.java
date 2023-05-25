@@ -26,9 +26,11 @@ public abstract class ClientHandler {
     }
 
     public MyShelfie getController(){ return this.game;}
+    public void sendMessageToClient(S2CMessage message){};
     public void setIsRMI(boolean value){
         isRMI = value;
     }
+    public void stop() {};
     public boolean getIsRMI(){
         return isRMI;
     }
