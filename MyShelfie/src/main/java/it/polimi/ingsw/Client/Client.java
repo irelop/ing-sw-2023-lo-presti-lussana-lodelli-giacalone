@@ -21,7 +21,7 @@ public class Client implements Runnable{
     private View currentView;
     private View nextView;
     private boolean isRMI;
-    private RemoteInterface server;
+    private RemoteInterface remoteServer;
     private RemoteInterface client;
 
     public static void main(String[] args){
@@ -62,9 +62,9 @@ public class Client implements Runnable{
         try{
             client = new RMIAdapter();
             Registry registry = LocateRegistry.getRegistry();
-            server = (RemoteInterface) registry.lookup("server");
-            server.printLoginStatus("["+this.getClass().getName()+"] now connected through RMI");
-            server.addRemoteClient(client);
+            remoteServer = (RemoteInterface) registry.lookup("server");
+            remoteServer.printLoginStatus("["+this.getClass().getName()+"] now connected through RMI");
+            remoteServer.addRemoteClient(client);
             client.setClient(this);
             //Thread.sleep(50);
 
@@ -143,4 +143,15 @@ public class Client implements Runnable{
     }
 
 
+    public boolean isRMI() {
+        return isRMI;
+    }
+
+    public RemoteInterface getRemoteServer() {
+        return remoteServer;
+    }
+
+    public RemoteInterface getClient() {
+        return client;
+    }
 }
