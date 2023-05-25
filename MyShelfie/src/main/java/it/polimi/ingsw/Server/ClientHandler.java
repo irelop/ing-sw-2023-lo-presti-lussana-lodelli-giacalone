@@ -14,31 +14,26 @@ import java.io.ObjectOutputStream;
  * @author Andrea Giacalone
  */
 
-public abstract class ClientHandler implements Runnable {
-    /*
-    ObjectOutputStream outputStream;
-    ObjectInputStream inputStream;
-     */
-    //Client client;
+public abstract class ClientHandler {
 
     protected MyShelfie game;
+    private boolean isRMI;
+    private RemoteInterface client;
 
-    public ClientHandler(MyShelfie game){
+    public ClientHandler(MyShelfie game, RemoteInterface client){
         this.game = game;
-
-    }
-
-    void handleClientConnection() throws IOException {
-
-    }
-
-    public void sendMessageToClient(S2CMessage message) {
-
+        this.client = client;
     }
 
     public MyShelfie getController(){ return this.game;}
+    public void setIsRMI(boolean value){
+        isRMI = value;
+    }
+    public boolean getIsRMI(){
+        return isRMI;
+    }
 
-    public void stop(){}
+    public RemoteInterface getClientInterface(){return client;}
 
 }
 

@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author Andrea Giacalone
  */
-public class SocketClientHandler extends ClientHandler{
+public class SocketClientHandler extends ClientHandler implements Runnable{
     //the socket used for communicate with the connected client.
     ObjectOutputStream outputStream;
     ObjectInputStream inputStream;
@@ -26,8 +26,9 @@ public class SocketClientHandler extends ClientHandler{
     private AtomicBoolean shouldStop = new AtomicBoolean(false);
 
     SocketClientHandler(Socket client, MyShelfie game){
-        super(game);
+        super(game, null);
         this.client = client;
+        setIsRMI(false);
     }
 
 
@@ -62,7 +63,6 @@ public class SocketClientHandler extends ClientHandler{
      * OVERVIEW: this method manages an event loop in order to receive messages from the client and processes them.
      * @throws IOException
      */
-    @Override
     void handleClientConnection() throws IOException {
 
         try{
@@ -87,7 +87,6 @@ public class SocketClientHandler extends ClientHandler{
      * OVERVIEW: this method allows to send a message from the server to the client using the Java serialization approach.
      * @param message: the message to be forwarded to the client.
      */
-    @Override
     public void sendMessageToClient(S2CMessage message) {
         try {
             outputStream.flush();
