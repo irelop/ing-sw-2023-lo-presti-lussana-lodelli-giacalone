@@ -61,7 +61,7 @@ public class LoginView extends View implements ObserverView {
 
                 else{
                     try{
-                        getOwner().getRemoteServer().sendMessageToServer(new LobbyUpdateRequest());
+                        getOwner().getRemoteServer().sendMessageToServer(new LobbyUpdateRequest(), getOwner().getClient());
                     }catch (RemoteException e){
                         e.printStackTrace();
                     }
@@ -136,7 +136,7 @@ public class LoginView extends View implements ObserverView {
                     getOwner().getServerHandler().sendMessageToServer(numPlayersRequest);
                 else{
                     try {
-                        getOwner().getRemoteServer().sendMessageToServer(numPlayersRequest);
+                        getOwner().getRemoteServer().sendMessageToServer(numPlayersRequest, getOwner().getClient());
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
                     }

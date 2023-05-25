@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Server;
 
 import it.polimi.ingsw.Client.Client;
-import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.View;
 import it.polimi.ingsw.Server.Messages.*;
 import it.polimi.ingsw.Server.Model.MyShelfie;
@@ -13,12 +12,9 @@ import java.rmi.RemoteException;
 
 public interface RemoteInterface extends Remote {
         void addRemoteClient(it.polimi.ingsw.Server.RemoteInterface client) throws RemoteException;
-        //void addController(MyShelfie controller) throws RemoteException;
-        //void setMapClientsToController(MyShelfie controller) throws RemoteException;
-        // MyShelfie getController(RemoteInterface client) throws RemoteException;
         void sendMessageToServer(C2SMessage msg) throws RemoteException;
         void setController(MyShelfie controller) throws RemoteException;
-        MyShelfie getController() throws RemoteException;
+        MyShelfie getController(RemoteInterface remoteClient) throws RemoteException;
         void printLoginStatus(String msg) throws  RemoteException;
         RemoteInterface getRemoteClient(int index) throws RemoteException;
         void sendMessageToClient(S2CMessage msg) throws  RemoteException;
@@ -39,5 +35,7 @@ public interface RemoteInterface extends Remote {
         int getNumClients() throws RemoteException;
 
         void disconnectClient(RemoteInterface remoteClient)throws RemoteException;
+        void addController(MyShelfie controller) throws RemoteException;
+        void setMapClientsToController(MyShelfie controller, int remoteClientIndex) throws RemoteException;
 
 }

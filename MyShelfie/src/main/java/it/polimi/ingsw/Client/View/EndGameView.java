@@ -1,21 +1,19 @@
 package it.polimi.ingsw.Client.View;
 
-import it.polimi.ingsw.Server.Messages.FinishGameAnswer;
 import it.polimi.ingsw.Server.Messages.FinishGameRequest;
 import it.polimi.ingsw.Server.Messages.ScoreBoardMsg;
 
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Collections;
 import java.util.Scanner;
 
-public class EndgameView extends View {
+public class EndGameView extends View {
     private final ScoreBoardMsg msg;
     Object lock = new Object();
 
     private String farewellFromServer;
 
-    public EndgameView(ScoreBoardMsg msg) {
+    public EndGameView(ScoreBoardMsg msg) {
         this.msg = msg;
     }
 

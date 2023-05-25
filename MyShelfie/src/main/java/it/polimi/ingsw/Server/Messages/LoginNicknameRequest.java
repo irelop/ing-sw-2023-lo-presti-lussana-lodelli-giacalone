@@ -5,7 +5,6 @@ import it.polimi.ingsw.Server.Model.MyShelfie;
 import it.polimi.ingsw.Server.RemoteInterface;
 
 import java.rmi.RemoteException;
-import java.util.concurrent.TimeUnit;
 
 
 public class LoginNicknameRequest extends C2SMessage{
@@ -29,7 +28,7 @@ public class LoginNicknameRequest extends C2SMessage{
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
-            server.getController().manageLoginRMI(this, client);
+            server.getController(client).manageLoginRMI(this, client);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

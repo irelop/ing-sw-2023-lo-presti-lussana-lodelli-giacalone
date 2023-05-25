@@ -20,7 +20,7 @@ public class LoginNumPlayersRequest extends C2SMessage{
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
-            server.getController().setNumberOfPlayers(insertedNumPlayers);
+            server.getController(client).setNumberOfPlayers(insertedNumPlayers);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

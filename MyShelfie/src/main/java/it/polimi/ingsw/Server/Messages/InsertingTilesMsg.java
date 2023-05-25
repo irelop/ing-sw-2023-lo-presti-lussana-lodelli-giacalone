@@ -50,9 +50,9 @@ public class InsertingTilesMsg extends C2SMessage {
         try{
             S2CMessage answer;
             try {
-                server.getController().insertingTiles(columnChosen, chosenOrderIndexes);
+                server.getController(client).insertingTiles(columnChosen, chosenOrderIndexes);
                 answer = new InsertingTilesAnswer("", true);
-                server.getController().computeTurnScore();
+                server.getController(client).computeTurnScore();
             } catch (InvalidTileIndexInLittleHandException | NotEnoughSpaceInChosenColumnException e) {
                 answer = new InsertingTilesAnswer(e.toString(), false);
             }

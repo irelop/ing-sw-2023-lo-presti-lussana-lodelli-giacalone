@@ -8,19 +8,23 @@ import it.polimi.ingsw.Server.Model.MyShelfie;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
     public ArrayList<RemoteInterface> remoteClients;
-    /*gestione partite multiple
-        public ArrayList<MyShelfie> controllers;
-        public HashMap<RemoteInterface, MyShelfie> mapClientsToController;
-     */
+
+    /*gestione partite multiple*/
+    public ArrayList<MyShelfie> controllers;
+    public HashMap<RemoteInterface, MyShelfie> mapClientsToController;
+
     private MyShelfie controller;
     private Client client;
 
     public RMIAdapter() throws RemoteException{
         super();
         this.remoteClients = new ArrayList<>();
+        this.controllers = new ArrayList<>();
+        this.mapClientsToController = new HashMap<>();
     }
 
     public void addRemoteClient(RemoteInterface remoteClient){
@@ -39,9 +43,16 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
     public void setController(MyShelfie controller){
         this.controller = controller;
     }
+    public void addController(MyShelfie controller){
+        this.controllers.add(controller);
+    }
 
-    public MyShelfie getController(){
-        return controller;
+    public void setMapClientsToController(MyShelfie controller, int remoteClientIndex){
+        mapClientsToController.put(remoteClients.get(remoteClientIndex), controller);
+    }
+
+    public MyShelfie getController(RemoteInterface client){
+        return mapClientsToController.get(client);
     }
 
     public void sendMessageToServer(C2SMessage msg){
@@ -81,7 +92,7 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
         transitionToView(new GameIsEndingView(msg));
     }
     public void goToEndgameView(ScoreBoardMsg msg){
-        transitionToView(new EndgameView(msg));
+        transitionToView(new EndGameView(msg));
     }
 
     public Client getClient(){

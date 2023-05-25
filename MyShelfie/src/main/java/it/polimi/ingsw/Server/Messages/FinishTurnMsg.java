@@ -15,7 +15,7 @@ public class FinishTurnMsg extends C2SMessage{
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
-            server.getController().finishTurn();
+            server.getController(client).finishTurn();
 
         } catch (RemoteException e) {
             throw new RuntimeException(e);

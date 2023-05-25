@@ -125,12 +125,11 @@ public class Server {
                             MyShelfie game = new MyShelfie();
                             games.add(game);
                             currentGame++;
-                            serverInterface.setController(game);
+                            serverInterface.addController(game);
                         } else
-                            serverInterface.setController(games.get(currentGame));
+                            serverInterface.addController(games.get(currentGame));
                         numRMIClients++;
-                        //server.setMapClientsToController(games.get(currentGame));
-
+                        serverInterface.setMapClientsToController(games.get(currentGame), numRMIClients-1);
                     }
                 }
             }catch(Exception e){

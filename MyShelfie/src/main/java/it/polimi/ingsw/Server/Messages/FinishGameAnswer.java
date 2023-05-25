@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
-import it.polimi.ingsw.Client.View.EndgameView;
+import it.polimi.ingsw.Client.View.EndGameView;
 import it.polimi.ingsw.Server.RemoteInterface;
 
 import java.rmi.RemoteException;
@@ -15,15 +15,15 @@ public class FinishGameAnswer extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        EndgameView endgameView = (EndgameView) serverHandler.getClient().getCurrentView();
+        EndGameView endgameView = (EndGameView) serverHandler.getClient().getCurrentView();
         endgameView.setFarewellFromServer(farewellMessage);
         endgameView.notifyView();
     }
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
-        EndgameView endgameView = null;
+        EndGameView endgameView = null;
         try {
-            endgameView = (EndgameView) client.getCurrentView();
+            endgameView = (EndGameView) client.getCurrentView();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

@@ -1,5 +1,4 @@
 package it.polimi.ingsw.Server.Messages;
-import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.Model.Exceptions.EmptyCellException;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidCellException;
@@ -7,7 +6,6 @@ import it.polimi.ingsw.Server.Model.Exceptions.InvalidPositionException;
 import it.polimi.ingsw.Server.Model.Exceptions.OutOfBoardException;
 import it.polimi.ingsw.Server.RemoteInterface;
 
-import java.io.IOException;
 import java.rmi.RemoteException;
 
 /**
@@ -55,7 +53,7 @@ public class InitialPositionMsg extends C2SMessage{
         try{
             S2CMessage initialPositionAnswer;
             try {
-                server.getController().getBoard().checkPosition(row, column);
+                server.getController(client).getBoard().checkPosition(row, column);
                 initialPositionAnswer = new InitialPositionAnswer("", true);
 
             } catch (OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException e) {

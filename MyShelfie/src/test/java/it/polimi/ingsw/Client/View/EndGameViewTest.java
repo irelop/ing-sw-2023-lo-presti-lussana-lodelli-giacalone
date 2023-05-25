@@ -1,24 +1,21 @@
 package it.polimi.ingsw.Client.View;
 
 import it.polimi.ingsw.Server.Messages.ScoreBoardMsg;
-import it.polimi.ingsw.Server.Model.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.util.ArrayList;
-import it.polimi.ingsw.Server.Model.Player;
+
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class EndgameViewTest {
+class EndGameViewTest {
     ArrayList<String> player = new ArrayList<>();
     ArrayList<Integer> score = new ArrayList<>();
 
 
     ScoreBoardMsg msg;
 
-    EndgameView view;
+    EndGameView view;
     @BeforeEach
     void setUp() {
         player.add("matteo");
@@ -32,7 +29,7 @@ class EndgameViewTest {
         score.add(20);
 
         msg = new ScoreBoardMsg(player, score, "player1");
-        view = new EndgameView(msg);
+        view = new EndGameView(msg);
     }
 
     @AfterEach

@@ -14,7 +14,7 @@ public class LobbyUpdateRequest extends C2SMessage{
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
-            server.getController().updateLobby();
+            server.getController(client).updateLobby();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

@@ -43,7 +43,7 @@ public class GameIsEndingView extends View{
                     getOwner().getServerHandler().sendMessageToServer(endGameMsg);
                 else{
                     try {
-                        getOwner().getRemoteServer().sendMessageToServer(endGameMsg);
+                        getOwner().getRemoteServer().sendMessageToServer(endGameMsg, getOwner().getClient());
                     } catch (RemoteException e) {
                         throw new RuntimeException(e);
                     }

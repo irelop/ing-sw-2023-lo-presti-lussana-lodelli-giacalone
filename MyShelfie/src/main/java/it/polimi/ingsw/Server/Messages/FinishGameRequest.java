@@ -4,7 +4,6 @@ import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.RemoteInterface;
 
 import java.rmi.RemoteException;
-import java.util.UUID;
 
 public class FinishGameRequest extends C2SMessage{
 
@@ -22,7 +21,7 @@ public class FinishGameRequest extends C2SMessage{
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
-            server.getController().finishGameRMI(client, nickname);
+            server.getController(client).finishGameRMI(client, nickname);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

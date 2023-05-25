@@ -49,12 +49,9 @@ public class GoalView extends View {
             FinishTurnMsg finishTurnMsg = new FinishTurnMsg();
             if (!getOwner().isRMI()) {
                 getOwner().getServerHandler().sendMessageToServer(finishTurnMsg);
-                //getOwner().transitionToView(nextView);
             } else {
                 try {
-                    getOwner().getRemoteServer().sendMessageToServer(finishTurnMsg);
-                    /*if(getOwner().getCurrentView() == this)
-                        getOwner().getClient().transitionToView(null);*/
+                    getOwner().getRemoteServer().sendMessageToServer(finishTurnMsg, getOwner().getClient());
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }

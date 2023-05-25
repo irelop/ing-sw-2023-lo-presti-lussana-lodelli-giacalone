@@ -8,6 +8,7 @@ package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.ChooseTilesFromBoardView;
+import it.polimi.ingsw.Client.View.WaitingView;
 import it.polimi.ingsw.Server.Model.Board;
 import it.polimi.ingsw.Server.Model.CommonGoalCard;
 import it.polimi.ingsw.Server.Model.PersonalGoalCard;
@@ -61,7 +62,8 @@ public class YourTurnMsg extends S2CMessage{
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
             client.goToChooseTilesFromBoardView(this);
-            client.notifyView();
+            if(client.getCurrentView().getClass() == WaitingView.class)
+                client.notifyView();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

@@ -55,9 +55,9 @@ public class PlayerChoiceMsg extends C2SMessage{
         try{
             S2CMessage playerChoiceAnswer;
             try {
-                server.getController().getBoard().checkDirectionAndNumberOfTiles(direction, numberOfTiles, initialRow, initialColumn, maxTilesPickable);
+                server.getController(client).getBoard().checkDirectionAndNumberOfTiles(direction, numberOfTiles, initialRow, initialColumn, maxTilesPickable);
                 playerChoiceAnswer = new PlayerChoiceAnswer("", true);
-                server.getController().getPlayerChoice(initialRow, initialColumn, direction, numberOfTiles + 1);
+                server.getController(client).getPlayerChoice(initialRow, initialColumn, direction, numberOfTiles + 1);
 
             } catch (OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException
                      | InvalidNumberOfTilesException | InvalidDirectionException e) {
