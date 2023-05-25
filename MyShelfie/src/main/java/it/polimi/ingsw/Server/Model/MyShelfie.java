@@ -254,7 +254,6 @@ public class MyShelfie {
                 }
                 else{
                     try {
-
                         GameIsEndingUpdateAnswer msg;
                         if(isRMIFirstLastLobby.get(i)) {
                             msg = new GameIsEndingUpdateAnswer(gameOver, i, firstToFinish, players, hasFinished, true);
@@ -353,17 +352,6 @@ public class MyShelfie {
                 shelfSnapshot
         );
 
-        //qui viene mandata la view per la scelta tessere al current player
-        if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
-            clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
-        else {
-            try {
-                clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(yourTurnMsg);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
         if(isOver){
             //se isOver = true allora siamo all'ultima mano
 
@@ -380,7 +368,16 @@ public class MyShelfie {
             updateGameIsEndingView();
         }
 
-
+        //qui viene mandata la view per la scelta tessere al current player
+        if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
+            clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
+        else {
+            try {
+                clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(yourTurnMsg);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     //funzione chiamata dal process message del messaggio creato alla fine dell'inserimento delle
@@ -539,6 +536,18 @@ public class MyShelfie {
     }
 
     public void finishTurn(){
+            if(!isOver){
+                FinishTurnAnswer finishTurnAnswer = new FinishTurnAnswer();
+                if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
+                    clientHandlers.get(currentPlayerIndex).sendMessageToClient(finishTurnAnswer);
+                else {
+                    try {
+                        clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(finishTurnAnswer);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
             if(currentPlayerIndex == numberOfPlayers-1)
                 currentPlayerIndex = 0;
             else
@@ -561,10 +570,13 @@ public class MyShelfie {
                 }
 
                 //setting last player has finished
-                if(currentPlayerIndex==0)
-                    playersConnected.get(numberOfPlayers-1).setHasFinished(true);
-                else
-                    playersConnected.get(currentPlayerIndex-1).setHasFinished(true);
+                if(currentPlayerIndex==0) {
+                    playersConnected.get(numberOfPlayers - 1).setHasFinished(true);
+                    isRMIFirstLastLobby.set(numberOfPlayers -1,true);
+                }else {
+                    playersConnected.get(currentPlayerIndex - 1).setHasFinished(true);
+                    isRMIFirstLastLobby.set(numberOfPlayers - 1,true);
+                }
 
                 //setting game over
                 this.gameOver = true;
@@ -587,7 +599,7 @@ public class MyShelfie {
                 scoreList.add(player.myScore.getScore());
             }
 
-            ScoreBoardMsg msg = new ScoreBoardMsg(playersNames, scoreList);
+            ScoreBoardMsg msg = new ScoreBoardMsg(playersNames, scoreList, playersNames.get(playerIndex));
             if(!clientHandlers.get(playerIndex).getIsRMI())
                 clientHandlers.get(playerIndex).sendMessageToClient(msg);
             else{
@@ -601,38 +613,25 @@ public class MyShelfie {
 
     }
 
-    public void finishGame(ClientHandler playerEnding){
+    public void finishGame(ClientHandler playerEnding, String playerNameEnding){
         FinishGameAnswer finishGameAnswer;
-        int found = clientHandlers.indexOf(playerEnding);
-        String playerNameEnding = new String(playersConnected.get(found).getNickname());
-        finishGameAnswer = new FinishGameAnswer(new String("See you soon " + playerNameEnding + "!"));
+        finishGameAnswer = new FinishGameAnswer("See you soon " + playerNameEnding + "!");
         playerEnding.sendMessageToClient(finishGameAnswer);
-
         playerEnding.stop();
 
+        /*int found = clientHandlers.indexOf(playerEnding);
         playersConnected.remove(found);
-        clientHandlers.remove(found);
-
+        clientHandlers.remove(found);*/
     }
 
-    public void finishGameRMI(RemoteInterface remoteClient){
+    public void finishGameRMI(RemoteInterface remoteClient, String playerNameEnding){
         FinishGameAnswer finishGameAnswer;
-        int found = -1;
-        for(int i = 0; i<clientHandlers.size();i++){
-            if(clientHandlers.get(i).getClientInterface().equals(remoteClient)){
-                found = i;
-            }
-        }
-        String playerNameEnding = new String(playersConnected.get(found).getNickname());
-        finishGameAnswer = new FinishGameAnswer(new String("See you soon " + playerNameEnding + "!"));
+        finishGameAnswer = new FinishGameAnswer("See you soon " + playerNameEnding + "!");
         try {
             remoteClient.sendMessageToClient(finishGameAnswer);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-        playersConnected.remove(found);
-        clientHandlers.remove(found);
-
     }
 
 

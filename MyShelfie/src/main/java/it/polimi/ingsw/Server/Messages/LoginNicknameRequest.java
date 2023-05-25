@@ -28,12 +28,11 @@ public class LoginNicknameRequest extends C2SMessage{
 
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
-        /*try {
+        try {
             server.getController().manageLoginRMI(this, client);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
-        }*/
-        //bisogna creare il metodo nel controller
+        }
     }
 
 }

@@ -39,7 +39,7 @@ public class LobbyView extends View implements ObserverView {
         if(lobbyUpdateAnswer.allPlayersReady){
             System.out.println("All players are connected! The game is starting...");
             try {
-                TimeUnit.SECONDS.sleep(5);
+                TimeUnit.SECONDS.sleep(2);
             } catch (InterruptedException ignored) { }
 
             AllPlayersReadyMsg allPlayersReadyMsg = new AllPlayersReadyMsg();

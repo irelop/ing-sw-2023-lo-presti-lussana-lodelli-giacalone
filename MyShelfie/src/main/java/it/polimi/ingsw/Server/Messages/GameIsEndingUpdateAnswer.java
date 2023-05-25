@@ -62,9 +62,13 @@ public class GameIsEndingUpdateAnswer extends S2CMessage{
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
+            System.out.println("process");
             client.goToGameIsEndingView(this);
-            if(!isRMIFirstLobby)
+
+            if(!isRMIFirstLobby) {
+                System.out.println("chiamo notify");
                 client.notifyView();
+            }
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

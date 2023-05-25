@@ -31,7 +31,7 @@ class EndgameViewTest {
         score.add(10);
         score.add(20);
 
-        msg = new ScoreBoardMsg(player, score);
+        msg = new ScoreBoardMsg(player, score, "player1");
         view = new EndgameView(msg);
     }
 

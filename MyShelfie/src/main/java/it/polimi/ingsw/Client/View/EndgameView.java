@@ -47,7 +47,7 @@ public class EndgameView extends View {
 
         if (goOn != null) {
             synchronized (lock) {
-                FinishGameRequest finishGameRequest = new FinishGameRequest();
+                FinishGameRequest finishGameRequest = new FinishGameRequest(msg.playerNickname);
                 if (!getOwner().isRMI()) {
                     getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
                     try {

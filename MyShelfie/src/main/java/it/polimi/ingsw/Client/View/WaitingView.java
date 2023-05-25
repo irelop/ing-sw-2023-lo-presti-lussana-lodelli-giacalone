@@ -19,6 +19,7 @@ public class WaitingView extends View implements ObserverView {
 
     @Override
     public void notifyView() {
+
         synchronized (lock){
             lock.notify();
         }
