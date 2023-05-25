@@ -3,6 +3,8 @@ package it.polimi.ingsw.Client.View;
 import it.polimi.ingsw.Server.Messages.EndGameMsg;
 import it.polimi.ingsw.Server.Messages.GameIsEndingUpdateAnswer;
 
+import java.rmi.RemoteException;
+
 public class GameIsEndingView extends View{
 
     private final Object lock;
@@ -37,10 +39,19 @@ public class GameIsEndingView extends View{
                 //playerIndex needed to choose the right clientHandler
                 System.out.println("Everyone has played their turn!");
                 EndGameMsg endGameMsg = new EndGameMsg(msg.playerIndex);
-                getOwner().getServerHandler().sendMessageToServer(endGameMsg);
+                if(!getOwner().isRMI())
+                    getOwner().getServerHandler().sendMessageToServer(endGameMsg);
+                else{
+                    try {
+                        getOwner().getRemoteServer().sendMessageToServer(endGameMsg);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
         }
     }
+
 
     @Override
     public void notifyView() {

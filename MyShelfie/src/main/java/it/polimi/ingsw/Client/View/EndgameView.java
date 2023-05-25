@@ -47,14 +47,17 @@ public class EndgameView extends View {
         if (goOn != null) {
             synchronized (lock) {
                 FinishGameRequest finishGameRequest = new FinishGameRequest();
-                getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
-                try {
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                if (!getOwner().isRMI()) {
+                    getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    System.out.println(farewellFromServer);
+                    getOwner().setTrueTerminate();
                 }
-                System.out.println(farewellFromServer);
-                getOwner().setTrueTerminate();
+                //else bisogna chiudere la connessione rmi
             }
         }
     }

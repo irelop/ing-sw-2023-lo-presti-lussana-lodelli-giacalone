@@ -12,6 +12,7 @@ import it.polimi.ingsw.Server.Model.Exceptions.OutOfBoardException;
 import it.polimi.ingsw.Server.Model.ReadFileByLines;
 import it.polimi.ingsw.Server.Model.Tile;
 
+import java.rmi.RemoteException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -96,12 +97,21 @@ public class ChooseTilesFromBoardView extends View {
 
 
                 InitialPositionMsg initialPositionMsg = new InitialPositionMsg(r, c);
-                getOwner().getServerHandler().sendMessageToServer(initialPositionMsg);
-
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                if (!getOwner().isRMI())
+                    getOwner().getServerHandler().sendMessageToServer(initialPositionMsg);
+                else {
+                    try {
+                        getOwner().getRemoteServer().sendMessageToServer(initialPositionMsg, getOwner().getClient());
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                if (!getOwner().isRMI()) {
+                    try {
+                        this.wait();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 System.out.println(this.initialPositionAnswer.answer);
                 if (this.initialPositionAnswer.valid)
@@ -142,12 +152,20 @@ public class ChooseTilesFromBoardView extends View {
 
                     PlayerChoiceMsg playerChoiceMsg = new PlayerChoiceMsg(r, c, direction, numberOfTiles,
                             yourTurnMsg.maxTilesPickable);
-                    getOwner().getServerHandler().sendMessageToServer(playerChoiceMsg);
-
-                    try {
-                        this.wait();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+                    if(!getOwner().isRMI()) {
+                        getOwner().getServerHandler().sendMessageToServer(playerChoiceMsg);
+                        try {
+                            this.wait();
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    else{
+                        try {
+                            getOwner().getRemoteServer().sendMessageToServer(playerChoiceMsg, getOwner().getClient());
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                     System.out.println(this.playerChoiceAnswer.answer);
                     if (this.playerChoiceAnswer.valid)
@@ -159,9 +177,17 @@ public class ChooseTilesFromBoardView extends View {
         else{
             PlayerChoiceMsg playerChoiceMsg = new PlayerChoiceMsg(r, c, '0', 0,
                     yourTurnMsg.maxTilesPickable);
-            getOwner().getServerHandler().sendMessageToServer(playerChoiceMsg);
-        }
+            if(!getOwner().isRMI()){
+                getOwner().getServerHandler().sendMessageToServer(playerChoiceMsg);
+            }else{
+                try {
+                    getOwner().getRemoteServer().sendMessageToServer(playerChoiceMsg, getOwner().getClient());
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
 
+        }
     }
 
     private void printShelfAndPersonalGoalCard(){
@@ -195,7 +221,7 @@ public class ChooseTilesFromBoardView extends View {
     /**
      * this method prints the common cards and the personal card
      */
-    /*public void printCommonGoalCardsInfo(){
+    public void printCommonGoalCardsInfo(){
 
         System.out.println("Common goal cards:");
         for(int i=0; i<yourTurnMsg.commonGoalCards.length; i++){
@@ -204,7 +230,7 @@ public class ChooseTilesFromBoardView extends View {
             System.out.println(yourTurnMsg.commonGoalCards[i].getCardInfo().getDescription());
             System.out.println();
         }
-    }*/
+    }
 
     /**
      * this method allows to print the goal cards with the possibility to visualize the common cards side to side.
