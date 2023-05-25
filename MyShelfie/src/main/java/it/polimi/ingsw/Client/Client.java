@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Client;
 
+import it.polimi.ingsw.Client.View.Exceptions.InvalidNetworkChoiceException;
 import it.polimi.ingsw.Client.View.LoginView;
 import it.polimi.ingsw.Client.View.View;
 import it.polimi.ingsw.Client.View.WaitingView;
@@ -27,7 +28,6 @@ public class Client implements Runnable{
     public static void main(String[] args){
         Client client = new Client();
         client.run();
-
     }
 
     @Override
@@ -43,19 +43,34 @@ public class Client implements Runnable{
         }
     }
 
-
-    private void askNetworkChoice() {
+    private char getNetworkChoice() throws InvalidNetworkChoiceException {
         Scanner input = new Scanner(System.in);
+        System.out.println("Insert 'R' for RMI connection or 'S' for Socket connection");
+        String answer = input.next().toUpperCase();
 
-        System.out.println("Do you want to switch to RMI?");
-        String networkChoice = input.next().toUpperCase();
+        if(answer.length()>1) throw new InvalidNetworkChoiceException();
 
-        if (networkChoice.equals("Y")) {
-            isRMI = true;
+        char networkChoice = answer.charAt(0);
+        if(networkChoice != 'R' && networkChoice != 'S') throw new InvalidNetworkChoiceException();
+        else return networkChoice;
+    }
+
+    private void askNetworkChoice(){
+        char networkChoice;
+        do{
+            try {
+                networkChoice = getNetworkChoice();
+                break;
+            } catch (InvalidNetworkChoiceException e) {
+                System.out.println(e);
+            }
+        }while(true);
+        if(networkChoice=='R') {
+            this.isRMI = true;
             manageRMIConnection();
         }
-        else{
-            isRMI = false;
+        else {
+            this.isRMI = false;
             manageSocketConnection();
         }
     }
@@ -123,7 +138,6 @@ public class Client implements Runnable{
 
 
     public synchronized void transitionToView(View nextView){
-
         this.nextView = nextView;
 
     }
@@ -167,5 +181,6 @@ public class Client implements Runnable{
         this.remoteServer = null;
 
         System.out.println("Connection with RMI server closed");
+        System.exit(0);
     }
 }

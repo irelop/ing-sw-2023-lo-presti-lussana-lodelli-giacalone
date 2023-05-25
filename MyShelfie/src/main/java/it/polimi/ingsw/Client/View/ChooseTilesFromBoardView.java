@@ -5,6 +5,7 @@ package it.polimi.ingsw.Client.View;
  * @author Irene Lo Presti
  */
 
+import it.polimi.ingsw.Client.View.Exceptions.InvalidRuleAnswerException;
 import it.polimi.ingsw.Server.Messages.*;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidDirectionException;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidNumberOfTilesException;
@@ -40,7 +41,7 @@ public class ChooseTilesFromBoardView extends View {
     public void run() {
 
         int r, c, numberOfTiles;
-        char direction;
+        char direction, ruleAnswer;
         boolean goOn = false;
         Scanner scanner = new Scanner(System.in);
 
@@ -48,9 +49,15 @@ public class ChooseTilesFromBoardView extends View {
 
         //If it's the first turn, it prints the order in which the players will play
         if(yourTurnMsg.firstTurn){
-            System.out.print("Do you want to read the rules? (y-n) ");
-            char answer = scanner.next().toUpperCase().charAt(0);
-            if(answer == 'Y')
+            do{
+                try {
+                    ruleAnswer = getRuleAnswer();
+                    break;
+                } catch (InvalidRuleAnswerException e) {
+                    System.out.println(e);
+                }
+            }while(true);
+            if(ruleAnswer == 'Y')
                 printRules();
             printOrderOfPlayers();
         }
@@ -189,6 +196,17 @@ public class ChooseTilesFromBoardView extends View {
             }
 
         }
+    }
+
+    private char getRuleAnswer() throws InvalidRuleAnswerException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Do you want to read the rules? (y-n) ");
+        String input = scanner.next().toUpperCase();
+        if(input.length() > 1 && !input.equals("NO") && !input.equals("YES")) throw new InvalidRuleAnswerException();
+
+        char answer = input.charAt(0);
+        if(answer!='Y' && answer!='N') throw new InvalidRuleAnswerException();
+        else return answer;
     }
 
     private void printShelfAndPersonalGoalCard(){
@@ -483,14 +501,15 @@ public class ChooseTilesFromBoardView extends View {
         System.out.print("Please insert the direction: ");
 
         Scanner scanner = new Scanner(System.in);
+        String answer;
+        answer = scanner.next().toLowerCase();
+        if(answer.length()>1) throw new InvalidDirectionException();
+
         char direction;
-        direction = scanner.next().charAt(0);
+        direction = scanner.next().toLowerCase().charAt(0);
 
-        if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w')
-            throw new InvalidDirectionException();
-
-        else
-            return direction;
+        if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w') throw new InvalidDirectionException();
+        else return direction;
     }
 
     public void printRules(){
