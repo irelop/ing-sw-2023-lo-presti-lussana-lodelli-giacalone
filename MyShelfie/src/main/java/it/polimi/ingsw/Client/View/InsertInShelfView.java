@@ -8,6 +8,7 @@ import it.polimi.ingsw.Server.Messages.InsertingTilesMsg;
 import it.polimi.ingsw.Server.Messages.ToShelfMsg;
 import static it.polimi.ingsw.Client.View.ColorCode.*;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -81,11 +82,20 @@ public class InsertInShelfView extends View {
 
                 // generating message and waiting for an answer
                 InsertingTilesMsg insertingMsg = new InsertingTilesMsg(columnChosen, chosenOrderIndexes);
-                getOwner().getServerHandler().sendMessageToServer(insertingMsg);
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                if(!getOwner().isRMI()) {
+                    getOwner().getServerHandler().sendMessageToServer(insertingMsg);
+                    try {
+                        this.wait();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                else{
+                    try {
+                        getOwner().getRemoteServer().sendMessageToServer(insertingMsg, getOwner().getClient());
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 System.out.println(this.insertingTilesAnswer.answer);
                 if (this.insertingTilesAnswer.valid)

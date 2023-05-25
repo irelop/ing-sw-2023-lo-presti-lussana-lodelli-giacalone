@@ -3,6 +3,7 @@ package it.polimi.ingsw.Client.View;
 import it.polimi.ingsw.Client.View.Exceptions.InvalidNumberOfPlayersException;
 import it.polimi.ingsw.Server.Messages.*;
 
+import java.rmi.RemoteException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -40,21 +41,33 @@ public class LoginView extends View implements ObserverView {
      */
     @Override
     public void run() {
-        synchronized (lock){
+        synchronized (lock) {
             showTitleScreen();
-            while(!goOn && !isFull){
+            while (!goOn && !isFull) {
                 askNicknameRequest();
-                try {
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                if(!getOwner().isRMI()) {
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 showNicknameAnswer(answerToShow);
             }
-            if(answerToShow.getNicknameStatus()== LoginNicknameAnswer.Status.ACCEPTED || answerToShow.getNicknameStatus()== LoginNicknameAnswer.Status.FIRST_ACCEPTED)
-                getOwner().getServerHandler().sendMessageToServer(new LobbyUpdateRequest());
-        }
+            if(answerToShow.getNicknameStatus()== LoginNicknameAnswer.Status.ACCEPTED || answerToShow.getNicknameStatus()== LoginNicknameAnswer.Status.FIRST_ACCEPTED) {
+                if(!getOwner().isRMI()) {
+                    getOwner().getServerHandler().sendMessageToServer(new LobbyUpdateRequest());
+                }
 
+                else{
+                    try{
+                        getOwner().getRemoteServer().sendMessageToServer(new LobbyUpdateRequest());
+                    }catch (RemoteException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -81,7 +94,15 @@ public class LoginView extends View implements ObserverView {
         String insertedNickname = input.nextLine().replace(" ", "").toUpperCase();
 
         C2SMessage nicknameRequest = new LoginNicknameRequest(insertedNickname);
-        getOwner().getServerHandler().sendMessageToServer(nicknameRequest);
+        if(!getOwner().isRMI())
+            getOwner().getServerHandler().sendMessageToServer(nicknameRequest);
+        else{
+            try {
+                getOwner().getRemoteServer().sendMessageToServer(nicknameRequest, getOwner().getClient());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     /**
@@ -111,7 +132,15 @@ public class LoginView extends View implements ObserverView {
                     }
                 }while(true);
                 C2SMessage numPlayersRequest = new LoginNumPlayersRequest(insertedNumPlayers);
-                getOwner().getServerHandler().sendMessageToServer(numPlayersRequest);
+                if(!getOwner().isRMI())
+                    getOwner().getServerHandler().sendMessageToServer(numPlayersRequest);
+                else{
+                    try {
+                        getOwner().getRemoteServer().sendMessageToServer(numPlayersRequest);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
             case FULL_LOBBY -> {
                 System.out.println("\nDeeply sorry! We cannot let you join because the game lobby is already full\n");
@@ -145,14 +174,6 @@ public class LoginView extends View implements ObserverView {
             throw new InvalidNumberOfPlayersException();
         else
             return insertedNumPlayers;
-        /*insertedNumPlayers = input.nextInt();
-        while(insertedNumPlayers <=1 || insertedNumPlayers > 4){
-            System.out.println("\nSorry, the number inserted is not valid: please select another one\n");
-            insertedNumPlayers = input.nextInt();
-        }*/
-
-        /*C2SMessage numPlayersRequest = new LoginNumPlayersRequest(insertedNumPlayers);
-        getOwner().getServerHandler().sendMessageToServer(numPlayersRequest);*/
     }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

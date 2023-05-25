@@ -35,8 +35,7 @@ public abstract class View implements Runnable, ObserverView {
      * in the server handler in order to send in the network.
      */
     @Override
-    public void run() {
-    }
+    public void run() {}
 
     /**
      * a getter of the lock flag associated to this view.

@@ -1,7 +1,5 @@
 package it.polimi.ingsw.Client.View;
 
-import static java.lang.Thread.sleep;
-
 public class WaitingView extends View implements ObserverView {
 
     private final Object lock = new Object();
