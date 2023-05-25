@@ -15,6 +15,7 @@ public class AllPlayersReadyMsg extends C2SMessage{
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
+            client.transitionToView(null);
             server.getController().allPlayersReady();
         } catch (RemoteException e) {
             throw new RuntimeException(e);

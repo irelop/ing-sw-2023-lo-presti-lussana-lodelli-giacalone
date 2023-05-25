@@ -47,7 +47,7 @@ public class LobbyView extends View implements ObserverView {
                 getOwner().getServerHandler().sendMessageToServer(allPlayersReadyMsg);
             else {
                 try {
-                    getOwner().getRemoteServer().sendMessageToServer(allPlayersReadyMsg);
+                    getOwner().getRemoteServer().sendMessageToServer(allPlayersReadyMsg, getOwner().getClient());
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }

@@ -57,17 +57,11 @@ public class YourTurnMsg extends S2CMessage{
         serverHandler.getClient().transitionToView(new ChooseTilesFromBoardView(this));
         serverHandler.getClient().getCurrentView().notifyView();
     }
-
-    public String toString(){
-        return "de sono un messaggio eeenoooorme";
-    }
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
             client.goToChooseTilesFromBoardView(this);
-            if(!(nickname.equals(playersNames.get(0))&& firstTurn)){
-                client.notifyView();
-            }
+            client.notifyView();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
