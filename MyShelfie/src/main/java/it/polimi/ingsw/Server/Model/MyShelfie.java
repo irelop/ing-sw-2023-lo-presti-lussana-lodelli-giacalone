@@ -5,6 +5,7 @@ import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandExcep
 import it.polimi.ingsw.Server.Model.Exceptions.NotEnoughSpaceInChosenColumnException;
 import it.polimi.ingsw.Server.RMIClientHandler;
 import it.polimi.ingsw.Server.RemoteInterface;
+import it.polimi.ingsw.Server.SocketClientHandler;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -415,7 +416,7 @@ public class MyShelfie {
 
         //parte dell'if è commentata per poter testare subito la fine di una partita
         //una volta risolti i problemi bisogna togliere il commento
-        if( /* playersConnected.get(currentPlayerIndex).myShelfie.isShelfFull() &&  */ !isOver) {
+        if( playersConnected.get(currentPlayerIndex).myShelfie.isShelfFull() &&  !isOver) {
             isShelfFull = true;
             playersConnected.get(currentPlayerIndex).myScore.addScore(1);
             this.isOver = true;
@@ -552,6 +553,49 @@ public class MyShelfie {
                 currentPlayerIndex = 0;
             else
                 currentPlayerIndex ++;
+
+            //skipping when a player is disconnected from the gam (FA Resilienza alle disconessioni)
+
+            /*for(int i = 0; i<clientHandlers.size();i++){
+                if(clientHandlers.get(i).getIsRMI()){
+                    try {
+                        if(!clientHandlers.get(i).getClientInterface().isClientConnected()) {
+                            clientHandlers.remove(i);
+                        }
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                else if(!((SocketClientHandler)clientHandlers.get(i)).isConnected()){
+                        clientHandlers.remove(i);
+                    }
+                }
+
+            }*/
+            if(clientHandlers.size()==1){
+                //gestire come mandare il player rimasto da qualche parte
+            }
+            else {
+                while(true){
+                    if(clientHandlers.get(currentPlayerIndex).getIsRMI()) {
+                        try {
+                            if (!(clientHandlers.get(currentPlayerIndex).getClientInterface().isClientConnected())){
+                                currentPlayerIndex++;
+                            } else break;
+
+                        } catch (RemoteException e) {
+                            currentPlayerIndex++;
+                        }
+
+                    }
+                    else if((!((SocketClientHandler)clientHandlers.get(currentPlayerIndex)).isConnected())) {
+                        currentPlayerIndex++;
+                    }
+                    else break;
+                }
+            }
+
+            //------------------------------------------------------------------------------------------------------
 
             if(!isOver || !playersConnected.get(currentPlayerIndex).hasChair()){
                 if(firstTurn && currentPlayerIndex==0) {
