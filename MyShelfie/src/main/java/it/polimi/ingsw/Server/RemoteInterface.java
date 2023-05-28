@@ -38,4 +38,6 @@ public interface RemoteInterface extends Remote {
         void addController(MyShelfie controller) throws RemoteException;
         void setMapClientsToController(MyShelfie controller, int remoteClientIndex) throws RemoteException;
 
+        boolean isClientConnected() throws RemoteException;
+
 }

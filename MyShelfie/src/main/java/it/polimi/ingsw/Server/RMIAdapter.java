@@ -49,6 +49,15 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
 
     public void setMapClientsToController(MyShelfie controller, int remoteClientIndex){
         mapClientsToController.put(remoteClients.get(remoteClientIndex), controller);
+
+    }
+
+    @Override
+    public boolean isClientConnected() throws RemoteException {
+        if(client==null) {
+            return false;
+        }
+        return true;
     }
 
     public MyShelfie getController(RemoteInterface client){
