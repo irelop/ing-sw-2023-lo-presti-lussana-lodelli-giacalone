@@ -25,10 +25,13 @@ public class SocketClientHandler extends ClientHandler implements Runnable{
     private Socket client;
     private AtomicBoolean shouldStop = new AtomicBoolean(false);
 
+    private boolean isConnected;
+
     SocketClientHandler(Socket client, MyShelfie game){
         super(game, null);
         this.client = client;
         setIsRMI(false);
+        isConnected = true;
     }
 
 
@@ -52,6 +55,7 @@ public class SocketClientHandler extends ClientHandler implements Runnable{
 
         try {
             System.out.println("Closing connection with "+client);
+            isConnected= false;
             client.close();
         } catch (IOException ex) {
             stop();
@@ -107,6 +111,10 @@ public class SocketClientHandler extends ClientHandler implements Runnable{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isConnected() {
+        return isConnected;
     }
 }
 
