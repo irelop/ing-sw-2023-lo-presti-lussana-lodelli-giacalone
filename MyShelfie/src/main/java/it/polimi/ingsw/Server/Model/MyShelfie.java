@@ -541,7 +541,7 @@ public class MyShelfie {
 
     public void finishTurn(){
             //to go to the waiting view if the game is not over
-            if(!isOver){
+            /*if(!isOver){
                 FinishTurnAnswer finishTurnAnswer = new FinishTurnAnswer();
                 if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
                     clientHandlers.get(currentPlayerIndex).sendMessageToClient(finishTurnAnswer);
@@ -552,8 +552,7 @@ public class MyShelfie {
                         throw new RuntimeException(e);
                     }
                 }
-            }
-
+            }*/
             //setting the next player as the current player
             if(currentPlayerIndex == numberOfPlayers-1)
                 currentPlayerIndex = 0;
@@ -566,16 +565,25 @@ public class MyShelfie {
                 if(clientHandlers.get(currentPlayerIndex).getIsRMI()) {
                     try {
                         if (!(clientHandlers.get(currentPlayerIndex).getClientInterface().isClientConnected())){
-                            currentPlayerIndex++;
+                            if(currentPlayerIndex == numberOfPlayers-1)
+                                currentPlayerIndex = 0;
+                            else
+                                currentPlayerIndex ++;
                             numOfPlayersConnected--;
                             } else break;
                         } catch (RemoteException e) {
-                            currentPlayerIndex++;
+                            if(currentPlayerIndex == numberOfPlayers-1)
+                                currentPlayerIndex = 0;
+                            else
+                                currentPlayerIndex ++;
                             numOfPlayersConnected--;
                             }
                 }
                 else if((!((SocketClientHandler)clientHandlers.get(currentPlayerIndex)).isConnected())) {
-                    currentPlayerIndex++;
+                    if(currentPlayerIndex == numberOfPlayers-1)
+                        currentPlayerIndex = 0;
+                    else
+                        currentPlayerIndex ++;
                     numOfPlayersConnected--;
                 }
                 else break;
