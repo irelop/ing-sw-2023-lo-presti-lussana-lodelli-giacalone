@@ -97,15 +97,23 @@ public class Client implements Runnable{
     public void manageSocketConnection(){
         System.out.println("Please insert the IP address of the server:\n");
         Scanner input = new Scanner(System.in);
-        String ip = input.nextLine();
+        String ip;
 
         Socket server;
-        try{
-            server = new Socket(ip, 9999);
-        }catch(IOException e){
-            System.out.println("server unreachable");
-            return;
-        }
+        do{
+            try{
+                ip = input.nextLine();
+                if(ip.equals("exit"))
+                    System.exit(0);
+                else{
+                    server = new Socket(ip, 9999);
+                    break;
+                }
+            }catch(IOException e){
+                System.out.println("server unreachable, try another address or insert 'exit' if you don't want to connect to the server anymore");
+            }
+        }while(true);
+
 
         serverHandler = new SocketServerHandler(server, this);
 
