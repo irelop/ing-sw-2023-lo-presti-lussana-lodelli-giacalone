@@ -39,5 +39,6 @@ public interface RemoteInterface extends Remote {
         void setMapClientsToController(MyShelfie controller, int remoteClientIndex) throws RemoteException;
 
         boolean isClientConnected() throws RemoteException;
+        void goToLastPlayerConnectedView(LastOneConnectedMsg msg) throws RemoteException;
 
 }

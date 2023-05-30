@@ -16,7 +16,7 @@ public class FinishGameAnswer extends S2CMessage{
     @Override
     public void processMessage(ServerHandler serverHandler) {
         EndGameView endgameView = (EndGameView) serverHandler.getClient().getCurrentView();
-        endgameView.setFarewellFromServer(farewellMessage);
+        //endgameView.setFarewellFromServer(farewellMessage);
         endgameView.notifyView();
     }
     @Override
@@ -27,6 +27,6 @@ public class FinishGameAnswer extends S2CMessage{
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-        endgameView.setFarewellFromServer(farewellMessage);
+       // endgameView.setFarewellFromServer(farewellMessage);
     }
 }

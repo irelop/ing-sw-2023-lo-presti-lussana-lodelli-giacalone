@@ -76,6 +76,9 @@ public class MyShelfie {
     public Board getBoard(){
         return board;
     }
+    public void setOver(boolean value){
+        this.isOver = value;
+    }
 
     //- - - - - - - - - - - - - - - - - - - -| L O G I N   M E T H O D S |- - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -157,7 +160,7 @@ public class MyShelfie {
         }
 
 
-        if (checkNickname(loginNicknameRequest.getInsertedNickname()) == true){
+        if (checkNickname(loginNicknameRequest.getInsertedNickname())){
 
             if(isFirstConnected()){
                 loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
@@ -537,6 +540,7 @@ public class MyShelfie {
     }
 
     public void finishTurn(){
+            //to go to the waiting view if the game is not over
             if(!isOver){
                 FinishTurnAnswer finishTurnAnswer = new FinishTurnAnswer();
                 if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
@@ -549,6 +553,8 @@ public class MyShelfie {
                     }
                 }
             }
+
+            //setting the next player as the current player
             if(currentPlayerIndex == numberOfPlayers-1)
                 currentPlayerIndex = 0;
             else
@@ -556,44 +562,47 @@ public class MyShelfie {
 
             //skipping when a player is disconnected from the gam (FA Resilienza alle disconessioni)
 
-            /*for(int i = 0; i<clientHandlers.size();i++){
-                if(clientHandlers.get(i).getIsRMI()){
-                    try {
-                        if(!clientHandlers.get(i).getClientInterface().isClientConnected()) {
-                            clientHandlers.remove(i);
-                        }
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                else if(!((SocketClientHandler)clientHandlers.get(i)).isConnected()){
-                        clientHandlers.remove(i);
-                    }
-                }
+            /*if(clientHandlers.size()==1){
+                //gestire come mandare il player rimasto da qualche parte
 
             }*/
-            if(clientHandlers.size()==1){
-                //gestire come mandare il player rimasto da qualche parte
-            }
-            else {
+            //else {
+                int numOfPlayersConnected = numberOfPlayers;
                 while(true){
                     if(clientHandlers.get(currentPlayerIndex).getIsRMI()) {
                         try {
                             if (!(clientHandlers.get(currentPlayerIndex).getClientInterface().isClientConnected())){
                                 currentPlayerIndex++;
-                            } else break;
+                                numOfPlayersConnected--;
+                                } else break;
 
                         } catch (RemoteException e) {
                             currentPlayerIndex++;
-                        }
+                            numOfPlayersConnected--;
+                            }
 
                     }
                     else if((!((SocketClientHandler)clientHandlers.get(currentPlayerIndex)).isConnected())) {
                         currentPlayerIndex++;
-                    }
+                        numOfPlayersConnected--;
+                        }
                     else break;
                 }
-            }
+        System.out.println(numOfPlayersConnected);
+                if(numOfPlayersConnected == 1){
+                    LastOneConnectedMsg msg = new LastOneConnectedMsg(playersConnected.get(currentPlayerIndex).getNickname());
+                    if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
+                        clientHandlers.get(currentPlayerIndex).sendMessageToClient(msg);
+                    else{
+                        try {
+                            clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(msg);
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    return;
+                }
+            //}
 
             //------------------------------------------------------------------------------------------------------
 
@@ -606,27 +615,30 @@ public class MyShelfie {
 
             //entered when everyone played last turn
             if(isOver && playersConnected.get(currentPlayerIndex).hasChair()){
-
-                //spot check
-                for (Player player : playersConnected) {
-                    int spotScore = player.myShelfie.spotCheck();
-                    player.myScore.addScore(spotScore);
-                }
-
-                //setting last player has finished
-                if(currentPlayerIndex==0) {
-                    playersConnected.get(numberOfPlayers - 1).setHasFinished(true);
-                    isRMIFirstLastLobby.set(numberOfPlayers -1,true);
-                }else {
-                    playersConnected.get(currentPlayerIndex - 1).setHasFinished(true);
-                    isRMIFirstLastLobby.set(numberOfPlayers - 1,true);
-                }
-
-                //setting game over
-                this.gameOver = true;
-
-                updateGameIsEndingView();
+                spotCheck();
             }
+    }
+
+    public void spotCheck(){
+        //spot check
+        for (Player player : playersConnected) {
+            int spotScore = player.myShelfie.spotCheck();
+            player.myScore.addScore(spotScore);
+        }
+
+        //setting last player has finished
+        if(currentPlayerIndex==0) {
+            playersConnected.get(numberOfPlayers - 1).setHasFinished(true);
+            isRMIFirstLastLobby.set(numberOfPlayers -1,true);
+        }else {
+            playersConnected.get(currentPlayerIndex - 1).setHasFinished(true);
+            isRMIFirstLastLobby.set(numberOfPlayers - 1,true);
+        }
+
+        //setting game over
+        this.gameOver = true;
+
+        updateGameIsEndingView();
     }
 
     public void endGame(int playerIndex) {
@@ -657,10 +669,7 @@ public class MyShelfie {
 
     }
 
-    public void finishGame(ClientHandler playerEnding, String playerNameEnding){
-        FinishGameAnswer finishGameAnswer;
-        finishGameAnswer = new FinishGameAnswer("See you soon " + playerNameEnding + "!");
-        playerEnding.sendMessageToClient(finishGameAnswer);
+    public void finishGame(ClientHandler playerEnding){
         playerEnding.stop();
 
         /*int found = clientHandlers.indexOf(playerEnding);
@@ -668,14 +677,8 @@ public class MyShelfie {
         clientHandlers.remove(found);*/
     }
 
-    public void finishGameRMI(RemoteInterface remoteClient, String playerNameEnding){
-        FinishGameAnswer finishGameAnswer;
-        finishGameAnswer = new FinishGameAnswer("See you soon " + playerNameEnding + "!");
-        try {
-            remoteClient.sendMessageToClient(finishGameAnswer);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
+    public void finishGameRMI(RemoteInterface remoteClient){
+
     }
 
 

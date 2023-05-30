@@ -9,9 +9,6 @@ import java.util.Scanner;
 
 public class EndGameView extends View {
     private final ScoreBoardMsg msg;
-    Object lock = new Object();
-
-    private String farewellFromServer;
 
     public EndGameView(ScoreBoardMsg msg) {
         this.msg = msg;
@@ -44,39 +41,23 @@ public class EndGameView extends View {
         goOn = scanner.nextLine();
 
         if (goOn != null) {
-            synchronized (lock) {
-                FinishGameRequest finishGameRequest = new FinishGameRequest(msg.playerNickname);
-                if (!getOwner().isRMI()) {
-                    getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                else {
-                    try {
-                        getOwner().getRemoteServer().sendMessageToServer(finishGameRequest, getOwner().getClient());
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                    System.out.println(farewellFromServer);
-                    getOwner().setTrueTerminate();
+            System.out.println("See you soon " + msg.playerNickname + "!");
+            getOwner().setTrueTerminate();
+            FinishGameRequest finishGameRequest = new FinishGameRequest();
+            if (!getOwner().isRMI()) {
+                getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
             }
+            else {
+                try {
+                    getOwner().getRemoteServer().sendMessageToServer(finishGameRequest);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
         }
     }
 
-    public void setFarewellFromServer(String farewellFromServer) {
-        this.farewellFromServer = farewellFromServer;
-    }
-
-    @Override
-    public void notifyView() {
-        synchronized (lock) {
-            lock.notify();
-        }
-    }
 }
 
 

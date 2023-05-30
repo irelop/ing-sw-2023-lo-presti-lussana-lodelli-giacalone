@@ -36,8 +36,10 @@ public class Client implements Runnable{
 
         nextView = new LoginView();
         runViewStateMachine();
-        if(!isRMI)
+        if(!isRMI) {
             serverHandler.stop();
+            System.exit(0);
+        }
         else{
             stopRMIConnection();
         }
@@ -110,7 +112,7 @@ public class Client implements Runnable{
                     break;
                 }
             }catch(IOException e){
-                System.out.println("server unreachable, try another address or insert 'exit' if you don't want to connect to the server anymore");
+                System.out.println("server unreachable, try another address, or insert 'exit' if you don't want to connect to the server anymore");
             }
         }while(true);
 
