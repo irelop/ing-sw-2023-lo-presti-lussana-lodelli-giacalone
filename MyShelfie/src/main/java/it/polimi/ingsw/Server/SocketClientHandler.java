@@ -50,11 +50,13 @@ public class SocketClientHandler extends ClientHandler implements Runnable{
         try {
             handleClientConnection();
         } catch (IOException ex) {
-            System.out.println("client" + client.getInetAddress() + "connection dropped");
+            //detection possible disconnection notifying the controller
+            this.isConnected = false;
+            getController().shouldFinishTurn(this);
+            System.out.println("client" + client.getInetAddress() + " connection dropped");
         }
 
         try {
-            System.out.println("Closing connection with "+client);
             isConnected= false;
             client.close();
         } catch (IOException ex) {

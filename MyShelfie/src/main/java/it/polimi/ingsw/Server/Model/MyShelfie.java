@@ -561,48 +561,38 @@ public class MyShelfie {
                 currentPlayerIndex ++;
 
             //skipping when a player is disconnected from the gam (FA Resilienza alle disconessioni)
-
-            /*if(clientHandlers.size()==1){
-                //gestire come mandare il player rimasto da qualche parte
-
-            }*/
-            //else {
-                int numOfPlayersConnected = numberOfPlayers;
-                while(true){
-                    if(clientHandlers.get(currentPlayerIndex).getIsRMI()) {
-                        try {
-                            if (!(clientHandlers.get(currentPlayerIndex).getClientInterface().isClientConnected())){
-                                currentPlayerIndex++;
-                                numOfPlayersConnected--;
-                                } else break;
-
+            int numOfPlayersConnected = numberOfPlayers;
+            while(true){
+                if(clientHandlers.get(currentPlayerIndex).getIsRMI()) {
+                    try {
+                        if (!(clientHandlers.get(currentPlayerIndex).getClientInterface().isClientConnected())){
+                            currentPlayerIndex++;
+                            numOfPlayersConnected--;
+                            } else break;
                         } catch (RemoteException e) {
                             currentPlayerIndex++;
                             numOfPlayersConnected--;
                             }
-
-                    }
-                    else if((!((SocketClientHandler)clientHandlers.get(currentPlayerIndex)).isConnected())) {
-                        currentPlayerIndex++;
-                        numOfPlayersConnected--;
-                        }
-                    else break;
                 }
-        System.out.println(numOfPlayersConnected);
-                if(numOfPlayersConnected == 1){
-                    LastOneConnectedMsg msg = new LastOneConnectedMsg(playersConnected.get(currentPlayerIndex).getNickname());
-                    if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
-                        clientHandlers.get(currentPlayerIndex).sendMessageToClient(msg);
-                    else{
-                        try {
-                            clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(msg);
-                        } catch (RemoteException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                    return;
+                else if((!((SocketClientHandler)clientHandlers.get(currentPlayerIndex)).isConnected())) {
+                    currentPlayerIndex++;
+                    numOfPlayersConnected--;
                 }
-            //}
+                else break;
+            }
+            if(numOfPlayersConnected == 1){
+                LastOneConnectedMsg msg = new LastOneConnectedMsg(playersConnected.get(currentPlayerIndex).getNickname());
+                if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
+                    clientHandlers.get(currentPlayerIndex).sendMessageToClient(msg);
+                else{
+                    try {
+                        clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(msg);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                return;
+            }
 
             //------------------------------------------------------------------------------------------------------
 
@@ -612,11 +602,21 @@ public class MyShelfie {
                 }
                 startTurn();
             }
-
             //entered when everyone played last turn
             if(isOver && playersConnected.get(currentPlayerIndex).hasChair()){
                 spotCheck();
             }
+    }
+
+    public void shouldFinishTurn(ClientHandler clientHandler){
+        //if the client disconnected was the actual one playing
+        if(clientHandlers.get(currentPlayerIndex).equals(clientHandler)) {
+            if(currentPlayerIndex == 0)
+                currentPlayerIndex = numberOfPlayers - 1;
+            else
+                currentPlayerIndex--;
+            finishTurn();
+        }
     }
 
     public void spotCheck(){
