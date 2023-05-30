@@ -229,7 +229,7 @@ public class MyShelfie {
         for (int i = 0; i<playersConnected.size();i++) {
             if(!clientHandlers.get(i).getIsRMI()) {
                 LobbyUpdateAnswer lobbyUpdateAnswer = new LobbyUpdateAnswer(lobbyPlayers, allPlayersReady);
-                if(((SocketClientHandler)clientHandlers.get(currentPlayerIndex)).isConnected())
+                if(((SocketClientHandler)clientHandlers.get(i)).isConnected())
                     clientHandlers.get(i).sendMessageToClient(lobbyUpdateAnswer);
             }
             else{
@@ -616,7 +616,12 @@ public class MyShelfie {
                 currentPlayerIndex = numberOfPlayers - 1;
             else
                 currentPlayerIndex--;
-            finishTurn();
+
+            if(playersConnected.size()==1){
+                currentPlayerIndex =-1;
+
+            }
+
         }
     }
 
