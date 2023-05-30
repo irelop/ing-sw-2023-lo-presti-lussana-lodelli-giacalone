@@ -49,7 +49,7 @@ public class EndGameView extends View {
             }
             else {
                 try {
-                    getOwner().getRemoteServer().sendMessageToServer(finishGameRequest);
+                    getOwner().getRemoteServer().sendMessageToServer(finishGameRequest, getOwner().getClient());
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }

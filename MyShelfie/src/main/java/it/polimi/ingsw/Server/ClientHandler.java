@@ -14,7 +14,7 @@ import java.io.ObjectOutputStream;
  * @author Andrea Giacalone
  */
 
-public abstract class ClientHandler {
+public abstract class ClientHandler implements Runnable {
 
     protected MyShelfie game;
     private boolean isRMI;
@@ -24,6 +24,8 @@ public abstract class ClientHandler {
         this.game = game;
         this.client = client;
     }
+
+    public void run(){}
 
     public MyShelfie getController(){ return this.game;}
     public void sendMessageToClient(S2CMessage message){};

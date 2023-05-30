@@ -118,4 +118,8 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
     public void disconnectClient(RemoteInterface remoteClient) throws RemoteException {
         this.remoteClients.remove(remoteClient);
     }
+
+    public void ping(){
+        client.ping();
+    }
 }

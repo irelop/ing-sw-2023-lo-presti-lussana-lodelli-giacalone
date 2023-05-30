@@ -198,13 +198,17 @@ public class MyShelfie {
                 if (isFirstConnected()) {
                     loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
                     client.sendMessageToClient(loginNicknameAnswer);
-                    addPlayer(msg.getInsertedNickname(), new RMIClientHandler(this, client));
-
-
+                    RMIClientHandler clientHandler = new RMIClientHandler(this, client);
+                    addPlayer(msg.getInsertedNickname(), clientHandler);
+                    Thread thread = new Thread(clientHandler);
+                    thread.start();
                 } else {
                     loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.ACCEPTED);
                     client.sendMessageToClient(loginNicknameAnswer);
-                    addPlayer(msg.getInsertedNickname(), new RMIClientHandler(this, client));
+                    RMIClientHandler clientHandler = new RMIClientHandler(this, client);
+                    addPlayer(msg.getInsertedNickname(), clientHandler);
+                    Thread thread = new Thread(clientHandler);
+                    thread.start();
                 }
 
 
@@ -225,13 +229,15 @@ public class MyShelfie {
         for (int i = 0; i<playersConnected.size();i++) {
             if(!clientHandlers.get(i).getIsRMI()) {
                 LobbyUpdateAnswer lobbyUpdateAnswer = new LobbyUpdateAnswer(lobbyPlayers, allPlayersReady);
-                clientHandlers.get(i).sendMessageToClient(lobbyUpdateAnswer);
+                if(((SocketClientHandler)clientHandlers.get(currentPlayerIndex)).isConnected())
+                    clientHandlers.get(i).sendMessageToClient(lobbyUpdateAnswer);
             }
             else{
                 if(i==(clientHandlers.size()-1)) lastRMIConnected = true;
                 try {
                     LobbyUpdateAnswer lobbyUpdateAnswer = new LobbyUpdateAnswer(lobbyPlayers, allPlayersReady,lastRMIConnected);
-                    clientHandlers.get(i).getClientInterface().sendMessageToClient(lobbyUpdateAnswer);
+                    if(clientHandlers.get(i).getClientInterface().isClientConnected())
+                        clientHandlers.get(i).getClientInterface().sendMessageToClient(lobbyUpdateAnswer);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -540,19 +546,6 @@ public class MyShelfie {
     }
 
     public void finishTurn(){
-            //to go to the waiting view if the game is not over
-            /*if(!isOver){
-                FinishTurnAnswer finishTurnAnswer = new FinishTurnAnswer();
-                if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
-                    clientHandlers.get(currentPlayerIndex).sendMessageToClient(finishTurnAnswer);
-                else {
-                    try {
-                        clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(finishTurnAnswer);
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }*/
             //setting the next player as the current player
             if(currentPlayerIndex == numberOfPlayers-1)
                 currentPlayerIndex = 0;

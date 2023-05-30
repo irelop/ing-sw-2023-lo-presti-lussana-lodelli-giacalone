@@ -193,4 +193,6 @@ public class Client implements Runnable{
         System.out.println("Connection with RMI server closed");
         System.exit(0);
     }
+
+    public void ping(){}
 }

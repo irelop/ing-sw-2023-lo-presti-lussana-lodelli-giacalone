@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author Andrea Giacalone
  */
-public class SocketClientHandler extends ClientHandler implements Runnable{
+public class SocketClientHandler extends ClientHandler{
     //the socket used for communicate with the connected client.
     ObjectOutputStream outputStream;
     ObjectInputStream inputStream;

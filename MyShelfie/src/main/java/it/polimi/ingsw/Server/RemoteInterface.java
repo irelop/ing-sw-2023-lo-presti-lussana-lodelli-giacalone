@@ -40,5 +40,6 @@ public interface RemoteInterface extends Remote {
 
         boolean isClientConnected() throws RemoteException;
         void goToLastPlayerConnectedView(LastOneConnectedMsg msg) throws RemoteException;
+        void ping() throws RemoteException;
 
 }
