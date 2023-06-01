@@ -506,7 +506,7 @@ public class ChooseTilesFromBoardView extends View {
         if(answer.length()>1) throw new InvalidDirectionException();
 
         char direction;
-        direction = scanner.next().toLowerCase().charAt(0);
+        direction = answer.charAt(0);
 
         if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w') throw new InvalidDirectionException();
         else return direction;
