@@ -229,14 +229,14 @@ public class MyShelfie {
         for (int i = 0; i<playersConnected.size();i++) {
             if(!clientHandlers.get(i).getIsRMI()) {
                 LobbyUpdateAnswer lobbyUpdateAnswer = new LobbyUpdateAnswer(lobbyPlayers, allPlayersReady);
-                if(((SocketClientHandler)clientHandlers.get(i)).isConnected())
+                if(clientHandlers.get(i).isConnected())
                     clientHandlers.get(i).sendMessageToClient(lobbyUpdateAnswer);
             }
             else{
                 if(i==(clientHandlers.size()-1)) lastRMIConnected = true;
                 try {
                     LobbyUpdateAnswer lobbyUpdateAnswer = new LobbyUpdateAnswer(lobbyPlayers, allPlayersReady,lastRMIConnected);
-                    if(clientHandlers.get(i).getClientInterface().isClientConnected())
+                    if(clientHandlers.get(i).isConnected())
                         clientHandlers.get(i).getClientInterface().sendMessageToClient(lobbyUpdateAnswer);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
@@ -256,7 +256,7 @@ public class MyShelfie {
 
         for(int i=0; i<numberOfPlayers; i++) {
             //sending to gameIsEndingView players who have played their last turn
-            if (playersConnected.get(i).getHasFinished()) {
+            if (playersConnected.get(i).getHasFinished() && clientHandlers.get(i).isConnected()) {
                 if(!clientHandlers.get(i).getIsRMI()) {
                     clientHandlers.get(i).sendMessageToClient(
                             new GameIsEndingUpdateAnswer(gameOver, i, firstToFinish, players, hasFinished)
@@ -328,7 +328,7 @@ public class MyShelfie {
     private void startTurn() {
 
         //checking if the board need to be refilled
-        if(board.needRefill())
+        if (board.needRefill())
             board.refill();
 
         // find max pickable tiles by the player
@@ -342,14 +342,14 @@ public class MyShelfie {
 
         Tile[][] boardSnapshot = new Tile[9][9];
 
-        for(int i=0; i<9; i++)
-            for(int j=0; j<9; j++)
+        for (int i = 0; i < 9; i++)
+            for (int j = 0; j < 9; j++)
                 boardSnapshot[i][j] = board.getBoardGrid()[i][j];
 
         Tile[][] shelfSnapshot = new Tile[6][5];
 
-        for(int i=0; i<6; i++)
-            for(int j=0; j<5; j++)
+        for (int i = 0; i < 6; i++)
+            for (int j = 0; j < 5; j++)
                 shelfSnapshot[i][j] = playersConnected.get(currentPlayerIndex).myShelfie.getGrid()[i][j];
 
         yourTurnMsg = new YourTurnMsg(
@@ -362,31 +362,39 @@ public class MyShelfie {
                 shelfSnapshot
         );
 
-        if(isOver){
+        if (isOver) {
             //se isOver = true allora siamo all'ultima mano
 
             //settiamo a true il booleano del giocatore precedente
-            if(currentPlayerIndex==0) {
+            if (currentPlayerIndex == 0) {
                 playersConnected.get(numberOfPlayers - 1).setHasFinished(true);
-                isRMIFirstLastLobby.set(numberOfPlayers -1,true);
-            }else {
+                isRMIFirstLastLobby.set(numberOfPlayers - 1, true);
+            } else {
                 playersConnected.get(currentPlayerIndex - 1).setHasFinished(true);
-                isRMIFirstLastLobby.set(numberOfPlayers - 1,true);
+                isRMIFirstLastLobby.set(numberOfPlayers - 1, true);
             }
 
             //aggiorniamo la game is ending view
             updateGameIsEndingView();
         }
-
+        //pensare come fare per fare un unico metodo isConnected() per controllare sia skt che rmi
         //qui viene mandata la view per la scelta tessere al current player
-        if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
-            clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
-        else {
-            try {
-                clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(yourTurnMsg);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
+
+        if(clientHandlers.get(currentPlayerIndex).isConnected()){
+
+            if (!clientHandlers.get(currentPlayerIndex).getIsRMI())
+                clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
+            else{
+                try {
+                    clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(yourTurnMsg);
+                }catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
             }
+        }
+        else{
+            computeCurrentPlayerIdx();
+            startTurn();
         }
     }
 
@@ -545,42 +553,47 @@ public class MyShelfie {
         return card.getPersonalGoalScore(playerShelfSnapshot);
     }
 
-    public void finishTurn(){
-            //setting the next player as the current player
+   private void computeCurrentPlayerIdx(){
             if(currentPlayerIndex == numberOfPlayers-1)
                 currentPlayerIndex = 0;
             else
                 currentPlayerIndex ++;
+    }
+
+    public void finishTurn(){
+            //setting the next player as the current player
+            computeCurrentPlayerIdx();
 
             //skipping when a player is disconnected from the gam (FA Resilienza alle disconessioni)
             int numOfPlayersConnected = numberOfPlayers;
             while(true){
+                if(!clientHandlers.get(currentPlayerIndex).isConnected()){
+                    computeCurrentPlayerIdx();
+                    numOfPlayersConnected--;
+                }
+                else break;
+
+                /*
                 if(clientHandlers.get(currentPlayerIndex).getIsRMI()) {
                     try {
                         if (!(clientHandlers.get(currentPlayerIndex).getClientInterface().isClientConnected())){
-                            if(currentPlayerIndex == numberOfPlayers-1)
-                                currentPlayerIndex = 0;
-                            else
-                                currentPlayerIndex ++;
+                            computeCurrentPlayerIdx();
                             numOfPlayersConnected--;
                             } else break;
                         } catch (RemoteException e) {
-                            if(currentPlayerIndex == numberOfPlayers-1)
-                                currentPlayerIndex = 0;
-                            else
-                                currentPlayerIndex ++;
+                            computeCurrentPlayerIdx();
                             numOfPlayersConnected--;
                             }
                 }
                 else if((!((SocketClientHandler)clientHandlers.get(currentPlayerIndex)).isConnected())) {
-                    if(currentPlayerIndex == numberOfPlayers-1)
-                        currentPlayerIndex = 0;
-                    else
-                        currentPlayerIndex ++;
+                    computeCurrentPlayerIdx();
                     numOfPlayersConnected--;
                 }
                 else break;
+
+                 */
             }
+
             if(numOfPlayersConnected == 1){
                 LastOneConnectedMsg msg = new LastOneConnectedMsg(playersConnected.get(currentPlayerIndex).getNickname());
                 if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
@@ -611,16 +624,16 @@ public class MyShelfie {
 
     public void shouldFinishTurn(ClientHandler clientHandler){
         //if the client disconnected was the actual one playing
-        if(clientHandlers.get(currentPlayerIndex).equals(clientHandler)) {
+        if(clientHandlers.get(currentPlayerIndex).equals(clientHandler) && isStarted) {
             if(currentPlayerIndex == 0)
                 currentPlayerIndex = numberOfPlayers - 1;
             else
                 currentPlayerIndex--;
-
+            /*
             if(playersConnected.size()==1){
                 currentPlayerIndex =-1;
-
-            }
+            }*/
+            finishTurn();
 
         }
     }

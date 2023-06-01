@@ -25,13 +25,11 @@ public class SocketClientHandler extends ClientHandler{
     private Socket client;
     private AtomicBoolean shouldStop = new AtomicBoolean(false);
 
-    private boolean isConnected;
 
     SocketClientHandler(Socket client, MyShelfie game){
         super(game, null);
         this.client = client;
         setIsRMI(false);
-        isConnected = true;
     }
 
 
@@ -114,7 +112,7 @@ public class SocketClientHandler extends ClientHandler{
             e.printStackTrace();
         }
     }
-
+    @Override
     public boolean isConnected() {
         return isConnected;
     }

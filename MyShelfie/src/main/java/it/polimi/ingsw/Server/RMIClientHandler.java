@@ -4,6 +4,7 @@ import it.polimi.ingsw.Server.Model.MyShelfie;
 
 import java.rmi.RemoteException;
 
+
 public class RMIClientHandler extends ClientHandler {
 
     public RMIClientHandler(MyShelfie game, RemoteInterface remoteClient){
@@ -16,13 +17,26 @@ public class RMIClientHandler extends ClientHandler {
         boolean goOn = true;
         while(goOn){
             try{
-                Thread.sleep(5000);
+                Thread.sleep(1000);
                 getClientInterface().ping();
             }catch(Exception e){
+                isConnected = false;
                 System.out.println("RMI client disconnected");
                 getController().shouldFinishTurn(this);
                 goOn = false;
             }
         }
+    }
+
+    @Override
+    public boolean isConnected() {
+        if(isConnected){
+            try {
+                isConnected = getClientInterface().isClientConnected();
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return isConnected;
     }
 }

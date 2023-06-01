@@ -19,10 +19,12 @@ public abstract class ClientHandler implements Runnable {
     protected MyShelfie game;
     private boolean isRMI;
     private RemoteInterface client;
+    protected boolean isConnected;
 
     public ClientHandler(MyShelfie game, RemoteInterface client){
         this.game = game;
         this.client = client;
+        this.isConnected = true;
     }
 
     public void run(){}
@@ -38,6 +40,8 @@ public abstract class ClientHandler implements Runnable {
     }
 
     public RemoteInterface getClientInterface(){return client;}
+
+    public abstract boolean isConnected();
 
 }
 
