@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Server;
 
+import it.polimi.ingsw.Server.Model.GameRecord;
 import it.polimi.ingsw.Server.Model.MyShelfie;
 
 import java.io.IOException;
@@ -25,6 +26,8 @@ public class Server {
     private static RemoteInterface serverInterface;
     private static Registry registry;
 
+    private static GameRecord gameRecord;
+
 
     /**
      * OVERVIEW: the constructor of the class which initializes the server with the its port open to receive
@@ -36,6 +39,7 @@ public class Server {
         games = new ArrayList<>();
         lock = new Object();
         numRMIClients = 0;
+        gameRecord = new GameRecord();
     }
 
     /**
@@ -76,12 +80,15 @@ public class Server {
                 Socket client =socket.accept();
                 // gestione partite multiple
                 synchronized (lock){
+                    /*
                     if (currentGame == -1 || games.get(currentGame).getAllPlayersReady()) {
                         MyShelfie game = new MyShelfie();
                         games.add(game);
                         currentGame++;
                     }
-                    SocketClientHandler clientHandler = new SocketClientHandler(client, games.get(currentGame));
+                     */
+                    //SocketClientHandler clientHandler = new SocketClientHandler(client, games.get(currentGame));
+                    SocketClientHandler clientHandler = new SocketClientHandler(client, gameRecord.getGame());
                     Thread clientHandlerThread = new Thread(clientHandler, "server_" + client.getInetAddress());
                     clientHandlerThread.start();
                 }
@@ -90,6 +97,7 @@ public class Server {
             }
         }
     }
+
 
     //perché è tutto static?
     public static void manageServerRMI(){
@@ -121,6 +129,7 @@ public class Server {
             try{
                 if (serverInterface.getNumClients() > numRMIClients) {
                     synchronized (lock) {
+                        /*
                         if (currentGame == -1 || games.get(currentGame).getAllPlayersReady()) {
                             MyShelfie game = new MyShelfie();
                             games.add(game);
@@ -128,8 +137,10 @@ public class Server {
                             serverInterface.addController(game);
                         } else
                             serverInterface.addController(games.get(currentGame));
+                         */
                         numRMIClients++;
-                        serverInterface.setMapClientsToController(games.get(currentGame), numRMIClients-1);
+                        //serverInterface.setMapClientsToController(games.get(currentGame), numRMIClients-1);
+                        serverInterface.setMapClientsToController(gameRecord.getGame(), numRMIClients-1);
                     }
                 }
             }catch(Exception e){

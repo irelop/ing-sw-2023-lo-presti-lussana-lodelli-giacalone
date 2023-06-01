@@ -26,7 +26,10 @@ public class LoginView extends View implements ObserverView {
     private Object lock; //in order to stop and continue the run() method computation.
     private boolean goOn; //in order to check if the nickname is valid and so we can go ahead.
     private boolean isFull;
+    private String insertedNickname;
     private LoginNicknameAnswer answerToShow; //the answer received by the server which needs to be shown.
+
+    private ReconnectionAnswer reconnectionAnswer;
 
     public LoginView() {
         this.lock = new Object();
@@ -43,8 +46,10 @@ public class LoginView extends View implements ObserverView {
      */
     @Override
     public void run() {
-        synchronized (lock) {
+        //synchronized (lock) {
             showTitleScreen();
+            manageReconnectionChoice();
+            /*
             while (!goOn && !isFull) {
                 askNicknameRequest();
                 if(!getOwner().isRMI()) {
@@ -70,6 +75,8 @@ public class LoginView extends View implements ObserverView {
                 }
             }
         }
+
+             */
     }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -91,9 +98,11 @@ public class LoginView extends View implements ObserverView {
      *           to the server.
      */
     public void askNicknameRequest(){
+        /*
         Scanner input = new Scanner(System.in);
         System.out.println("\nPlease select your nickname:\n");
         String insertedNickname = input.nextLine().replace(" ", "").toUpperCase();
+         */
 
         C2SMessage nicknameRequest = new LoginNicknameRequest(insertedNickname);
         if(!getOwner().isRMI())
@@ -205,6 +214,10 @@ public class LoginView extends View implements ObserverView {
     }
 
     private void manageReconnectionChoice(){
+        Scanner input = new Scanner(System.in);
+        System.out.println("\nPlease select your nickname:\n");
+        insertedNickname = input.nextLine().replace(" ", "").toUpperCase();
+
         char answer;
         do{
             try{
@@ -214,7 +227,49 @@ public class LoginView extends View implements ObserverView {
                 System.out.println(e);
             }
         }while(true);
+
+        if(answer == 'L') manageNewLobbyConnection();
+        else manageExistingGameConnection();
+
     }
+
+    private void manageNewLobbyConnection(){
+        synchronized (lock) {
+            while (!goOn && !isFull) {
+                askNicknameRequest();
+                if (!getOwner().isRMI()) {
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                showNicknameAnswer(answerToShow);
+            }
+            if (answerToShow.getNicknameStatus() == LoginNicknameAnswer.Status.ACCEPTED || answerToShow.getNicknameStatus() == LoginNicknameAnswer.Status.FIRST_ACCEPTED) {
+                if (!getOwner().isRMI()) {
+                    getOwner().getServerHandler().sendMessageToServer(new LobbyUpdateRequest());
+                } else {
+                    try {
+                        getOwner().getRemoteServer().sendMessageToServer(new LobbyUpdateRequest(), getOwner().getClient());
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+    }
+
+    private void manageExistingGameConnection(){
+        ReconnectionRequest reconnectionRequest = new ReconnectionRequest(insertedNickname);
+
+    }
+
+    public void setReconnectionAnswer(ReconnectionAnswer reconnectionAnswer) {
+        this.reconnectionAnswer = reconnectionAnswer;
+    }
+
 
 
 }

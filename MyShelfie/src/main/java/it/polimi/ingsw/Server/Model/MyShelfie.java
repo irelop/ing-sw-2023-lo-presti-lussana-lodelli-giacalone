@@ -39,10 +39,12 @@ public class MyShelfie {
     private final Object lock;
     private int firstToFinish;
 
+    private GameRecord gameRecord;
+
     //- - - R M I - - - - -
     private ArrayList<Boolean> isRMIFirstLastLobby;
 
-    public MyShelfie(){
+    public MyShelfie(GameRecord gameRecord){
         this.board = new Board();
         this.commonDeck = new CommonGoalDeck();
         this.personalDeck = new PersonalGoalDeck();
@@ -58,6 +60,7 @@ public class MyShelfie {
         this.gameOver = false;
         this.lock = new Object();
         this.isRMIFirstLastLobby = new ArrayList<>();
+        this.gameRecord = gameRecord;
     }
 
     /**
@@ -701,4 +704,25 @@ public class MyShelfie {
     }
 
 
+    public ArrayList<Player> getPlayersConnected() {
+        return playersConnected;
+    }
+
+    public ClientHandler getDisconnectedClientHandler(String nickname){
+        if(!checkNickname(nickname)) return null;
+        else{
+            int found = -1;
+            for(int i = 0; i< numberOfPlayers;i++){
+                if(nickname.equals(playersConnected.get(i).getNickname()))
+                    found = i;
+            }
+
+            if(clientHandlers.get(found).isConnected()) return null;
+            else return clientHandlers.get(found);
+        }
+    }
+
+    public GameRecord getGameRecord() {
+        return gameRecord;
+    }
 }
