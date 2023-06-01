@@ -26,8 +26,13 @@ public class SocketClientHandler extends ClientHandler{
     private AtomicBoolean shouldStop = new AtomicBoolean(false);
 
 
-    SocketClientHandler(Socket client, MyShelfie game){
+    public SocketClientHandler(Socket client, MyShelfie game){
         super(game, null);
+        this.client = client;
+        setIsRMI(false);
+    }
+    public SocketClientHandler(Socket client){
+        super(null);
         this.client = client;
         setIsRMI(false);
     }
@@ -43,7 +48,7 @@ public class SocketClientHandler extends ClientHandler{
             return;
         }
 
-        System.out.println("Enstablished connection with client: " + client.getInetAddress());
+        System.out.println("Established connection with client: " + client.getInetAddress());
 
         try {
             handleClientConnection();

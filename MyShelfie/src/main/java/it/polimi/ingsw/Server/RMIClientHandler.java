@@ -12,6 +12,11 @@ public class RMIClientHandler extends ClientHandler {
         setIsRMI(true);
     }
 
+    public RMIClientHandler(RemoteInterface remoteClient){
+        super(remoteClient);
+        setIsRMI(true);
+    }
+
     @Override
     public void run(){
         boolean goOn = true;

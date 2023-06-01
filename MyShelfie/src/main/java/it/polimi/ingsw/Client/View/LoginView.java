@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Client.View;
 
+import it.polimi.ingsw.Client.SocketServerHandler;
 import it.polimi.ingsw.Client.View.Exceptions.InvalidNumberOfPlayersException;
 import it.polimi.ingsw.Client.View.Exceptions.InvalidReconnectionAnswerException;
 import it.polimi.ingsw.Client.View.Exceptions.InvalidRuleAnswerException;
@@ -263,6 +264,29 @@ public class LoginView extends View implements ObserverView {
 
     private void manageExistingGameConnection(){
         ReconnectionRequest reconnectionRequest = new ReconnectionRequest(insertedNickname);
+        synchronized (lock){
+            if (!getOwner().isRMI()) {
+                getOwner().getServerHandler().sendMessageToServer(reconnectionRequest);
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            else {
+                try {
+                    getOwner().getRemoteServer().sendMessageToServer(reconnectionRequest, getOwner().getClient());
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        if(!reconnectionAnswer.canConnect){
+            System.out.println("There isn't any disconnected player matching with your nickname.\n" +
+                    "Redirecting to a new lobby.\n");
+            manageNewLobbyConnection();
+        }
+
 
     }
 

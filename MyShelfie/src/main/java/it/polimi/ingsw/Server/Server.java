@@ -53,6 +53,7 @@ public class Server {
         games = new ArrayList<>();
         lock = new Object();
         numRMIClients = 0;
+        gameRecord = new GameRecord();
         System.out.println("Server is open: listening for new clients...");
         Thread socketServer = new Thread(()->manageServerSocket());
         Thread RMIServer = new Thread(()->manageServerRMI());
@@ -88,7 +89,9 @@ public class Server {
                     }
                      */
                     //SocketClientHandler clientHandler = new SocketClientHandler(client, games.get(currentGame));
-                    SocketClientHandler clientHandler = new SocketClientHandler(client, gameRecord.getGame());
+                    MyShelfie game = gameRecord.getGame();
+                    System.out.println(game);
+                    SocketClientHandler clientHandler = new SocketClientHandler(client, game);
                     Thread clientHandlerThread = new Thread(clientHandler, "server_" + client.getInetAddress());
                     clientHandlerThread.start();
                 }

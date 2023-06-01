@@ -20,9 +20,7 @@ public class LoginNicknameRequest extends C2SMessage{
 
     @Override
     public void processMessage(ClientHandler clientHandler) {
-
-        MyShelfie controller = clientHandler.getController();
-        controller.manageLogin(clientHandler,this);
+       clientHandler.getController().manageLogin(clientHandler,this);
     }
 
     @Override

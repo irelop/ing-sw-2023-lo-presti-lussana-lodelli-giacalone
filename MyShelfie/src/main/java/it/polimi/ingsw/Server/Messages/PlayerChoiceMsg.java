@@ -39,8 +39,10 @@ public class PlayerChoiceMsg extends C2SMessage{
     public void processMessage(ClientHandler clientHandler){
         S2CMessage playerChoiceAnswer;
         try{
+            //???
             clientHandler.getController().getBoard().checkDirectionAndNumberOfTiles(direction, numberOfTiles, initialRow, initialColumn, maxTilesPickable);
             playerChoiceAnswer = new PlayerChoiceAnswer("",true);
+            System.out.println(clientHandler.getController());
             clientHandler.getController().getPlayerChoice(initialRow, initialColumn, direction, numberOfTiles+1);
 
         }catch(OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException

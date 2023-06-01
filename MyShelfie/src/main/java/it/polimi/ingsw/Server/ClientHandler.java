@@ -7,6 +7,7 @@ import it.polimi.ingsw.Server.Model.MyShelfie;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 /**
  * ClientHandler class: an abstract class which represents the client inside the server.
@@ -27,6 +28,15 @@ public abstract class ClientHandler implements Runnable {
         this.isConnected = true;
     }
 
+    public ClientHandler(RemoteInterface client){
+        this.client = client;
+        this.isConnected = true;
+    }
+
+    public void setGame(MyShelfie game) {
+        this.game = game;
+    }
+
     public void run(){}
 
     public MyShelfie getController(){ return this.game;}
@@ -40,6 +50,9 @@ public abstract class ClientHandler implements Runnable {
     }
 
     public RemoteInterface getClientInterface(){return client;}
+    public void setIsConnected(boolean value){
+        this.isConnected = value;
+    }
 
     public abstract boolean isConnected();
 

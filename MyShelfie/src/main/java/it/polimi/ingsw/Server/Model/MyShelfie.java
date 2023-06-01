@@ -1,4 +1,5 @@
 package it.polimi.ingsw.Server.Model;
+import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.Messages.*;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
@@ -68,13 +69,13 @@ public class MyShelfie {
      * @return myShelfieInstance: the one that already exists or a new one
      * @deprecated
      */
-    public static MyShelfie getMyShelfie(){
+    /*public static MyShelfie getMyShelfie(){
         //singleton instance of controller class
         if(myShelfieInstance == null){
             myShelfieInstance = new MyShelfie();
         }
         return myShelfieInstance;
-    }
+    }*/
 
     public Board getBoard(){
         return board;
@@ -709,17 +710,46 @@ public class MyShelfie {
     }
 
     public ClientHandler getDisconnectedClientHandler(String nickname){
-        if(!checkNickname(nickname)) return null;
-        else{
+        /*if(!checkNickname(nickname)){
+            System.out.println("primo if");
+            return null;
+        }
+        else{*/
             int found = -1;
             for(int i = 0; i< numberOfPlayers;i++){
                 if(nickname.equals(playersConnected.get(i).getNickname()))
                     found = i;
             }
 
-            if(clientHandlers.get(found).isConnected()) return null;
+            if(found == -1 || clientHandlers.get(found).isConnected()) return null;
             else return clientHandlers.get(found);
+        //}
+
+
+    }
+
+    public boolean getDisconnectedClientHandler(String nickname, ClientHandler clientHandlerReconnected){
+        /*if(!checkNickname(nickname)){
+            System.out.println("primo if");
+            return null;
         }
+        else{*/
+        int found = -1;
+        for(int i = 0; i< numberOfPlayers;i++){
+            if(nickname.equals(playersConnected.get(i).getNickname()))
+                found = i;
+        }
+
+
+        if(found == -1 || clientHandlers.get(found).isConnected()) return false;
+        else{
+            clientHandlerReconnected.setGame(this);
+            clientHandlers.set(found, clientHandlerReconnected);
+            return true;
+        }
+        //}
+
+
     }
 
     public GameRecord getGameRecord() {
