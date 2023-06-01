@@ -1,6 +1,8 @@
 package it.polimi.ingsw.Client.View;
 
 import it.polimi.ingsw.Client.View.Exceptions.InvalidNumberOfPlayersException;
+import it.polimi.ingsw.Client.View.Exceptions.InvalidReconnectionAnswerException;
+import it.polimi.ingsw.Client.View.Exceptions.InvalidRuleAnswerException;
 import it.polimi.ingsw.Server.Messages.*;
 
 import java.rmi.RemoteException;
@@ -186,6 +188,32 @@ public class LoginView extends View implements ObserverView {
 
     public void setLoginNicknameAnswer(LoginNicknameAnswer answerToShow) {
         this.answerToShow = answerToShow;
+    }
+
+    //gestione FA Disconnection Resilience
+
+    private char getReconnectionChoice() throws InvalidReconnectionAnswerException{
+        System.out.println("Do you want to join a new lobby or an already existing game?");
+        System.out.println("Insert L for a new lobby or G for the existing game");
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.next().toUpperCase();
+        if(input.length() > 1) throw new InvalidReconnectionAnswerException();
+
+        char answer = input.charAt(0);
+        if(answer!='L' && answer!='G') throw new InvalidReconnectionAnswerException();
+        else return answer;
+    }
+
+    private void manageReconnectionChoice(){
+        char answer;
+        do{
+            try{
+                answer = getReconnectionChoice();
+                break;
+            }catch(InvalidReconnectionAnswerException e){
+                System.out.println(e);
+            }
+        }while(true);
     }
 
 
