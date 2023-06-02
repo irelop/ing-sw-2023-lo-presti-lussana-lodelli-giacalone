@@ -44,8 +44,6 @@ public class ToShelfMsg extends S2CMessage {
      */
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        System.out.println(commonGoalCards[0]);
-        System.out.println(commonGoalCards[1]);
         serverHandler.getClient().transitionToView(new InsertInShelfView(this));
     }
 
