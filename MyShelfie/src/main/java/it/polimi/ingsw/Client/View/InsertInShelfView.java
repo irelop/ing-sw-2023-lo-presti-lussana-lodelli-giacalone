@@ -46,6 +46,9 @@ public class InsertInShelfView extends View {
         Tile[][] myShelf = msg.getShelf();
         boolean goOn = false;
 
+        System.out.println(msg.commonGoalCards[0]);
+        System.out.println(msg.commonGoalCards[1]);
+
         synchronized (this) {
 
             printCommonGoalCardsInfo();

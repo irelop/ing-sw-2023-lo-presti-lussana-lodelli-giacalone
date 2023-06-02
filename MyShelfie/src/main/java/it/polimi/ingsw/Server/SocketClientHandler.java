@@ -2,6 +2,7 @@ package it.polimi.ingsw.Server;
 
 import it.polimi.ingsw.Server.Messages.C2SMessage;
 import it.polimi.ingsw.Server.Messages.S2CMessage;
+import it.polimi.ingsw.Server.Model.GameRecord;
 import it.polimi.ingsw.Server.Model.MyShelfie;
 
 import java.io.IOException;
@@ -33,6 +34,12 @@ public class SocketClientHandler extends ClientHandler{
     }
     public SocketClientHandler(Socket client){
         super(null);
+        this.client = client;
+        setIsRMI(false);
+    }
+
+    public SocketClientHandler(Socket client, GameRecord gameRecord){
+        super(null, gameRecord);
         this.client = client;
         setIsRMI(false);
     }

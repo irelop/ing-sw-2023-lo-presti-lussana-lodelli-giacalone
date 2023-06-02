@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Server;
 
+import it.polimi.ingsw.Server.Model.GameRecord;
 import it.polimi.ingsw.Server.Model.MyShelfie;
 
 import java.rmi.RemoteException;
@@ -16,6 +17,12 @@ public class RMIClientHandler extends ClientHandler {
         super(remoteClient);
         setIsRMI(true);
     }
+
+    public RMIClientHandler(RemoteInterface remoteClient, GameRecord gameRecord){
+        super(remoteClient, gameRecord);
+        setIsRMI(true);
+    }
+
 
     @Override
     public void run(){

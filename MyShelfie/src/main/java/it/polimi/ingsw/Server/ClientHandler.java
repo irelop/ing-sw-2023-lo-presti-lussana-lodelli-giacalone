@@ -2,6 +2,7 @@ package it.polimi.ingsw.Server;
 
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Server.Messages.S2CMessage;
+import it.polimi.ingsw.Server.Model.GameRecord;
 import it.polimi.ingsw.Server.Model.MyShelfie;
 
 import java.io.IOException;
@@ -21,6 +22,7 @@ public abstract class ClientHandler implements Runnable {
     private boolean isRMI;
     private RemoteInterface client;
     protected boolean isConnected;
+    protected GameRecord gameRecord;
 
     public ClientHandler(MyShelfie game, RemoteInterface client){
         this.game = game;
@@ -32,9 +34,22 @@ public abstract class ClientHandler implements Runnable {
         this.client = client;
         this.isConnected = true;
     }
+    public ClientHandler(RemoteInterface client, GameRecord gameRecord){
+        this.client = client;
+        this.isConnected = true;
+        this.gameRecord = gameRecord;
+    }
 
     public void setGame(MyShelfie game) {
         this.game = game;
+    }
+
+    public void setGameFromGameRecord(){
+        this.game = gameRecord.getGame();
+    }
+
+    public GameRecord getGameRecord(){
+        return this.gameRecord;
     }
 
     public void run(){}

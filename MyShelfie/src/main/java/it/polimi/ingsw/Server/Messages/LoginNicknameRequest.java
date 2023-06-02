@@ -20,7 +20,8 @@ public class LoginNicknameRequest extends C2SMessage{
 
     @Override
     public void processMessage(ClientHandler clientHandler) {
-       clientHandler.getController().manageLogin(clientHandler,this);
+        clientHandler.setGameFromGameRecord();
+        clientHandler.getController().manageLogin(clientHandler,this);
     }
 
     @Override

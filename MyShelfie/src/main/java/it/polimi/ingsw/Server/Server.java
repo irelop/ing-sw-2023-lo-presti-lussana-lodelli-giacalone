@@ -89,9 +89,11 @@ public class Server {
                     }
                      */
                     //SocketClientHandler clientHandler = new SocketClientHandler(client, games.get(currentGame));
-                    MyShelfie game = gameRecord.getGame();
+                    /*MyShelfie game = gameRecord.getGame();
                     System.out.println(game);
-                    SocketClientHandler clientHandler = new SocketClientHandler(client, game);
+                    SocketClientHandler clientHandler = new SocketClientHandler(client, game);*/
+
+                    SocketClientHandler clientHandler = new SocketClientHandler(client, gameRecord);
                     Thread clientHandlerThread = new Thread(clientHandler, "server_" + client.getInetAddress());
                     clientHandlerThread.start();
                 }
@@ -102,8 +104,9 @@ public class Server {
     }
 
 
-    //perché è tutto static?
+
     public static void manageServerRMI(){
+        //DA SISTEMARE COME PER SOCKET
         try{
             serverInterface = new RMIAdapter();
             registry = LocateRegistry.createRegistry(1099);

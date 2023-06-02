@@ -14,17 +14,18 @@ public class ReconnectionRequest extends C2SMessage{
 
     @Override
     public void processMessage(ClientHandler clientHandler) {
-        clientHandler.getController().
-                getGameRecord().getDisconnectedClientHandlerSocket(this.nickname, clientHandler);
+        /*clientHandler.getController().
+                getGameRecord().getDisconnectedClientHandlerSocket(this.nickname, clientHandler);*/
+        clientHandler.getGameRecord().getDisconnectedClientHandlerSocket(nickname, clientHandler);
     }
 
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client) {
-        try {
-            server.getController(client).getGameRecord().
-                    getDisconnectedClientHandlerRMI(this.nickname, client);
+       //da sistemare!!
+        /*try {
+
         } catch (RemoteException e) {
             throw new RuntimeException(e);
-        }
+        }*/
     }
 }

@@ -21,7 +21,7 @@ public class GameRecord {
 
     public MyShelfie getGame(){
         if (currentGame == -1 || games.get(currentGame).getAllPlayersReady()) {
-            MyShelfie game = new MyShelfie(this);
+            MyShelfie game = new MyShelfie();
             games.add(game);
             currentGame++;
         }
@@ -29,36 +29,17 @@ public class GameRecord {
     }
 
     public void getDisconnectedClientHandlerSocket(String nickname, ClientHandler currentClientHandler){
-        ClientHandler clientHandler = null;
-        /*for(int i=0; i<games.size()-1; i++){
-            clientHandler = games.get(i).getDisconnectedClientHandler(nickname);
-            if(clientHandler != null)
-                break;
-        }
-        boolean canConnect;
-        if(clientHandler == null)
-           canConnect = false;
-        else canConnect = true;
-        S2CMessage reconnectionAnswer = new ReconnectionAnswer(canConnect);
-        currentClientHandler.sendMessageToClient(reconnectionAnswer);
-
-        if(clientHandler!=null){
-            /*clientHandler.setIsConnected(true);
-            Thread thread = new Thread(clientHandler);
-            thread.start();
-
-        }*/
         boolean canConnect = false;
-        for(int i=0; i<games.size()-1; i++){
-            if(games.get(i).getDisconnectedClientHandler(nickname, currentClientHandler)){
+        for(MyShelfie game : games){
+            if(game.getDisconnectedClientHandler(nickname, currentClientHandler)){
                 canConnect = true;
                 break;
             }
         }
-        if(canConnect){
+        /*if(canConnect){
             games.remove(currentGame);
             currentGame--;
-        }
+        }*/
         S2CMessage reconnectionAnswer = new ReconnectionAnswer(canConnect);
         currentClientHandler.sendMessageToClient(reconnectionAnswer);
 
@@ -67,23 +48,9 @@ public class GameRecord {
     }
 
     public void getDisconnectedClientHandlerRMI(String nickname, RemoteInterface client){
-        ClientHandler clientHandler = null;
-        for(int i=0; i<games.size()-1; i++){
-            clientHandler = games.get(i).getDisconnectedClientHandler(nickname);
-            if(clientHandler != null)
-                break;
-        }
+        //bisogna copiare quello della socket
 
-        boolean canConnect;
-        if(clientHandler == null)
-            canConnect = false;
-        else canConnect = true;
-        S2CMessage reconnectionAnswer = new ReconnectionAnswer(canConnect);
-        try {
-            client.sendMessageToClient(reconnectionAnswer);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
+
         //gestione giocatore con lo stesso nome [...]
     }
 }

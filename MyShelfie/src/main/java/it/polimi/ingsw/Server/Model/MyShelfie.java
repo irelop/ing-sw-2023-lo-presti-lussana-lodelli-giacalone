@@ -31,7 +31,7 @@ public class MyShelfie {
     private boolean isStarted;
     private final ArrayList<ClientHandler> clientHandlers;
     private int currentPlayerIndex;
-    private static MyShelfie myShelfieInstance;
+    //private static MyShelfie myShelfieInstance;
 
     //private final Object lock;
     private boolean allPlayersReady;
@@ -40,12 +40,10 @@ public class MyShelfie {
     private final Object lock;
     private int firstToFinish;
 
-    private GameRecord gameRecord;
-
     //- - - R M I - - - - -
     private ArrayList<Boolean> isRMIFirstLastLobby;
 
-    public MyShelfie(GameRecord gameRecord){
+    public MyShelfie(){
         this.board = new Board();
         this.commonDeck = new CommonGoalDeck();
         this.personalDeck = new PersonalGoalDeck();
@@ -61,7 +59,6 @@ public class MyShelfie {
         this.gameOver = false;
         this.lock = new Object();
         this.isRMIFirstLastLobby = new ArrayList<>();
-        this.gameRecord = gameRecord;
     }
 
     /**
@@ -476,7 +473,10 @@ public class MyShelfie {
      * @param numberOfTiles: user choice tiles number
      */
     public void getPlayerChoice(int initialRow, int initialColumn, char direction, int numberOfTiles){
-
+        System.out.println(board.getCommonGoalCard(0));
+        System.out.println(board.getCommonGoalCard(1));
+        if(board == null)
+            System.out.println("board is null");
         Player currentPlayer = playersConnected.get(currentPlayerIndex);
 
         board.pickTilesFromBoard(initialRow, initialColumn, numberOfTiles, direction, currentPlayer);
@@ -489,13 +489,15 @@ public class MyShelfie {
         }
 
         ArrayList<Tile> littleHand = new ArrayList<>(currentPlayer.getLittleHand());
-
+        System.out.println(board.getCommonGoalCard(0));
+        System.out.println(board.getCommonGoalCard(1));
         ToShelfMsg toShelfMsg = new ToShelfMsg(
                 matrix,
                 littleHand,
                 Board.getCommonGoalCards(),
                 currentPlayer.getPersonalGoalCard()
                 );
+
         if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
             clientHandlers.get(currentPlayerIndex).sendMessageToClient(toShelfMsg);
         else{
@@ -576,26 +578,6 @@ public class MyShelfie {
                     numOfPlayersConnected--;
                 }
                 else break;
-
-                /*
-                if(clientHandlers.get(currentPlayerIndex).getIsRMI()) {
-                    try {
-                        if (!(clientHandlers.get(currentPlayerIndex).getClientInterface().isClientConnected())){
-                            computeCurrentPlayerIdx();
-                            numOfPlayersConnected--;
-                            } else break;
-                        } catch (RemoteException e) {
-                            computeCurrentPlayerIdx();
-                            numOfPlayersConnected--;
-                            }
-                }
-                else if((!((SocketClientHandler)clientHandlers.get(currentPlayerIndex)).isConnected())) {
-                    computeCurrentPlayerIdx();
-                    numOfPlayersConnected--;
-                }
-                else break;
-
-                 */
             }
 
             if(numOfPlayersConnected == 1){
@@ -628,17 +610,19 @@ public class MyShelfie {
 
     public void shouldFinishTurn(ClientHandler clientHandler){
         //if the client disconnected was the actual one playing
-        if(clientHandlers.get(currentPlayerIndex).equals(clientHandler) && isStarted) {
-            if(currentPlayerIndex == 0)
-                currentPlayerIndex = numberOfPlayers - 1;
-            else
-                currentPlayerIndex--;
+        if(isStarted){
+            if (clientHandlers.get(currentPlayerIndex).equals(clientHandler)) {
+                if (currentPlayerIndex == 0)
+                    currentPlayerIndex = numberOfPlayers - 1;
+                else
+                    currentPlayerIndex--;
             /*
             if(playersConnected.size()==1){
                 currentPlayerIndex =-1;
             }*/
-            finishTurn();
+                finishTurn();
 
+            }
         }
     }
 
@@ -709,50 +693,17 @@ public class MyShelfie {
         return playersConnected;
     }
 
-    public ClientHandler getDisconnectedClientHandler(String nickname){
-        /*if(!checkNickname(nickname)){
-            System.out.println("primo if");
-            return null;
-        }
-        else{*/
-            int found = -1;
-            for(int i = 0; i< numberOfPlayers;i++){
-                if(nickname.equals(playersConnected.get(i).getNickname()))
-                    found = i;
-            }
-
-            if(found == -1 || clientHandlers.get(found).isConnected()) return null;
-            else return clientHandlers.get(found);
-        //}
-
-
-    }
-
     public boolean getDisconnectedClientHandler(String nickname, ClientHandler clientHandlerReconnected){
-        /*if(!checkNickname(nickname)){
-            System.out.println("primo if");
-            return null;
-        }
-        else{*/
         int found = -1;
         for(int i = 0; i< numberOfPlayers;i++){
             if(nickname.equals(playersConnected.get(i).getNickname()))
                 found = i;
         }
-
-
         if(found == -1 || clientHandlers.get(found).isConnected()) return false;
         else{
             clientHandlerReconnected.setGame(this);
             clientHandlers.set(found, clientHandlerReconnected);
             return true;
         }
-        //}
-
-
-    }
-
-    public GameRecord getGameRecord() {
-        return gameRecord;
     }
 }
