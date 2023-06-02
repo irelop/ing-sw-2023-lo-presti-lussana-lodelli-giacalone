@@ -24,8 +24,8 @@ import java.util.Scanner;
  * @author Andrea Giacalone
  */
 public class LoginView extends View implements ObserverView {
-    private Object lock; //in order to stop and continue the run() method computation.
-    private boolean goOn; //in order to check if the nickname is valid and so we can go ahead.
+    private final Object lock; //in order to stop and continue the run() method computation.
+    private boolean goOn; //in order to check if the nickname is valid, and so we can go ahead.
     private boolean isFull;
     private String insertedNickname;
     private LoginNicknameAnswer answerToShow; //the answer received by the server which needs to be shown.
@@ -36,7 +36,6 @@ public class LoginView extends View implements ObserverView {
         this.lock = new Object();
         this.goOn = false;
         this.isFull = false;
-        //this.answerToShow = null;
     }
 
 
@@ -49,35 +48,8 @@ public class LoginView extends View implements ObserverView {
     public void run() {
         //synchronized (lock) {
             showTitleScreen();
+            askNickname();
             manageReconnectionChoice();
-            /*
-            while (!goOn && !isFull) {
-                askNicknameRequest();
-                if(!getOwner().isRMI()) {
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                showNicknameAnswer(answerToShow);
-            }
-            if(answerToShow.getNicknameStatus()== LoginNicknameAnswer.Status.ACCEPTED || answerToShow.getNicknameStatus()== LoginNicknameAnswer.Status.FIRST_ACCEPTED) {
-                if(!getOwner().isRMI()) {
-                    getOwner().getServerHandler().sendMessageToServer(new LobbyUpdateRequest());
-                }
-
-                else{
-                    try{
-                        getOwner().getRemoteServer().sendMessageToServer(new LobbyUpdateRequest(), getOwner().getClient());
-                    }catch (RemoteException e){
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-
-             */
     }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -98,13 +70,12 @@ public class LoginView extends View implements ObserverView {
      * OVERVIEW: this method allows the user to insert its nickname and checks its validity through a request forwarded
      *           to the server.
      */
-    public void askNicknameRequest(){
-        /*
+    public void askNickname(){
         Scanner input = new Scanner(System.in);
         System.out.println("\nPlease select your nickname:\n");
-        String insertedNickname = input.nextLine().replace(" ", "").toUpperCase();
-         */
-
+        insertedNickname = input.nextLine().replace(" ", "").toUpperCase();
+    }
+    private void sendNicknameRequest(){
         C2SMessage nicknameRequest = new LoginNicknameRequest(insertedNickname);
         if(!getOwner().isRMI())
             getOwner().getServerHandler().sendMessageToServer(nicknameRequest);
@@ -130,6 +101,7 @@ public class LoginView extends View implements ObserverView {
             }
             case INVALID -> {
                 System.out.println("\nSorry, your nickname has already been chosen - please select another one\n");
+                askNickname();
             }
             case FIRST_ACCEPTED -> {
                 System.out.println("\nGreat! So you are: " + nicknameAnswer.getParent().getInsertedNickname()+ ", nice to meet you!\n");
@@ -215,10 +187,6 @@ public class LoginView extends View implements ObserverView {
     }
 
     private void manageReconnectionChoice(){
-        Scanner input = new Scanner(System.in);
-        System.out.println("\nPlease select your nickname:\n");
-        insertedNickname = input.nextLine().replace(" ", "").toUpperCase();
-
         char answer;
         do{
             try{
@@ -237,7 +205,7 @@ public class LoginView extends View implements ObserverView {
     private void manageNewLobbyConnection(){
         synchronized (lock) {
             while (!goOn && !isFull) {
-                askNicknameRequest();
+                sendNicknameRequest();
                 if (!getOwner().isRMI()) {
                     try {
                         lock.wait();
@@ -282,7 +250,7 @@ public class LoginView extends View implements ObserverView {
             }
         }
         if(!reconnectionAnswer.canConnect){
-            System.out.println("There isn't any disconnected player matching with your nickname.\n" +
+            System.out.println("\nThere isn't any disconnected player matching with your nickname.\n" +
                     "Redirecting to a new lobby.\n");
             manageNewLobbyConnection();
         }
