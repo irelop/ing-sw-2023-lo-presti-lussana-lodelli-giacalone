@@ -706,4 +706,8 @@ public class MyShelfie {
             return true;
         }
     }
+
+    public ArrayList<ClientHandler> getClientHandlers() {
+        return clientHandlers;
+    }
 }

@@ -9,6 +9,7 @@ public class LastPlayerConnectedView extends View{
 
     private LastOneConnectedMsg msg;
 
+    private boolean goOn = true;
     public LastPlayerConnectedView(LastOneConnectedMsg msg){
         this.msg = msg;
     }
@@ -19,7 +20,7 @@ public class LastPlayerConnectedView extends View{
                 "At least one of them have to reconnect to this game in 20 seconds or you will be the winner.\n" +
                 "COUNTDOWN:\n");
         int i;
-        for(i=20; i>=0; i--){
+        for(i=20; i>=0 && goOn; i--){
             System.out.println(i+" seconds");
             try {
                 Thread.sleep(1000);
@@ -28,22 +29,27 @@ public class LastPlayerConnectedView extends View{
             }
         }
         //if(i==0) {
+        if(goOn) {
             System.out.println("Congratulation " + msg.nickname + "! You are the winner!");
             System.out.println("See you soon " + msg.nickname + "!");
             getOwner().setTrueTerminate();
             FinishGameRequest finishGameRequest = new FinishGameRequest();
             if (!getOwner().isRMI()) {
                 getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
-            }
-            else {
+            } else {
                 try {
                     getOwner().getRemoteServer().sendMessageToServer(finishGameRequest, getOwner().getClient());
                 } catch (RemoteException e) {
-                throw new RuntimeException(e);
+                    throw new RuntimeException(e);
                 }
+            }
         }
 
         // }
     }
 
+    @Override
+    public void notifyView() {
+        this.goOn = false;
+    }
 }
