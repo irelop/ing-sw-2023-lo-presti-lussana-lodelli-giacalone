@@ -35,16 +35,18 @@ public class GameRecord {
 
 
         for(MyShelfie game : games){
+
+            //checking if there is only player while others are disconnected
+            if(game.getClientHandlers().stream().filter(x->x.isConnected()).toList().size()==1){
+                for(ClientHandler clientHandler: game.getClientHandlers())
+                    if(clientHandler.isConnected()){
+                        countDownClient = clientHandler;    //the player who is in Countdown Mode
+                        currentGame = game;                 //the game which is near to be ended
+                    }
+            }
+
             if(game.checkDisconnectedSocketClient(nickname, currentClientHandler)){
                 canConnect = true;
-                //checking if there is only player while others are disconnected
-                if(game.getClientHandlers().stream().filter(x->x.isConnected()).toList().size()==1){
-                    for(ClientHandler clientHandler: game.getClientHandlers())
-                        if(clientHandler.isConnected()){
-                            countDownClient = clientHandler;    //the player who is in Countdown Mode
-                            currentGame = game;                 //the game which is near to be ended
-                        }
-                }
                 break;
             }
         }
@@ -79,16 +81,17 @@ public class GameRecord {
 
 
         for(MyShelfie game : games){
+            //checking if there is only player while others are disconnected
+            if(game.getClientHandlers().stream().filter(x->x.isConnected()).toList().size()==1){
+                for(ClientHandler clientHandler: game.getClientHandlers())
+                    if(clientHandler.isConnected()){
+                        countDownClient = clientHandler;    //the player who is in Countdown Mode
+                        currentGame = game;                 //the game which is near to be ended
+                    }
+            }
+
             if(game.checkDisconnectedRMIClient(nickname, client)){
                 canConnect = true;
-                //checking if there is only player while others are disconnected
-                if(game.getClientHandlers().stream().filter(x->x.isConnected()).toList().size()==1){
-                    for(ClientHandler clientHandler: game.getClientHandlers())
-                        if(clientHandler.isConnected()){
-                            countDownClient = clientHandler;    //the player who is in Countdown Mode
-                            currentGame = game;                 //the game which is near to be ended
-                        }
-                }
                 break;
             }
         }
@@ -118,5 +121,9 @@ public class GameRecord {
 
 
         //gestione giocatore con lo stesso nome [...]
+    }
+
+    public MyShelfie getCurrentGame(){
+        return games.get(currentGame);
     }
 }

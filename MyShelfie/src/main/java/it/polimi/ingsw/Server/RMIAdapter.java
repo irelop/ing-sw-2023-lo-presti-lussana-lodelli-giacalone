@@ -67,7 +67,13 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
     }
 
     public MyShelfie getController(RemoteInterface client){
+
+        if(mapClientsToController.get(client)==null){
+            //I need to add an entry for the reconnected client and the retrieved current game
+            mapClientsToController.put(client,gameRecord.getCurrentGame());
+        }
         return mapClientsToController.get(client);
+
     }
 
     public void sendMessageToServer(C2SMessage msg){
