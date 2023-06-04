@@ -17,10 +17,10 @@ public class LastPlayerConnectedView extends View{
     @Override
     public void run(){
         System.out.println("\n"+msg.nickname+", all the other players have disconnected.\n" +
-                "At least one of them have to reconnect to this game in 20 seconds or you will be the winner.\n" +
-                "COUNTDOWN:\n");
+                "At least one of them has to reconnect to this game in 30 seconds or you will be the winner.\n" +
+                "\nCOUNTDOWN:\n");
         int i;
-        for(i=20; i>=0 && goOn; i--){
+        for(i=30; i>=0 && goOn; i--){
             System.out.println(i+" seconds");
             try {
                 Thread.sleep(1000);
@@ -48,8 +48,8 @@ public class LastPlayerConnectedView extends View{
         // }
     }
 
-    @Override
-    public void notifyView() {
+    public void notifyView(String nickname) {
         this.goOn = false;
+        System.out.println(nickname+" reconnected, the game continues! Good luck!");
     }
 }

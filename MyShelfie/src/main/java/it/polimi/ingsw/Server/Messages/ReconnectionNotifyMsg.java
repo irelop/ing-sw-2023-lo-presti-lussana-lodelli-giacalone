@@ -8,17 +8,22 @@ import it.polimi.ingsw.Server.RemoteInterface;
 import java.rmi.RemoteException;
 
 public class ReconnectionNotifyMsg extends S2CMessage{
+    public String nickname;
+
+    public ReconnectionNotifyMsg(String nickname){
+        this.nickname = nickname;
+    }
     @Override
     public void processMessage(ServerHandler serverHandler) {
         LastPlayerConnectedView lastPlayerConnectedView = (LastPlayerConnectedView) serverHandler.getClient().getCurrentView();
-        lastPlayerConnectedView.notifyView();
+        lastPlayerConnectedView.notifyView(nickname);
     }
 
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client) {
         try {
             LastPlayerConnectedView lastPlayerConnectedView = (LastPlayerConnectedView) client.getClient().getCurrentView();
-            lastPlayerConnectedView.notifyView();
+            lastPlayerConnectedView.notifyView(nickname);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

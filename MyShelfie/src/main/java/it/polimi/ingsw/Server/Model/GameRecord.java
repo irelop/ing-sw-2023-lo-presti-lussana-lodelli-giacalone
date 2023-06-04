@@ -38,35 +38,41 @@ public class GameRecord {
         boolean canConnect = false;
         ClientHandler countDownClient= null;
         MyShelfie currentGame = null;
+        int playerIndex = -1;
 
 
         for(MyShelfie game : games){
 
-            //checking if there is only player while others are disconnected
-            if(game.getClientHandlers().stream().filter(x->x.isConnected()).toList().size()==1){
-                for(ClientHandler clientHandler: game.getClientHandlers())
-                    if(clientHandler.isConnected()){
-                        countDownClient = clientHandler;    //the player who is in Countdown Mode
-                        currentGame = game;                 //the game which is near to be ended
-                    }
-            }
+            playerIndex = game.checkPlayerDisconnected(nickname);
 
-            if(game.checkDisconnectedSocketClient(nickname, currentClientHandler)){
+            if(playerIndex != -1){
+
+                //checking if there is only player while others are disconnected
+                if(game.getClientHandlers().stream().filter(ClientHandler::isConnected).toList().size()==1){
+                    for(ClientHandler clientHandler: game.getClientHandlers())
+                        if(clientHandler.isConnected()){
+                            countDownClient = clientHandler;    //the player who is in Countdown Mode
+                            currentGame = game;                 //the game which is near to be ended
+                        }
+                }
+
+                game.switchSocketClientHandler(playerIndex, currentClientHandler);
                 canConnect = true;
                 break;
             }
         }
+
         //sending the result of the reconnection choice to the player
         S2CMessage reconnectionAnswer = new ReconnectionAnswer(canConnect);
         currentClientHandler.sendMessageToClient(reconnectionAnswer);
 
-        if(countDownClient!= null && canConnect) {
+        if(countDownClient != null) {
             //stops the countdown
             if(!countDownClient.getIsRMI())
-                countDownClient.sendMessageToClient(new ReconnectionNotifyMsg());
+                countDownClient.sendMessageToClient(new ReconnectionNotifyMsg(nickname));
             else{
                 try {
-                    countDownClient.getClientInterface().sendMessageToClient(new ReconnectionNotifyMsg());
+                    countDownClient.getClientInterface().sendMessageToClient(new ReconnectionNotifyMsg(nickname));
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -83,26 +89,31 @@ public class GameRecord {
         boolean canConnect = false;
         ClientHandler countDownClient= null;
         MyShelfie currentGame = null;
+        int playerIndex = -1;
 
 
         for(MyShelfie game : games){
-            //checking if there is only player while others are disconnected
-            if(game.getClientHandlers().stream().filter(ClientHandler::isConnected).toList().size()==1){
-                for(ClientHandler clientHandler: game.getClientHandlers())
-                    if(clientHandler.isConnected()){
-                        countDownClient = clientHandler;    //the player who is in Countdown Mode
-                        currentGame = game;                 //the game which is near to be ended
-                    }
-            }
 
-            if(game.checkDisconnectedRMIClient(nickname, client)){
-                canConnect = true;
+            playerIndex = game.checkPlayerDisconnected(nickname);
+            if(playerIndex != -1){
+
+                //checking if there is only player while others are disconnected
+                if(game.getClientHandlers().stream().filter(ClientHandler::isConnected).toList().size()==1){
+                    for(ClientHandler clientHandler: game.getClientHandlers())
+                        if(clientHandler.isConnected()){
+                            countDownClient = clientHandler;    //the player who is in Countdown Mode
+                            currentGame = game;                 //the game which is near to be ended
+                        }
+                }
+                game.switchRMIClientHandler(playerIndex, client);
                 try {
                     remoteServer.setMapClientsToController(game, client);
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
+                canConnect = true;
                 break;
+
             }
         }
 
@@ -114,13 +125,13 @@ public class GameRecord {
             throw new RuntimeException(e);
         }
 
-        if(countDownClient!= null && canConnect) {
+        if(countDownClient!= null) {
             //stops the countdown
             if(!countDownClient.getIsRMI())
-                countDownClient.sendMessageToClient(new ReconnectionNotifyMsg());
+                countDownClient.sendMessageToClient(new ReconnectionNotifyMsg(nickname));
             else{
                 try {
-                    countDownClient.getClientInterface().sendMessageToClient(new ReconnectionNotifyMsg());
+                    countDownClient.getClientInterface().sendMessageToClient(new ReconnectionNotifyMsg(nickname));
                 } catch (RemoteException e) {
                     throw new RuntimeException(e);
                 }
@@ -131,9 +142,5 @@ public class GameRecord {
 
 
         //gestione giocatore con lo stesso nome [...]
-    }
-
-    public MyShelfie getCurrentGame(){
-        return games.get(currentGame);
     }
 }

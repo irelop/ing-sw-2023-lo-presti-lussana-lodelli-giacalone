@@ -1,4 +1,5 @@
 package it.polimi.ingsw.Server.Model;
+import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.Messages.*;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
@@ -644,32 +645,22 @@ public class MyShelfie {
 
     }
 
-    public boolean checkDisconnectedSocketClient(String nickname, ClientHandler clientHandlerReconnected){
+    public int checkPlayerDisconnected(String nickname){
         int found = -1;
         for(int i = 0; i< numberOfPlayers;i++){
-            if(nickname.equals(playersConnected.get(i).getNickname()))
+            if(nickname.equals(playersConnected.get(i).getNickname()) && !clientHandlers.get(i).isConnected())
                 found = i;
         }
-        if(found == -1 || clientHandlers.get(found).isConnected()) return false;
-        else{
-            clientHandlerReconnected.setGame(this);
-            clientHandlers.set(found, clientHandlerReconnected);
-            return true;
-        }
+        return found;
     }
 
-    public boolean checkDisconnectedRMIClient(String nickname, RemoteInterface client){
-        int found = -1;
-        for(int i = 0; i< numberOfPlayers;i++){
-            if(nickname.equals(playersConnected.get(i).getNickname()))
-                found = i;
-        }
-        if(found == -1 || clientHandlers.get(found).isConnected()) return false;
-        else{
-            RMIClientHandler clientHandlerReconnected = new RMIClientHandler(this, client);
-            clientHandlers.set(found, clientHandlerReconnected);
-            return true;
-        }
+    public void switchRMIClientHandler(int playerIndex, RemoteInterface client){
+        RMIClientHandler clientHandlerReconnected = new RMIClientHandler(this, client);
+        clientHandlers.set(playerIndex, clientHandlerReconnected);
+    }
+    public void switchSocketClientHandler(int playerIndex, ClientHandler clientHandlerReconnected){
+        clientHandlerReconnected.setGame(this);
+        clientHandlers.set(playerIndex, clientHandlerReconnected);
     }
 
     public ArrayList<ClientHandler> getClientHandlers() {
