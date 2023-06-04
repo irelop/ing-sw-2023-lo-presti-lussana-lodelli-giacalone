@@ -86,8 +86,6 @@ public class Client implements Runnable{
             remoteServer.printLoginStatus("["+this.getClass().getName()+"] now connected through RMI");
             remoteServer.addRemoteClient(client);
             client.setClient(this);
-            //Thread.sleep(50);
-
 
         }catch(RemoteException e){
             System.out.println("[ERROR]: Unable to invoke remote method");

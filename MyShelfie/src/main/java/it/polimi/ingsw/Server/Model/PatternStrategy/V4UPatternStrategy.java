@@ -15,43 +15,48 @@ public class V4UPatternStrategy implements StrategyInterface {
     public boolean checkPattern(Tile[][] shelfSnapshot) {
         int numRow = shelfSnapshot.length;
         int numCol = shelfSnapshot[0].length;
+        Tile[][] copy = new Tile[numRow][numCol];
+        for (int i = 0; i < numRow; i++) {
+            for (int j = 0; j < numCol; j++) {
+                copy[i][j] = shelfSnapshot[i][j];
+            }
+        }
         int contatore = 0;
 
 
-        //check if there is a pattern of 4 vertical tile and it hasn't been already counted
+        //check if there is a pattern of 4 vertical tile, and it hasn't been already counted
         for(int i=0; i<numRow-3; i++)
             for(int j=0; j<numCol; j++){
-                if(shelfSnapshot[i][j] != Tile.BLANK &&
-                        shelfSnapshot[i][j] != Tile.NOT_VALID &&
-                        shelfSnapshot[i][j] == shelfSnapshot[i+1][j] &&
-                        shelfSnapshot[i][j] == shelfSnapshot[i+2][j] &&
-                        shelfSnapshot[i][j] == shelfSnapshot[i+3][j])
+                if(copy[i][j] != Tile.BLANK &&
+                        copy[i][j] != Tile.NOT_VALID &&
+                        copy[i][j] == copy[i+1][j] &&
+                        copy[i][j] == copy[i+2][j] &&
+                        copy[i][j] == copy[i+3][j])
                 {
 
                     //count and mark on the cells
-                    shelfSnapshot[i][j] = Tile.NOT_VALID;
-                    shelfSnapshot[i+1][j] = Tile.NOT_VALID;
-                    shelfSnapshot[i+2][j] = Tile.NOT_VALID;
-                    shelfSnapshot[i+3][j] = Tile.NOT_VALID;
+                    copy[i][j] = Tile.NOT_VALID;
+                    copy[i+1][j] = Tile.NOT_VALID;
+                    copy[i+2][j] = Tile.NOT_VALID;
+                    copy[i+3][j] = Tile.NOT_VALID;
                     contatore++;
                     if(contatore == 4) return true;
                 }
             }
-
         for(int i=0; i<numRow; i++)
             for(int j=0; j<numCol-3; j++){
-                if(shelfSnapshot[i][j] != Tile.BLANK &&
-                        shelfSnapshot[i][j] != Tile.NOT_VALID &&
-                        shelfSnapshot[i][j] == shelfSnapshot[i][j+1] &&
-                        shelfSnapshot[i][j] == shelfSnapshot[i][j+2] &&
-                        shelfSnapshot[i][j] == shelfSnapshot[i][j+3])
+                if(copy[i][j] != Tile.BLANK &&
+                        copy[i][j] != Tile.NOT_VALID &&
+                        copy[i][j] == copy[i][j+1] &&
+                        copy[i][j] == copy[i][j+2] &&
+                        copy[i][j] == copy[i][j+3])
                 {
 
                     //count and mark on the cells
-                    shelfSnapshot[i][j] = Tile.NOT_VALID;
-                    shelfSnapshot[i][j+1] = Tile.NOT_VALID;
-                    shelfSnapshot[i][j+2] = Tile.NOT_VALID;
-                    shelfSnapshot[i][j+3] = Tile.NOT_VALID;
+                    copy[i][j] = Tile.NOT_VALID;
+                    copy[i][j+1] = Tile.NOT_VALID;
+                    copy[i][j+2] = Tile.NOT_VALID;
+                    copy[i][j+3] = Tile.NOT_VALID;
                     contatore++;
                     if(contatore == 4) return true;
                 }

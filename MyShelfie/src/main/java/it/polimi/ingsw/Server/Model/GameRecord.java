@@ -3,7 +3,6 @@ package it.polimi.ingsw.Server.Model;
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.Messages.ReconnectionAnswer;
 import it.polimi.ingsw.Server.Messages.ReconnectionNotifyMsg;
-import it.polimi.ingsw.Server.Messages.ReconnectionRequest;
 import it.polimi.ingsw.Server.Messages.S2CMessage;
 import it.polimi.ingsw.Server.RemoteInterface;
 
@@ -36,27 +35,19 @@ public class GameRecord {
 
 
         for(MyShelfie game : games){
-
-            //checking if there is only player while others are disconnected
-            if(game.getClientHandlers().stream().filter(x->x.isConnected()).toList().size()==1){
-                for(ClientHandler clientHandler: game.getClientHandlers())
-                    if(clientHandler.isConnected()){
-                        countDownClient = clientHandler;    //the player who is in Countdown Mode
-                        currentGame = game;                 //the game which is near to be ended
-                    }
-            }
-
-            if(game.getDisconnectedClientHandler(nickname, currentClientHandler)){
+            if(game.checkDisconnectedSocketClient(nickname, currentClientHandler)){
                 canConnect = true;
+                //checking if there is only player while others are disconnected
+                if(game.getClientHandlers().stream().filter(x->x.isConnected()).toList().size()==1){
+                    for(ClientHandler clientHandler: game.getClientHandlers())
+                        if(clientHandler.isConnected()){
+                            countDownClient = clientHandler;    //the player who is in Countdown Mode
+                            currentGame = game;                 //the game which is near to be ended
+                        }
+                }
                 break;
             }
         }
-
-
-        /*if(canConnect){
-            games.remove(currentGame);
-            currentGame--;
-        }*/
 
         //sending the result of the reconnection choice to the player
         S2CMessage reconnectionAnswer = new ReconnectionAnswer(canConnect);
@@ -64,7 +55,15 @@ public class GameRecord {
 
         if(countDownClient!= null && canConnect) {
             //stops the countdown
-            countDownClient.sendMessageToClient(new ReconnectionNotifyMsg());
+            if(!countDownClient.getIsRMI())
+                countDownClient.sendMessageToClient(new ReconnectionNotifyMsg());
+            else{
+                try {
+                    countDownClient.getClientInterface().sendMessageToClient(new ReconnectionNotifyMsg());
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             //allows to play the round to the reconnected player
             currentGame.finishTurn();
         }
@@ -74,7 +73,48 @@ public class GameRecord {
     }
 
     public void getDisconnectedClientHandlerRMI(String nickname, RemoteInterface client){
-        //bisogna copiare quello della socket
+        boolean canConnect = false;
+        ClientHandler countDownClient= null;
+        MyShelfie currentGame = null;
+
+
+        for(MyShelfie game : games){
+            if(game.checkDisconnectedRMIClient(nickname, client)){
+                canConnect = true;
+                //checking if there is only player while others are disconnected
+                if(game.getClientHandlers().stream().filter(x->x.isConnected()).toList().size()==1){
+                    for(ClientHandler clientHandler: game.getClientHandlers())
+                        if(clientHandler.isConnected()){
+                            countDownClient = clientHandler;    //the player who is in Countdown Mode
+                            currentGame = game;                 //the game which is near to be ended
+                        }
+                }
+                break;
+            }
+        }
+
+        //sending the result of the reconnection choice to the player
+        S2CMessage reconnectionAnswer = new ReconnectionAnswer(canConnect);
+        try {
+            client.sendMessageToClient(reconnectionAnswer);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+
+        if(countDownClient!= null && canConnect) {
+            //stops the countdown
+            if(!countDownClient.getIsRMI())
+                countDownClient.sendMessageToClient(new ReconnectionNotifyMsg());
+            else{
+                try {
+                    countDownClient.getClientInterface().sendMessageToClient(new ReconnectionNotifyMsg());
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            //allows to play the round to the reconnected player
+            currentGame.finishTurn();
+        }
 
 
         //gestione giocatore con lo stesso nome [...]

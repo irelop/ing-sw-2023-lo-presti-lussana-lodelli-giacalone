@@ -43,7 +43,7 @@ public class CommonGoalCard implements Serializable {
     }
 
     /**
-     * OVERVIEW: this method returns the score, which depends from the timing of players' gaol achievement.
+     * OVERVIEW: this method returns the score, which depends on from the timing of players' gaol achievement.
      * @return score: the available score for the completed goal.
      */
     public int getScore(){
@@ -60,6 +60,9 @@ public class CommonGoalCard implements Serializable {
 
     public String getStrategyName(){
         return this.commonStrategy.getClass().getName();
+    }
+    public ArrayList<Integer> returnScore(){
+        return availableScore;
     }
 
 }

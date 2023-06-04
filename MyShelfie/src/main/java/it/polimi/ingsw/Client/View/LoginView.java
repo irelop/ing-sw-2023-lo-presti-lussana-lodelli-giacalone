@@ -174,8 +174,6 @@ public class LoginView extends View implements ObserverView {
     //gestione FA Disconnection Resilience
 
     private char getReconnectionChoice() throws InvalidReconnectionAnswerException{
-        System.out.println("Do you want to join a new lobby or an already existing game?");
-        System.out.println("Insert L for a new lobby or G for the existing game");
         Scanner scanner = new Scanner(System.in);
         String input = scanner.next().toUpperCase();
         if(input.length() > 1) throw new InvalidReconnectionAnswerException();
@@ -186,6 +184,8 @@ public class LoginView extends View implements ObserverView {
     }
 
     private void manageReconnectionChoice(){
+        System.out.println("Do you want to join a new lobby or an already existing game?");
+        System.out.println("Insert L for a new lobby or G for the existing game");
         char answer;
         do{
             try{

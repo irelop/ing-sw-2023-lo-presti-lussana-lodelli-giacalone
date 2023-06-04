@@ -106,7 +106,6 @@ public class Server {
 
 
     public static void manageServerRMI(){
-        //DA SISTEMARE COME PER SOCKET
         try{
             serverInterface = new RMIAdapter();
             registry = LocateRegistry.createRegistry(1099);
@@ -146,7 +145,9 @@ public class Server {
                          */
                         numRMIClients++;
                         //serverInterface.setMapClientsToController(games.get(currentGame), numRMIClients-1);
-                        serverInterface.setMapClientsToController(gameRecord.getGame(), numRMIClients-1);
+
+                        //serverInterface.setMapClientsToController(gameRecord.getGame(), numRMIClients-1);
+                        serverInterface.setGameRecord(gameRecord);
                     }
                 }
             }catch(Exception e){

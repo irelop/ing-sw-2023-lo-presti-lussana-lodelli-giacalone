@@ -3,6 +3,7 @@ package it.polimi.ingsw.Server;
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.View.*;
 import it.polimi.ingsw.Server.Messages.*;
+import it.polimi.ingsw.Server.Model.GameRecord;
 import it.polimi.ingsw.Server.Model.MyShelfie;
 
 import java.rmi.RemoteException;
@@ -19,6 +20,7 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
 
     private MyShelfie controller;
     private Client client;
+    private GameRecord gameRecord;
 
     public RMIAdapter() throws RemoteException{
         super();
@@ -50,6 +52,10 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
     public void setMapClientsToController(MyShelfie controller, int remoteClientIndex){
         mapClientsToController.put(remoteClients.get(remoteClientIndex), controller);
 
+    }
+    public void setMapClientsToController(RemoteInterface client){
+        MyShelfie controller = gameRecord.getGame();
+        mapClientsToController.put(client, controller);
     }
 
     @Override
@@ -121,5 +127,12 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
 
     public void ping(){
         client.ping();
+    }
+
+    public void setGameRecord(GameRecord gameRecord){
+        this.gameRecord = gameRecord;
+    }
+    public GameRecord getGameRecord(){
+        return this.gameRecord;
     }
 }

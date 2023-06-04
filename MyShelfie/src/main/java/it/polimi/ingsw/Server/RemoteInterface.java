@@ -3,6 +3,7 @@ package it.polimi.ingsw.Server;
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.View.View;
 import it.polimi.ingsw.Server.Messages.*;
+import it.polimi.ingsw.Server.Model.GameRecord;
 import it.polimi.ingsw.Server.Model.MyShelfie;
 
 import java.rmi.Remote;
@@ -41,5 +42,7 @@ public interface RemoteInterface extends Remote {
         boolean isClientConnected() throws RemoteException;
         void goToLastPlayerConnectedView(LastOneConnectedMsg msg) throws RemoteException;
         void ping() throws RemoteException;
-
+        void setGameRecord(GameRecord gameRecord) throws RemoteException;
+        GameRecord getGameRecord() throws RemoteException;
+        void setMapClientsToController(RemoteInterface client) throws RemoteException;
 }

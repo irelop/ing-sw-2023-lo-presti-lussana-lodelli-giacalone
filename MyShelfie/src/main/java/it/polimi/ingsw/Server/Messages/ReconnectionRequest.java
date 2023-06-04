@@ -21,11 +21,10 @@ public class ReconnectionRequest extends C2SMessage{
 
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client) {
-       //da sistemare!!
-        /*try {
-
+        try {
+            server.getGameRecord().getDisconnectedClientHandlerRMI(nickname, client);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
-        }*/
+        }
     }
 }

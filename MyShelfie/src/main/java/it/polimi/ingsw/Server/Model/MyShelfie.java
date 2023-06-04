@@ -1,12 +1,10 @@
 package it.polimi.ingsw.Server.Model;
-import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.Messages.*;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
 import it.polimi.ingsw.Server.Model.Exceptions.NotEnoughSpaceInChosenColumnException;
 import it.polimi.ingsw.Server.RMIClientHandler;
 import it.polimi.ingsw.Server.RemoteInterface;
-import it.polimi.ingsw.Server.SocketClientHandler;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -646,7 +644,7 @@ public class MyShelfie {
 
     }
 
-    public boolean getDisconnectedClientHandler(String nickname, ClientHandler clientHandlerReconnected){
+    public boolean checkDisconnectedSocketClient(String nickname, ClientHandler clientHandlerReconnected){
         int found = -1;
         for(int i = 0; i< numberOfPlayers;i++){
             if(nickname.equals(playersConnected.get(i).getNickname()))
@@ -660,7 +658,29 @@ public class MyShelfie {
         }
     }
 
+    public boolean checkDisconnectedRMIClient(String nickname, RemoteInterface client){
+        int found = -1;
+        for(int i = 0; i< numberOfPlayers;i++){
+            if(nickname.equals(playersConnected.get(i).getNickname()))
+                found = i;
+        }
+        if(found == -1 || clientHandlers.get(found).isConnected()) return false;
+        else{
+            RMIClientHandler clientHandlerReconnected = new RMIClientHandler(this, client);
+            clientHandlers.set(found, clientHandlerReconnected);
+            return true;
+        }
+    }
+
     public ArrayList<ClientHandler> getClientHandlers() {
         return clientHandlers;
     }
+
+    public void finishGame(ClientHandler clientHandler){
+        clientHandler.stop();
+    }
+
+    public void finishGameRMI(RemoteInterface client){}
+
+
 }

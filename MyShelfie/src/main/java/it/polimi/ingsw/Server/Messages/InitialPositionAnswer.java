@@ -34,7 +34,6 @@ public class InitialPositionAnswer extends S2CMessage{
         try{
             ChooseTilesFromBoardView chooseTilesFromBoardView = (ChooseTilesFromBoardView) client.getCurrentView();
             chooseTilesFromBoardView.setInitialPositionAnswer(this);
-            //client.notifyView();
         }catch(RemoteException e){
             e.printStackTrace();
         }
