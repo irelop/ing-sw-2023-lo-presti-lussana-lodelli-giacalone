@@ -49,9 +49,8 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
         this.controllers.add(controller);
     }
 
-    public void setMapClientsToController(MyShelfie controller, int remoteClientIndex){
-        mapClientsToController.put(remoteClients.get(remoteClientIndex), controller);
-
+    public void setMapClientsToController(MyShelfie controller, RemoteInterface client){
+        mapClientsToController.put(client, controller);
     }
     public void setMapClientsToController(RemoteInterface client){
         MyShelfie controller = gameRecord.getGame();
@@ -68,10 +67,10 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
 
     public MyShelfie getController(RemoteInterface client){
 
-        if(mapClientsToController.get(client)==null){
+        /*if(mapClientsToController.get(client)==null){
             //I need to add an entry for the reconnected client and the retrieved current game
             mapClientsToController.put(client,gameRecord.getCurrentGame());
-        }
+        }*/
         return mapClientsToController.get(client);
 
     }

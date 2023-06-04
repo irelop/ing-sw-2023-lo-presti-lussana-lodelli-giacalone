@@ -6,17 +6,23 @@ import it.polimi.ingsw.Server.Messages.ReconnectionNotifyMsg;
 import it.polimi.ingsw.Server.Messages.S2CMessage;
 import it.polimi.ingsw.Server.RemoteInterface;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class GameRecord {
     private ArrayList<MyShelfie> games;
     private int currentGame;
+    private RemoteInterface remoteServer;
 
 
     public GameRecord() {
         games = new ArrayList<>();
         currentGame = -1;
+    }
+
+    public void setRemoteServer(RemoteInterface remoteServer){
+        this.remoteServer = remoteServer;
     }
 
     public MyShelfie getGame(){
@@ -50,7 +56,6 @@ public class GameRecord {
                 break;
             }
         }
-
         //sending the result of the reconnection choice to the player
         S2CMessage reconnectionAnswer = new ReconnectionAnswer(canConnect);
         currentClientHandler.sendMessageToClient(reconnectionAnswer);
@@ -82,7 +87,7 @@ public class GameRecord {
 
         for(MyShelfie game : games){
             //checking if there is only player while others are disconnected
-            if(game.getClientHandlers().stream().filter(x->x.isConnected()).toList().size()==1){
+            if(game.getClientHandlers().stream().filter(ClientHandler::isConnected).toList().size()==1){
                 for(ClientHandler clientHandler: game.getClientHandlers())
                     if(clientHandler.isConnected()){
                         countDownClient = clientHandler;    //the player who is in Countdown Mode
@@ -92,6 +97,11 @@ public class GameRecord {
 
             if(game.checkDisconnectedRMIClient(nickname, client)){
                 canConnect = true;
+                try {
+                    remoteServer.setMapClientsToController(game, client);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
             }
         }

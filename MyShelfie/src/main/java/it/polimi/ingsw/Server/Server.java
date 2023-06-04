@@ -116,6 +116,8 @@ public class Server {
             return;
         }
 
+        gameRecord.setRemoteServer(serverInterface);
+
         while(true){
 
             //checking if a new client is connected
