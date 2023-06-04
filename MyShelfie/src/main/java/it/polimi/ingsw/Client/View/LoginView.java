@@ -46,7 +46,6 @@ public class LoginView extends View implements ObserverView {
      */
     @Override
     public void run() {
-        //synchronized (lock) {
             showTitleScreen();
             askNickname();
             manageReconnectionChoice();

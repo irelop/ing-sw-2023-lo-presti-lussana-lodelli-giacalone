@@ -27,6 +27,8 @@ public class Board implements Serializable {
         boardGrid = new Tile[MAX_ROWS][MAX_COLUMNS];
     }
 
+
+    //dobbiamo toglierlo?
     /**
      * OVERVIEW: this method returns the singleton instance of the Board class.
      * @return the instance of the game board.
@@ -189,11 +191,6 @@ public class Board implements Serializable {
      * @return ArrayList<Tile> chosenTiles != null
      * @author Irene Lo Presti
      */
-
-    // Ho tolto i commenti che circondavano il metodo perchè sennò ogni volta che
-    // scrivevamo Board usciva la scritta rigata. Tanto 90/100 sto metodo andrà cancellato
-    // (=> non guardate gli errori causati da questo). Cordiali saluti, Riccardo KEKW
-
     public void chooseTilesFromBoard(int maxTilesPickable){
         int initialPositionR, initialPositionC, numberOfTiles;
         char direction;
@@ -245,7 +242,8 @@ public class Board implements Serializable {
      * @return ArrayList<Tile> chosenTiles != null : the chosen tiles from the board
      * @author Irene Lo Presti
      */
-    public void pickTilesFromBoard(int initialPositionR, int initialPositionC, int numberOfTiles, char direction, Player player){
+    public void pickTilesFromBoard(int initialPositionR, int initialPositionC, int numberOfTiles,
+                                   char direction, Player player){
         ArrayList<Tile> chosenTiles = new ArrayList<>();
 
         for(int i=0; i<numberOfTiles; i++){
@@ -260,8 +258,134 @@ public class Board implements Serializable {
             else if(direction == 'w')
                 initialPositionC--;
         }
-
         player.setLittleHand(chosenTiles);
+    }
+
+    /**
+     * OVERVIEW: this method checks if the cells are valid and not empty and if the tiles have a free side
+     * @param r : int
+     * @param c : int
+     * @throws InvalidPositionException if the tile has not a free side
+     * @throws InvalidCellException if the cell is not valid
+     * @throws EmptyCellException if the cell is empty
+     * @author Irene Lo Presti
+     */
+    public void checkPosition(int r, int c) throws InvalidPositionException, InvalidCellException, EmptyCellException, OutOfBoardException {
+
+        if(r<0 || r>=MAX_ROWS || c<0 || c>=MAX_COLUMNS) throw new OutOfBoardException();
+
+        if(boardGrid[r][c] == Tile.NOT_VALID) throw new InvalidCellException();
+
+        if(boardGrid[r][c] == Tile.BLANK) throw new EmptyCellException();
+
+        //if it is on the border a side is free
+        if(r == MAX_ROWS-1 || c == MAX_COLUMNS-1 || r==0 || c==0)
+            return;
+
+        if(boardGrid[r+1][c].equals(Tile.BLANK) || boardGrid[r-1][c].equals(Tile.BLANK) ||
+                boardGrid[r][c+1].equals(Tile.BLANK) || boardGrid[r][c-1].equals(Tile.BLANK))
+            return;
+
+        if(boardGrid[r+1][c].equals(Tile.NOT_VALID) || boardGrid[r-1][c].equals(Tile.NOT_VALID) ||
+                boardGrid[r][c+1].equals(Tile.NOT_VALID) || boardGrid[r][c-1].equals(Tile.NOT_VALID))
+            return;
+
+        throw new InvalidPositionException();
+
+    }
+
+    /**
+     * OVERVIEW: this method checks if the cells are valid and not empty, if the tiles have a free side and
+     * if the direction is correct
+     * @param direction : char
+     * @param numberOfTiles : int
+     * @param r : int
+     * @param c : int
+     * @param maxTilesPickable : int
+     * @throws InvalidPositionException if the tiles don't have a free side
+     * @throws OutOfBoardException if the direction chosen goes out of the board
+     * @throws InvalidCellException if tone of the cells is not valid
+     * @throws EmptyCellException if one of the cells is empty
+     * @throws InvalidDirectionException if the direction is not valid
+     * @author Irene Lo Presti
+     */
+    public void checkDirectionAndNumberOfTiles(char direction, int numberOfTiles, int r, int c,
+                                               int maxTilesPickable) throws InvalidPositionException,
+            InvalidCellException, EmptyCellException, OutOfBoardException, InvalidNumberOfTilesException,
+            InvalidDirectionException {
+
+        if(numberOfTiles==0)
+            return;
+
+        if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w')
+            throw new InvalidDirectionException();
+
+        numberOfTiles++; //aumento di uno per avere il totale delle tessere (così conto anche la prima)
+
+        if(numberOfTiles > maxTilesPickable || numberOfTiles < 0)
+            throw new InvalidNumberOfTilesException(maxTilesPickable);
+        
+        switch (direction) {
+            case 'e' -> {
+                for (int i = 1; i < numberOfTiles; i++) {
+                    if (c + i >= MAX_COLUMNS) throw new OutOfBoardException();
+                    checkPosition(r, c+i);
+                }
+            }
+            case 'n' -> {
+                for (int i = 1; i < numberOfTiles; i++) {
+                    if (r - i < 0) throw new OutOfBoardException();
+                    checkPosition(r-i, c);
+                }
+            }
+            case 's' -> {
+                for (int i = 1; i < numberOfTiles; i++) {
+                    if (r + i >= MAX_ROWS) throw new OutOfBoardException();
+                    checkPosition(r+i, c);
+                }
+            }
+            case 'w' -> {
+                for (int i = 1; i < numberOfTiles; i++) {
+                    if (c - i < 0) throw new OutOfBoardException();
+                    checkPosition(r, c-i);
+                }
+            }
+        }
+    }
+
+    //gestire l'eccezione!
+    /**
+     * OVERVIEW: this method refills the board with tiles from the bag
+     * @author Irene Lo Presti
+     */
+    public void refill(){
+        for(int r=0; r<MAX_ROWS; r++)
+            for(int c=0; c<MAX_COLUMNS; c++)
+                if(boardGrid[r][c] == Tile.BLANK)
+                    try {
+                        boardGrid[r][c] = bag.draw();
+                    } catch (EmptyBagException ex){
+                        ex.toString();
+                        ex.printStackTrace();
+                    }
+    }
+
+    /**
+     * OVERVIEW: this method checks if the board needs to be refilled
+     * @return true if the board needs to be refilled, false otherwise
+     * @author Irene Lo Presti
+     */
+    public boolean needRefill(){
+        for(int r=0; r<MAX_ROWS-1; r++)
+            for(int c=0; c<MAX_COLUMNS-1; c++){
+                if(boardGrid[r][c] != Tile.BLANK && boardGrid[r][c]!=Tile.NOT_VALID){
+                    if(boardGrid[r+1][c] != Tile.BLANK && boardGrid[r+1][c]!=Tile.NOT_VALID)
+                        return false;
+                    else if(boardGrid[r][c+1] != Tile.BLANK && boardGrid[r][c+1]!=Tile.NOT_VALID)
+                        return false;
+                }
+            }
+        return true;
     }
 
     /**
@@ -322,41 +446,6 @@ public class Board implements Serializable {
         if(c<0 || c>=MAX_COLUMNS) throw new OutOfBoardException();
         else return c;
     }
-
-    /**
-     * OVERVIEW: this method checks if the cells are valid and not empty and if the tiles have a free side
-     * @param r : int
-     * @param c : int
-     * @throws InvalidPositionException if the tile has not a free side
-     * @throws InvalidCellException if the cell is not valid
-     * @throws EmptyCellException if the cell is empty
-     * @author Irene Lo Presti
-     */
-    public void checkPosition(int r, int c) throws InvalidPositionException, InvalidCellException, EmptyCellException, OutOfBoardException {
-
-        if(r<0 || r>=MAX_ROWS || c<0 || c>=MAX_COLUMNS) throw new OutOfBoardException();
-
-        if(boardGrid[r][c] == Tile.NOT_VALID) throw new InvalidCellException();
-
-        if(boardGrid[r][c] == Tile.BLANK) throw new EmptyCellException();
-
-        //if it is on the boarder a side is free
-        if(r == MAX_ROWS-1 || c == MAX_COLUMNS-1 || r==0 || c==0)
-            return;
-
-        if(boardGrid[r+1][c].equals(Tile.BLANK) || boardGrid[r-1][c].equals(Tile.BLANK) ||
-                boardGrid[r][c+1].equals(Tile.BLANK) || boardGrid[r][c-1].equals(Tile.BLANK))
-            return;
-
-        if(boardGrid[r+1][c].equals(Tile.NOT_VALID) || boardGrid[r-1][c].equals(Tile.NOT_VALID) ||
-                boardGrid[r][c+1].equals(Tile.NOT_VALID) || boardGrid[r][c-1].equals(Tile.NOT_VALID))
-            return;
-
-
-        throw new InvalidPositionException();
-
-    }
-
     /**
      * OVERVIEW: this method get the number of tiles
      * SCANNER
@@ -422,99 +511,6 @@ public class Board implements Serializable {
 
     }
 
-    /**
-     * OVERVIEW: this method checks if the cells are valid and not empty, if the tiles have a free side and
-     * if the direction is correct
-     * @param direction : char
-     * @param numberOfTiles : int
-     * @param r : int
-     * @param c : int
-     * @param maxTilesPickable : int
-     * @throws InvalidPositionException if the tiles don't have a free side
-     * @throws OutOfBoardException if the direction chosen goes out of the board
-     * @throws InvalidCellException if tone of the cells is not valid
-     * @throws EmptyCellException if one of the cells is empty
-     * @throws InvalidDirectionException if the direction is not valid
-     * @author Irene Lo Presti
-     */
-    public void checkDirectionAndNumberOfTiles(char direction, int numberOfTiles, int r, int c,
-                                               int maxTilesPickable) throws InvalidPositionException,
-            InvalidCellException, EmptyCellException, OutOfBoardException, InvalidNumberOfTilesException,
-            InvalidDirectionException {
-
-        if(numberOfTiles==0)
-            return;
-
-        if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w')
-            throw new InvalidDirectionException();
-
-        numberOfTiles++; //aumento di uno per avere il totale delle tessere (così conto anche la prima)
-
-        if(numberOfTiles > maxTilesPickable || numberOfTiles < 0)
-            throw new InvalidNumberOfTilesException(maxTilesPickable);
-        
-        switch (direction) {
-            case 'e' -> {
-                for (int i = 1; i < numberOfTiles; i++) {
-                    if (c + i >= MAX_COLUMNS) throw new OutOfBoardException();
-                    checkPosition(r, c+i);
-                }
-            }
-            case 'n' -> {
-                for (int i = 1; i < numberOfTiles; i++) {
-                    if (r - i < 0) throw new OutOfBoardException();
-                    checkPosition(r-i, c);
-                }
-            }
-            case 's' -> {
-                for (int i = 1; i < numberOfTiles; i++) {
-                    if (r + i >= MAX_ROWS) throw new OutOfBoardException();
-                    checkPosition(r+i, c);
-                }
-            }
-            case 'w' -> {
-                for (int i = 1; i < numberOfTiles; i++) {
-                    if (c - i < 0) throw new OutOfBoardException();
-                    checkPosition(r, c-i);
-                }
-            }
-        }
-    }
-
-    /**
-     * OVERVIEW: this method refills the board with tiles from the bag
-     * @author Irene Lo Presti
-     */
-    public void refill(){
-        for(int r=0; r<MAX_ROWS; r++)
-            for(int c=0; c<MAX_COLUMNS; c++)
-                if(boardGrid[r][c] == Tile.BLANK)
-                    try {
-                        boardGrid[r][c] = bag.draw();
-                    } catch (EmptyBagException ex){
-                        ex.toString();
-                        ex.printStackTrace();
-                    }
-    }
-
-    /**
-     * OVERVIEW: this method checks if the board needs to be refilled
-     * @return true if the board needs to be refilled, false otherwise
-     * @author Irene Lo Presti
-     */
-    public boolean needRefill(){
-        for(int r=0; r<MAX_ROWS-1; r++)
-            for(int c=0; c<MAX_COLUMNS-1; c++){
-                if(boardGrid[r][c] != Tile.BLANK && boardGrid[r][c]!=Tile.NOT_VALID){
-                    if(boardGrid[r+1][c] != Tile.BLANK && boardGrid[r+1][c]!=Tile.NOT_VALID)
-                        return false;
-                    else if(boardGrid[r][c+1] != Tile.BLANK && boardGrid[r][c+1]!=Tile.NOT_VALID)
-                        return false;
-                }
-            }
-        return true;
-    }
-
 
 
     /**
@@ -522,6 +518,7 @@ public class Board implements Serializable {
      * that move in the board: ns (north - south), sn (south-north), w (west), e (est), we (west-est),
      * ew (est-west).
      * @param numPlayers: number of player playing
+     * @deprecated
      * @author Irene Lo Presti
      */
     public void initGrid(int numPlayers){
@@ -564,6 +561,7 @@ public class Board implements Serializable {
 
     /**
      * OVERVIEW: initialization of the board for 2 players
+     * @deprecated
      * @author Irene Lo Presti
      */
     private void init2Players(){
@@ -593,6 +591,7 @@ public class Board implements Serializable {
 
     /**
      * OVERVIEW: initialization of the board for 3 players
+     * @deprecated
      * @author Irene Lo Presti
      */
     private void init3Players() {
@@ -636,6 +635,7 @@ public class Board implements Serializable {
 
     /**
      * OVERVIEW: initialization of the board for 4 players
+     * @deprecated
      * @author Irene Lo Presti
      */
     private void init4Players() {

@@ -31,9 +31,6 @@ public class MyShelfie {
     private boolean isStarted;
     private final ArrayList<ClientHandler> clientHandlers;
     private int currentPlayerIndex;
-    //private static MyShelfie myShelfieInstance;
-
-    //private final Object lock;
     private boolean allPlayersReady;
     private boolean firstTurn;
     private boolean gameOver;
@@ -54,31 +51,14 @@ public class MyShelfie {
         this.numberOfPlayers = -1;
         this.clientHandlers = new ArrayList<>();
 
-        //this.lock = new Object();
         this.allPlayersReady = false;
         this.gameOver = false;
         this.lock = new Object();
         this.isRMIFirstLastLobby = new ArrayList<>();
     }
 
-    /**
-     * Method used for singleton design pattern
-     * @return myShelfieInstance: the one that already exists or a new one
-     * @deprecated
-     */
-    /*public static MyShelfie getMyShelfie(){
-        //singleton instance of controller class
-        if(myShelfieInstance == null){
-            myShelfieInstance = new MyShelfie();
-        }
-        return myShelfieInstance;
-    }*/
-
     public Board getBoard(){
         return board;
-    }
-    public void setOver(boolean value){
-        this.isOver = value;
     }
 
     //- - - - - - - - - - - - - - - - - - - -| L O G I N   M E T H O D S |- - - - - - - - - - - - - - - - - - - - - - - -
@@ -473,10 +453,6 @@ public class MyShelfie {
      * @param numberOfTiles: user choice tiles number
      */
     public void getPlayerChoice(int initialRow, int initialColumn, char direction, int numberOfTiles){
-        System.out.println(board.getCommonGoalCard(0));
-        System.out.println(board.getCommonGoalCard(1));
-        if(board == null)
-            System.out.println("board is null");
         Player currentPlayer = playersConnected.get(currentPlayerIndex);
 
         board.pickTilesFromBoard(initialRow, initialColumn, numberOfTiles, direction, currentPlayer);
@@ -489,8 +465,6 @@ public class MyShelfie {
         }
 
         ArrayList<Tile> littleHand = new ArrayList<>(currentPlayer.getLittleHand());
-        System.out.println(board.getCommonGoalCard(0));
-        System.out.println(board.getCommonGoalCard(1));
         ToShelfMsg toShelfMsg = new ToShelfMsg(
                 matrix,
                 littleHand,
@@ -570,7 +544,7 @@ public class MyShelfie {
             //setting the next player as the current player
             computeCurrentPlayerIdx();
 
-            //skipping when a player is disconnected from the gam (FA Resilienza alle disconessioni)
+            //skipping when a player is disconnected from the game (FA Resilienza alle disconessioni)
             int numOfPlayersConnected = numberOfPlayers;
             while(true){
                 if(!clientHandlers.get(currentPlayerIndex).isConnected()){
@@ -616,10 +590,6 @@ public class MyShelfie {
                     currentPlayerIndex = numberOfPlayers - 1;
                 else
                     currentPlayerIndex--;
-            /*
-            if(playersConnected.size()==1){
-                currentPlayerIndex =-1;
-            }*/
                 finishTurn();
 
             }
@@ -674,23 +644,6 @@ public class MyShelfie {
             }
         }
 
-    }
-
-    public void finishGame(ClientHandler playerEnding){
-        playerEnding.stop();
-
-        /*int found = clientHandlers.indexOf(playerEnding);
-        playersConnected.remove(found);
-        clientHandlers.remove(found);*/
-    }
-
-    public void finishGameRMI(RemoteInterface remoteClient){
-
-    }
-
-
-    public ArrayList<Player> getPlayersConnected() {
-        return playersConnected;
     }
 
     public boolean getDisconnectedClientHandler(String nickname, ClientHandler clientHandlerReconnected){
