@@ -92,6 +92,12 @@ public class Client implements Runnable{
         } catch (NotBoundException e) {
             System.out.println("[ERROR]: Server unreachable");
         }
+
+
+        RMIServerHandler rmiServerHandler = new RMIServerHandler(this,remoteServer);
+        Thread serverHandlerThread = new Thread(rmiServerHandler);
+        serverHandlerThread.start();
+
     }
 
     public void manageSocketConnection(){
@@ -192,5 +198,4 @@ public class Client implements Runnable{
         System.exit(0);
     }
 
-    public void ping(){}
 }

@@ -130,9 +130,7 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
         this.remoteClients.remove(remoteClient);
     }
 
-    public void ping(){
-        client.ping();
-    }
+    public void ping(){}
 
     public void setGameRecord(GameRecord gameRecord){
         this.gameRecord = gameRecord;
