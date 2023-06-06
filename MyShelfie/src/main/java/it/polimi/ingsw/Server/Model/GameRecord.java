@@ -1,9 +1,8 @@
 package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.ClientHandler;
-import it.polimi.ingsw.Server.Messages.ReconnectionAnswer;
-import it.polimi.ingsw.Server.Messages.ReconnectionNotifyMsg;
-import it.polimi.ingsw.Server.Messages.S2CMessage;
+import it.polimi.ingsw.Server.Messages.*;
+import it.polimi.ingsw.Server.RMIClientHandler;
 import it.polimi.ingsw.Server.RemoteInterface;
 
 import java.rmi.Remote;
@@ -15,10 +14,13 @@ public class GameRecord {
     private int currentGame;
     private RemoteInterface remoteServer;
 
+    private Object lock;
+
 
     public GameRecord() {
         games = new ArrayList<>();
         currentGame = -1;
+        lock = new Object();
     }
 
     public void setRemoteServer(RemoteInterface remoteServer){
@@ -142,5 +144,90 @@ public class GameRecord {
 
 
         //gestione giocatore con lo stesso nome [...]
+    }
+
+
+    public void manageLogin(ClientHandler clientHandler, LoginNicknameRequest loginNicknameRequest,MyShelfie controller){
+        synchronized (lock) {
+            S2CMessage loginNicknameAnswer;
+
+            int controllerIdx = games.indexOf(controller);
+            if (games.get(controllerIdx).isStarted()) {
+                loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FULL_LOBBY);
+                clientHandler.sendMessageToClient(loginNicknameAnswer);
+                return;
+            }
+
+            boolean found = false;
+            for (MyShelfie game : games) {
+                if (!game.checkNickname(loginNicknameRequest.getInsertedNickname())) found = true;
+            }
+            if (!found) {
+
+                if (games.get(controllerIdx).isFirstConnected()) {
+                    loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
+                    clientHandler.sendMessageToClient(loginNicknameAnswer);
+                    games.get(controllerIdx).addPlayer(loginNicknameRequest.getInsertedNickname(), clientHandler);
+
+
+                } else {
+                    loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.ACCEPTED);
+                    clientHandler.sendMessageToClient(loginNicknameAnswer);
+                    games.get(controllerIdx).addPlayer(loginNicknameRequest.getInsertedNickname(), clientHandler);
+                }
+
+
+            } else {
+                loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.INVALID);
+                clientHandler.sendMessageToClient(loginNicknameAnswer);
+            }
+        }
+
+    }
+
+    public void manageLoginRMI(LoginNicknameRequest msg, RemoteInterface client,MyShelfie controller ){
+        synchronized (lock) {
+            S2CMessage loginNicknameAnswer;
+
+            int controllerIdx = games.indexOf(controller);
+            try {
+                if (games.get(controllerIdx).isStarted()) {
+                    loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.FULL_LOBBY);
+                    client.sendMessageToClient(loginNicknameAnswer);
+                    return;
+                }
+
+                boolean found = false;
+                for (MyShelfie game : games) {
+                    if (!game.checkNickname(msg.getInsertedNickname())) found = true;
+                }
+                if (!found) {
+
+                    if (games.get(controllerIdx).isFirstConnected()) {
+                        loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
+                        client.sendMessageToClient(loginNicknameAnswer);
+                        RMIClientHandler clientHandler = new RMIClientHandler(games.get(controllerIdx), client);
+                        games.get(controllerIdx).addPlayer(msg.getInsertedNickname(), clientHandler);
+                        Thread thread = new Thread(clientHandler);
+                        thread.start();
+                    } else {
+                        loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.ACCEPTED);
+                        client.sendMessageToClient(loginNicknameAnswer);
+                        RMIClientHandler clientHandler = new RMIClientHandler(games.get(controllerIdx), client);
+                        games.get(controllerIdx).addPlayer(msg.getInsertedNickname(), clientHandler);
+                        Thread thread = new Thread(clientHandler);
+                        thread.start();
+                    }
+
+
+                } else {
+                    loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.INVALID);
+                    client.sendMessageToClient(loginNicknameAnswer);
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 }

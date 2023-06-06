@@ -130,78 +130,7 @@ public class MyShelfie {
         }
     }
 
-    public void manageLogin(ClientHandler clientHandler,LoginNicknameRequest loginNicknameRequest){
-        S2CMessage loginNicknameAnswer;
-
-        if (isStarted()) {
-            loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FULL_LOBBY);
-            clientHandler.sendMessageToClient(loginNicknameAnswer);
-            return;
-        }
-
-
-        if (checkNickname(loginNicknameRequest.getInsertedNickname())){
-
-            if(isFirstConnected()){
-                loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
-                clientHandler.sendMessageToClient(loginNicknameAnswer);
-                addPlayer(loginNicknameRequest.getInsertedNickname(),clientHandler);
-
-
-            }else{
-                loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.ACCEPTED);
-                clientHandler.sendMessageToClient(loginNicknameAnswer);
-                addPlayer(loginNicknameRequest.getInsertedNickname(),clientHandler);
-            }
-
-
-        }else {
-            loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.INVALID);
-            clientHandler.sendMessageToClient(loginNicknameAnswer);
-        }
-
-    }
-
-    public void manageLoginRMI(LoginNicknameRequest msg, RemoteInterface client){
-        S2CMessage loginNicknameAnswer;
-
-        try {
-            if (isStarted()) {
-                loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.FULL_LOBBY);
-                client.sendMessageToClient(loginNicknameAnswer);
-                return;
-            }
-
-
-            if (checkNickname(msg.getInsertedNickname())) {
-
-                if (isFirstConnected()) {
-                    loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
-                    client.sendMessageToClient(loginNicknameAnswer);
-                    RMIClientHandler clientHandler = new RMIClientHandler(this, client);
-                    addPlayer(msg.getInsertedNickname(), clientHandler);
-                    Thread thread = new Thread(clientHandler);
-                    thread.start();
-                } else {
-                    loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.ACCEPTED);
-                    client.sendMessageToClient(loginNicknameAnswer);
-                    RMIClientHandler clientHandler = new RMIClientHandler(this, client);
-                    addPlayer(msg.getInsertedNickname(), clientHandler);
-                    Thread thread = new Thread(clientHandler);
-                    thread.start();
-                }
-
-
-            } else {
-                loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.INVALID);
-                client.sendMessageToClient(loginNicknameAnswer);
-            }
-        }catch (RemoteException e){
-            e.printStackTrace();
-        }
-
-    }
-
+    
     public void updateLobby(){
         boolean lastRMIConnected = false;
         ArrayList<String> lobbyPlayers = new ArrayList<>(playersConnected.stream().map(x->x.getNickname()).collect(Collectors.toList()));
