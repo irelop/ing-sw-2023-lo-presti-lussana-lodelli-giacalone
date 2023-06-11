@@ -36,21 +36,17 @@ public class LoginNicknameAnswer extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        if(parent != null) {
-            LoginView loginView = (LoginView) serverHandler.getOwner().getCurrentView();
-            loginView.setLoginNicknameAnswer(this);
-            serverHandler.getOwner().getCurrentView().notifyView();
-        }
-        else{
-            LoginView loginView = new LoginView();
-
-        }
+        LoginView loginView = (LoginView) serverHandler.getOwner().getCurrentView();
+        serverHandler.getOwner().setNickname(parent.getInsertedNickname());
+        loginView.setLoginNicknameAnswer(this);
+        serverHandler.getOwner().getCurrentView().notifyView();
     }
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
             LoginView loginView = (LoginView) client.getCurrentView();
             loginView.setLoginNicknameAnswer(this);
+            client.getClient().setNickname(parent.getInsertedNickname());
             if(client.getCurrentView().getClass() == WaitingView.class)
                 client.notifyView();
         }catch (RemoteException e){

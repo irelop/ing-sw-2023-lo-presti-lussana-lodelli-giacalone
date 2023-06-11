@@ -81,6 +81,7 @@ public class MyShelfie {
         this.lock = new Object();
         this.persistenceFile = persistenceFile;
         this.safeFilePath = "src/safetxt/";
+        this.chatManager = new ChatManager();
     }
 
     /**
@@ -117,6 +118,7 @@ public class MyShelfie {
         this.playersConnected = new ArrayList<>();
         this.clientHandlers = new ArrayList<>();
         this.safeFilePath = "src/safetxt/";
+        this.chatManager = new ChatManager();
     }
 
     /**

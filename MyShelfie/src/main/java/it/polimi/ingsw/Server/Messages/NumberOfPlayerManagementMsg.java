@@ -17,8 +17,8 @@ public class NumberOfPlayerManagementMsg extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        serverHandler.getClient().transitionToView(new LoginView(this));
-        serverHandler.getClient().getCurrentView().notifyView();
+        serverHandler.getOwner().transitionToView(new LoginView(this));
+        serverHandler.getOwner().getCurrentView().notifyView();
     }
 
     @Override

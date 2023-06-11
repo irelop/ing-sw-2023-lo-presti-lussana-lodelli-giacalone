@@ -1,0 +1,21 @@
+For game txt:
+1st line: board
+2nd line: first common goal card
+3rd line: second common goal card
+4th line: current player index
+5th line: isStarted
+6th line: number of players
+7th line: bag
+8th line: isOver
+9th line: first player's nickname
+10th line: second player's nickname
+11th line: third player's nickname
+12th line: fourth player's nickname
+
+For player txt:
+1st line: game index
+2nd line: hasChair
+3rd line: personal goal card id
+4th line: score
+5th line: shelf
+NB: if the shelf is blank in the 5th line there is thw word "shelf"
