@@ -36,6 +36,7 @@ public class MyShelfie {
     private boolean gameOver;
     private final Object lock;
     private int firstToFinish;
+    private ChatManager chatManager;
 
     //- - - R M I - - - - -
     private File persistenceFile;
@@ -56,6 +57,7 @@ public class MyShelfie {
         this.gameOver = false;
         this.lock = new Object();
         this.safeFilePath = "src/safetxt/";
+        this.chatManager = new ChatManager();
     }//non penso serva più
 
     /**
@@ -263,6 +265,7 @@ public class MyShelfie {
             Player newPlayer = new Player(playerNickname);
             playersConnected.add(newPlayer);
             clientHandlers.add(clientHandler);
+            chatManager.addChatter(playerNickname);
 
             if (playersConnected.size() == numberOfPlayers && !this.allPlayersReady)
                 this.allPlayersReady = true;
@@ -766,6 +769,41 @@ public class MyShelfie {
         numberOfPlayers--;
         if(numberOfPlayers==0){
             persistenceFile.delete();
+        }
+    }
+
+    public ChatManager getChatManager() {
+        return chatManager;
+    }
+
+    public void getCustomChat(String requester){
+        ChatStorage customChat = chatManager.getCustomChat(requester);
+        if (!clientHandlers.get(currentPlayerIndex).getIsRMI())
+            clientHandlers.get(currentPlayerIndex).sendMessageToClient(new ChatRecordAnswer(customChat));
+        else {
+            try {
+                clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(new ChatRecordAnswer(customChat));
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void updateChat(ChatMessage messageToSend){
+        ChatMsgAnswer chatMsgAnswer;
+        if(getChatManager().updateChat(messageToSend)==true){
+            chatMsgAnswer = new ChatMsgAnswer(true);
+        }else {
+            chatMsgAnswer = new ChatMsgAnswer(false);
+        }
+        if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
+            clientHandlers.get(currentPlayerIndex).sendMessageToClient(chatMsgAnswer);
+        else {
+            try {
+                clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(chatMsgAnswer);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

@@ -33,8 +33,8 @@ public class GameIsEndingUpdateAnswer extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        serverHandler.getClient().transitionToView(new GameIsEndingView(this));
-        serverHandler.getClient().getCurrentView().notifyView();
+        serverHandler.getOwner().transitionToView(new GameIsEndingView(this));
+        serverHandler.getOwner().getCurrentView().notifyView();
     }
 
     @Override
