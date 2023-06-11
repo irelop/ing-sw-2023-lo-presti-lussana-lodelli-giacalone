@@ -88,8 +88,9 @@ public class Shelf {
                 if(beenThere[r][c]==0 && !grid[r][c].equals(Tile.BLANK)){
                     dimension = spotDimension(grid[r][c],r,c,1);
                     switch(dimension){
-                        case 1: break;
-                        case 2: break;
+                        case 1:
+                        case 2:
+                            break;
                         case 3: score = score +2;
                             break;
                         case 4: score = score +3;

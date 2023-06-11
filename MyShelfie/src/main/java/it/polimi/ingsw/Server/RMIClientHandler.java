@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Server;
 
+import it.polimi.ingsw.Server.Messages.S2CMessage;
 import it.polimi.ingsw.Server.Model.GameRecord;
 import it.polimi.ingsw.Server.Model.MyShelfie;
 
@@ -33,8 +34,9 @@ public class RMIClientHandler extends ClientHandler {
                 getClientInterface().ping();
             }catch(Exception e){
                 isConnected = false;
+                if(getController() != null)
+                    getController().shouldFinishTurn(this);
                 System.out.println("RMI client disconnected");
-                getController().shouldFinishTurn(this);
                 goOn = false;
             }
         }
@@ -50,5 +52,14 @@ public class RMIClientHandler extends ClientHandler {
             }
         }
         return isConnected;
+    }
+
+    @Override
+    public void sendMessageToClient(S2CMessage message){
+        try {
+            getClientInterface().sendMessageToClient(message);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

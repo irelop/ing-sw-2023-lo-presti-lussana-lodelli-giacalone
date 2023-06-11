@@ -36,6 +36,7 @@ public class SocketServerHandler extends ServerHandler {
             handleClientConnection();
         }catch(IOException e){
             System.out.println("server "+ server.getInetAddress()+" connection dropped");
+            System.exit(0);
         }
 
         try{

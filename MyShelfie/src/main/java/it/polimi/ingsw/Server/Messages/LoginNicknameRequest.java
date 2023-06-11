@@ -1,7 +1,9 @@
 package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Server.ClientHandler;
+import it.polimi.ingsw.Server.Model.GameRecord;
 import it.polimi.ingsw.Server.Model.MyShelfie;
+import it.polimi.ingsw.Server.RMIClientHandler;
 import it.polimi.ingsw.Server.RemoteInterface;
 
 import java.rmi.RemoteException;
@@ -21,8 +23,6 @@ public class LoginNicknameRequest extends C2SMessage{
     @Override
     public void processMessage(ClientHandler clientHandler) {
         clientHandler.setGameFromGameRecord();
-        //clientHandler.getController().manageLogin(clientHandler,this);
-
         clientHandler.getGameRecord().manageLogin(clientHandler,this,clientHandler.getController());
     }
 
@@ -30,8 +30,10 @@ public class LoginNicknameRequest extends C2SMessage{
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
             server.setMapClientsToController(client);
-            //server.getController(client).manageLoginRMI(this, client);
-            server.getGameRecord().manageLoginRMI(this,client,server.getController(client));
+            RMIClientHandler clientHandler = new RMIClientHandler(client, server.getGameRecord());
+            server.getGameRecord().manageLogin(clientHandler,this,server.getController(client));
+            Thread thread = new Thread(clientHandler);
+            thread.start();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

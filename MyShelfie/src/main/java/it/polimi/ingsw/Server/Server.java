@@ -1,14 +1,12 @@
 package it.polimi.ingsw.Server;
 
 import it.polimi.ingsw.Server.Model.GameRecord;
-import it.polimi.ingsw.Server.Model.MyShelfie;
-
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.ArrayList;
 
 
 /**
@@ -19,8 +17,6 @@ import java.util.ArrayList;
 public class Server {
     public static int serverPort = 9999;
     //private static MyShelfie game;
-    private static ArrayList<MyShelfie> games;
-    private static int currentGame;
     private static int numRMIClients;
     private static Object lock;
     private static RemoteInterface serverInterface;
@@ -28,39 +24,33 @@ public class Server {
 
     private static GameRecord gameRecord;
 
-
     /**
-     * OVERVIEW: the constructor of the class which initializes the server with the its port open to receive
-     *           new possible connections with the clients.
-     */
-    public Server(int serverPort){
-        serverPort = 9999;
-        currentGame = -1;
-        games = new ArrayList<>();
-        lock = new Object();
-        numRMIClients = 0;
-        gameRecord = new GameRecord();
-    }
-
-    /**
-     * OVERVIEW: the main method of the server. It allows to enstablish connection with multiple connections adopting two
-     *           possible tecnologies: the Socket and the RMI one.
+     * OVERVIEW: the main method of the server. It allows to establish connection with multiple connections adopting two
+     *           possible technologies: the Socket and the RMI one.
      * @param args
      */
     public static void main(String[] args) {
-        //Server server = new Server(serverPort);
-        currentGame = -1;
-        games = new ArrayList<>();
         lock = new Object();
         numRMIClients = 0;
         gameRecord = new GameRecord();
+
+        //FA: persistence
+        if(hasCrashed()){
+            gameRecord.reset();
+        }
+
         System.out.println("Server is open: listening for new clients...");
         Thread socketServer = new Thread(()->manageServerSocket());
         Thread RMIServer = new Thread(()->manageServerRMI());
         socketServer.start();
         RMIServer.start();
+
     }
 
+    private static boolean hasCrashed(){
+        File file = new File("src/safetxt/game_0.txt");
+        return file.exists() && file.length() != 0;
+    }
 
     /**
      * OVERVIEW: this method allows to manage a connection using socket technology.
@@ -110,6 +100,8 @@ public class Server {
             serverInterface = new RMIAdapter();
             registry = LocateRegistry.createRegistry(1099);
             registry.rebind("server", serverInterface);
+
+            serverInterface.setGameRecord(gameRecord);
         }catch(Exception e){
             System.out.println("Failed to open RMI server");
             System.exit(1);
@@ -117,6 +109,7 @@ public class Server {
         }
 
         gameRecord.setRemoteServer(serverInterface);
+
 
         while(true){
 
@@ -149,7 +142,6 @@ public class Server {
                         //serverInterface.setMapClientsToController(games.get(currentGame), numRMIClients-1);
 
                         //serverInterface.setMapClientsToController(gameRecord.getGame(), numRMIClients-1);
-                        serverInterface.setGameRecord(gameRecord);
                     }
                 }
             }catch(Exception e){

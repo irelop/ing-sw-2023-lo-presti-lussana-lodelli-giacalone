@@ -15,10 +15,10 @@ public class CommonGoalCard implements Serializable {
     private String patternName;
     private CommonCardInfo cardInfo;
 
-    public CommonGoalCard(StrategyInterface commonStrategy){
+    public CommonGoalCard(StrategyInterface commonStrategy) {
         this.commonStrategy = commonStrategy;
         this.patternName = this.getStrategyName();
-        this.availableScore = new ArrayList<>(Arrays.asList(8,6,4,2));
+        this.availableScore = new ArrayList<>(Arrays.asList(8, 6, 4, 2));
         this.cardInfo = new CommonCardInfo(patternName);
     }
 

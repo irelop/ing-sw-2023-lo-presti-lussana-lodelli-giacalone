@@ -1,143 +1,239 @@
 package it.polimi.ingsw.Server.Model;
 
-import it.polimi.ingsw.Server.ClientHandler;
+import it.polimi.ingsw.Server.*;
 import it.polimi.ingsw.Server.Messages.*;
-import it.polimi.ingsw.Server.RMIClientHandler;
-import it.polimi.ingsw.Server.RemoteInterface;
 
-import java.rmi.Remote;
+import java.io.File;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+/**
+ * Class to manage multiple games
+ */
 public class GameRecord {
     private ArrayList<MyShelfie> games;
     private int currentGame;
     private RemoteInterface remoteServer;
-    private Object lock;
+
+    private final Object lock;
+    private final PersistenceManager persistenceManager;
+
+    private boolean persistenceManaged;
 
 
-
+    /**
+     * Constructor method
+     */
     public GameRecord() {
         games = new ArrayList<>();
         currentGame = -1;
         lock = new Object();
+        persistenceManager = new PersistenceManager();
+        persistenceManaged = false;
     }
 
     public void setRemoteServer(RemoteInterface remoteServer){
         this.remoteServer = remoteServer;
     }
 
+    /**
+     * This method checks if all players are connected to the current game, if not it returns the current game
+     * else it adds a new game the array list
+     * @return current game or a new one
+     * @author Lo Presti, Giacalone
+     */
     public MyShelfie getGame(){
         if (currentGame == -1 || games.get(currentGame).getAllPlayersReady()) {
-            MyShelfie game = new MyShelfie();
-            games.add(game);
             currentGame++;
+            persistenceManager.addNewGameFile("game_"+currentGame+".txt");
+            MyShelfie game = new MyShelfie(persistenceManager.getGameFile(currentGame));
+            games.add(game);
         }
         return games.get(currentGame);
     }
 
-    public void getDisconnectedClientHandlerSocket(String nickname, ClientHandler currentClientHandler){
-        boolean canConnect = false;
-        ClientHandler countDownClient= null;
-        MyShelfie currentGame = null;
-        int playerIndex = -1;
-
-
-        for(MyShelfie game : games){
-
-            playerIndex = game.checkPlayerDisconnected(nickname);
-
-            if(playerIndex != -1){
-
-                //checking if there is only player while others are disconnected
-                if(game.getClientHandlers().stream().filter(ClientHandler::isConnected).toList().size()==1){
-                    for(ClientHandler clientHandler: game.getClientHandlers())
-                        if(clientHandler.isConnected()){
-                            countDownClient = clientHandler;    //the player who is in Countdown Mode
-                            currentGame = game;                 //the game which is near to be ended
-                        }
-                }
-
-                game.switchSocketClientHandler(playerIndex, currentClientHandler);
-                canConnect = true;
-                break;
-            }
+    public void deleteGame(MyShelfie game, String playerNickname){
+        int index = games.indexOf(game);
+        boolean remove = false;
+        if(index == currentGame) {
+            games.remove(game);
+            currentGame--;
+            persistenceManager.deletePlayerFile(playerNickname);
+            remove = true;
         }
-
-        //sending the result of the reconnection choice to the player
-        S2CMessage reconnectionAnswer = new ReconnectionAnswer(canConnect);
-        currentClientHandler.sendMessageToClient(reconnectionAnswer);
-
-        if(countDownClient != null) {
-            //stops the countdown
-            if(!countDownClient.getIsRMI())
-                countDownClient.sendMessageToClient(new ReconnectionNotifyMsg(nickname));
-            else{
-                try {
-                    countDownClient.getClientInterface().sendMessageToClient(new ReconnectionNotifyMsg(nickname));
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            //allows to play the round to the reconnected player
-            currentGame.finishTurn();
-        }
+        else
+            games.set(index, null);
+        persistenceManager.deleteGameFile(index, remove);
     }
 
-    public void getDisconnectedClientHandlerRMI(String nickname, RemoteInterface client){
-        boolean canConnect = false;
-        ClientHandler countDownClient= null;
-        MyShelfie currentGame = null;
-        int playerIndex = -1;
+    /**
+     * This method is used for the FA persistence. After the server reconnects, this method recreates all the old
+     * games: first it call the reset() function to recovery all the files, then it sets all the information from
+     * the files in the games
+     *
+     * @author Irene Lo Presti
+     */
+    public void reset(){
 
+        int gamesNum = persistenceManager.reset(); //find how many old games there were
 
-        for(MyShelfie game : games){
+        for(int i=0; i<gamesNum; i++){
+            ReadFileByLines reader;
+            reader = new ReadFileByLines();
+            reader.readFrom("src/safetxt/game_"+i+".txt");
 
-            playerIndex = game.checkPlayerDisconnected(nickname);
-            if(playerIndex != -1){
-
-                //checking if there is only player while others are disconnected
-                if(game.getClientHandlers().stream().filter(ClientHandler::isConnected).toList().size()==1){
-                    for(ClientHandler clientHandler: game.getClientHandlers())
-                        if(clientHandler.isConnected()){
-                            countDownClient = clientHandler;    //the player who is in Countdown Mode
-                            currentGame = game;                 //the game which is near to be ended
-                        }
+            //read the board matrix
+            Tile[][] boardMatrix = new Tile[9][9];
+            String row = ReadFileByLines.getLineByIndex(0);
+            String[] values = row.replaceAll("\\[", "")
+                    .replaceAll("]", "")
+                    .split(", ");
+            int index = 0;
+            for(int j=0; j<9; j++){
+                for(int k=0; k<9; k++){
+                    boardMatrix[j][k] = Tile.valueOf(values[index]);
+                    index++;
                 }
-                game.switchRMIClientHandler(playerIndex, client);
-                try {
-                    remoteServer.setMapClientsToController(game, client);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-                canConnect = true;
-                break;
-
             }
+            //create a new board
+            Board board = new Board();
+            //init the new board with the one in the right file
+            board.initFromMatrix(boardMatrix);
+
+            //read the bag
+            Map<Tile,Integer> bag = new HashMap<>();
+            row = ReadFileByLines.getLineByIndex(6);
+            values = row.replaceAll("\\{", "")
+                    .replaceAll("}", "")
+                    .split(", ");
+            for(String value : values){
+                String[] tile = value.split("=");
+                bag.put(Tile.valueOf(tile[0]), Integer.valueOf(tile[1]));
+            }
+            //set the correct bag in the board created above
+            board.setBag(bag);
+
+            //read common goal cards names
+            String[] commonGoalCardsNames = new String[2];
+            commonGoalCardsNames[0] = ReadFileByLines.getLineByIndex(1);
+            commonGoalCardsNames[1] = ReadFileByLines.getLineByIndex(2);
+
+            //read all the other infos
+            int currentPlayerIndex = Integer.parseInt(ReadFileByLines.getLineByIndex(3));
+            boolean isStarted = Boolean.parseBoolean(ReadFileByLines.getLineByIndex(4));
+            int numberOfPlayers = Integer.parseInt(ReadFileByLines.getLineByIndex(5));
+            boolean isOver = Boolean.parseBoolean(ReadFileByLines.getLineByIndex(7));
+
+            //read players names
+            String[] playerNicknames = new String[numberOfPlayers];
+            for(int j=0; j<numberOfPlayers; j++){
+                playerNicknames[j] = ReadFileByLines.getLineByIndex(j+8);
+            }
+
+            //create a new game setting all the old info
+            MyShelfie game = new MyShelfie(persistenceManager.getGameFile(i), board, commonGoalCardsNames,
+                    currentPlayerIndex, isStarted, isOver, numberOfPlayers);
+
+            //setting facade client handlers (they could also be socket) instantiates the players and
+            // to check the connection
+            //when a player reconnects to the game (like the FA client resilience) the facade client handler
+            //will be replaced with the new one (working)
+            for(String player : playerNicknames) {
+                ClientHandler clientHandler = new RMIClientHandler(null);
+                clientHandler.setIsConnected(false);
+                game.addPlayer(player, clientHandler);
+            }
+
+            //call a function in the right controller to set all the players info
+            game.resetPlayers();
+
+            //add this game to the array list
+            this.games.add(game);
+            this.currentGame++;
         }
 
-        //sending the result of the reconnection choice to the player
-        S2CMessage reconnectionAnswer = new ReconnectionAnswer(canConnect);
-        try {
-            client.sendMessageToClient(reconnectionAnswer);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
+        persistenceManaged = true;
+    }
 
-        if(countDownClient!= null) {
-            //stops the countdown
-            if(!countDownClient.getIsRMI())
-                countDownClient.sendMessageToClient(new ReconnectionNotifyMsg(nickname));
+    public void reconnectPlayer(String nickname, ClientHandler clientHandler){
+        String msg = null;
+        int gameIndex = -1, playerIndex = -1;
+        ClientHandler countDownClient = null;
+
+        String pathFile = "src/safetxt/"+nickname+".txt";
+        File file = new File(pathFile);
+        if(!file.exists())
+            msg = """
+
+                    There isn't any disconnected player matching with your nickname.
+                    Redirecting to a new lobby.
+                    """;
+
+        else if(file.length()<=2)
+            msg = """
+
+                    You were connected to a game not already started.
+                    Redirecting to a new lobby.
+                    """;
+        else{
+            ReadFileByLines reader = new ReadFileByLines();
+            reader.readFrom(pathFile);
+            //read the controller index from the player's file
+            gameIndex = Integer.parseInt(ReadFileByLines.getLineByIndex(0));
+
+            //find if the player is really disconnected from the game
+            playerIndex = games.get(gameIndex).checkPlayerDisconnected(nickname);
+
+            if(playerIndex == -1)
+                msg = """
+                        
+                        The player with your nickname is connected and is playing.
+                        Redirecting to a new lobby.
+                        """;
             else{
-                try {
-                    countDownClient.getClientInterface().sendMessageToClient(new ReconnectionNotifyMsg(nickname));
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
+                //find how many players are still connected to the game
+                int playersConnected = games.get(gameIndex).getClientHandlers().stream().filter(ClientHandler::isConnected).toList().size();
+                if(playersConnected == 1)
+                    countDownClient = games.get(gameIndex).getLastClientHandler(); //the player who is in Countdown Mode
+                else if(playersConnected == 0 && !persistenceManaged){
+                    msg = """
+
+                            Sorry, it took you too long to reconnect so the game is over.
+                            Redirecting to a new lobby.""";
+
+                    games.get(gameIndex).fileDeleting(nickname);
                 }
+                else {
+                    if(clientHandler.getIsRMI()){
+                        try {
+                            remoteServer.setMapClientsToController(games.get(gameIndex), clientHandler.getClientInterface());
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    games.get(gameIndex).switchClientHandler(playerIndex, clientHandler);
+                }
+
             }
-            //allows to play the round to the reconnected player
-            currentGame.finishTurn();
         }
+
+        //send the result of the reconnection choice to the player
+        S2CMessage reconnectionAnswer = new ReconnectionAnswer(msg);
+        clientHandler.sendMessageToClient(reconnectionAnswer);
+
+        if(countDownClient != null) {
+            //stop the countdown
+            countDownClient.sendMessageToClient(new ReconnectionNotifyMsg(nickname));
+
+            //go on with the game
+            games.get(gameIndex).setNextPlayer();
+        }
+
+        //if all players are reconnecting after the server crashed
+        else if(persistenceManaged && msg == null)
+            games.get(gameIndex).persistenceManager(playerIndex);
     }
 
 
@@ -146,7 +242,7 @@ public class GameRecord {
             S2CMessage loginNicknameAnswer;
 
             int controllerIdx = games.indexOf(controller);
-            if (controller.isStarted()) {
+            if (games.get(controllerIdx).isStarted()) {
                 loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FULL_LOBBY);
                 clientHandler.sendMessageToClient(loginNicknameAnswer);
                 return;
@@ -162,12 +258,14 @@ public class GameRecord {
                     loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
                     clientHandler.sendMessageToClient(loginNicknameAnswer);
                     games.get(controllerIdx).addPlayer(loginNicknameRequest.getInsertedNickname(), clientHandler);
+                    persistenceManager.addNewPlayerFile(loginNicknameRequest.getInsertedNickname()+".txt", controllerIdx);
+                }
 
-
-                } else {
+                else {
                     loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.ACCEPTED);
                     clientHandler.sendMessageToClient(loginNicknameAnswer);
                     games.get(controllerIdx).addPlayer(loginNicknameRequest.getInsertedNickname(), clientHandler);
+                    persistenceManager.addNewPlayerFile(loginNicknameRequest.getInsertedNickname()+".txt", controllerIdx);
                 }
 
 
@@ -177,51 +275,5 @@ public class GameRecord {
             }
         }
 
-    }
-
-    public void manageLoginRMI(LoginNicknameRequest msg, RemoteInterface client,MyShelfie controller ){
-        synchronized (lock) {
-            S2CMessage loginNicknameAnswer;
-
-            int controllerIdx = games.indexOf(controller);
-            try {
-                if (controller.isStarted()) {
-                    loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.FULL_LOBBY);
-                    client.sendMessageToClient(loginNicknameAnswer);
-                    return;
-                }
-
-                boolean found = false;
-                for (MyShelfie game : games) {
-                    if (!game.checkNickname(msg.getInsertedNickname())) found = true;
-                }
-                if (!found) {
-
-                    if (games.get(controllerIdx).isFirstConnected()) {
-                        loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
-                        client.sendMessageToClient(loginNicknameAnswer);
-                        RMIClientHandler clientHandler = new RMIClientHandler(games.get(controllerIdx), client);
-                        games.get(controllerIdx).addPlayer(msg.getInsertedNickname(), clientHandler);
-                        Thread thread = new Thread(clientHandler);
-                        thread.start();
-                    } else {
-                        loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.ACCEPTED);
-                        client.sendMessageToClient(loginNicknameAnswer);
-                        RMIClientHandler clientHandler = new RMIClientHandler(games.get(controllerIdx), client);
-                        games.get(controllerIdx).addPlayer(msg.getInsertedNickname(), clientHandler);
-                        Thread thread = new Thread(clientHandler);
-                        thread.start();
-                    }
-
-
-                } else {
-                    loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.INVALID);
-                    client.sendMessageToClient(loginNicknameAnswer);
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-
-        }
     }
 }
