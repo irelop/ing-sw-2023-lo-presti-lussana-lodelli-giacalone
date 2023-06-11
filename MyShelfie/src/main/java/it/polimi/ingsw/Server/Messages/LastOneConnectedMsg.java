@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
-import it.polimi.ingsw.Client.View.ChooseTilesFromBoardView;
 import it.polimi.ingsw.Client.View.LastPlayerConnectedView;
 import it.polimi.ingsw.Client.View.WaitingView;
 import it.polimi.ingsw.Server.RemoteInterface;
@@ -18,8 +17,8 @@ public class LastOneConnectedMsg extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        serverHandler.getClient().transitionToView(new LastPlayerConnectedView(this));
-        serverHandler.getClient().getCurrentView().notifyView();
+        serverHandler.getOwner().transitionToView(new LastPlayerConnectedView(this));
+        serverHandler.getOwner().getCurrentView().notifyView();
     }
 
     @Override

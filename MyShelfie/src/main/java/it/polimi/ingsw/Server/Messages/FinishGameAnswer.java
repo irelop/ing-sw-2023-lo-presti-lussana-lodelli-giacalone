@@ -5,7 +5,7 @@ import it.polimi.ingsw.Client.View.EndGameView;
 import it.polimi.ingsw.Server.RemoteInterface;
 
 import java.rmi.RemoteException;
-
+@Deprecated
 public class FinishGameAnswer extends S2CMessage{
     String farewellMessage;
 
@@ -15,7 +15,7 @@ public class FinishGameAnswer extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        EndGameView endgameView = (EndGameView) serverHandler.getClient().getCurrentView();
+        EndGameView endgameView = (EndGameView) serverHandler.getOwner().getCurrentView();
         //endgameView.setFarewellFromServer(farewellMessage);
         endgameView.notifyView();
     }

@@ -29,8 +29,8 @@ public class LobbyUpdateAnswer extends S2CMessage{
     @Override
     public void processMessage(ServerHandler serverHandler) {
         //serverHandler.getClient().transitionToView(new LobbyView(lobbyPlayers));
-        serverHandler.getClient().transitionToView(new LobbyView(this));
-        serverHandler.getClient().getCurrentView().notifyView();
+        serverHandler.getOwner().transitionToView(new LobbyView(this));
+        serverHandler.getOwner().getCurrentView().notifyView();
 
 
     }

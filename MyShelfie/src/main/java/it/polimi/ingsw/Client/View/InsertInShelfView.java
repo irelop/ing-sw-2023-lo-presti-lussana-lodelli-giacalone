@@ -91,11 +91,7 @@ public class InsertInShelfView extends View {
                     }
                 }
                 else{
-                    try {
-                        getOwner().getRemoteServer().sendMessageToServer(insertingMsg, getOwner().getClient());
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
+                    getOwner().getServerHandler().sendMessageToServer(insertingMsg);
                 }
                 System.out.println(this.insertingTilesAnswer.answer);
                 if (this.insertingTilesAnswer.valid)

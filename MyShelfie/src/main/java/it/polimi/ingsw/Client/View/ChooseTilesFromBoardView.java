@@ -114,11 +114,7 @@ public class ChooseTilesFromBoardView extends View {
                 }
 
                 else {
-                    try {
-                        getOwner().getRemoteServer().sendMessageToServer(initialPositionMsg, getOwner().getClient());
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
+                    getOwner().getServerHandler().sendMessageToServer(initialPositionMsg);
                 }
 
                 System.out.println(this.initialPositionAnswer.answer);
@@ -169,11 +165,7 @@ public class ChooseTilesFromBoardView extends View {
                         }
                     }
                     else{
-                        try {
-                            getOwner().getRemoteServer().sendMessageToServer(playerChoiceMsg, getOwner().getClient());
-                        } catch (RemoteException e) {
-                            throw new RuntimeException(e);
-                        }
+                        getOwner().getServerHandler().sendMessageToServer(playerChoiceMsg);
                     }
                     System.out.println(this.playerChoiceAnswer.answer);
                     if (this.playerChoiceAnswer.valid)
@@ -188,11 +180,7 @@ public class ChooseTilesFromBoardView extends View {
             if(!getOwner().isRMI()){
                 getOwner().getServerHandler().sendMessageToServer(playerChoiceMsg);
             }else{
-                try {
-                    getOwner().getRemoteServer().sendMessageToServer(playerChoiceMsg, getOwner().getClient());
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
+                getOwner().getServerHandler().sendMessageToServer(playerChoiceMsg);
             }
 
         }
@@ -546,8 +534,8 @@ public class ChooseTilesFromBoardView extends View {
 
         Tile[][] example = new Tile[6][5];
         ReadFileByLines reader = new ReadFileByLines();
-        //reader.readFrom("MyShelfie/src/txtfiles/ExampleForRules.txt");
-        reader.readFrom("src/txtfiles/ExampleForRules.txt");
+        reader.readFrom("MyShelfie/src/txtfiles/ExampleForRules.txt");
+        //reader.readFrom("src/txtfiles/ExampleForRules.txt");
         for (int i = 0; i < 6; i++) {
 
             String row = ReadFileByLines.getLine();

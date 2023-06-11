@@ -9,7 +9,6 @@ package it.polimi.ingsw.Server.Messages;
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.ChooseTilesFromBoardView;
 import it.polimi.ingsw.Client.View.WaitingView;
-import it.polimi.ingsw.Server.Model.Board;
 import it.polimi.ingsw.Server.Model.CommonGoalCard;
 import it.polimi.ingsw.Server.Model.PersonalGoalCard;
 import it.polimi.ingsw.Server.Model.Tile;
@@ -55,8 +54,8 @@ public class YourTurnMsg extends S2CMessage{
     @Override
     public void processMessage(ServerHandler serverHandler) {
 
-        serverHandler.getClient().transitionToView(new ChooseTilesFromBoardView(this));
-        serverHandler.getClient().getCurrentView().notifyView();
+        serverHandler.getOwner().transitionToView(new ChooseTilesFromBoardView(this));
+        serverHandler.getOwner().getCurrentView().notifyView();
     }
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){

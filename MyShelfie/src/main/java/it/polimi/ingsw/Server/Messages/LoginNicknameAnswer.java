@@ -4,7 +4,6 @@ import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.LoginView;
 import it.polimi.ingsw.Server.RemoteInterface;
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public class LoginNicknameAnswer extends S2CMessage{
@@ -35,15 +34,17 @@ public class LoginNicknameAnswer extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        LoginView loginView = (LoginView) serverHandler.getClient().getCurrentView();
+        LoginView loginView = (LoginView) serverHandler.getOwner().getCurrentView();
+        serverHandler.getOwner().setNickname(parent.getInsertedNickname());
         loginView.setLoginNicknameAnswer(this);
-        serverHandler.getClient().getCurrentView().notifyView();
+        serverHandler.getOwner().getCurrentView().notifyView();
     }
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
             LoginView loginView = (LoginView) client.getCurrentView();
             loginView.setLoginNicknameAnswer(this);
+            client.getClient().setNickname(parent.getInsertedNickname());
         }catch (RemoteException e){
             e.printStackTrace();
         }

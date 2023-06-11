@@ -25,9 +25,9 @@ public class PlayerChoiceAnswer extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler){
-        ChooseTilesFromBoardView chooseTilesFromBoardView = (ChooseTilesFromBoardView) serverHandler.getClient().getCurrentView();
+        ChooseTilesFromBoardView chooseTilesFromBoardView = (ChooseTilesFromBoardView) serverHandler.getOwner().getCurrentView();
         chooseTilesFromBoardView.setPlayerChoiceAnswer(this);
-        serverHandler.getClient().getCurrentView().notifyView();
+        serverHandler.getOwner().getCurrentView().notifyView();
     }
 
     @Override

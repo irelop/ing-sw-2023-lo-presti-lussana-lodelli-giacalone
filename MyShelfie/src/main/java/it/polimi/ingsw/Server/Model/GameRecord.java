@@ -13,8 +13,8 @@ public class GameRecord {
     private ArrayList<MyShelfie> games;
     private int currentGame;
     private RemoteInterface remoteServer;
-
     private Object lock;
+
 
 
     public GameRecord() {
@@ -82,9 +82,6 @@ public class GameRecord {
             //allows to play the round to the reconnected player
             currentGame.finishTurn();
         }
-
-
-        //gestione giocatore con lo stesso nome [...]
     }
 
     public void getDisconnectedClientHandlerRMI(String nickname, RemoteInterface client){
@@ -141,9 +138,6 @@ public class GameRecord {
             //allows to play the round to the reconnected player
             currentGame.finishTurn();
         }
-
-
-        //gestione giocatore con lo stesso nome [...]
     }
 
 
@@ -152,7 +146,7 @@ public class GameRecord {
             S2CMessage loginNicknameAnswer;
 
             int controllerIdx = games.indexOf(controller);
-            if (games.get(controllerIdx).isStarted()) {
+            if (controller.isStarted()) {
                 loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FULL_LOBBY);
                 clientHandler.sendMessageToClient(loginNicknameAnswer);
                 return;
@@ -191,7 +185,7 @@ public class GameRecord {
 
             int controllerIdx = games.indexOf(controller);
             try {
-                if (games.get(controllerIdx).isStarted()) {
+                if (controller.isStarted()) {
                     loginNicknameAnswer = new LoginNicknameAnswer(msg, LoginNicknameAnswer.Status.FULL_LOBBY);
                     client.sendMessageToClient(loginNicknameAnswer);
                     return;

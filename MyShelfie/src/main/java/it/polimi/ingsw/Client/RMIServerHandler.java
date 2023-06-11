@@ -1,14 +1,13 @@
 package it.polimi.ingsw.Client;
 
+import it.polimi.ingsw.Server.Messages.C2SMessage;
 import it.polimi.ingsw.Server.RemoteInterface;
 
 import java.rmi.RemoteException;
 
 public class RMIServerHandler extends ServerHandler{
-    private RemoteInterface remoteServer;
     public RMIServerHandler(Client owner,RemoteInterface remoteServer) {
-        super(owner);
-        this.remoteServer = remoteServer;
+        super(owner,remoteServer);
     }
 
     @Override
@@ -17,7 +16,7 @@ public class RMIServerHandler extends ServerHandler{
         while(goOn){
             try{
                 Thread.sleep(1000);
-                remoteServer.ping();
+                getRemoteServer().ping();
             }catch(RemoteException e){
                  goOn= false;
                 System.out.println("[ERROR] Connection to the server has been lost");
@@ -26,6 +25,20 @@ public class RMIServerHandler extends ServerHandler{
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    @Override
+    public RemoteInterface getRemoteServer() {
+        return super.getRemoteServer();
+    }
+
+    @Override
+    public void sendMessageToServer(C2SMessage msg) {
+        try {
+            getRemoteServer().sendMessageToServer(msg,getOwner().getClient());
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
         }
     }
 }

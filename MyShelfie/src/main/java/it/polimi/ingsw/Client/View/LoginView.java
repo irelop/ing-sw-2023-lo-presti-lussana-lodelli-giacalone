@@ -79,11 +79,7 @@ public class LoginView extends View implements ObserverView {
         if(!getOwner().isRMI())
             getOwner().getServerHandler().sendMessageToServer(nicknameRequest);
         else{
-            try {
-                getOwner().getRemoteServer().sendMessageToServer(nicknameRequest, getOwner().getClient());
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
+            getOwner().getServerHandler().sendMessageToServer(nicknameRequest);
         }
     }
 
@@ -118,18 +114,15 @@ public class LoginView extends View implements ObserverView {
                 if(!getOwner().isRMI())
                     getOwner().getServerHandler().sendMessageToServer(numPlayersRequest);
                 else{
-                    try {
-                        getOwner().getRemoteServer().sendMessageToServer(numPlayersRequest, getOwner().getClient());
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
+                    getOwner().getServerHandler().sendMessageToServer(numPlayersRequest);
                 }
             }
             case FULL_LOBBY -> {
-                System.out.println("\nDeeply sorry! We cannot let you join because the game lobby is already full\n");
-                System.out.println("Probably there is a problem with you connection. Try to restart the client\n");
+                System.out.println("\nDeeply sorry! We cannot let you join because the first player hasn't set the number of players yet\n");
+                System.out.println("Probably there is a problem with your connection. Try to reboot the application\n");
                 isFull = true;
                 goOn = true;
+                getOwner().setTrueTerminate();
             }
         }
     }
@@ -218,11 +211,7 @@ public class LoginView extends View implements ObserverView {
                 if (!getOwner().isRMI()) {
                     getOwner().getServerHandler().sendMessageToServer(new LobbyUpdateRequest());
                 } else {
-                    try {
-                        getOwner().getRemoteServer().sendMessageToServer(new LobbyUpdateRequest(), getOwner().getClient());
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
+                    getOwner().getServerHandler().sendMessageToServer(new LobbyUpdateRequest());
                 }
             }
         }
@@ -241,11 +230,7 @@ public class LoginView extends View implements ObserverView {
                 }
             }
             else {
-                try {
-                    getOwner().getRemoteServer().sendMessageToServer(reconnectionRequest, getOwner().getClient());
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
+                getOwner().getServerHandler().sendMessageToServer(reconnectionRequest);
             }
         }
         if(!reconnectionAnswer.canConnect){

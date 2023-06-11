@@ -16,6 +16,7 @@ import java.rmi.registry.Registry;
 import java.util.Scanner;
 
 public class Client implements Runnable{
+    private String nickname;
     private ServerHandler serverHandler;
     private boolean terminate = false;
 
@@ -94,8 +95,8 @@ public class Client implements Runnable{
         }
 
 
-        RMIServerHandler rmiServerHandler = new RMIServerHandler(this,remoteServer);
-        Thread serverHandlerThread = new Thread(rmiServerHandler);
+        serverHandler = new RMIServerHandler(this,remoteServer);
+        Thread serverHandlerThread = new Thread(serverHandler);
         serverHandlerThread.start();
 
     }
@@ -198,4 +199,11 @@ public class Client implements Runnable{
         System.exit(0);
     }
 
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
 }

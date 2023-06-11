@@ -44,7 +44,7 @@ public class ToShelfMsg extends S2CMessage {
      */
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        serverHandler.getClient().transitionToView(new InsertInShelfView(this));
+        serverHandler.getOwner().transitionToView(new InsertInShelfView(this));
     }
 
 

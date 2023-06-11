@@ -39,18 +39,14 @@ public class LobbyView extends View implements ObserverView {
         if(lobbyUpdateAnswer.allPlayersReady){
             System.out.println("All players are connected! The game is starting...");
             try {
-                TimeUnit.SECONDS.sleep(2);
+                TimeUnit.SECONDS.sleep(2); //simulating computation
             } catch (InterruptedException ignored) { }
 
             AllPlayersReadyMsg allPlayersReadyMsg = new AllPlayersReadyMsg();
             if(!getOwner().isRMI())
                 getOwner().getServerHandler().sendMessageToServer(allPlayersReadyMsg);
             else {
-                try {
-                    getOwner().getRemoteServer().sendMessageToServer(allPlayersReadyMsg, getOwner().getClient());
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
+                getOwner().getServerHandler().sendMessageToServer(allPlayersReadyMsg);
             }
         }
 

@@ -2,7 +2,6 @@ package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.GoalView;
-import it.polimi.ingsw.Client.View.InsertInShelfView;
 import it.polimi.ingsw.Server.RemoteInterface;
 
 import java.rmi.RemoteException;
@@ -32,7 +31,7 @@ public class GoalAndScoreMsg extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler){
-        serverHandler.getClient().transitionToView(new GoalView(this));
+        serverHandler.getOwner().transitionToView(new GoalView(this));
     }
 
     @Override

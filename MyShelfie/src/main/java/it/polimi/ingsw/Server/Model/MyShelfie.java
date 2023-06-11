@@ -1,5 +1,4 @@
 package it.polimi.ingsw.Server.Model;
-import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.Messages.*;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
@@ -36,6 +35,9 @@ public class MyShelfie {
     private final Object lock;
     private int firstToFinish;
 
+    private ChatManager chatManager;
+
+
     //- - - R M I - - - - -
     private ArrayList<Boolean> isRMIFirstLastLobby;
 
@@ -54,6 +56,8 @@ public class MyShelfie {
         this.gameOver = false;
         this.lock = new Object();
         this.isRMIFirstLastLobby = new ArrayList<>();
+        this.chatManager = new ChatManager();
+
     }
 
     public Board getBoard(){
@@ -93,9 +97,12 @@ public class MyShelfie {
             playersConnected.add(newPlayer);
             clientHandlers.add(clientHandler);
             isRMIFirstLastLobby.add(false);
+            chatManager.addChatter(playerNickname);
 
-            if (playersConnected.size() == numberOfPlayers && !this.allPlayersReady)
+            if (playersConnected.size() == numberOfPlayers && !this.allPlayersReady) {
                 this.allPlayersReady = true;
+            }
+
         }
     }
 
@@ -130,7 +137,7 @@ public class MyShelfie {
         }
     }
 
-    
+
     public void updateLobby(){
         boolean lastRMIConnected = false;
         ArrayList<String> lobbyPlayers = new ArrayList<>(playersConnected.stream().map(x->x.getNickname()).collect(Collectors.toList()));
@@ -600,7 +607,41 @@ public class MyShelfie {
         clientHandler.stop();
     }
 
-    public void finishGameRMI(RemoteInterface client){}
+    public void finishGameRMI(RemoteInterface client){} //serve ancora
 
+    public ChatManager getChatManager() {
+        return chatManager;
+    }
+
+    public void getCustomChat(String requester){
+        ChatStorage customChat = chatManager.getCustomChat(requester);
+        if (!clientHandlers.get(currentPlayerIndex).getIsRMI())
+            clientHandlers.get(currentPlayerIndex).sendMessageToClient(new ChatRecordAnswer(customChat));
+        else {
+            try {
+                clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(new ChatRecordAnswer(customChat));
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public void updateChat(ChatMessage messageToSend){
+        ChatMsgAnswer chatMsgAnswer;
+        if(getChatManager().updateChat(messageToSend)==true){
+            chatMsgAnswer = new ChatMsgAnswer(true);
+        }else {
+            chatMsgAnswer = new ChatMsgAnswer(false);
+        }
+        if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
+            clientHandlers.get(currentPlayerIndex).sendMessageToClient(chatMsgAnswer);
+        else {
+            try {
+                clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(chatMsgAnswer);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
 }

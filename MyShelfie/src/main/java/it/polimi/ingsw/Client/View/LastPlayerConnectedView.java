@@ -37,11 +37,7 @@ public class LastPlayerConnectedView extends View{
             if (!getOwner().isRMI()) {
                 getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
             } else {
-                try {
-                    getOwner().getRemoteServer().sendMessageToServer(finishGameRequest, getOwner().getClient());
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
+                getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
             }
         }
 

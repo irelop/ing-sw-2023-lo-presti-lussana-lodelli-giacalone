@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
-import it.polimi.ingsw.Client.View.ChooseTilesFromBoardView;
 import it.polimi.ingsw.Client.View.InsertInShelfView;
 import it.polimi.ingsw.Server.RemoteInterface;
 
@@ -30,9 +29,9 @@ public class InsertingTilesAnswer extends S2CMessage {
 
     @Override
     public void processMessage(ServerHandler serverHandler){
-        InsertInShelfView view = (InsertInShelfView) serverHandler.getClient().getCurrentView();
+        InsertInShelfView view = (InsertInShelfView) serverHandler.getOwner().getCurrentView();
         view.setInsertingTilesAnswer(this);
-        serverHandler.getClient().getCurrentView().notifyView();
+        serverHandler.getOwner().getCurrentView().notifyView();
     }
 
     @Override

@@ -18,7 +18,7 @@ public class SocketServerHandler extends ServerHandler {
     private AtomicBoolean shouldStop = new AtomicBoolean(false);
 
     public SocketServerHandler(Socket server, Client owner){
-       super(owner);
+       super(owner,null);
        this.server = server;
         try{
             output = new ObjectOutputStream(server.getOutputStream());

@@ -2,12 +2,9 @@ package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.GameIsEndingView;
-import it.polimi.ingsw.Client.View.LobbyView;
-import it.polimi.ingsw.Server.Model.Player;
 import it.polimi.ingsw.Server.RemoteInterface;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 
 public class GameIsEndingUpdateAnswer extends S2CMessage{
 
@@ -55,8 +52,8 @@ public class GameIsEndingUpdateAnswer extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        serverHandler.getClient().transitionToView(new GameIsEndingView(this));
-        serverHandler.getClient().getCurrentView().notifyView();
+        serverHandler.getOwner().transitionToView(new GameIsEndingView(this));
+        serverHandler.getOwner().getCurrentView().notifyView();
     }
 
     @Override
