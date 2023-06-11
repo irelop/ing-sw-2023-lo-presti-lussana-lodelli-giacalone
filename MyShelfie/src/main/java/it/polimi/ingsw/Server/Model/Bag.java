@@ -55,4 +55,12 @@ public class Bag {
     public int getTileQuantity(Tile tile){
         return bag.get(tile);
     }
+
+    public Map<Tile,Integer> getBag(){
+        return bag;
+    }
+
+    public void setBag(Map<Tile,Integer> bag){
+        this.bag = bag;
+    }
 }

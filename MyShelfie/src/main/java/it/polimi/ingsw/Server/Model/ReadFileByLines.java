@@ -14,6 +14,8 @@ public class ReadFileByLines {
     }
 
     public static String getLine() {
+        if(text.size()==0)
+            return null;
         return text.remove(0);
     }
     public static String getLineByIndex(int index) {

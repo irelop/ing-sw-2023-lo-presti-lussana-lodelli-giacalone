@@ -11,7 +11,7 @@ import java.util.Arrays;
  */
 public class PersonalGoalCard implements Serializable {
 
-    String id;
+    private String id;
     private final static int maxr = 6;
     private final static int maxc = 5;
     private Tile[][] pattern;

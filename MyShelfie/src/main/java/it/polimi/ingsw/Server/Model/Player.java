@@ -43,6 +43,14 @@ public class Player {
         this.hasFinished = false;
     }
 
+    public int getScore(){
+        return myScore.getScore();
+    }
+
+    public Tile[][] getPlayerShelf(){
+        return myShelfie.getGrid();
+    }
+
     public void setHasFinished(boolean hasFinished) {
         this.hasFinished = hasFinished;
     }
@@ -101,6 +109,13 @@ public class Player {
      */
     public void setCard(PersonalGoalCard card){
         this.card = card;
+    }
+    public void setScore(int score){
+        this.myScore.addScore(score);
+    }
+
+    public void setShelf(Tile[][] shelf){
+        myShelfie = new Shelf(shelf);
     }
 
     public void setLittleHand(ArrayList<Tile> tilesChosen){

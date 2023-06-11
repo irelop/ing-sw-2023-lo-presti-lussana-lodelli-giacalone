@@ -55,7 +55,6 @@ public abstract class ClientHandler implements Runnable {
     public void run(){}
 
     public MyShelfie getController(){ return this.game;}
-    public void sendMessageToClient(S2CMessage message){};
     public void setIsRMI(boolean value){
         isRMI = value;
     }
@@ -70,6 +69,7 @@ public abstract class ClientHandler implements Runnable {
     }
 
     public abstract boolean isConnected();
+    public abstract void sendMessageToClient(S2CMessage message);
 
 }
 

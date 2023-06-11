@@ -1,9 +1,7 @@
 package it.polimi.ingsw.Client.View;
 
-import it.polimi.ingsw.Client.SocketServerHandler;
 import it.polimi.ingsw.Client.View.Exceptions.InvalidNumberOfPlayersException;
 import it.polimi.ingsw.Client.View.Exceptions.InvalidReconnectionAnswerException;
-import it.polimi.ingsw.Client.View.Exceptions.InvalidRuleAnswerException;
 import it.polimi.ingsw.Server.Messages.*;
 
 import java.rmi.RemoteException;
@@ -36,6 +34,14 @@ public class LoginView extends View implements ObserverView {
         this.lock = new Object();
         this.goOn = false;
         this.isFull = false;
+        this.insertedNickname = null;
+    }
+
+    public LoginView(NumberOfPlayerManagementMsg msg){
+        this.lock = new Object();
+        this.goOn = false;
+        this.isFull = false;
+        this.insertedNickname = msg.nickname;
     }
 
 
@@ -46,9 +52,17 @@ public class LoginView extends View implements ObserverView {
      */
     @Override
     public void run() {
+        if(insertedNickname == null) {
             showTitleScreen();
             askNickname();
             manageReconnectionChoice();
+        }
+
+        else{
+            System.out.println("Sorry, there are some problems with the lobby you were inserted in.\n" +
+                    "Insertion in a new lobby");
+            manageNewLobbyConnection();
+        }
     }
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -248,9 +262,8 @@ public class LoginView extends View implements ObserverView {
                 }
             }
         }
-        if(!reconnectionAnswer.canConnect){
-            System.out.println("\nThere isn't any disconnected player matching with your nickname.\n" +
-                    "Redirecting to a new lobby.\n");
+        if(reconnectionAnswer.msg != null){
+            System.out.println(reconnectionAnswer.msg);
             manageNewLobbyConnection();
         }
 

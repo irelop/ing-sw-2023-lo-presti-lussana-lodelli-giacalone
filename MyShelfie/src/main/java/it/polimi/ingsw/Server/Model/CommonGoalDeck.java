@@ -49,4 +49,12 @@ public class CommonGoalDeck {
         return (commonGoalCardDeck.size());
     }
 
+    public CommonGoalCard getCard(String name){
+        for(CommonGoalCard card : commonGoalCardDeck){
+            if(card.getCardInfo().getName().equals(name))
+                return card;
+        }
+        return null;
+    }
+
 }

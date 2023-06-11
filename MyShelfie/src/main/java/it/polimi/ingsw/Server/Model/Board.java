@@ -10,6 +10,7 @@ import it.polimi.ingsw.Server.Model.Exceptions.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Board implements Serializable {
@@ -25,6 +26,14 @@ public class Board implements Serializable {
         bag = new Bag();
         commonGoalCards = new CommonGoalCard[MAX_DRAWABLE_COMMON];
         boardGrid = new Tile[MAX_ROWS][MAX_COLUMNS];
+    }
+
+    public Map<Tile,Integer> getBag(){
+        return bag.getBag();
+    }
+
+    public void setBag(Map<Tile,Integer> bag){
+        this.bag.setBag(bag);
     }
 
 
@@ -670,5 +679,4 @@ public class Board implements Serializable {
             sn--;
         }
     }
-
 }

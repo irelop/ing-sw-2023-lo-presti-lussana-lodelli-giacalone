@@ -9,10 +9,14 @@ import java.rmi.RemoteException;
 
 public class ReconnectionAnswer extends S2CMessage{
 
-    public boolean canConnect;
+    //public boolean canConnect;
+    public String msg;
 
-    public ReconnectionAnswer(boolean canConnect) {
+    /*public ReconnectionAnswer(boolean canConnect) {
         this.canConnect = canConnect;
+    }*/
+    public ReconnectionAnswer(String msg){
+        this.msg = msg;
     }
 
     @Override

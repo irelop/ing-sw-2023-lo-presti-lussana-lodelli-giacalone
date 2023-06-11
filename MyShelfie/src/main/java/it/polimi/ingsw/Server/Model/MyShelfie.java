@@ -1,5 +1,4 @@
 package it.polimi.ingsw.Server.Model;
-import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.Messages.*;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
@@ -7,8 +6,10 @@ import it.polimi.ingsw.Server.Model.Exceptions.NotEnoughSpaceInChosenColumnExcep
 import it.polimi.ingsw.Server.RMIClientHandler;
 import it.polimi.ingsw.Server.RemoteInterface;
 
+import java.io.*;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,8 @@ public class MyShelfie {
     private int firstToFinish;
 
     //- - - R M I - - - - -
-    private ArrayList<Boolean> isRMIFirstLastLobby;
+    private File persistenceFile;
+    private String safeFilePath;
 
     public MyShelfie(){
         this.board = new Board();
@@ -53,7 +55,176 @@ public class MyShelfie {
         this.allPlayersReady = false;
         this.gameOver = false;
         this.lock = new Object();
-        this.isRMIFirstLastLobby = new ArrayList<>();
+        this.safeFilePath = "src/safetxt/";
+    }//non penso serva più
+
+    /**
+     * Constructor for new games
+     * @param persistenceFile is the file where all the info of this game are going to be saved
+     * @author Irene Lo Presti
+     */
+    public MyShelfie(File persistenceFile){
+        this.board = new Board();
+        this.commonDeck = new CommonGoalDeck();
+        this.personalDeck = new PersonalGoalDeck();
+
+        this.isOver = false;
+        this.isStarted = false;
+        this.playersConnected = new ArrayList<>();
+        this.numberOfPlayers = -1;
+        this.clientHandlers = new ArrayList<>();
+
+        this.allPlayersReady = false;
+        this.gameOver = false;
+        this.lock = new Object();
+        this.persistenceFile = persistenceFile;
+        this.safeFilePath = "src/safetxt/";
+    }
+
+    /**
+     * Constructor for old games to be restored after the server crash
+     * @param persistenceFile: file with all the info of this game
+     * @param board: old board
+     * @param commonGoalCardsNames: codes of the old common goal cards
+     * @param currentPlayerIndex: index of the player that was playing the last turn
+     * @param isStarted: boolean to know if the game was started
+     * @param isOver: boolean to know if the games was finishing
+     * @param numberOfPlayers: number of players connected to the old game
+     *
+     * @author Irene Lo Presti
+     */
+    public MyShelfie(File persistenceFile, Board board, String[] commonGoalCardsNames, int currentPlayerIndex, boolean isStarted, boolean isOver, int numberOfPlayers){
+        this.commonDeck = new CommonGoalDeck();
+        this.board = board;
+        CommonGoalCard[] commonGoalCards = new CommonGoalCard[2];
+        //get the right cards form the deck
+        commonGoalCards[0] = commonDeck.getCard(commonGoalCardsNames[0]);
+        commonGoalCards[1] = commonDeck.getCard(commonGoalCardsNames[1]);
+        board.setCommonGoalCards(commonGoalCards);
+
+        this.persistenceFile = persistenceFile;
+        this.isOver = isOver;
+        this.isStarted = isStarted;
+        this.numberOfPlayers = numberOfPlayers;
+
+        //initialize all the others attributes
+        this.gameOver = false;
+        this.lock = new Object();
+        this.allPlayersReady = false;//?
+        this.personalDeck = new PersonalGoalDeck();
+        this.playersConnected = new ArrayList<>();
+        this.clientHandlers = new ArrayList<>();
+        this.safeFilePath = "src/safetxt/";
+    }
+
+    /**
+     * Method for the FA: persistence. It reads the files of the players connected to the old game and sets
+     * all the right info
+     * @author Irene Lo Presti
+     */
+    public void resetPlayers(){
+        String path;
+        for(Player player : playersConnected){
+            path = safeFilePath + player.getNickname()+".txt";
+            ReadFileByLines reader;
+            reader = new ReadFileByLines();
+            reader.readFrom(path);
+
+            //set the chair only if the player has it
+            boolean hasChair = Boolean.parseBoolean(ReadFileByLines.getLineByIndex(1));
+            if(hasChair)
+                player.setChair();
+
+            //get the right personal card from the deck
+            PersonalGoalCard card = personalDeck.getCard(ReadFileByLines.getLineByIndex(2));
+            player.setCard(card);
+
+            //set the old score
+            int score = Integer.parseInt(ReadFileByLines.getLineByIndex(3));
+            player.setScore(score);
+
+            //set the old shelf
+            Tile[][] shelf = new Tile[9][9];
+            String row = ReadFileByLines.getLineByIndex(4);
+
+            //if row.equals("shelf") the player didn't play their turn, so the shelf was all blank
+            if(!row.equals("shelf")) {
+                String[] values = row.replaceAll("\\[", "")
+                        .replaceAll("]", "")
+                        .split(", ");
+                int index = 0;
+                for (int j = 0; j < 6; j++) {
+                    for (int k = 0; k < 5; k++) {
+                        shelf[j][k] = Tile.valueOf(values[index]);
+                        index++;
+                    }
+                }
+                player.setShelf(shelf);
+            }
+        }
+    }
+
+    /**
+     * This method updates the files for the FA persistence after all turns
+     * @author Irene Lo Presti
+     */
+    public void updatePersistenceFiles(){
+
+        //set the string with all the info about this game
+        StringBuilder update = new StringBuilder(Arrays.deepToString(board.getBoardGrid()) + "\n" +
+                board.getCommonGoalCard(0).getCardInfo().getName() + "\n" +
+                board.getCommonGoalCard(1).getCardInfo().getName() + "\n" +
+                currentPlayerIndex + "\n" + isStarted + "\n" + numberOfPlayers + "\n" +
+                board.getBag().toString() + "\n" + isOver + "\n");
+
+        for(int j=0; j<numberOfPlayers; j++)
+            update.append(playersConnected.get(j).getNickname()).append("\n");
+
+        //write the info on the game file
+        try {
+            FileWriter fw = new FileWriter(persistenceFile);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(update.toString());
+            bw.flush();
+            bw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        //update of the player file
+        String playerPath = safeFilePath + playersConnected.get(currentPlayerIndex).getNickname() + ".txt";
+
+        //read all the info to keep the "static" ones: controller number, personal goal card
+        ReadFileByLines reader = new ReadFileByLines();
+        reader.readFrom(playerPath);
+        String line;
+        ArrayList<String> lines = new ArrayList<>();
+        while((line = ReadFileByLines.getLine())!=null){
+            lines.add(line);
+        }
+
+        //set the new score
+        lines.set(lines.size()-2, String.valueOf(playersConnected.get(currentPlayerIndex).getScore()));
+
+        //set the update shelf
+        lines.set(lines.size()-1, Arrays.deepToString(playersConnected.get(currentPlayerIndex).getPlayerShelf()));
+
+        //rewrite the file
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter(playerPath);
+            BufferedWriter bw = new BufferedWriter(fw);
+            for(String newLine : lines){
+                bw.write(newLine + "\n");
+            }
+            bw.flush();
+            bw.close();
+        } catch (IOException e) {
+            System.out.println("Error during player file updating");
+        }
+
+
     }
 
     public Board getBoard(){
@@ -69,7 +240,7 @@ public class MyShelfie {
      * @return true if nickname is valid, false otherwise
      */
     public boolean checkNickname(String insertedString) {
-        return(!(new ArrayList<String>(this.playersConnected.stream().map(x->x.getNickname()).collect(Collectors.toList()))).contains(insertedString));
+        return(!(new ArrayList<>(this.playersConnected.stream().map(Player::getNickname).collect(Collectors.toList()))).contains(insertedString));
     }
 
     /**
@@ -92,7 +263,6 @@ public class MyShelfie {
             Player newPlayer = new Player(playerNickname);
             playersConnected.add(newPlayer);
             clientHandlers.add(clientHandler);
-            isRMIFirstLastLobby.add(false);
 
             if (playersConnected.size() == numberOfPlayers && !this.allPlayersReady)
                 this.allPlayersReady = true;
@@ -128,30 +298,24 @@ public class MyShelfie {
         if((playersConnected.size()==numberOfPlayers) && (!this.allPlayersReady)){
             this.allPlayersReady = true;
         }
+        else if(playersConnected.size() > numberOfPlayers){
+            for(int i=playersConnected.size()-1; i>numberOfPlayers-1; i--) {
+                NumberOfPlayerManagementMsg msg = new NumberOfPlayerManagementMsg(playersConnected.get(i).getNickname());
+                clientHandlers.get(i).sendMessageToClient(msg);
+                playersConnected.remove(i);
+                clientHandlers.remove(i);
+            }
+            this.allPlayersReady = true;
+        }
     }
 
     
     public void updateLobby(){
-        boolean lastRMIConnected = false;
-        ArrayList<String> lobbyPlayers = new ArrayList<>(playersConnected.stream().map(x->x.getNickname()).collect(Collectors.toList()));
+        ArrayList<String> lobbyPlayers = new ArrayList<>(playersConnected.stream().map(Player::getNickname).collect(Collectors.toList()));
 
         for (int i = 0; i<playersConnected.size();i++) {
-            if(!clientHandlers.get(i).getIsRMI()) {
-                LobbyUpdateAnswer lobbyUpdateAnswer = new LobbyUpdateAnswer(lobbyPlayers, allPlayersReady);
-                if(clientHandlers.get(i).isConnected())
-                    clientHandlers.get(i).sendMessageToClient(lobbyUpdateAnswer);
-            }
-            else{
-                if(i==(clientHandlers.size()-1)) lastRMIConnected = true;
-                try {
-                    LobbyUpdateAnswer lobbyUpdateAnswer = new LobbyUpdateAnswer(lobbyPlayers, allPlayersReady,lastRMIConnected);
-                    if(clientHandlers.get(i).isConnected())
-                        clientHandlers.get(i).getClientInterface().sendMessageToClient(lobbyUpdateAnswer);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-
-            }
+            LobbyUpdateAnswer msg = new LobbyUpdateAnswer(lobbyPlayers, allPlayersReady);
+            clientHandlers.get(i).sendMessageToClient(msg);
         }
     }
 
@@ -166,29 +330,25 @@ public class MyShelfie {
         for(int i=0; i<numberOfPlayers; i++) {
             //sending to gameIsEndingView players who have played their last turn
             if (playersConnected.get(i).getHasFinished() && clientHandlers.get(i).isConnected()) {
-                if(!clientHandlers.get(i).getIsRMI()) {
-                    clientHandlers.get(i).sendMessageToClient(
-                            new GameIsEndingUpdateAnswer(gameOver, i, firstToFinish, players, hasFinished)
-                    );
-                }
-                else{
-                    try {
-                        GameIsEndingUpdateAnswer msg;
-                        if(isRMIFirstLastLobby.get(i)) {
-                            msg = new GameIsEndingUpdateAnswer(gameOver, i, firstToFinish, players, hasFinished, true);
-                            isRMIFirstLastLobby.set(i,false);
-                        }else{
-                            msg = new GameIsEndingUpdateAnswer(gameOver, i, firstToFinish, players, hasFinished);
-                        }
-                        clientHandlers.get(i).getClientInterface().sendMessageToClient(msg);
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
-
-                }
+                clientHandlers.get(i).sendMessageToClient(
+                        new GameIsEndingUpdateAnswer(gameOver, i, firstToFinish, players, hasFinished));
             }
         }
 
+    }
+
+    private void writeOnPlayersFiles(String info, String playerNickname){
+
+        String fileName = safeFilePath + playerNickname + ".txt";
+        try {
+            FileWriter fw = new FileWriter(fileName, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(info);
+            bw.flush();
+            bw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -198,8 +358,11 @@ public class MyShelfie {
      * @see PersonalGoalDeck
      */
     private void dealPersonalCards(){
-        for(Player player : playersConnected){
-            player.setCard(personalDeck.drawPersonal());
+        for(Player player : playersConnected) {
+            PersonalGoalCard card = personalDeck.drawPersonal();
+            player.setCard(card);
+            String info = card.getId() + "\n0\nshelf\n";
+            writeOnPlayersFiles(info, player.getNickname());
         }
     }
 
@@ -216,6 +379,11 @@ public class MyShelfie {
         playersConnected.add(0, firstPlayer);
         clientHandlers.remove(firstPlayerClientHandler);
         clientHandlers.add(0, firstPlayerClientHandler);
+
+        for(Player player : playersConnected){
+            String info = player.hasChair()+"\n";
+            writeOnPlayersFiles(info, player.getNickname());
+        }
 
     }
 
@@ -275,31 +443,18 @@ public class MyShelfie {
             //se isOver = true allora siamo all'ultima mano
 
             //settiamo a true il booleano del giocatore precedente
-            if (currentPlayerIndex == 0) {
+            if (currentPlayerIndex == 0)
                 playersConnected.get(numberOfPlayers - 1).setHasFinished(true);
-                isRMIFirstLastLobby.set(numberOfPlayers - 1, true);
-            } else {
+            else
                 playersConnected.get(currentPlayerIndex - 1).setHasFinished(true);
-                isRMIFirstLastLobby.set(numberOfPlayers - 1, true);
-            }
-
             //aggiorniamo la game is ending view
             updateGameIsEndingView();
         }
-        //pensare come fare per fare un unico metodo isConnected() per controllare sia skt che rmi
+
         //qui viene mandata la view per la scelta tessere al current player
 
         if(clientHandlers.get(currentPlayerIndex).isConnected()){
-
-            if (!clientHandlers.get(currentPlayerIndex).getIsRMI())
-                clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
-            else{
-                try {
-                    clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(yourTurnMsg);
-                }catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
         }
         else{
             computeCurrentPlayerIdx();
@@ -340,9 +495,7 @@ public class MyShelfie {
         //checking if a player's shelf is full,
         // if true add +1pt and set the last lap
 
-        //parte dell'if è commentata per poter testare subito la fine di una partita
-        //una volta risolti i problemi bisogna togliere il commento
-        if( playersConnected.get(currentPlayerIndex).myShelfie.isShelfFull() &&  !isOver) {
+        if(playersConnected.get(currentPlayerIndex).myShelfie.isShelfFull() &&  !isOver) {
             isShelfFull = true;
             playersConnected.get(currentPlayerIndex).myScore.addScore(1);
             this.isOver = true;
@@ -355,21 +508,13 @@ public class MyShelfie {
             //      avranno già giocato il loro ultimo turno
             for(int i=0; i<=currentPlayerIndex; i++) {
                 playersConnected.get(i).setHasFinished(true);
-                isRMIFirstLastLobby.set(i,true);
             }
         }
 
+        updatePersistenceFiles();
 
         GoalAndScoreMsg goalAndScoreMsg = new GoalAndScoreMsg(isCommonGoalAchived, isPersonalGoalAchived, playersConnected.get(currentPlayerIndex).myScore.getScore(), isShelfFull, isOver);
-        if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
-            clientHandlers.get(currentPlayerIndex).sendMessageToClient(goalAndScoreMsg);
-        else{
-            try {
-                clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(goalAndScoreMsg);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        clientHandlers.get(currentPlayerIndex).sendMessageToClient(goalAndScoreMsg);
     }
 
     /**
@@ -399,16 +544,7 @@ public class MyShelfie {
                 Board.getCommonGoalCards(),
                 currentPlayer.getPersonalGoalCard()
                 );
-
-        if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
-            clientHandlers.get(currentPlayerIndex).sendMessageToClient(toShelfMsg);
-        else{
-            try {
-                clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(toShelfMsg);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        clientHandlers.get(currentPlayerIndex).sendMessageToClient(toShelfMsg);
     }
 
     /**
@@ -468,9 +604,10 @@ public class MyShelfie {
                 currentPlayerIndex ++;
     }
 
-    public void finishTurn(){
+    public void setNextPlayer(){
             //setting the next player as the current player
             computeCurrentPlayerIdx();
+
 
             //skipping when a player is disconnected from the game (FA Resilienza alle disconessioni)
             int numOfPlayersConnected = numberOfPlayers;
@@ -483,67 +620,77 @@ public class MyShelfie {
             }
 
             if(numOfPlayersConnected == 1){
-                LastOneConnectedMsg msg = new LastOneConnectedMsg(playersConnected.get(currentPlayerIndex).getNickname());
-                if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
-                    clientHandlers.get(currentPlayerIndex).sendMessageToClient(msg);
-                else{
-                    try {
-                        clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(msg);
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                return;
+                startCountdown(currentPlayerIndex);
+                return; //?
             }
 
             //------------------------------------------------------------------------------------------------------
 
-            if(!isOver || !playersConnected.get(currentPlayerIndex).hasChair()){
-                if(firstTurn && currentPlayerIndex==0) {
-                    firstTurn = false;
-                }
-                startTurn();
+        checkIfStartTurnOrEndTheGame();
+
+    }
+
+    private void checkIfStartTurnOrEndTheGame(){
+        if(!isOver || !playersConnected.get(currentPlayerIndex).hasChair()){
+            if(firstTurn && currentPlayerIndex==0) {
+                firstTurn = false;
             }
-            //entered when everyone played last turn
-            if(isOver && playersConnected.get(currentPlayerIndex).hasChair()){
-                spotCheck();
+            startTurn();
+        }
+        //entered when everyone played last turn
+        if(isOver && playersConnected.get(currentPlayerIndex).hasChair()){
+            //spot check
+            for (Player player : playersConnected) {
+                int spotScore = player.myShelfie.spotCheck();
+                player.myScore.addScore(spotScore);
             }
+
+            //setting last player has finished
+            if(currentPlayerIndex==0) {
+                playersConnected.get(numberOfPlayers - 1).setHasFinished(true);
+            }else {
+                playersConnected.get(currentPlayerIndex - 1).setHasFinished(true);
+            }
+
+            //setting game over
+            this.gameOver = true;
+
+            updateGameIsEndingView();
+        }
+    }
+
+    private void startCountdown(int playerIndex){
+        LastOneConnectedMsg msg = new LastOneConnectedMsg(playersConnected.get(playerIndex).getNickname());
+        clientHandlers.get(playerIndex).sendMessageToClient(msg);
     }
 
     public void shouldFinishTurn(ClientHandler clientHandler){
         //if the client disconnected was the actual one playing
         if(isStarted){
             if (clientHandlers.get(currentPlayerIndex).equals(clientHandler)) {
-                if (currentPlayerIndex == 0)
-                    currentPlayerIndex = numberOfPlayers - 1;
-                else
-                    currentPlayerIndex--;
-                finishTurn();
-
+                computeCurrentPlayerIdx();
+                setNextPlayer();
             }
+        }
+        else if(numberOfPlayers == -1 && clientHandlers.indexOf(clientHandler) == 0){
+            clientHandler.getGameRecord().deleteGame(this, playersConnected.get(0).getNickname());
+            if(playersConnected.size() > 1){
+                for(int i=1; i<playersConnected.size(); i++){
+                    NumberOfPlayerManagementMsg msg = new NumberOfPlayerManagementMsg(playersConnected.get(i).getNickname());
+                    clientHandlers.get(1).sendMessageToClient(msg);
+                }
+            }
+
         }
     }
 
-    public void spotCheck(){
-        //spot check
-        for (Player player : playersConnected) {
-            int spotScore = player.myShelfie.spotCheck();
-            player.myScore.addScore(spotScore);
+    public void persistenceManager(int playerIndex){
+        if(clientHandlers.stream().filter(ClientHandler::isConnected).toList().size()==1)
+            startCountdown(playerIndex);
+
+        else if(playerIndex == currentPlayerIndex){
+            checkIfStartTurnOrEndTheGame();
         }
-
-        //setting last player has finished
-        if(currentPlayerIndex==0) {
-            playersConnected.get(numberOfPlayers - 1).setHasFinished(true);
-            isRMIFirstLastLobby.set(numberOfPlayers -1,true);
-        }else {
-            playersConnected.get(currentPlayerIndex - 1).setHasFinished(true);
-            isRMIFirstLastLobby.set(numberOfPlayers - 1,true);
-        }
-
-        //setting game over
-        this.gameOver = true;
-
-        updateGameIsEndingView();
     }
 
     public void endGame(int playerIndex) {
@@ -561,15 +708,7 @@ public class MyShelfie {
             }
 
             ScoreBoardMsg msg = new ScoreBoardMsg(playersNames, scoreList, playersNames.get(playerIndex));
-            if(!clientHandlers.get(playerIndex).getIsRMI())
-                clientHandlers.get(playerIndex).sendMessageToClient(msg);
-            else{
-                try {
-                    clientHandlers.get(playerIndex).getClientInterface().sendMessageToClient(msg);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            clientHandlers.get(playerIndex).sendMessageToClient(msg);
         }
 
     }
@@ -583,11 +722,7 @@ public class MyShelfie {
         return found;
     }
 
-    public void switchRMIClientHandler(int playerIndex, RemoteInterface client){
-        RMIClientHandler clientHandlerReconnected = new RMIClientHandler(this, client);
-        clientHandlers.set(playerIndex, clientHandlerReconnected);
-    }
-    public void switchSocketClientHandler(int playerIndex, ClientHandler clientHandlerReconnected){
+    public void switchClientHandler(int playerIndex, ClientHandler clientHandlerReconnected){
         clientHandlerReconnected.setGame(this);
         clientHandlers.set(playerIndex, clientHandlerReconnected);
     }
@@ -595,12 +730,44 @@ public class MyShelfie {
     public ArrayList<ClientHandler> getClientHandlers() {
         return clientHandlers;
     }
-
+    public ClientHandler getLastClientHandler(){
+        for(int i=0; i<numberOfPlayers; i++)
+            if(clientHandlers.get(i).isConnected())
+                return clientHandlers.get(i);
+        return null;
+    }
     public void finishGame(ClientHandler clientHandler){
         clientHandler.stop();
+
+        int playerIndex = clientHandlers.indexOf(clientHandler);
+        fileDeleting(playersConnected.get(playerIndex).getNickname());
+
     }
 
-    public void finishGameRMI(RemoteInterface client){}
+    public void finishGameRMI(RemoteInterface client){
+
+        int playerIndex = -1;
+        for(int i=0; i<playersConnected.size(); i++){
+            if(clientHandlers.get(i) != null && clientHandlers.get(i).getIsRMI() && clientHandlers.get(i).getClientInterface().equals(client)){
+                playerIndex = i;
+                break;
+            }
+        }
+
+        fileDeleting(playersConnected.get(playerIndex).getNickname());
+
+    }
+
+    public void fileDeleting(String playerNickname){
+        //deleting player file
+        File file = new File("src/safetxt/"+playerNickname+".txt");
+        file.delete();
+
+        numberOfPlayers--;
+        if(numberOfPlayers==0){
+            persistenceFile.delete();
+        }
+    }
 
 
 }

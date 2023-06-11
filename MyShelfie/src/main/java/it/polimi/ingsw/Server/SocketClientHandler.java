@@ -62,7 +62,8 @@ public class SocketClientHandler extends ClientHandler{
         } catch (IOException ex) {
             //detection possible disconnection notifying the controller
             this.isConnected = false;
-            getController().shouldFinishTurn(this);
+            if(getController() != null)
+                getController().shouldFinishTurn(this);
             System.out.println("client" + client.getInetAddress() + " connection dropped");
         }
 
@@ -103,6 +104,7 @@ public class SocketClientHandler extends ClientHandler{
      * OVERVIEW: this method allows to send a message from the server to the client using the Java serialization approach.
      * @param message: the message to be forwarded to the client.
      */
+    @Override
     public void sendMessageToClient(S2CMessage message) {
         try {
             outputStream.flush();

@@ -2,6 +2,7 @@ package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.LoginView;
+import it.polimi.ingsw.Client.View.WaitingView;
 import it.polimi.ingsw.Server.RemoteInterface;
 
 import java.rmi.Remote;
@@ -35,15 +36,23 @@ public class LoginNicknameAnswer extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        LoginView loginView = (LoginView) serverHandler.getClient().getCurrentView();
-        loginView.setLoginNicknameAnswer(this);
-        serverHandler.getClient().getCurrentView().notifyView();
+        if(parent != null) {
+            LoginView loginView = (LoginView) serverHandler.getClient().getCurrentView();
+            loginView.setLoginNicknameAnswer(this);
+            serverHandler.getClient().getCurrentView().notifyView();
+        }
+        else{
+            LoginView loginView = new LoginView();
+
+        }
     }
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
             LoginView loginView = (LoginView) client.getCurrentView();
             loginView.setLoginNicknameAnswer(this);
+            if(client.getCurrentView().getClass() == WaitingView.class)
+                client.notifyView();
         }catch (RemoteException e){
             e.printStackTrace();
         }

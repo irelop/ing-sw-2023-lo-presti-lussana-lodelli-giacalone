@@ -61,4 +61,8 @@ public class CommonCardInfo implements Serializable {
     public String getDescription(){
         return description.replaceAll("\\. ",".\n");
     }
+
+    public String getName(){
+        return this.name;
+    }
 }

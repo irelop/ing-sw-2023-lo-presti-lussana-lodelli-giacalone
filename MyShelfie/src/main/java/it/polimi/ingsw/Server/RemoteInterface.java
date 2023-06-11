@@ -45,4 +45,5 @@ public interface RemoteInterface extends Remote {
         void setGameRecord(GameRecord gameRecord) throws RemoteException;
         GameRecord getGameRecord() throws RemoteException;
         void setMapClientsToController(RemoteInterface client) throws RemoteException;
+        void goToLoginView(NumberOfPlayerManagementMsg msg) throws RemoteException;
 }

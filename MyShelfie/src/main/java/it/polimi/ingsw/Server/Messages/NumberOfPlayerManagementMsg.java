@@ -1,39 +1,32 @@
 package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
-import it.polimi.ingsw.Client.View.LobbyView;
+import it.polimi.ingsw.Client.View.LoginView;
 import it.polimi.ingsw.Client.View.WaitingView;
 import it.polimi.ingsw.Server.RemoteInterface;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 
-public class LobbyUpdateAnswer extends S2CMessage{
-    /*private*/public ArrayList<String> lobbyPlayers;
-    public boolean allPlayersReady;
+public class NumberOfPlayerManagementMsg extends S2CMessage{
 
-    public LobbyUpdateAnswer(ArrayList<String> lobbyPlayers, boolean allPlayersReady) {
-        this.lobbyPlayers = lobbyPlayers;
-        this.allPlayersReady = allPlayersReady;
+    public String nickname;
+
+    public NumberOfPlayerManagementMsg(String nickname){
+        this.nickname = nickname;
     }
-
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        //serverHandler.getClient().transitionToView(new LobbyView(lobbyPlayers));
-        serverHandler.getClient().transitionToView(new LobbyView(this));
+        serverHandler.getClient().transitionToView(new LoginView(this));
         serverHandler.getClient().getCurrentView().notifyView();
-
-
     }
 
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client) {
         try {
-            client.goToLobbyView(this);
+            client.goToLoginView(this);
             if(client.getCurrentView().getClass() == WaitingView.class)
                 client.notifyView();
-
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

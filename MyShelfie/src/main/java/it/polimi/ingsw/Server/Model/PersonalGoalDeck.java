@@ -43,4 +43,12 @@ public class PersonalGoalDeck {
     public ArrayList<PersonalGoalCard> getPersonalGoalCardDeck() {
         return personalGoalCardDeck;
     }
+
+    public PersonalGoalCard getCard(String id){
+        for(PersonalGoalCard card : personalGoalCardDeck){
+            if(card.getId().equals(id))
+                return card;
+        }
+        return null;
+    }
 }

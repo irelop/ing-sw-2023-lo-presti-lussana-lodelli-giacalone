@@ -118,6 +118,10 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
         transitionToView(new LastPlayerConnectedView(msg));
     }
 
+    public void goToLoginView(NumberOfPlayerManagementMsg msg){
+        transitionToView(new LoginView(msg));
+    }
+
     public Client getClient(){
         return client;
     }
@@ -138,4 +142,5 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
     public GameRecord getGameRecord(){
         return this.gameRecord;
     }
+
 }
