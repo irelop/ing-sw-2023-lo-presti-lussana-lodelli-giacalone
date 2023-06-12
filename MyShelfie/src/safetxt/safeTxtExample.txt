@@ -1,4 +1,5 @@
 For game txt:
+name: game_index.txt
 1st line: board
 2nd line: first common goal card
 3rd line: second common goal card
@@ -11,8 +12,10 @@ For game txt:
 10th line: second player's nickname
 11th line: third player's nickname
 12th line: fourth player's nickname
+NB: if there are less than 4 players the line are blank
 
 For player txt:
+name: playerNickname.txt
 1st line: game index
 2nd line: hasChair
 3rd line: personal goal card id
