@@ -41,7 +41,7 @@ public class GameRecord {
      * @return current game or a new one
      * @author Lo Presti, Giacalone
      */
-    public MyShelfie getGame(){
+    public synchronized MyShelfie getGame(){
         if (currentGame == -1 || games.get(currentGame) == null || games.get(currentGame).getAllPlayersReady()) {
             currentGame++;
             persistenceManager.addNewGameFile("game_"+currentGame+".txt");
@@ -170,7 +170,7 @@ public class GameRecord {
      * @param clientHandler of the player who wants to reconnect
      * @author Irene Lo Presti, Andrea Giacalone
      */
-    public void reconnectPlayer(String nickname, ClientHandler clientHandler){
+    public synchronized void reconnectPlayer(String nickname, ClientHandler clientHandler){
         String msg = null;
         int gameIndex = -1, playerIndex = -1;
         ClientHandler countDownClient = null;
@@ -257,43 +257,47 @@ public class GameRecord {
             games.get(gameIndex).persistenceManager(playerIndex);
     }
 
+    /**
+     * This method check the nickname of the new player and if it's valid, connects them to the game
+     * @param clientHandler of the new player
+     * @param loginNicknameRequest message with the new player's nickname
+     * @param game where the new player is connecting
+     * @author Andrea Giacalone, Irene Lo Presti
+     */
+    public synchronized void manageLogin(ClientHandler clientHandler, LoginNicknameRequest loginNicknameRequest,
+                                         MyShelfie game){
+        S2CMessage loginNicknameAnswer;
 
-    public void manageLogin(ClientHandler clientHandler, LoginNicknameRequest loginNicknameRequest,MyShelfie controller){
-        synchronized (lock) {
-            S2CMessage loginNicknameAnswer;
+        int controllerIdx = games.indexOf(game);
+        if (games.get(controllerIdx).isStarted()) {
+            loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FULL_LOBBY);
+            clientHandler.sendMessageToClient(loginNicknameAnswer);
+            return;
+        }
 
-            int controllerIdx = games.indexOf(controller);
-            if (games.get(controllerIdx).isStarted()) {
-                loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FULL_LOBBY);
+        String pathFile = "src/safetxt/"+loginNicknameRequest.getInsertedNickname()+".txt";
+        File file = new File(pathFile);
+
+        if (!file.exists()) {
+
+            if (games.get(controllerIdx).isFirstConnected()) {
+                loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
                 clientHandler.sendMessageToClient(loginNicknameAnswer);
-                return;
+                games.get(controllerIdx).addPlayer(loginNicknameRequest.getInsertedNickname(), clientHandler);
+                persistenceManager.addNewPlayerFile(loginNicknameRequest.getInsertedNickname()+".txt", controllerIdx);
             }
 
-            boolean found = false;
-            for (MyShelfie game : games) {
-                if (!game.checkNickname(loginNicknameRequest.getInsertedNickname())) found = true;
-            }
-            if (!found) {
-
-                if (games.get(controllerIdx).isFirstConnected()) {
-                    loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
-                    clientHandler.sendMessageToClient(loginNicknameAnswer);
-                    games.get(controllerIdx).addPlayer(loginNicknameRequest.getInsertedNickname(), clientHandler);
-                    persistenceManager.addNewPlayerFile(loginNicknameRequest.getInsertedNickname()+".txt", controllerIdx);
-                }
-
-                else {
-                    loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.ACCEPTED);
-                    clientHandler.sendMessageToClient(loginNicknameAnswer);
-                    games.get(controllerIdx).addPlayer(loginNicknameRequest.getInsertedNickname(), clientHandler);
-                    persistenceManager.addNewPlayerFile(loginNicknameRequest.getInsertedNickname()+".txt", controllerIdx);
-                }
-
-
-            } else {
-                loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.INVALID);
+            else {
+                loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.ACCEPTED);
                 clientHandler.sendMessageToClient(loginNicknameAnswer);
+                games.get(controllerIdx).addPlayer(loginNicknameRequest.getInsertedNickname(), clientHandler);
+                persistenceManager.addNewPlayerFile(loginNicknameRequest.getInsertedNickname()+".txt", controllerIdx);
             }
+
+
+        } else {
+            loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.INVALID);
+            clientHandler.sendMessageToClient(loginNicknameAnswer);
         }
 
     }
