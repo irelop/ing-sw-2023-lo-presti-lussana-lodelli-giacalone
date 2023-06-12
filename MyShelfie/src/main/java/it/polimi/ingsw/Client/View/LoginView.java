@@ -3,17 +3,8 @@ package it.polimi.ingsw.Client.View;
 import it.polimi.ingsw.Client.View.Exceptions.InvalidNumberOfPlayersException;
 import it.polimi.ingsw.Client.View.Exceptions.InvalidReconnectionAnswerException;
 import it.polimi.ingsw.Server.Messages.*;
-
-import java.rmi.RemoteException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
-/**
- package it.polimi.ingsw.Client.View;
-
- import it.polimi.ingsw.Server.Messages.*;
-
- import java.util.Scanner;
 
  /**
  * LoginView class: this class manages the user interaction during the login phase. It is followed by the WaitingView,
@@ -186,13 +177,13 @@ public class LoginView extends View implements ObserverView {
         if(input.length() > 1) throw new InvalidReconnectionAnswerException();
 
         char answer = input.charAt(0);
-        if(answer!='L' && answer!='G') throw new InvalidReconnectionAnswerException();
+        if(answer!='N' && answer!='C') throw new InvalidReconnectionAnswerException();
         else return answer;
     }
 
     private void manageReconnectionChoice(){
-        System.out.println("Do you want to join a new lobby or an already existing game?");
-        System.out.println("Insert L for a new lobby or G for the existing game");
+        System.out.println("\nCONTINUE A GAME [C]");
+        System.out.println("NEW GAME [N]");
         char answer;
         do{
             try{
@@ -203,7 +194,7 @@ public class LoginView extends View implements ObserverView {
             }
         }while(true);
 
-        if(answer == 'L') manageNewLobbyConnection();
+        if(answer == 'N') manageNewLobbyConnection();
         else manageExistingGameConnection();
 
     }

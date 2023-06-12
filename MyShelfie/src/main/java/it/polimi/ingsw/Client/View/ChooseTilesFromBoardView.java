@@ -199,7 +199,7 @@ public class ChooseTilesFromBoardView extends View {
 
     private void printShelfAndPersonalGoalCard(){
 
-        System.out.println("This is your shelf, empty circles represent where to place tiles to\n" +
+        System.out.println(yourTurnMsg.nickname + ", this is your shelf, empty circles represent where to place tiles to\n" +
                 "achieve personal goal card:");
         printPersonalGoalCardOnPlayerShelf(yourTurnMsg.shelfSnapshot);
         System.out.println();
@@ -276,10 +276,6 @@ public class ChooseTilesFromBoardView extends View {
             System.out.println(yourTurnMsg.commonGoalCards[i].getCardInfo().getDescription());
             System.out.println();
         }
-
-        System.out.println("Punteggi: ");
-        System.out.println("Prima card: "+yourTurnMsg.commonGoalCards[0].returnScore());
-        System.out.println("Seconda card: "+yourTurnMsg.commonGoalCards[1].returnScore());
 
     }
 
