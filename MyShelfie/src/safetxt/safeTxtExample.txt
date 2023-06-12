@@ -21,4 +21,4 @@ name: playerNickname.txt
 3rd line: personal goal card id
 4th line: score
 5th line: shelf
-NB: if the shelf is blank in the 5th line there is thw word "shelf"
+NB: if the shelf is blank in the 5th line there is the word "shelf"

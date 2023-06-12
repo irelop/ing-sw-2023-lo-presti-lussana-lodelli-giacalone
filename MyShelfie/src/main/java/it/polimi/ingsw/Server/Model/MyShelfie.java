@@ -289,6 +289,7 @@ public class MyShelfie {
             drawCommonGoalCards();
             currentPlayerIndex = 0;
             firstTurn = true;
+            updatePersistenceFiles();
             startTurn();
         }
     }
