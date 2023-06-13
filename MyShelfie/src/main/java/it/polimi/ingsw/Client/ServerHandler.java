@@ -5,36 +5,36 @@ import it.polimi.ingsw.Server.RemoteInterface;
 
 import java.io.IOException;
 
+/**
+ * ServerHandler class: an abstraction of the network handler used by the client in order to send and process messages
+ *                      to/from the server
+ */
+
 public abstract class ServerHandler implements Runnable{
-    /*
-    public ObjectInputStream input;
-    public ObjectOutputStream output;
-    public Socket server;
-    */
-    public Client owner;
+    protected final Client owner; //the client associated to this handler: it is unique for this class
 
-    private RemoteInterface remoteServer;
-
-
-    public ServerHandler(Client owner,RemoteInterface remoteServer) {
+    public ServerHandler(Client owner) {
         this.owner = owner;
-        this.remoteServer = remoteServer;
     }
 
+    //private void handleClientConnection() throws IOException{}
 
-    //event loop che riceve i messaggi dal server e li processa
-    private void handleClientConnection() throws IOException{}
-
-    public Client getOwner(){return owner;}
-
-
-    //funzione per mandare i mesaggi dal client al server
+    /**
+     * OVERVIEW: this method allows to send a message from the client to the server independently from the
+     *           network technology chosen.
+     * @param msg : message to be forwarded to the server.
+     */
     public void sendMessageToServer(C2SMessage msg){}
 
+
+    /**
+     * OVERVIEW: this method allows to close safely the handler or in order to manage possible disconnection.
+     */
     public void stop(){}
 
+    //- - - - - - - G E T T E R S- - - - - - - - - -
 
-    public RemoteInterface getRemoteServer() {
-        return remoteServer;
+    public Client getOwner(){
+        return owner;       //the client associated to this handler
     }
 }

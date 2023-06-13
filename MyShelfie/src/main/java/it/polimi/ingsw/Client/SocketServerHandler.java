@@ -11,6 +11,11 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * SocketServerHandler class: an implementation of the abstract class ServerHandler in order to manage the network functions
+ *                            used in a socket communication.
+ */
+
 public class SocketServerHandler extends ServerHandler {
     public ObjectInputStream input;
     public ObjectOutputStream output;
@@ -18,7 +23,7 @@ public class SocketServerHandler extends ServerHandler {
     private AtomicBoolean shouldStop = new AtomicBoolean(false);
 
     public SocketServerHandler(Socket server, Client owner){
-       super(owner,null);
+       super(owner);
        this.server = server;
         try{
             output = new ObjectOutputStream(server.getOutputStream());
@@ -29,7 +34,6 @@ public class SocketServerHandler extends ServerHandler {
         }
     }
 
-    //questa run fa andare l'event loop che servirà per ricevere i pacchetti in arrivo dal server
     @Override
         public void run(){
         try{
@@ -48,7 +52,11 @@ public class SocketServerHandler extends ServerHandler {
     }
 
 
-    //event loop che riceve i messaggi dal server e li processa
+    /**
+     * OVERVIEW: this method manages the event loop in order to deserialize the messages received by the server socket
+     *           and to process them.
+     * @throws IOException: exception thrown when an error occurs during serialization.
+     */
     private void handleClientConnection() throws IOException{
         try{
             boolean stop = false;
@@ -67,21 +75,20 @@ public class SocketServerHandler extends ServerHandler {
             System.out.println("Invalid stream from server");
         }
     }
-
-    //funzione per mandare i mesaggi dal client al server
+    @Override
     public void sendMessageToServer(C2SMessage msg){
         try {
-            output.flush();
-            output.writeObject(msg);
+            output.flush();     //flushing the output stream associated to the socket
+            output.writeObject(msg);    //serializing the message
 
         } catch (IOException e) {
-            System.out.println("Communication error");
+            System.out.println("[SKT] Communication error: problems in sending message to the server");
             owner.setTrueTerminate();
         }
     }
 
     public void stop() {
-        shouldStop.set(true);
+        shouldStop.set(true);   //notifying the handling method that it should stop in the next loop ASAP
         try {
             server.shutdownInput();
             System.out.println("Connection closed.");
