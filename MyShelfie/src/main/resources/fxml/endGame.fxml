@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.GUI.EndGameController">
+   <children>
+      <BorderPane prefHeight="720.0" prefWidth="1280.0">
+         <center>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fitHeight="570.0" fitWidth="1280.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../MyShelfie_IMAGES/misc/soggiorno_v4.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="textPos_1" layoutX="617.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="n_first" textAlignment="CENTER" visible="false" wrappingWidth="282.13671875">
+                     <font>
+                        <Font name="Georgia" size="42.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="textPos_2" layoutX="772.0" layoutY="238.0" strokeType="OUTSIDE" strokeWidth="0.0" text="n-second" textAlignment="CENTER" visible="false" wrappingWidth="282.13671875">
+                     <font>
+                        <Font name="Georgia" size="39.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="textPos_3" layoutX="719.0" layoutY="379.0" strokeType="OUTSIDE" strokeWidth="0.0" text="n_third" textAlignment="CENTER" visible="false" wrappingWidth="282.13671875">
+                     <font>
+                        <Font name="Georgia" size="38.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="textPos_4" layoutX="803.0" layoutY="514.0" strokeType="OUTSIDE" strokeWidth="0.0" text="n_fourth" textAlignment="CENTER" visible="false" wrappingWidth="318.13671875">
+                     <font>
+                        <Font name="Georgia" size="34.0" />
+                     </font>
+                  </Text>
+                  <ImageView fx:id="podFirst" fitHeight="65.0" fitWidth="45.0" layoutX="631.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true" rotate="12.5">
+                     <image>
+                        <Image url="@../MyShelfie_IMAGES/misc/podium/first.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="podSecond" fitHeight="65.0" fitWidth="45.0" layoutX="719.0" layoutY="247.0" pickOnBounds="true" preserveRatio="true" rotate="-12.5">
+                     <image>
+                        <Image url="@../MyShelfie_IMAGES/misc/podium/second.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="podThird" fitHeight="65.0" fitWidth="45.0" layoutX="762.0" layoutY="381.0" pickOnBounds="true" preserveRatio="true" rotate="6.3">
+                     <image>
+                        <Image url="@../MyShelfie_IMAGES/misc/podium/third.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="textPos_1_score" fill="WHITE" layoutX="665.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="s_first" textAlignment="CENTER" visible="false" wrappingWidth="282.13671875">
+                     <font>
+                        <Font name="Georgia" size="22.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="textPos_2_score" fill="WHITE" layoutX="750.0" layoutY="265.0" strokeType="OUTSIDE" strokeWidth="0.0" text="s_second" textAlignment="CENTER" visible="false" wrappingWidth="282.13671875">
+                     <font>
+                        <Font name="Georgia" size="22.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="textPos_3_score" fill="WHITE" layoutX="798.0" layoutY="400.0" strokeType="OUTSIDE" strokeWidth="0.0" text="s_third" textAlignment="CENTER" visible="false" wrappingWidth="259.13671875">
+                     <font>
+                        <Font name="Georgia" size="17.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="textPos_4_score" fill="WHITE" layoutX="808.0" layoutY="550.0" strokeType="OUTSIDE" strokeWidth="0.0" text="s_fourth" textAlignment="CENTER" visible="false" wrappingWidth="259.13671875">
+                     <font>
+                        <Font name="Georgia" size="17.0" />
+                     </font>
+                  </Text>
+               </children>
+            </AnchorPane>
+         </center>
+         <top>
+            <AnchorPane prefHeight="127.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fitHeight="150.0" fitWidth="1280.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../MyShelfie_IMAGES/misc/base_pagina2.jpg" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="148.0" fitWidth="647.0" layoutX="401.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="401.0" AnchorPane.rightAnchor="400.03558349609375">
+                     <image>
+                        <Image url="@../MyShelfie_IMAGES/Publisher_material/Title_2000x618px.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="86.0" fitWidth="86.0" layoutX="1160.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../MyShelfie_IMAGES/Publisher_material/Publisher.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>

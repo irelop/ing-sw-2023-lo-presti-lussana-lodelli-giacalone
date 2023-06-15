@@ -1,0 +1,115 @@
+#Q2UPatternStrategy{
+    -fx-background-image: url("../MyShelfie_IMAGES/common_goal_cards/1.jpg");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#V6UPatternStrategy{
+    -fx-background-image: url("../MyShelfie_IMAGES/common_goal_cards/2.jpg");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#V4UPatternStrategy{
+    -fx-background-image: url("../MyShelfie_IMAGES/common_goal_cards/3.jpg");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#V2UPatternStrategy{
+    -fx-background-image: url("../MyShelfie_IMAGES/common_goal_cards/4.jpg");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#V6DPatternStrategy{
+    -fx-background-image: url("../MyShelfie_IMAGES/common_goal_cards/5.jpg");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#O5UPatternStrategy{
+    -fx-background-image: url("../MyShelfie_IMAGES/common_goal_cards/6.jpg");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#O5DPatternStrategy{
+    -fx-background-image: url("../MyShelfie_IMAGES/common_goal_cards/7.jpg");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#APatternStrategy{
+    -fx-background-image: url("../MyShelfie_IMAGES/common_goal_cards/8.jpg");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#M8PatternStrategy{
+    -fx-background-image: url("../MyShelfie_IMAGES/common_goal_cards/9.jpg");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#XPatternStrategy{
+    -fx-background-image: url("../MyShelfie_IMAGES/common_goal_cards/10.jpg");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#DPatternStrategy{
+    -fx-background-image: url("../MyShelfie_IMAGES/common_goal_cards/11.jpg");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#PPatternStrategy{
+    -fx-background-image: url("../MyShelfie_IMAGES/common_goal_cards/12.jpg");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#SCORE0{
+    visibility: hidden;
+}
+
+#SCORE2{
+    -fx-background-image: url("../MyShelfie_IMAGES/scoring_tokens/scoring_2.jpg");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#SCORE4{
+    -fx-background-image: url("../MyShelfie_IMAGES/scoring_tokens/scoring_4.jpg");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#SCORE6{
+    -fx-background-image: url("../MyShelfie_IMAGES/scoring_tokens/scoring_6.jpg");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#SCORE8{
+    -fx-background-image: url("../MyShelfie_IMAGES/scoring_tokens/scoring_8.jpg");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
