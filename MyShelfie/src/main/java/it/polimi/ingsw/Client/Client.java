@@ -15,14 +15,18 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
 
+/**
+ * Client class: this class represents the client in the network protocol. It wraps all the references useful in order
+ *               to communicate with a server in a Socket or RMI communication protocol.
+ */
 public class Client implements Runnable{
-    private String nickname;
-    private ServerHandler serverHandler;
-    private boolean terminate = false;
+    private String nickname;        //nickname chosen by the user once connected
+    private ServerHandler serverHandler;        //network handler client side
+    private boolean terminate = false;      //in order to stop the view state machine
 
-    private View currentView;
-    private View nextView;
-    private boolean isRMI;
+    private View currentView;       //view currently visualized in the client side
+    private View nextView;      //the following view after the transition
+    private boolean isRMI;      //checks if a client chooses the RMI mode
     private RemoteInterface remoteServer;
     private RemoteInterface client;
 
@@ -35,8 +39,8 @@ public class Client implements Runnable{
     public void run(){
         askNetworkChoice();
 
-        nextView = new LoginView();
-        runViewStateMachine();
+        nextView = new LoginView();     //the first view to visualize
+        runViewStateMachine();      //allows to run the state machine
         if(!isRMI) {
             serverHandler.stop();
             System.exit(0);
@@ -46,6 +50,12 @@ public class Client implements Runnable{
         }
     }
 
+    /**
+     * OVERVIEW: this method allows to get the correct user choice between RMI or Socket and check for possible typos
+     *           from the user.
+     * @return the digit choice of the user.
+     * @throws InvalidNetworkChoiceException: exception thrown when the digit choice isn't valid.
+     */
     private char getNetworkChoice() throws InvalidNetworkChoiceException {
         Scanner input = new Scanner(System.in);
         System.out.println("Insert 'R' for RMI connection or 'S' for Socket connection");
@@ -58,6 +68,10 @@ public class Client implements Runnable{
         else return networkChoice;
     }
 
+    /**
+     * OVERVIEW: this method allows to manage the request for the connection mode and to trigger the proper methods in
+     *           order to handle the connection following the chosen protocol.
+     */
     private void askNetworkChoice(){
         char networkChoice;
         do{
@@ -78,15 +92,65 @@ public class Client implements Runnable{
         }
     }
 
+
+    //- - - - - - - - - - - - - - - - - V I E W   M A N A G E M E N T   M E T H O D S  - - - - - - - - - - - - - - - - - - -
+
+    /**
+     * OVERVIEW: this method allows to manage the view state machine for the correct visualization and transition of the views.
+     */
+    private void runViewStateMachine(){
+        boolean stop;
+
+        synchronized (this){
+            stop = terminate;
+            currentView = nextView;     //setting the first view
+            nextView = null;
+        }
+        while(!stop){
+            if(currentView==null){
+                currentView = new WaitingView();    //if there is no runnable view currently
+            }
+            currentView.setOwner(this);
+            currentView.run();      //allows to start the view
+
+            synchronized (this){
+                stop = terminate;       //checks if the state machine should be stopped
+                currentView = nextView;
+                nextView = null;
+            }
+        }
+    }
+
+    /**
+     * OVERVIEW: this method allows to make a transition in the state machine of the views setting the next view to
+     *           run after the current view.
+     * @param nextView: the following view.
+     */
+    public synchronized void transitionToView(View nextView){
+        this.nextView = nextView;
+
+    }
+
+
+
+
+
+    //- - - - - - - - - - - - - - -C O N N E C T I O N   M A N A G E M E N T   M E T H O D S - - - - - - - - - - - - - - - - - - -
+
+    /**
+     * OVERVIEW: this method allows to manage the RMI connection client-server.
+     */
     public void manageRMIConnection(){
 
         try{
-            client = new RMIAdapter();
-            Registry registry = LocateRegistry.getRegistry();
-            remoteServer = (RemoteInterface) registry.lookup("server");
+            client = new RMIAdapter();      //instantiating the remote interface of the client
+            Registry registry = LocateRegistry.getRegistry();       //getting the reference of the RMI registry
+            remoteServer = (RemoteInterface) registry.lookup("server");     //getting the remote interface of the server
+
+            //printing logging message in the server side
             remoteServer.printLoginStatus("["+this.getClass().getName()+"] now connected through RMI");
-            remoteServer.addRemoteClient(client);
-            client.setClient(this);
+            remoteServer.addRemoteClient(client);       //adding the remote interface of the client to the remote server
+            client.setClient(this);     //adding the reference of this client to the remote client interface
 
         }catch(RemoteException e){
             System.out.println("[ERROR]: Unable to invoke remote method");
@@ -94,13 +158,16 @@ public class Client implements Runnable{
             System.out.println("[ERROR]: Server unreachable");
         }
 
-
+        //creating the handler for the RMI connection
         serverHandler = new RMIServerHandler(this,remoteServer);
         Thread serverHandlerThread = new Thread(serverHandler);
         serverHandlerThread.start();
 
     }
 
+    /**
+     * OVERVIEW: this method allows to manage the Socket connection client-server.
+     */
     public void manageSocketConnection(){
         System.out.println("Please insert the IP address of the server:\n");
         Scanner input = new Scanner(System.in);
@@ -127,65 +194,6 @@ public class Client implements Runnable{
         Thread serverHandlerThread = new Thread((SocketServerHandler)serverHandler,"server_"+server.getInetAddress().getHostAddress());
         serverHandlerThread.start();
     }
-    private void runViewStateMachine(){
-        boolean stop;
-
-        synchronized (this){
-            stop = terminate;
-            currentView = nextView;
-            nextView = null;
-        }
-        while(!stop){
-            if(currentView==null){
-                currentView = new WaitingView();
-            }
-            currentView.setOwner(this);
-            currentView.run();
-
-            synchronized (this){
-                stop = terminate;
-                currentView = nextView;
-
-                nextView = null;
-            }
-        }
-    }
-
-
-    public synchronized void transitionToView(View nextView){
-        this.nextView = nextView;
-
-    }
-
-    public synchronized void setTrueTerminate(){
-        if(!terminate){
-            terminate = true;
-            if(currentView!=null)
-                currentView.setStopInteraction();
-        }
-    }
-
-
-    public View getCurrentView() {
-        return currentView;
-    }
-
-    public ServerHandler getServerHandler() {
-        return serverHandler;
-    }
-
-
-    public boolean isRMI() {
-        return isRMI;
-    }
-
-    public RemoteInterface getRemoteServer() {
-        return remoteServer;
-    }
-
-    public RemoteInterface getClient() {
-        return client;
-    }
 
     public void stopRMIConnection(){
         try {
@@ -199,10 +207,38 @@ public class Client implements Runnable{
         System.exit(0);
     }
 
+
+
+    //- - - - - - - - - S E T T E R S - - - - - - - - - - - - -
+    /**
+     * OVERVIEW: this method allows to notify the state machine in order to stop it and eventually also the interaction
+     *           with the current view.
+     */
+    public synchronized void setTrueTerminate(){
+        if(!terminate){
+            terminate = true;
+            if(currentView!=null)
+                currentView.setStopInteraction();
+        }
+    }
+
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
+    //- - - - - - - G E T T E R S - - - - - - - - - - - - - - -
+    public View getCurrentView() {
+        return currentView;
+    }
+    public ServerHandler getServerHandler() {
+        return serverHandler;
+    }
+    public boolean isRMI() {
+        return isRMI;
+    }
+    public RemoteInterface getClient() {
+        return client;
+    }
     public String getNickname() {
         return nickname;
     }
