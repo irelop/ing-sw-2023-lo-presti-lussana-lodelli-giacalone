@@ -132,38 +132,41 @@ public class MyShelfie {
             path = safeFilePath + player.getNickname()+".txt";
             ReadFileByLines reader;
             reader = new ReadFileByLines();
-            reader.readFrom(path);
+            File file = new File(path);
+            if(file.exists()){
+                reader.readFrom(path);
 
-            //set the chair only if the player has it
-            boolean hasChair = Boolean.parseBoolean(ReadFileByLines.getLineByIndex(1));
-            if(hasChair)
-                player.setChair();
+                //set the chair only if the player has it
+                boolean hasChair = Boolean.parseBoolean(ReadFileByLines.getLineByIndex(1));
+                if (hasChair)
+                    player.setChair();
 
-            //get the right personal card from the deck
-            PersonalGoalCard card = personalDeck.getCard(ReadFileByLines.getLineByIndex(2));
-            player.setCard(card);
+                //get the right personal card from the deck
+                PersonalGoalCard card = personalDeck.getCard(ReadFileByLines.getLineByIndex(2));
+                player.setCard(card);
 
-            //set the old score
-            int score = Integer.parseInt(ReadFileByLines.getLineByIndex(3));
-            player.setScore(score);
+                //set the old score
+                int score = Integer.parseInt(ReadFileByLines.getLineByIndex(3));
+                player.setScore(score);
 
-            //set the old shelf
-            Tile[][] shelf = new Tile[9][9];
-            String row = ReadFileByLines.getLineByIndex(4);
+                //set the old shelf
+                Tile[][] shelf = new Tile[9][9];
+                String row = ReadFileByLines.getLineByIndex(4);
 
-            //if row.equals("shelf") the player didn't play their turn, so the shelf was all blank
-            if(!row.equals("shelf")) {
-                String[] values = row.replaceAll("\\[", "")
-                        .replaceAll("]", "")
-                        .split(", ");
-                int index = 0;
-                for (int j = 0; j < 6; j++) {
-                    for (int k = 0; k < 5; k++) {
-                        shelf[j][k] = Tile.valueOf(values[index]);
-                        index++;
+                //if row.equals("shelf") the player didn't play their turn, so the shelf was all blank
+                if (!row.equals("shelf")) {
+                    String[] values = row.replaceAll("\\[", "")
+                            .replaceAll("]", "")
+                            .split(", ");
+                    int index = 0;
+                    for (int j = 0; j < 6; j++) {
+                        for (int k = 0; k < 5; k++) {
+                            shelf[j][k] = Tile.valueOf(values[index]);
+                            index++;
+                        }
                     }
+                    player.setShelf(shelf);
                 }
-                player.setShelf(shelf);
             }
         }
     }
