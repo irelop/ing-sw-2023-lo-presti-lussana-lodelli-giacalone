@@ -8,6 +8,7 @@ import it.polimi.ingsw.Client.View.View;
 import it.polimi.ingsw.Client.View.WaitingView;
 import it.polimi.ingsw.Server.RMIAdapter;
 import it.polimi.ingsw.Server.RemoteInterface;
+import javafx.application.Application;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -47,8 +48,21 @@ public class Client implements Runnable{
     public void run(){
         askNetworkChoice();
 
-        nextView = new LoginView();     //the first view to visualize
-        runViewStateMachine();      //allows to run the state machine
+        System.out.println("do you want the GUI?");
+
+        Scanner input = new Scanner(System.in);
+        this.gui = input.nextInt();
+        if(gui == 0) {
+            nextView = new LoginView();
+            runViewStateMachine();
+        }
+        else{
+            stageManager = StageManager.getInstance();
+            //stageManager = new StageManager();
+            stageManager.setOwner(this);
+            mainApp = new JavaGUI();
+            Application.launch(JavaGUI.class);
+        }      //allows to run the state machine
         if(!isRMI) {
             serverHandler.stop();
             System.exit(0);
