@@ -65,4 +65,9 @@ public class CommonGoalCard implements Serializable {
         return availableScore;
     }
 
+    public String printAvailableScore(){
+        if(this.availableScore.isEmpty()) return "0";
+        return Integer.toString( this.availableScore.get(0));
+    }
+
 }

@@ -108,7 +108,7 @@ class ChooseTilesFromBoardViewTest {
         playersNames.add("player2");
 
         yourTurnMsg = new YourTurnMsg("player1", 3, boardGrid, commonGoalCards,
-                personalGoalCard, true, playersNames, shelf);
+                personalGoalCard, true, playersNames, shelf,false);
         chooseTilesFromBoardView = new ChooseTilesFromBoardView(yourTurnMsg);
     }
 

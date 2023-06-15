@@ -445,7 +445,8 @@ public class MyShelfie {
                 playersConnected.get(currentPlayerIndex).getPersonalGoalCard(),
                 firstTurn,
                 playersNames,
-                shelfSnapshot
+                shelfSnapshot,
+                isOver
         );
 
         if (isOver) {

@@ -12,6 +12,7 @@ import java.util.Arrays;
 public class PersonalGoalCard implements Serializable {
 
     private String id;
+    private String imageCode;
     private final static int maxr = 6;
     private final static int maxc = 5;
     private Tile[][] pattern;
@@ -37,6 +38,7 @@ public class PersonalGoalCard implements Serializable {
         pattern = new Tile[maxr][maxc];
 
         id = ReadFileByLines.getLine();
+        this.imageCode = ReadFileByLines.getLine();
 
         for (int i = 0; i < maxr; i++) {
 
@@ -77,5 +79,9 @@ public class PersonalGoalCard implements Serializable {
             }
         }
         return 0;
+    }
+
+    public String getImageCode() {
+        return this.imageCode;
     }
 }
