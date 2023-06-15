@@ -1,0 +1,83 @@
+#PG1{
+    -fx-background-image: url("../MyShelfie_IMAGES/personal_goal_cards/Personal_Goals.png");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#PG2{
+    -fx-background-image: url("../MyShelfie_IMAGES/personal_goal_cards/Personal_Goals2.png");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#PG3{
+    -fx-background-image: url("../MyShelfie_IMAGES/personal_goal_cards/Personal_Goals3.png");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#PG4{
+    -fx-background-image: url("../MyShelfie_IMAGES/personal_goal_cards/Personal_Goals4.png");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#PG5{
+    -fx-background-image: url("../MyShelfie_IMAGES/personal_goal_cards/Personal_Goals5.png");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#PG6{
+    -fx-background-image: url("../MyShelfie_IMAGES/personal_goal_cards/Personal_Goals6.png");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#PG7{
+    -fx-background-image: url("../MyShelfie_IMAGES/personal_goal_cards/Personal_Goals7.png");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#PG8{
+    -fx-background-image: url("../MyShelfie_IMAGES/personal_goal_cards/Personal_Goals8.png");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#PG9{
+    -fx-background-image: url("../MyShelfie_IMAGES/personal_goal_cards/Personal_Goals9.png");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#PG10{
+    -fx-background-image: url("../MyShelfie_IMAGES/personal_goal_cards/Personal_Goals10.png");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#PG11{
+    -fx-background-image: url("../MyShelfie_IMAGES/personal_goal_cards/Personal_Goals11.png");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#PG12{
+    -fx-background-image: url("../MyShelfie_IMAGES/personal_goal_cards/Personal_Goals12.png");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}

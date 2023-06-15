@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.Gui.GridController">
+   <children>
+      <ImageView fitHeight="720.0" fitWidth="680.0" pickOnBounds="true" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0">
+         <image>
+            <Image url="@../MyShelfie_IMAGES/misc/sfondo_parquet.jpg" />
+         </image>
+      </ImageView>
+      <BorderPane maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0">
+         <center>
+            <AnchorPane maxHeight="720.0" maxWidth="680.0" minHeight="720.0" minWidth="680.0" prefHeight="720.0" prefWidth="680.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fitHeight="720.0" fitWidth="620.0" layoutX="30.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="50.0">
+                     <image>
+                        <Image url="@../MyShelfie_IMAGES/boards/livingroom.png" />
+                     </image>
+                  </ImageView>
+                  <GridPane fx:id="grid" alignment="CENTER" layoutX="30.0" layoutY="50.0" maxHeight="618.0" maxWidth="624.0" minHeight="600.0" minWidth="600.0" prefHeight="618.0" prefWidth="614.0" AnchorPane.bottomAnchor="52.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="36.0" AnchorPane.topAnchor="50.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Button alignment="CENTER" contentDisplay="CENTER" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="170.0" layoutY="172.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="170.0" layoutY="172.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="170.0" layoutY="131.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="170.0" layoutY="172.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="170.0" layoutY="131.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="170.0" layoutY="50.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="130.0" layoutY="50.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="90.0" layoutY="91.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="170.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="130.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="170.0" layoutY="131.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="130.0" layoutY="212.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="6" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="6" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="8" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="8" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="130.0" layoutY="252.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="251.0" layoutY="172.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="210.0" layoutY="212.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="7" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="8" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="7" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="8" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="7" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="6" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="6" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="6" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="130.0" layoutY="212.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="90.0" layoutY="212.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="234.0" layoutY="242.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="185.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="66.0" layoutY="128.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="122.0" layoutY="71.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="122.0" layoutY="14.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="0" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="290.0" layoutY="14.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="347.0" layoutY="71.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="404.0" layoutY="128.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="8" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="461.0" layoutY="128.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="6" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="354.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="6" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="66.0" layoutY="354.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="7" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="122.0" layoutY="410.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="8" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="178.0" layoutY="466.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="7" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="347.0" layoutY="410.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="6" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" layoutX="404.0" layoutY="354.0" maxHeight="58.0" maxWidth="58.0" minHeight="58.0" minWidth="58.0" onAction="#chooseStartingTile" prefHeight="58.0" prefWidth="58.0" GridPane.columnIndex="8" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+                     </children>
+                     <padding>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                     </padding>
+                  </GridPane>
+                  <ImageView fx:id="shelfFulledImage" fitHeight="60.0" fitWidth="60.0" rotate="7.6" translateX="532.0" translateY="482.0">
+                    <image>
+                       <Image url="@../MyShelfie_IMAGES/scoring_tokens/end game.jpg" />
+                    </image>
+                  </ImageView>
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="100.0" top="100.0" />
+               </BorderPane.margin>
+            </AnchorPane>
+         </center>
+         <right>
+            <AnchorPane maxHeight="720.0" maxWidth="300.0" minHeight="720.0" minWidth="300.0" prefHeight="720.0" prefWidth="300.0" BorderPane.alignment="CENTER_LEFT">
+               <children>
+                  <ImageView fitHeight="720.0" fitWidth="300.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../MyShelfie_IMAGES/misc/sfondo_parquet.jpg" />
+                     </image>
+                  </ImageView>
+                  <Button fx:id="common_card_1" layoutX="62.0" layoutY="50.0" onAction="#infoCard" prefHeight="128.0" prefWidth="194.0" rotate="18.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
+                  <Pane fx:id="scoringPane_1" layoutX="174.0" layoutY="93.0" mouseTransparent="true" prefHeight="59.0" prefWidth="58.0" rotate="9.5" />
+                  <Button fx:id="common_card_2" layoutX="26.0" layoutY="213.0" onAction="#infoCard" prefHeight="133.0" prefWidth="201.0" rotate="-8.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
+                  <Pane fx:id="scoringPane_2" layoutX="142.0" layoutY="238.0" mouseTransparent="true" prefHeight="60.0" prefWidth="61.0" rotate="-15.3" />
+                  <Button id="pick-button" layoutX="21.0" layoutY="583.0" mnemonicParsing="false" onAction="#confirmChoice" prefHeight="106.0" prefWidth="106.0" style="-fx-background-radius: 150;" text="PICK">
+                     <font>
+                        <Font name="HoloLens MDL2 Assets" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <GridPane fx:id="joystick" alignment="CENTER" layoutX="103.0" layoutY="377.0" prefHeight="195.0" prefWidth="199.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Button id="arrow-button" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" mnemonicParsing="false" onAction="#getDirection" prefHeight="40.0" prefWidth="80.0" text="N" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                        <Button id="arrow-button" layoutX="53.0" layoutY="10.0" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" mnemonicParsing="false" onAction="#getDirection" prefHeight="40.0" prefWidth="80.0" rotate="-90.0" text="W" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                        <Button id="arrow-button" layoutX="10.0" layoutY="49.0" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" mnemonicParsing="false" onAction="#getDirection" prefHeight="40.0" prefWidth="80.0" rotate="180.0" text="S" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                        <Button id="arrow-button" layoutX="53.0" layoutY="88.0" maxHeight="40.0" maxWidth="80.0" minHeight="40.0" minWidth="80.0" mnemonicParsing="false" onAction="#getDirection" prefHeight="40.0" prefWidth="80.0" rotate="90.0" text="E" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                           <font>
+                              <Font size="17.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                  </GridPane>
+                  <Pane id="infoText" fx:id="errorPane" layoutX="137.0" layoutY="612.0" prefHeight="105.0" prefWidth="159.0" style="-fx-background-color: #F6D669; -fx-border-color: #422F11; -fx-border-width: 5; -fx-border-radius: 8; -fx-background-radius: 10;">
+                     <children>
+                        <Text fx:id="errorText" layoutX="13.0" layoutY="26.0" strokeWidth="0.0" text="Text" wrappingWidth="129.13671875">
+                           <font>
+                              <Font name="System Bold Italic" size="13.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </Pane>
+                  <VBox fx:id="numOfTilesButtons" layoutX="14.0" layoutY="375.0" prefHeight="188.0" prefWidth="60.0" spacing="4.0">
+                     <children>
+                        <Button id="numTiles3" fx:id="number3" mnemonicParsing="false" onAction="#setNumberOfTiles" prefHeight="60.0" prefWidth="60.0" />
+                        <Button id="numTiles2" fx:id="number2" mnemonicParsing="false" onAction="#setNumberOfTiles" prefHeight="60.0" prefWidth="60.0" />
+                        <Button id="numTiles1" fx:id="number1" mnemonicParsing="false" onAction="#setNumberOfTiles" prefHeight="60.0" prefWidth="60.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </right>
+         <left>
+            <AnchorPane maxHeight="720.0" maxWidth="300.0" minHeight="720.0" minWidth="300.0" prefHeight="720.0" prefWidth="300.0" BorderPane.alignment="CENTER_RIGHT">
+               <children>
+                  <ImageView fitHeight="720.0" fitWidth="300.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../MyShelfie_IMAGES/misc/sfondo_parquet.jpg" />
+                     </image>
+                  </ImageView>
+                  <Pane fx:id="personal_card" layoutX="65.0" layoutY="71.0" prefHeight="260.0" prefWidth="182.0" />
+                  <GridPane fx:id="shelfDisplay" layoutX="34.0" layoutY="360.0" prefHeight="242.0" prefWidth="235.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                         <Pane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                     </children>
+                  </GridPane>
+                  <ImageView fitHeight="291.0" fitWidth="291.0" layoutX="6.0" layoutY="346.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../MyShelfie_IMAGES/boards/bookshelf_orth.png" />
+                     </image>
+                  </ImageView>
+                  <Button id="off" fx:id="infoButton" layoutX="13.0" layoutY="29.0" mnemonicParsing="false" onAction="#infoText" prefHeight="50.0" prefWidth="50.0" style="-fx-border-width: 5; -fx-border-color: #422F11;">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></Button>
+                  <Pane id="infoText" fx:id="infoTextPane" layoutX="70.0" layoutY="24.0" prefHeight="250.0" prefWidth="390.0" style="-fx-background-color: #F6D669; -fx-border-color: #422F11; -fx-border-width: 5; -fx-border-radius: 8; -fx-background-radius: 10;">
+                     <children>
+                        <Text fx:id="infoText" layoutX="16.0" layoutY="60.0" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="350.0">
+                           <font>
+                              <Font name="System Bold Italic" size="15.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </Pane>
+               </children>
+            </AnchorPane>
+         </left>
+      </BorderPane>
+      <Pane id="infoText" fx:id="infoCardPane" layoutX="-110.0" layoutY="-800.0" maxHeight="400.0" maxWidth="700.0" minHeight="400.0" minWidth="700.0" prefHeight="400.0" prefWidth="700.0" style="-fx-background-color: #F6D669; -fx-border-color: #422F11; -fx-border-width: 5; -fx-border-radius: 8; -fx-background-radius: 10;" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="200.0">
+         <children>
+            <Text fx:id="infoCardText" layoutX="302.0" layoutY="104.0" strokeWidth="0.0" text="Text" textAlignment="RIGHT" wrappingWidth="339.13671875">
+               <font>
+                  <Font name="System Bold Italic" size="15.0" />
+               </font>
+            </Text>
+            <Pane fx:id="imageInfoCard" layoutX="39.0" layoutY="63.0" prefHeight="200.0" prefWidth="209.0" />
+         </children>
+      </Pane>
+      <Pane id="infoText" fx:id="confirmationPane" layoutX="310.0" layoutY="210.0" maxHeight="400.0" maxWidth="700.0" minHeight="400.0" minWidth="700.0" prefHeight="400.0" prefWidth="700.0" style="-fx-background-color: #F6D669; -fx-border-color: #422F11; -fx-border-width: 5; -fx-border-radius: 8; -fx-background-radius: 10;" AnchorPane.bottomAnchor="220.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="180.0">
+         <children>
+            <Text layoutX="170.0" layoutY="58.0" strokeWidth="0.0" text="Do you confirm your choice?" textAlignment="CENTER" wrappingWidth="339.13671875">
+               <font>
+                  <Font name="System Bold Italic" size="15.0" />
+               </font>
+            </Text>
+            <HBox fx:id="confirmationList" alignment="CENTER" layoutX="100.0" layoutY="81.0" maxHeight="150.0" minHeight="150.0" prefHeight="150.0" prefWidth="480.0">
+               <children>
+                  <Pane prefHeight="200.0" prefWidth="200.0" />
+                  <Pane prefHeight="200.0" prefWidth="200.0" />
+                  <Pane prefHeight="200.0" prefWidth="200.0" />
+               </children>
+            </HBox>
+            <Button layoutX="542.0" layoutY="239.0" mnemonicParsing="false" onAction="#checkPosition" prefHeight="62.0" prefWidth="76.0" text="YES" />
+            <Button layoutX="62.0" layoutY="239.0" mnemonicParsing="false" onAction="#closeConfirmationPane" prefHeight="62.0" prefWidth="76.0" text="NO" />
+         </children>
+      </Pane>
+   </children>
+    <stylesheets>
+        <URL value="@../css/stylesheet.css" />
+        <URL value="@../css/commonCard.css" />
+        <URL value="@../css/personalCard.css" />
+    </stylesheets>
+</AnchorPane>
