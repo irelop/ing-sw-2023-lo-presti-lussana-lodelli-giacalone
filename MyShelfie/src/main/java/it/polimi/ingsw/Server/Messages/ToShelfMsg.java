@@ -20,6 +20,7 @@ import java.util.ArrayList;
 
 public class ToShelfMsg extends S2CMessage {
 
+    public String[] commonPoints;
     private Tile[][] shelf;
     private ArrayList<Tile> littleHand;
     public CommonGoalCard[] commonGoalCards;
@@ -35,6 +36,10 @@ public class ToShelfMsg extends S2CMessage {
         this.shelf = shelf;
         this.littleHand = littleHand;
         this.commonGoalCards = commonGoalCards;
+        this.commonPoints = new String[2];
+        for (int i = 0; i < 2; i++) {
+            commonPoints[i] = commonGoalCards[i].printAvailableScore();
+        }
         this.personalGoalCard = personalGoalCard;
     }
 

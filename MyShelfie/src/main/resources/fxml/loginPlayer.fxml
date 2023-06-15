@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.Gui.LoginPlayerController">
+   <children>
+      <BorderPane styleClass="scene" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <AnchorPane BorderPane.alignment="TOP_CENTER">
+               <children>
+                  <TextField fx:id="playerNickname" onKeyPressed="#manageKeyPressed" prefHeight="90.0" promptText="your nickname" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0">
+                     <font>
+                        <Font size="41.0" />
+                     </font>
+                  </TextField>
+                  <Button mnemonicParsing="false" onAction="#submitNicknameRequest" styleClass="startButton" text="Submit" textFill="#e0ff97" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="125.0">
+                     <font>
+                        <Font name="Baskerville Old Face" size="38.0" />
+                     </font>
+                  </Button>
+               </children>
+               <BorderPane.margin>
+                  <Insets left="300.0" right="300.0" />
+               </BorderPane.margin>
+            </AnchorPane>
+         </center>
+         <top>
+            <AnchorPane prefHeight="300.0" prefWidth="1280.0" BorderPane.alignment="TOP_CENTER">
+               <children>
+                  <ImageView fitWidth="1080.0" opacity="0.45" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="0.0">
+                     <image>
+                        <Image url="@../MyShelfie_IMAGES/Publisher_material/banner_1386x400px.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="#e0ff97" strokeType="OUTSIDE" strokeWidth="0.0" text="Insert your nickname" textAlignment="CENTER" wrappingWidth="1180.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="20.0">
+                     <font>
+                        <Font name="Baskerville Old Face" size="88.0" />
+                     </font>
+                     <effect>
+                        <Glow />
+                     </effect>
+                  </Text>
+                  <Label fx:id="loginResult" layoutX="362.0" layoutY="259.0" prefHeight="60.0" prefWidth="550.0" textFill="RED" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="350.0">
+                     <font>
+                        <Font name="Baskerville Old Face" size="25.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </top>
+         <bottom>
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="1280.0" BorderPane.alignment="BOTTOM_CENTER">
+               <children>
+                  <Button id="backButton" fx:id="backButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#returnBack" prefHeight="90.0" prefWidth="110.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="40.0">
+                     <effect>
+                        <Glow />
+                     </effect>
+                  </Button>
+                  <Text fx:id="numOfPlayersText" fill="#e0ff97" layoutX="743.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select number of players" textAlignment="RIGHT" AnchorPane.bottomAnchor="38.650000000000006">
+                     <font>
+                        <Font name="Baskerville Old Face" size="39.0" />
+                     </font>
+                     <effect>
+                        <Glow />
+                     </effect>
+                  </Text>
+                  <ComboBox id="numOfPlayerSelection" fx:id="numOfPlayersSelection" layoutX="1149.0" layoutY="65.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="70.0" promptText="2" visibleRowCount="3" AnchorPane.bottomAnchor="48.8" AnchorPane.rightAnchor="60.6" />
+               </children>
+            </AnchorPane>
+         </bottom>
+      </BorderPane>
+      <Pane id="infoText" fx:id="textPane" layoutY="200.0" maxHeight="400.0" maxWidth="700.0" minHeight="202.0" minWidth="515.0" prefHeight="216.0" prefWidth="580.0" style="-fx-background-color: #f6d669; -fx-border-color: #422f11; -fx-border-width: 5; -fx-border-radius: 8; -fx-background-radius: 10;" AnchorPane.bottomAnchor="304.0" AnchorPane.leftAnchor="350.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="200.0">
+         <children>
+            <Text layoutX="112.0" layoutY="67.0" strokeWidth="0.0" text="You are the first to join the lobby, so you have to select the number of players for this game" textAlignment="CENTER" wrappingWidth="349.59991455078125">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Text>
+            <Button layoutX="474.0" layoutY="149.0" mnemonicParsing="false" onAction="#closeTextPane" prefHeight="40.0" prefWidth="76.0" text="OK">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+   </children>
+   <stylesheets>
+      <URL value="@../css/loginStyle.css" />
+      <URL value="@../css/stylesheet.css" />
+   </stylesheets>
+</AnchorPane>

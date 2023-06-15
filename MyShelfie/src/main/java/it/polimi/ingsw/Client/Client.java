@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Client;
 
+import it.polimi.ingsw.Client.Gui.JavaGUI;
+import it.polimi.ingsw.Client.Gui.StageManager;
 import it.polimi.ingsw.Client.View.Exceptions.InvalidNetworkChoiceException;
 import it.polimi.ingsw.Client.View.LoginView;
 import it.polimi.ingsw.Client.View.View;
@@ -29,6 +31,12 @@ public class Client implements Runnable{
     private boolean isRMI;      //checks if a client chooses the RMI mode
     private RemoteInterface remoteServer;
     private RemoteInterface client;
+
+    public int gui;
+
+    private StageManager stageManager;
+
+    public JavaGUI mainApp;
 
     public static void main(String[] args){
         Client client = new Client();
@@ -241,5 +249,8 @@ public class Client implements Runnable{
     }
     public String getNickname() {
         return nickname;
+    }
+    public StageManager getStageManager() {
+        return stageManager;
     }
 }

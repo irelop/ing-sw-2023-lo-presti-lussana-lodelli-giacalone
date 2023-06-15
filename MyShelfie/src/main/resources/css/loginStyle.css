@@ -1,0 +1,27 @@
+.scene {
+    -fx-background-image: url("../MyShelfie_IMAGES/misc/base_pagina2.jpg");
+    -fx-background-size: cover;
+}
+.startButton{
+    -fx-background-image:url("../MyShelfie_IMAGES/misc/button_background.jpg");
+}
+.startButton:hover{
+    -fx-background-image:url("../MyShelfie_IMAGES/misc/button_background_HOVER.jpg");
+}
+#backButton {
+    -fx-shape: "M 0 0 L 6 4 L 6 2 L 10 2 L 10 -1 L 6 -1 L 6 -3 L 0 0" ;
+    -fx-background-color: #F0DAAB;
+}
+#playerDisplay {
+    -fx-background-color: #EDDFCD;
+    -fx-pref-width: 1000;
+    -fx-pref-height: 110;
+    -fx-shape: "M 0 0 L 55 0 Q 60 0 60 5 L 60 20 Q 60 25 55 25 L -5 25 Q -10 25 -10 20 L -10 5 Q -10 0 -5 0"
+}
+#numOfPlayerSelection {
+    -fx-background-color: #EDDFCD;
+    -fx-font-size: 15;
+    -fx-font-family: "Baskerville Old Face";
+}
+
+
