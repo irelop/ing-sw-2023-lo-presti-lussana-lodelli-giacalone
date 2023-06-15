@@ -30,7 +30,7 @@ public class PersistenceManager {
     public void addNewGameFile(String name){
         File file = new File(path+name);
         try {
-            if(file.createNewFile())
+            if((file.exists() && file.length()==0 ) || file.createNewFile())
                 this.gameFiles.add(file);
         } catch (IOException e) {
             System.out.println("Problems with file for server persistence creation.");
@@ -67,7 +67,7 @@ public class PersistenceManager {
     public void deletePlayerFile(String nickname){
         File file = new File(path + nickname + ".txt");
         int index = playersFiles.indexOf(file);
-        boolean success = playersFiles.get(index).delete();
+        boolean success = file.delete();
         if(success)
             playersFiles.remove(index);
         else System.out.println("Problems deleting "+nickname+"'s persistence file");
@@ -96,6 +96,7 @@ public class PersistenceManager {
                 gameFiles.remove(index);
             else gameFiles.set(index,null);
         }
+        else System.out.println("Problems deleting file");
 
     }
 
@@ -119,24 +120,11 @@ public class PersistenceManager {
                     ReadFileByLines reader = new ReadFileByLines();
                     reader.readFrom(pathFile);
 
-                    String row = ReadFileByLines.getLineByIndex(7);
-                    String[] playerNicknames = row.replaceAll("\\{", "")
-                            .replaceAll("}", "")
-                            .split(", ");
-                    for (String player : playerNicknames) {
-                        try {
-                            File playerFile = new File(path + player);
-                            if (playerFile.exists()) {
-                                FileWriter fw = new FileWriter(file);
-                                BufferedWriter bw = new BufferedWriter(fw);
-                                bw.write(gamesNum + "\n");
-                                bw.flush();
-                                bw.close();
-                                this.playersFiles.add(playerFile);
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                    int playersNum = Integer.parseInt(ReadFileByLines.getLineByIndex(5));
+                    for(int j=0; j<playersNum; j++){
+                        File playerFile = new File(path+ReadFileByLines.getLineByIndex(j+8)+".txt");
+                        if(playerFile.exists())
+                            playersFiles.add(playerFile);
                     }
                     gameIdx++;
                 }

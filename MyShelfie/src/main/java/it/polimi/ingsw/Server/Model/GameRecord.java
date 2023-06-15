@@ -66,11 +66,12 @@ public class GameRecord {
         if(index == currentGame) {
             games.remove(game);
             currentGame--;
-            persistenceManager.deletePlayerFile(playerNickname);
             remove = true;
         }
         else
             games.set(index, null);
+
+        persistenceManager.deletePlayerFile(playerNickname);
         persistenceManager.deleteGameFile(index, remove);
     }
 
@@ -213,13 +214,18 @@ public class GameRecord {
 
                 int playersConnected = games.get(gameIndex).getClientHandlers().stream().filter(ClientHandler::isConnected).toList().size();
 
-                if(playersConnected == 0 && !persistenceManaged){
+                if(playersConnected == 0 && (!persistenceManaged || games.get(gameIndex).isGameOver())){
+                    //if there aren't players connected we are in 2 possible scenarios:
+                        //1) the server connection dropped so all players are reconnecting so the player can
+                        //   reconnect to the game -> !persistenceManaged
+                        //2) the player connection drop but the game is over
                     msg = """
 
                             Sorry, it took you too long to reconnect so the game is over.
                             Redirecting to a new lobby.""";
 
-                    games.get(gameIndex).fileDeleting(nickname);
+                    //games.get(gameIndex).fileDeleting(nickname);
+                    deleteGame(games.get(gameIndex), nickname);
                 }
                 //if there are no players connected and persistenceManaged == true
                 // then this player is the first one to reconnect to the game
@@ -236,7 +242,7 @@ public class GameRecord {
                         }
                     }
 
-                    games.get(gameIndex).switchClientHandler(playerIndex, clientHandler);
+                    games.get(gameIndex).switchClientHandler(gameIndex, clientHandler);
                 }
             }
         }
@@ -278,21 +284,18 @@ public class GameRecord {
         String pathFile = "src/safetxt/"+loginNicknameRequest.getInsertedNickname()+".txt";
         File file = new File(pathFile);
 
-        if (!file.exists()) {
+        if (!file.exists() || (file.exists() && file.length()<=2)) {
 
             if (games.get(controllerIdx).isFirstConnected()) {
                 loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
-                clientHandler.sendMessageToClient(loginNicknameAnswer);
-                games.get(controllerIdx).addPlayer(loginNicknameRequest.getInsertedNickname(), clientHandler);
-                persistenceManager.addNewPlayerFile(loginNicknameRequest.getInsertedNickname()+".txt", controllerIdx);
             }
 
             else {
                 loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.ACCEPTED);
-                clientHandler.sendMessageToClient(loginNicknameAnswer);
-                games.get(controllerIdx).addPlayer(loginNicknameRequest.getInsertedNickname(), clientHandler);
-                persistenceManager.addNewPlayerFile(loginNicknameRequest.getInsertedNickname()+".txt", controllerIdx);
             }
+            clientHandler.sendMessageToClient(loginNicknameAnswer);
+            games.get(controllerIdx).addPlayer(loginNicknameRequest.getInsertedNickname(), clientHandler);
+            persistenceManager.addNewPlayerFile(loginNicknameRequest.getInsertedNickname()+".txt", controllerIdx);
 
 
         } else {

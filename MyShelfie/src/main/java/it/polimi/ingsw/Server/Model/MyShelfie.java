@@ -84,6 +84,10 @@ public class MyShelfie {
         this.chatManager = new ChatManager();
     }
 
+    public boolean isGameOver(){
+        return gameOver;
+    }
+
     /**
      * Constructor for old games to be restored after the server crash
      * @param persistenceFile: file with all the info of this game
@@ -128,12 +132,14 @@ public class MyShelfie {
      */
     public void resetPlayers(){
         String path;
+        int numberOfPlayersConnected = 0;
         for(Player player : playersConnected){
             path = safeFilePath + player.getNickname()+".txt";
             ReadFileByLines reader;
             reader = new ReadFileByLines();
             File file = new File(path);
             if(file.exists()){
+                numberOfPlayersConnected ++;
                 reader.readFrom(path);
 
                 //set the chair only if the player has it
@@ -169,6 +175,8 @@ public class MyShelfie {
                 }
             }
         }
+        if(numberOfPlayersConnected == 1) //controllo anche se sono 0?
+            this.gameOver = true;
     }
 
     /**
