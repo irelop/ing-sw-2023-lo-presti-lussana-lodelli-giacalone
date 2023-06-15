@@ -7,7 +7,7 @@ import java.rmi.RemoteException;
 
 /**
  * RMIServerHandler class: an implementation of the abstract class ServerHandler in order to manage the network functions
- *                            used in a RMI communication.
+ *                            used in an RMI communication.
  */
 
 public class RMIServerHandler extends ServerHandler{
