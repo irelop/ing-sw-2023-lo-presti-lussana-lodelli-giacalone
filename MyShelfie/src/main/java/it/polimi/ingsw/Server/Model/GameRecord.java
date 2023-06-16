@@ -242,7 +242,7 @@ public class GameRecord {
                         }
                     }
 
-                    games.get(gameIndex).switchClientHandler(gameIndex, clientHandler);
+                    games.get(gameIndex).switchClientHandler(playerIndex, clientHandler);
                 }
             }
         }
