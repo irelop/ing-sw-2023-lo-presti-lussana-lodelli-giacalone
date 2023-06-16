@@ -8,7 +8,7 @@ import java.rmi.RemoteException;
 
 
 public class RMIClientHandler extends ClientHandler {
-
+    @Deprecated
     public RMIClientHandler(MyShelfie game, RemoteInterface remoteClient){
         super(game, remoteClient);
         setIsRMI(true);
@@ -33,11 +33,8 @@ public class RMIClientHandler extends ClientHandler {
                 Thread.sleep(1000);
                 getClientInterface().ping();
             }catch(Exception e){
-                isConnected = false;
-                if(getController() != null)
-                    getController().shouldFinishTurn(this);
-                System.out.println("RMI client disconnected");
                 goOn = false;
+                stop();
             }
         }
     }
@@ -61,5 +58,13 @@ public class RMIClientHandler extends ClientHandler {
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void stop() {
+        isConnected = false;
+        if(getController() != null)
+            getController().shouldFinishTurn(this);
+        System.out.println("RMI client disconnected");
     }
 }
