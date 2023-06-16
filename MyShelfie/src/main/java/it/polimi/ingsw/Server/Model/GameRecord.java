@@ -248,7 +248,7 @@ public class GameRecord {
         }
 
         //send the result of the reconnection choice to the player
-        S2CMessage reconnectionAnswer = new ReconnectionAnswer(msg);
+        S2CMessage reconnectionAnswer = new ReconnectionAnswer(msg,nickname);
         clientHandler.sendMessageToClient(reconnectionAnswer);
 
         if(countDownClient != null) {
