@@ -22,8 +22,12 @@ public class ReconnectionRequest extends C2SMessage{
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client) {
         try {
-            RMIClientHandler rmiClientHandler = new RMIClientHandler(client, server.getGameRecord());
-            server.getGameRecord().reconnectPlayer(nickname, rmiClientHandler);
+            RMIClientHandler reconnectedHandler = new RMIClientHandler(client, server.getGameRecord());
+            server.getGameRecord().reconnectPlayer(nickname, reconnectedHandler);
+
+            //need to create a new Thread in order to handle connection in RMI
+            Thread reconnectedHandlerThread = new Thread(reconnectedHandler);
+            reconnectedHandlerThread.start();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

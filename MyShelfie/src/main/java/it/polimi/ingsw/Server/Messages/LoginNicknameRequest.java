@@ -22,7 +22,7 @@ public class LoginNicknameRequest extends C2SMessage{
 
     @Override
     public void processMessage(ClientHandler clientHandler) {
-        clientHandler.setGameFromGameRecord();
+        clientHandler.setGameFromGameRecord();  //setting the controller
         clientHandler.getGameRecord().manageLogin(clientHandler,this,clientHandler.getController());
     }
 
@@ -31,6 +31,7 @@ public class LoginNicknameRequest extends C2SMessage{
         try {
             server.setMapClientsToController(client);
             RMIClientHandler clientHandler = new RMIClientHandler(client, server.getGameRecord());
+            clientHandler.setGameFromGameRecord();  //setting the controller
             server.getGameRecord().manageLogin(clientHandler,this,server.getController(client));
             Thread thread = new Thread(clientHandler);
             thread.start();
