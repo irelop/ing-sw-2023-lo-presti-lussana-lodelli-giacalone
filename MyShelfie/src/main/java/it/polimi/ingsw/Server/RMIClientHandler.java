@@ -6,6 +6,11 @@ import it.polimi.ingsw.Server.Model.MyShelfie;
 
 import java.rmi.RemoteException;
 
+/**
+ * RMIClientHandler class: an implementation of the abstract class ClientHandler in order to manage the network functions
+ * used in an RMI communication.
+ * @author Irene Lo Presti, Andrea Giacalone
+ */
 
 public class RMIClientHandler extends ClientHandler {
     @Deprecated
@@ -24,7 +29,10 @@ public class RMIClientHandler extends ClientHandler {
         setIsRMI(true);
     }
 
-
+    /**
+     * OVERVIEW: this method checks the connection with the client sending periodically ping signals and eventually
+     * manages its disconnection.
+     */
     @Override
     public void run(){
         boolean goOn = true;
@@ -39,6 +47,10 @@ public class RMIClientHandler extends ClientHandler {
         }
     }
 
+    /**
+     * OVERVIEW: this method checks the connection status of the client.
+     * @return true: if it's still connected, false: otherwise.
+     */
     @Override
     public boolean isConnected() {
         if(isConnected){
