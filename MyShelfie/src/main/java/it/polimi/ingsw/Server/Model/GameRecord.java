@@ -236,7 +236,7 @@ public class GameRecord {
                     if(clientHandler.getIsRMI()){
                         try {
                             //set the correct controller in the map
-                            remoteServer.setMapClientsToController(games.get(gameIndex), clientHandler.getClientInterface());
+                            remoteServer.resetControllerToClient(games.get(gameIndex), clientHandler.getClientInterface());
                         } catch (RemoteException e) {
                             throw new RuntimeException(e);
                         }

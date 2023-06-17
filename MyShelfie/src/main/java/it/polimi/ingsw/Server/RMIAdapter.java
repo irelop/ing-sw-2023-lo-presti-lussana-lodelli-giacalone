@@ -14,7 +14,7 @@ import java.util.HashMap;
 /**
  * RMIAdapter class: this class represents the implementation of the RemoteInterface and allows to expose the methods
  * which can be remotely invoked by client/server during an RMI connection.
- * @author Irene Lo Presti, Andrea Giacalone
+ * @authors Irene Lo Presti, Andrea Giacalone
  */
 
 public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
@@ -33,7 +33,7 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
         this.remoteClients.add(remoteClient);
     }
     @Override
-    public void disconnectClient(RemoteInterface remoteClient) throws RemoteException {
+    public void disconnectRemoteClient(RemoteInterface remoteClient) throws RemoteException {
         this.remoteClients.remove(remoteClient);
     }
     @Override
@@ -115,13 +115,10 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
     public Client getClient(){
         return client;
     }
-    public int getNumClients(){
-        return remoteClients.size();
-    }
+
     public View getCurrentView(){
         return client.getCurrentView();
     }
-
 
 
 }

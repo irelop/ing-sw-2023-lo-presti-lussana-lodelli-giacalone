@@ -222,7 +222,7 @@ public class Client implements Runnable{
      */
     public void stopRMIConnection(){
         try {
-            this.remoteServer.disconnectClient(this.client);
+            this.remoteServer.disconnectRemoteClient(this.client);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
