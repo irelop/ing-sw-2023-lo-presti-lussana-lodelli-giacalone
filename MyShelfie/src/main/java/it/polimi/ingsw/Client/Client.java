@@ -63,13 +63,11 @@ public class Client implements Runnable{
             mainApp = new JavaGUI();
             Application.launch(JavaGUI.class);
         }      //allows to run the state machine
-        if(!isRMI) {
-            serverHandler.stop();
-            System.exit(0);
-        }
-        else{
+
+        serverHandler.stop();
+        if(isRMI)
             stopRMIConnection();
-        }
+        System.exit(0);
     }
 
     /**
@@ -226,7 +224,6 @@ public class Client implements Runnable{
         this.remoteServer = null;
 
         System.out.println("Connection with RMI server closed");
-        System.exit(0);
     }
 
 
