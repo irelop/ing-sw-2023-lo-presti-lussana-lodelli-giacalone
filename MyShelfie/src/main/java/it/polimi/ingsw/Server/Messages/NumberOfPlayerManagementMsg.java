@@ -4,9 +4,18 @@ import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.LoginView;
 import it.polimi.ingsw.Client.View.WaitingView;
 import it.polimi.ingsw.Server.RemoteInterface;
-
 import java.rmi.RemoteException;
 
+/**
+ * This message is used only if there are problems with the player's connection:
+ *      1) all players connect and set their nickname before the first player sets the number of players.
+ *          If the first player sets a number smaller than the players connected this message is sent to
+ *          the supernumerary players
+ *      2) the first player connects, set their nickname and disconnects before setting the number of players.
+ *          This message is sent to all the players connected to the game in order to connect them
+ *          to another one.
+ * @author Irene Lo Presti
+ */
 public class NumberOfPlayerManagementMsg extends S2CMessage{
 
     public String nickname;

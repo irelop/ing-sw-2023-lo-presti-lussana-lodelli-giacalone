@@ -2,12 +2,12 @@ package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Server.Messages.C2SMessage;
 import it.polimi.ingsw.Server.RemoteInterface;
-
 import java.rmi.RemoteException;
 
 /**
  * RMIServerHandler class: an implementation of the abstract class ServerHandler in order to manage the network functions
  *                            used in an RMI communication.
+ * @author Andrea Giacalone, Irene Lo Presti
  */
 
 public class RMIServerHandler extends ServerHandler{
