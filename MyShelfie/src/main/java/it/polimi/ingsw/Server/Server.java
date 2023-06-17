@@ -12,13 +12,12 @@ import java.rmi.registry.Registry;
 /**
  * Server class: this class represents the server of the game.
  *
- * @author Andrea Giacalone
+ * @author Andrea Giacalone, Irene Lo Presti
  */
 public class Server {
     public static int serverPort = 9999;
-    //private static MyShelfie game;
     private static int numRMIClients;
-    private static Object lock;
+    private final static Object lock = new Object();
     private static RemoteInterface serverInterface;
     private static Registry registry;
 
@@ -27,10 +26,8 @@ public class Server {
     /**
      * OVERVIEW: the main method of the server. It allows to establish connection with multiple connections adopting two
      *           possible technologies: the Socket and the RMI one.
-     * @param args
      */
     public static void main(String[] args) {
-        lock = new Object();
         numRMIClients = 0;
         gameRecord = new GameRecord();
 
@@ -38,15 +35,22 @@ public class Server {
         if(hasCrashed()){
             gameRecord.reset();
         }
-
+        manageServerRMI();
         System.out.println("Server is open: listening for new clients...");
-        Thread socketServer = new Thread(()->manageServerSocket());
+        manageServerSocket();
+
+        /*Thread socketServer = new Thread(()->manageServerSocket());
         Thread RMIServer = new Thread(()->manageServerRMI());
         socketServer.start();
-        RMIServer.start();
+        RMIServer.start();*/
+
 
     }
 
+    /**
+     * FA: persistence. This method checks if the server connection has dropped before
+     * @return true if the server has crashed, false otherwise
+     */
     private static boolean hasCrashed(){
         File file = new File("src/safetxt/game_0.txt");
         return file.exists() && file.length() != 0;
@@ -68,21 +72,9 @@ public class Server {
 
         while(true){
             try{
-                Socket client =socket.accept();
-                // gestione partite multiple
+                //lo lasciamo synchronized?
                 synchronized (lock){
-                    /*
-                    if (currentGame == -1 || games.get(currentGame).getAllPlayersReady()) {
-                        MyShelfie game = new MyShelfie();
-                        games.add(game);
-                        currentGame++;
-                    }
-                     */
-                    //SocketClientHandler clientHandler = new SocketClientHandler(client, games.get(currentGame));
-                    /*MyShelfie game = gameRecord.getGame();
-                    System.out.println(game);
-                    SocketClientHandler clientHandler = new SocketClientHandler(client, game);*/
-
+                    Socket client = socket.accept();
                     SocketClientHandler clientHandler = new SocketClientHandler(client, gameRecord);
                     Thread clientHandlerThread = new Thread(clientHandler, "server_" + client.getInetAddress());
                     clientHandlerThread.start();
@@ -94,7 +86,9 @@ public class Server {
     }
 
 
-
+    /**
+     * OVERVIEW: this method allows to manage a connection using RMI technology.
+     */
     public static void manageServerRMI(){
         try{
             serverInterface = new RMIAdapter();
@@ -102,17 +96,15 @@ public class Server {
             registry.rebind("server", serverInterface);
 
             serverInterface.setGameRecord(gameRecord);
+            gameRecord.setRemoteServer(serverInterface);
         }catch(Exception e){
             System.out.println("Failed to open RMI server");
             System.exit(1);
-            return;
         }
-
-        gameRecord.setRemoteServer(serverInterface);
-
-
+/*
         while(true){
 
+            //non penso serva più
             //checking if a new client is connected
             int clientsConnected = numRMIClients;
             do{
@@ -124,31 +116,17 @@ public class Server {
                 }
             }while(clientsConnected<=numRMIClients);
 
-            //serve questo if? c'è il do while
-            //o proviamo a togliere il do while? tanto ci sono sleep e while(true)
             try{
                 if (serverInterface.getNumClients() > numRMIClients) {
                     synchronized (lock) {
-                        /*
-                        if (currentGame == -1 || games.get(currentGame).getAllPlayersReady()) {
-                            MyShelfie game = new MyShelfie();
-                            games.add(game);
-                            currentGame++;
-                            serverInterface.addController(game);
-                        } else
-                            serverInterface.addController(games.get(currentGame));
-                         */
                         numRMIClients++;
-                        //serverInterface.setMapClientsToController(games.get(currentGame), numRMIClients-1);
-
-                        //serverInterface.setMapClientsToController(gameRecord.getGame(), numRMIClients-1);
                     }
                 }
             }catch(Exception e){
                 System.out.println("Problems connecting new RMI client");
                 System.exit(1);
             }
-        }
+        }*/
     }
 
 

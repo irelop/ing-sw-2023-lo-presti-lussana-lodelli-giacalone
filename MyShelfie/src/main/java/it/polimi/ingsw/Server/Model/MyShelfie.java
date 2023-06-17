@@ -616,6 +616,7 @@ public class MyShelfie {
     }
 
    private void computeCurrentPlayerIdx(){
+
             if(currentPlayerIndex == numberOfPlayers-1)
                 currentPlayerIndex = 0;
             else
@@ -623,29 +624,24 @@ public class MyShelfie {
     }
 
     public void setNextPlayer(){
-            //setting the next player as the current player
-            computeCurrentPlayerIdx();
+        //setting the next player as the current player
+        computeCurrentPlayerIdx();
 
+        //skipping when a player is disconnected from the game (FA Resilienza alle disconessioni)
+        int numOfPlayersConnected = numberOfPlayers;
 
-            //skipping when a player is disconnected from the game (FA Resilienza alle disconessioni)
-            int numOfPlayersConnected = numberOfPlayers;
-            while(true){
-                if(!clientHandlers.get(currentPlayerIndex).isConnected()){
-                    computeCurrentPlayerIdx();
-                    numOfPlayersConnected--;
-                }
-                else break;
+        while(numOfPlayersConnected>0){
+            if(!clientHandlers.get(currentPlayerIndex).isConnected()){
+                computeCurrentPlayerIdx();
+                numOfPlayersConnected--;
             }
+            else break;
+        }
 
-            if(numOfPlayersConnected == 1){
-                startCountdown(currentPlayerIndex);
-                return; //?
-            }
-
-            //------------------------------------------------------------------------------------------------------
-
-        checkIfStartTurnOrEndTheGame();
-
+        if(numOfPlayersConnected == 1)
+            startCountdown(currentPlayerIndex);
+        else
+            checkIfStartTurnOrEndTheGame();
     }
 
     private void checkIfStartTurnOrEndTheGame(){
@@ -685,8 +681,7 @@ public class MyShelfie {
     public void shouldFinishTurn(ClientHandler clientHandler){
         //if the client disconnected was the actual one playing
         if(isStarted){
-            if (clientHandlers.get(currentPlayerIndex).equals(clientHandler)) {
-                computeCurrentPlayerIdx();
+            if (clientHandlers.get(currentPlayerIndex).equals(clientHandler) && clientHandlers.stream().filter(ClientHandler::isConnected).toList().size()>=1) {
                 setNextPlayer();
             }
         }
@@ -755,6 +750,8 @@ public class MyShelfie {
         return null;
     }
     public void finishGame(ClientHandler clientHandler){
+        gameOver = true;
+
         clientHandler.stop();
 
         int playerIndex = clientHandlers.indexOf(clientHandler);
@@ -763,6 +760,7 @@ public class MyShelfie {
     }
 
     public void finishGameRMI(RemoteInterface client){
+        gameOver = true;
 
         int playerIndex = -1;
         for(int i=0; i<playersConnected.size(); i++){
@@ -772,6 +770,7 @@ public class MyShelfie {
             }
         }
 
+        clientHandlers.get(playerIndex).stop();
         fileDeleting(playersConnected.get(playerIndex).getNickname());
 
     }
