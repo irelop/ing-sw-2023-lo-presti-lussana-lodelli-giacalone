@@ -625,9 +625,7 @@ public class MyShelfie {
 
     public void setNextPlayer(){
         //setting the next player as the current player
-        System.out.println("prima compute: "+currentPlayerIndex);
         computeCurrentPlayerIdx();
-        System.out.println("dopo compute: "+currentPlayerIndex);
 
         //skipping when a player is disconnected from the game (FA Resilienza alle disconessioni)
         int numOfPlayersConnected = numberOfPlayers;
