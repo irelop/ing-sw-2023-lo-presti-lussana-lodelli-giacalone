@@ -6,9 +6,14 @@ import it.polimi.ingsw.Server.Model.MyShelfie;
 
 import java.rmi.RemoteException;
 
+/**
+ * RMIClientHandler class: an implementation of the abstract class ClientHandler in order to manage the network functions
+ * used in an RMI communication.
+ * @author Irene Lo Presti, Andrea Giacalone
+ */
 
 public class RMIClientHandler extends ClientHandler {
-
+    @Deprecated
     public RMIClientHandler(MyShelfie game, RemoteInterface remoteClient){
         super(game, remoteClient);
         setIsRMI(true);
@@ -24,7 +29,10 @@ public class RMIClientHandler extends ClientHandler {
         setIsRMI(true);
     }
 
-
+    /**
+     * OVERVIEW: this method checks the connection with the client sending periodically ping signals and eventually
+     * manages its disconnection.
+     */
     @Override
     public void run(){
         boolean goOn = true;
@@ -33,15 +41,16 @@ public class RMIClientHandler extends ClientHandler {
                 Thread.sleep(1000);
                 getClientInterface().ping();
             }catch(Exception e){
-                isConnected = false;
-                if(getController() != null)
-                    getController().shouldFinishTurn(this);
-                System.out.println("RMI client disconnected");
                 goOn = false;
+                stop();
             }
         }
     }
 
+    /**
+     * OVERVIEW: this method checks the connection status of the client.
+     * @return true: if it's still connected, false: otherwise.
+     */
     @Override
     public boolean isConnected() {
         if(isConnected){
@@ -61,5 +70,13 @@ public class RMIClientHandler extends ClientHandler {
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void stop() {
+        isConnected = false;
+        if(getController() != null)
+            getController().shouldFinishTurn(this);
+        System.out.println("RMI client disconnected");
     }
 }

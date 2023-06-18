@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Server.Messages;
 
 /**
- * Message that allow the player to see the ChooseTilesFromBoardView.
+ * Message that allows the player to see the ChooseTilesFromBoardView.
  *
  * @author Irene Lo Presti
  */

@@ -32,13 +32,13 @@ public class LastPlayerConnectedView extends View{
         if(goOn) {
             System.out.println("Congratulation " + msg.nickname + "! You are the winner!");
             System.out.println("See you soon " + msg.nickname + "!");
-            getOwner().setTrueTerminate();
             FinishGameRequest finishGameRequest = new FinishGameRequest();
             if (!getOwner().isRMI()) {
                 getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
             } else {
                 getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
             }
+            getOwner().setTrueTerminate();
         }
 
         // }

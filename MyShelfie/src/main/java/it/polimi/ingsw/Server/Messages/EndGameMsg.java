@@ -2,8 +2,12 @@ package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.RemoteInterface;
-
 import java.rmi.RemoteException;
+
+/**
+ * This message calls the endGame() method in the controller after all players have played their turn
+ * @author Irene Lo Presti
+ */
 
 public class EndGameMsg extends C2SMessage{
 

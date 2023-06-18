@@ -11,52 +11,31 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * RMIAdapter class: this class represents the implementation of the RemoteInterface and allows to expose the methods
+ * which can be remotely invoked by client/server during an RMI connection.
+ * @authors Irene Lo Presti, Andrea Giacalone
+ */
+
 public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
-    public ArrayList<RemoteInterface> remoteClients;
-
-    /*gestione partite multiple*/
-    public ArrayList<MyShelfie> controllers;
-    public HashMap<RemoteInterface, MyShelfie> mapClientsToController;
-
-    private MyShelfie controller;
-    private Client client;
-    private GameRecord gameRecord;
+    private ArrayList<RemoteInterface> remoteClients;       //moved from public to private
+    public HashMap<RemoteInterface, MyShelfie> mapClientsToController;      //mapping for each client their controller
+    private Client client;      //reference to the client if the rmi object is on the client side
+    private GameRecord gameRecord;      //reference to the record for multiple games management
 
     public RMIAdapter() throws RemoteException{
         super();
         this.remoteClients = new ArrayList<>();
-        this.controllers = new ArrayList<>();
         this.mapClientsToController = new HashMap<>();
     }
-
+    //- - - - - - - - - - - - - - - - - - - C O N N E C T I O N   M E T H O D S - - - - - - - - - - - - - - - - - - - -
     public void addRemoteClient(RemoteInterface remoteClient){
         this.remoteClients.add(remoteClient);
     }
-
-    public void setClient(Client client){
-        this.client = client;
+    @Override
+    public void disconnectRemoteClient(RemoteInterface remoteClient) throws RemoteException {
+        this.remoteClients.remove(remoteClient);
     }
-
-    //da sistemare per più rmi clients
-    public RemoteInterface getRemoteClient(int index){
-        return this.remoteClients.get(index);
-    }
-
-    public void setController(MyShelfie controller){
-        this.controller = controller;
-    }
-    public void addController(MyShelfie controller){
-        this.controllers.add(controller);
-    }
-
-    public void setMapClientsToController(MyShelfie controller, RemoteInterface client){
-        mapClientsToController.put(client, controller);
-    }
-    public void setMapClientsToController(RemoteInterface client){
-        MyShelfie controller = gameRecord.getGame();
-        mapClientsToController.put(client, controller);
-    }
-
     @Override
     public boolean isClientConnected() throws RemoteException {
         if(client==null) {
@@ -64,37 +43,26 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
         }
         return true;
     }
-
-    public MyShelfie getController(RemoteInterface client){
-
-        /*if(mapClientsToController.get(client)==null){
-            //I need to add an entry for the reconnected client and the retrieved current game
-            mapClientsToController.put(client,gameRecord.getCurrentGame());
-        }*/
-        return mapClientsToController.get(client);
-
-    }
-
-    public void sendMessageToServer(C2SMessage msg){
-        msg.processMessage(this, null);
-    }
     public void sendMessageToClient(S2CMessage msg){
         msg.processMessage(null, this);
     }
     public void sendMessageToServer(C2SMessage msg, RemoteInterface remoteClient){
         msg.processMessage(this, remoteClient);
     }
+
+    @Override
+    public void ping(){}
+
+    //- - - - - - - - - - - - - - - - - R E M O T E   V I E W   M E T H O D S - - - - - - - - - - - - - - - - - - -
     public void printLoginStatus(String msg){
         System.out.println(msg);
     }
     public void transitionToView(View view){
         client.transitionToView(view);
     }
-    public View getCurrentView(){
-        return client.getCurrentView();
-    }
-    public void notifyView(){
-        client.getCurrentView().notifyView();
+
+    public void goToLoginView(NumberOfPlayerManagementMsg msg){
+        transitionToView(new LoginView(msg));
     }
     public void goToChooseTilesFromBoardView(YourTurnMsg msg){
         transitionToView(new ChooseTilesFromBoardView(msg));
@@ -118,29 +86,39 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
         transitionToView(new LastPlayerConnectedView(msg));
     }
 
-    public void goToLoginView(NumberOfPlayerManagementMsg msg){
-        transitionToView(new LoginView(msg));
+    public void notifyView(){
+        client.getCurrentView().notifyView();
     }
 
-    public Client getClient(){
-        return client;
-    }
-    public int getNumClients(){
-        return remoteClients.size();
-    }
 
-    @Override
-    public void disconnectClient(RemoteInterface remoteClient) throws RemoteException {
-        this.remoteClients.remove(remoteClient);
+    //- - - - - - - - - - - - - - - - - - - - - S E T T E R S - - - - - - - - - - - - - - - - - - - - - -
+    public void setClient(Client client){
+        this.client = client;
     }
-
-    public void ping(){}
-
     public void setGameRecord(GameRecord gameRecord){
         this.gameRecord = gameRecord;
     }
+    public void setControllerToClient(RemoteInterface client){
+        MyShelfie controller = gameRecord.getGame();
+        mapClientsToController.put(client, controller);
+    }
+    public void resetControllerToClient(MyShelfie controller, RemoteInterface client){
+        mapClientsToController.put(client, controller);
+    }
+    //- - - - - - - - - - - - - - - - - - - - - - G E T T E R S - - - - - - - - - - - - - - - - - - - - -
     public GameRecord getGameRecord(){
         return this.gameRecord;
     }
+    public MyShelfie getController(RemoteInterface client){
+        return mapClientsToController.get(client);
+    }
+    public Client getClient(){
+        return client;
+    }
+
+    public View getCurrentView(){
+        return client.getCurrentView();
+    }
+
 
 }

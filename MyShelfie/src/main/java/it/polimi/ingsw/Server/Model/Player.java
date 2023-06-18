@@ -122,9 +122,13 @@ public class Player {
         if(littleHand.size()==0)
             littleHand.addAll(tilesChosen);
         else{
-            littleHand.clear();
+            clearLittleHand();
             littleHand.addAll(tilesChosen);
         }
+    }
+
+    public void clearLittleHand(){
+        littleHand.clear();
     }
 
     /**

@@ -2,18 +2,20 @@ package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Server.Messages.C2SMessage;
 import it.polimi.ingsw.Server.RemoteInterface;
-
 import java.rmi.RemoteException;
 
 /**
  * RMIServerHandler class: an implementation of the abstract class ServerHandler in order to manage the network functions
  *                            used in an RMI communication.
+ * @author Andrea Giacalone, Irene Lo Presti
  */
 
 public class RMIServerHandler extends ServerHandler{
     private final RemoteInterface remoteServer;   //reference to the remote interface of the server for RMI connection
+    private boolean stop;
     public RMIServerHandler(Client owner,RemoteInterface remoteServer) {
         super(owner);
+        this.stop = false;
         this.remoteServer = remoteServer;
     }
 
@@ -23,13 +25,14 @@ public class RMIServerHandler extends ServerHandler{
      */
     @Override
     public void run() {
-        boolean goOn = true;
-        while(goOn){
+        //boolean goOn = true;
+        while(!stop){
             try{
                 Thread.sleep(1000);
                 getRemoteServer().ping();
             }catch(RemoteException e){
-                 goOn= false;
+                 //goOn= false;
+                stop = true;
                 System.out.println("[ERROR] Connection to the server has been lost");
                 System.out.println("Disconnecting...");
                 System.exit(1);
@@ -37,6 +40,11 @@ public class RMIServerHandler extends ServerHandler{
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    @Override
+    public void stop(){
+        stop = true;
     }
 
 

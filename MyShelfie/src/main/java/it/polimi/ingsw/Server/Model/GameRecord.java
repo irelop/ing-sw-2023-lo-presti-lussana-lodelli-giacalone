@@ -236,19 +236,19 @@ public class GameRecord {
                     if(clientHandler.getIsRMI()){
                         try {
                             //set the correct controller in the map
-                            remoteServer.setMapClientsToController(games.get(gameIndex), clientHandler.getClientInterface());
+                            remoteServer.resetControllerToClient(games.get(gameIndex), clientHandler.getClientInterface());
                         } catch (RemoteException e) {
                             throw new RuntimeException(e);
                         }
                     }
 
-                    games.get(gameIndex).switchClientHandler(gameIndex, clientHandler);
+                    games.get(gameIndex).switchClientHandler(playerIndex, clientHandler);
                 }
             }
         }
 
         //send the result of the reconnection choice to the player
-        S2CMessage reconnectionAnswer = new ReconnectionAnswer(msg);
+        S2CMessage reconnectionAnswer = new ReconnectionAnswer(msg,nickname);
         clientHandler.sendMessageToClient(reconnectionAnswer);
 
         if(countDownClient != null) {

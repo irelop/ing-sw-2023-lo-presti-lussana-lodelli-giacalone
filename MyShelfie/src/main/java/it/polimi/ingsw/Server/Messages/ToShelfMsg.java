@@ -2,6 +2,7 @@ package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.InsertInShelfView;
+import it.polimi.ingsw.Client.View.WaitingView;
 import it.polimi.ingsw.Server.Model.CommonGoalCard;
 import it.polimi.ingsw.Server.Model.PersonalGoalCard;
 import it.polimi.ingsw.Server.Model.Tile;
@@ -50,6 +51,8 @@ public class ToShelfMsg extends S2CMessage {
     @Override
     public void processMessage(ServerHandler serverHandler) {
         serverHandler.getOwner().transitionToView(new InsertInShelfView(this));
+        if(serverHandler.getOwner().getCurrentView().getClass() == WaitingView.class)
+            serverHandler.getOwner().getCurrentView().notifyView();
     }
 
 
@@ -57,6 +60,8 @@ public class ToShelfMsg extends S2CMessage {
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
             client.goToInsertInShelfView(this);
+            if(client.getCurrentView().getClass() == WaitingView.class)
+                client.notifyView();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

@@ -9,7 +9,6 @@ import it.polimi.ingsw.Client.View.WaitingView;
 import it.polimi.ingsw.Server.RMIAdapter;
 import it.polimi.ingsw.Server.RemoteInterface;
 import javafx.application.Application;
-
 import java.io.IOException;
 import java.net.Socket;
 import java.rmi.NotBoundException;
@@ -63,13 +62,11 @@ public class Client implements Runnable{
             mainApp = new JavaGUI();
             Application.launch(JavaGUI.class);
         }      //allows to run the state machine
-        if(!isRMI) {
-            serverHandler.stop();
-            System.exit(0);
-        }
-        else{
+
+        serverHandler.stop();
+        if(isRMI)
             stopRMIConnection();
-        }
+        System.exit(0);
     }
 
     /**
@@ -77,6 +74,7 @@ public class Client implements Runnable{
      *           from the user.
      * @return the digit choice of the user.
      * @throws InvalidNetworkChoiceException: exception thrown when the digit choice isn't valid.
+     * @author Andrea Giacalone, Irene Lo Presti
      */
     private char getNetworkChoice() throws InvalidNetworkChoiceException {
         Scanner input = new Scanner(System.in);
@@ -93,6 +91,7 @@ public class Client implements Runnable{
     /**
      * OVERVIEW: this method allows to manage the request for the connection mode and to trigger the proper methods in
      *           order to handle the connection following the chosen protocol.
+     * @author Andrea Giacalone, Irene Lo Presti
      */
     private void askNetworkChoice(){
         char networkChoice;
@@ -119,6 +118,7 @@ public class Client implements Runnable{
 
     /**
      * OVERVIEW: this method allows to manage the view state machine for the correct visualization and transition of the views.
+     * @author Matteo Lussana
      */
     private void runViewStateMachine(){
         boolean stop;
@@ -147,20 +147,18 @@ public class Client implements Runnable{
      * OVERVIEW: this method allows to make a transition in the state machine of the views setting the next view to
      *           run after the current view.
      * @param nextView: the following view.
+     * @author Matteo Lussana
      */
     public synchronized void transitionToView(View nextView){
         this.nextView = nextView;
 
     }
 
-
-
-
-
     //- - - - - - - - - - - - - - -C O N N E C T I O N   M A N A G E M E N T   M E T H O D S - - - - - - - - - - - - - - - - - - -
 
     /**
      * OVERVIEW: this method allows to manage the RMI connection client-server.
+     * @author Andrea Giacalone, Irene Lo Presti
      */
     public void manageRMIConnection(){
 
@@ -189,6 +187,7 @@ public class Client implements Runnable{
 
     /**
      * OVERVIEW: this method allows to manage the Socket connection client-server.
+     * @author Andrea Giacalone, Irene Lo Presti
      */
     public void manageSocketConnection(){
         System.out.println("Please insert the IP address of the server:\n");
@@ -213,20 +212,23 @@ public class Client implements Runnable{
 
         serverHandler = new SocketServerHandler(server, this);
 
-        Thread serverHandlerThread = new Thread((SocketServerHandler)serverHandler,"server_"+server.getInetAddress().getHostAddress());
+        Thread serverHandlerThread = new Thread(serverHandler,"server_"+server.getInetAddress().getHostAddress());
         serverHandlerThread.start();
     }
 
+    /**
+     * This method stops the RMI connection
+     * @author Andrea Giacalone, Irene Lo Presti
+     */
     public void stopRMIConnection(){
         try {
-            this.remoteServer.disconnectClient(this.client);
+            this.remoteServer.disconnectRemoteClient(this.client);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
         this.remoteServer = null;
 
         System.out.println("Connection with RMI server closed");
-        System.exit(0);
     }
 
 
@@ -235,6 +237,7 @@ public class Client implements Runnable{
     /**
      * OVERVIEW: this method allows to notify the state machine in order to stop it and eventually also the interaction
      *           with the current view.
+     * @author Matteo Lussana
      */
     public synchronized void setTrueTerminate(){
         if(!terminate){

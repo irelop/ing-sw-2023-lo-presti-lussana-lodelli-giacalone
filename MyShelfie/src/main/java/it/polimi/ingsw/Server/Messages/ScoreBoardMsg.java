@@ -3,7 +3,6 @@ package it.polimi.ingsw.Server.Messages;
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.EndGameView;
 import it.polimi.ingsw.Server.RemoteInterface;
-
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 

@@ -4,8 +4,13 @@ import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.View.LastPlayerConnectedView;
 import it.polimi.ingsw.Client.View.WaitingView;
 import it.polimi.ingsw.Server.RemoteInterface;
-
 import java.rmi.RemoteException;
+
+/**
+ * This message sets the LastPlayerConnectedView (the one with the countdown)
+ *      for the last player connected to the game
+ * @author Irene Lo Presti, Andrea Giacalone
+ */
 
 public class LastOneConnectedMsg extends S2CMessage{
 
