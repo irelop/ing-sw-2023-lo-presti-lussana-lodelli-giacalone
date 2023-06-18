@@ -117,6 +117,7 @@ public class MyShelfie {
      * Starts the game if lobby has enough players
      * @param playerNickname: player's nickname
      * @param clientHandler: instance of client handler
+     * @author Irene Lo Presti, Matteo Lussana
      */
     public void addPlayer(String playerNickname, ClientHandler clientHandler) {
 
@@ -131,6 +132,13 @@ public class MyShelfie {
         }
     }
 
+    /**
+     * This method sets the number of players of this game. If the players needed are already connected it
+     * updates the boolean allPlayersReady in order to start the game. If too many players are connected it
+     * sends them to another game
+     * @param numberOfPlayers: number of players to be set
+     * @author Irene Lo Presti
+     */
     public void setNumberOfPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
         if((playersConnected.size()==numberOfPlayers) && (!this.allPlayersReady)){
@@ -148,7 +156,7 @@ public class MyShelfie {
     }
 
     public void updateLobby(){
-        ArrayList<String> lobbyPlayers = new ArrayList<>(playersConnected.stream().map(Player::getNickname).collect(Collectors.toList()));
+        ArrayList<String> lobbyPlayers = playersConnected.stream().map(Player::getNickname).collect(Collectors.toCollection(ArrayList::new));
 
         for (int i = 0; i<playersConnected.size();i++) {
             LobbyUpdateAnswer msg = new LobbyUpdateAnswer(lobbyPlayers, allPlayersReady);
@@ -159,6 +167,13 @@ public class MyShelfie {
     //- - - - - - - - - - - - - - - - - - - -| GAME METHODS |- - - - - - - - - - - - - - - - - - - - - - -
 
         //- - - - - - - - - - -| INIT METHODS |- - - - - - - - - - - - - - - - - - - - - - - - -
+
+        /**
+         * This method is called when all players are connected and ready. It prepares the game (creation and
+         * refill of the board, set of the chair, deal of personal cards, draw of common cards) and starts it.
+         *
+         * @author Irene Lo Presti
+         */
         public void initGame(){
             if(!this.isStarted){
                 this.isStarted = true;
@@ -180,6 +195,7 @@ public class MyShelfie {
          * personal goal card
          * @see Player
          * @see PersonalGoalDeck
+         * @author Irene Lo Presti, Matteo Lussana
          */
         private void dealPersonalCards(){
             for(Player player : playersConnected) {
@@ -192,6 +208,7 @@ public class MyShelfie {
 
         /**
          * OVERVIEW: this method gives, randomly, a chair to one player
+         * @author Irene Lo Presti, Matteo Lussana
          */
         private void setChair(){
             Random random = new Random();
@@ -213,6 +230,7 @@ public class MyShelfie {
 
         /**
          * OVERVIEW: this method draws 2 common goal cards from the deck
+         * @auhtor Irene Lo Presti, Matteo Lussana
          */
         private void drawCommonGoalCards(){
             CommonGoalCard[] commonGoalCards = new CommonGoalCard[2];
@@ -223,7 +241,8 @@ public class MyShelfie {
 
     /**
      * OVERVIEW: it finds max pickable tiles by the current player and creates a message to send to
-     * ChooseTilesFromBoardView
+     * ChooseTilesFromBoardView. It also checks if this is the last mache, if so it updates the last lobby.
+     * @author Irene Lo Presti, Matteo Lussana
      */
     private void startTurn() {
 
@@ -289,8 +308,7 @@ public class MyShelfie {
     }
 
     /**
-     * This method collect chosen tiles from the board and creates a
-     * message which is sent to client in order to show InsertInShelfView
+     * This method collects chosen tiles from the board
      * @param initialRow: user choice initial row
      * @param initialColumn: user choice initial column
      * @param direction: user choice direction
@@ -302,6 +320,9 @@ public class MyShelfie {
         redirectToPersonalShelf();
     }
 
+    /**
+     * This method sends the player the InsertInShelfView
+     */
     private void redirectToPersonalShelf(){
         Player currentPlayer = playersConnected.get(currentPlayerIndex);
 
@@ -344,15 +365,18 @@ public class MyShelfie {
     }
 
         //- - - - - - - - - - - - - - -| SCORE METHODS |- - - - - - - - - - - - - - - - - - - - - - - - -
-        //funzione chiamata dal process message del messaggio creato alla fine dell'inserimento delle
-        //tessere nella shelf del giocatore
-        public void computeTurnScore(){
 
+        /**
+         * This method computes the score of the current turn and manages the last lobby when the first
+         * player fills the shelf
+         * @author Matteo Lussana, Irene Lo Presti
+         */
+        public void computeTurnScore(){
             boolean isCommonGoalAchived = false;
             boolean isPersonalGoalAchived = false;
             boolean isShelfFull = false;
 
-            //checking goals and adding score if necessary
+            //check goals and add score if necessary
             int personalPointsEarned = personalPointsEarned();
             if(personalPointsEarned != 0) {
                 isPersonalGoalAchived = true;
@@ -376,18 +400,14 @@ public class MyShelfie {
 
             //checking if a player's shelf is full,
             // if true add +1pt and set the last lap
-
             if(playersConnected.get(currentPlayerIndex).myShelfie.isShelfFull() &&  !isOver) {
                 isShelfFull = true;
                 playersConnected.get(currentPlayerIndex).myScore.addScore(1);
                 this.isOver = true;
 
                 this.firstToFinish = currentPlayerIndex;
-
-                //se finisce un giocatore che non è il primo, settiamo che quelli prima di lui hanno
-                // già fatto l'ultimo turno
-                //es: se il giocatore 3 riempie la board, il giocatore 1 e il giocatore 2
-                //      avranno già giocato il loro ultimo turno
+                //if the first player to fill the shelf hasn't got the chair, the ones before he/she have
+                //already played their last turn!
                 for(int i=0; i<=currentPlayerIndex; i++) {
                     playersConnected.get(i).setHasFinished(true);
                 }
@@ -406,6 +426,7 @@ public class MyShelfie {
          * @see CommonGoalCard
          * @param commonGoalIndex : number of the common goal to check (0 or 1)
          * @return commonPointsEarned >= 0
+         * @author Irene Lo Presti
          */
         private int commonPointsEarned(int commonGoalIndex){
             CommonGoalCard card = Board.getCommonGoalCard(commonGoalIndex);
@@ -424,6 +445,7 @@ public class MyShelfie {
          * @see PersonalGoalCard
          * @see Tile
          * @return personalPointsEarned >= 0
+         * @author Irene Lo Presti
          */
         private int personalPointsEarned(){
             PersonalGoalCard card = playersConnected.get(currentPlayerIndex).getPersonalGoalCard();
@@ -432,12 +454,23 @@ public class MyShelfie {
         }
 
     //- - - - - - - - - - - - - - - - -| TURN MANAGEMENT METHODS |- - - - - - - - - - - - - - - - - - -
+
+    /**
+     * This method computes the current player index
+     * @author Andrea Giacalone, Irene Lo Presti
+     */
     private void computeCurrentPlayerIdx(){
             if(currentPlayerIndex == numberOfPlayers-1)
                 currentPlayerIndex = 0;
             else
                 currentPlayerIndex ++;
     }
+
+    /**
+     * This method sets the player who plays the next turn. It checks if the player is connected and if
+     * he/she is the only one.
+     * @author Irene Lo Presti, Andrea Giacalone
+     */
     public void setNextPlayer(){
         //setting the next player as the current player
         computeCurrentPlayerIdx();
@@ -459,7 +492,13 @@ public class MyShelfie {
             checkIfStartTurnOrEndTheGame();
     }
 
+    /**
+     * This method checks if the player can begin their turn or the game is over.
+     * @author Irene Lo Presti, Andrea Giacalone
+     */
     private void checkIfStartTurnOrEndTheGame(){
+
+        //if a player is here the countdown has been interrupted
         if(playerInCountdown)
             playerInCountdown = false;
 
@@ -467,6 +506,9 @@ public class MyShelfie {
             if(firstTurn && currentPlayerIndex==0) {
                 firstTurn = false;
             }
+
+            //FA: resilience
+                // check if the player has put the tiles in the shelf
             if(playersConnected.get(currentPlayerIndex).getLittleHand().size() == 0)
                 startTurn();
             else
@@ -480,26 +522,38 @@ public class MyShelfie {
                 player.myScore.addScore(spotScore);
             }
 
-            //setting last player has finished
+            //sett last player has finished
             if(currentPlayerIndex==0) {
                 playersConnected.get(numberOfPlayers - 1).setHasFinished(true);
             }else {
                 playersConnected.get(currentPlayerIndex - 1).setHasFinished(true);
             }
 
-            //setting game over
+            //set game over
             this.gameOver = true;
 
             updateGameIsEndingView();
         }
     }
 
+    /**
+     * This method sends the only player connected in countdown mode
+     * @param playerIndex: index of the last player connected
+     * @author Andrea Giacalone, Irene Lo Presti
+     */
     private void startCountdown(int playerIndex){
         this.playerInCountdown = true;
         LastOneConnectedMsg msg = new LastOneConnectedMsg(playersConnected.get(playerIndex).getNickname());
         clientHandlers.get(playerIndex).sendMessageToClient(msg);
     }
 
+    /**
+     * This method checks if the player disconnected was in the middle of their turn. If so it sets
+     * the next player. It also checks if the player who is disconnected is the first one and didn't
+     * set the number of players, if so it disconnects all the other player from this game.
+     * @param clientHandler of the player who is disconnected
+     * @author Irene Lo Presti, Andrea Giacalone
+     */
     public void shouldFinishTurn(ClientHandler clientHandler){
         //if the client disconnected was the actual one playing
         if(isStarted){
@@ -521,6 +575,10 @@ public class MyShelfie {
 
     //- - - - - - - - - - - - - - - -| END GAME METHODS |- - - - - - - - - - - - - - - - - - - -
 
+    /**
+     * This method manages the update of the game is ending view every time a player plays their last turn.
+     * @author Irene Lo Presti
+     */
     public void updateGameIsEndingView(){
         String[] players = new String[numberOfPlayers];
         boolean[] hasFinished = new boolean[numberOfPlayers];
@@ -538,10 +596,15 @@ public class MyShelfie {
         }
 
     }
+
+    /**
+     * This method sends the players to the scoreboard
+     * @param playerIndex: index of the player going to the scoreboard
+     * @author Matteo Lussana, Irene Lo Presti, Andrea Giacalone
+     */
     public void endGame(int playerIndex) {
 
         synchronized (lock){
-
             ArrayList<String> playersNames = new ArrayList<>();
             for (int i = 0; i < numberOfPlayers; i++) {
                 playersNames.add(playersConnected.get(i).getNickname());
@@ -558,8 +621,14 @@ public class MyShelfie {
 
     }
 
+    /**
+     * This method disconnects the players from the game and delete their file
+     * @param clientHandler of the player disconnecting
+     * @author Andrea Giacalone, Irene Lo Presti
+     */
     public void finishGame(ClientHandler clientHandler){
-        gameOver = true;
+        if(!gameOver)
+            gameOver = true;
 
         clientHandler.stop();
 
@@ -568,24 +637,30 @@ public class MyShelfie {
 
     }
 
+    /**
+     * This method finds the correct client handler and calls finishGame
+     * @param client: remote inteface of the RMI client disconnecting
+     * @author Andrea Giacalone, Irene Lo Presti
+     */
     public void finishGameRMI(RemoteInterface client){
-        gameOver = true;
-
-        int playerIndex = -1;
+        ClientHandler clientHandler = null;
         for(int i=0; i<playersConnected.size(); i++){
             if(clientHandlers.get(i) != null && clientHandlers.get(i).getIsRMI() && clientHandlers.get(i).getClientInterface().equals(client)){
-                playerIndex = i;
+                clientHandler = clientHandlers.get(i);
                 break;
             }
         }
-
-        clientHandlers.get(playerIndex).stop();
-        fileDeleting(playersConnected.get(playerIndex).getNickname());
-
+        finishGame(clientHandler);
     }
 
     //- - - - - - - - - - - - - - - - -| CLIENT RESILIENCE |- - - - - - - - - - - - - - - - - - - - -
 
+    /**
+     * This method checks if the player with the parameter nickname is disconnected from this game
+     * @param nickname of the player who wants to reconnect
+     * @return the player index if the player is disconnected from this game, -1 otherwise
+     * @author Irene Lo Presti, Andrea Giacalone
+     */
     public int checkPlayerDisconnected(String nickname){
         int found = -1;
         for(int i = 0; i< numberOfPlayers;i++){
@@ -595,11 +670,24 @@ public class MyShelfie {
         return found;
     }
 
+    /**
+     * This method switch the new client handler of the player reconnected with the one that he/she had before
+     * the disconnection
+     * @param playerIndex: index of the player reconnecting
+     * @param clientHandlerReconnected: new client handler
+     * @author Irene Lo Presti, Andrea Giacalone
+     */
     public void switchClientHandler(int playerIndex, ClientHandler clientHandlerReconnected){
         clientHandlerReconnected.setGame(this);
         clientHandlers.set(playerIndex, clientHandlerReconnected);
     }
-    public ClientHandler getLastClientHandler(){
+
+    /**
+     * This method get the client handler of the player in countdown
+     * @return the client handler of the player in countdown
+     * @author Irene Lo Presti, Andrea Giacalone
+     */
+    public ClientHandler geCountdownClientHandler(){
         for(int i=0; i<numberOfPlayers; i++)
             if(clientHandlers.get(i).isConnected())
                 return clientHandlers.get(i);
@@ -759,6 +847,12 @@ public class MyShelfie {
 
     }
 
+    /**
+     * This method writes on the player file the update info
+     * @param info: all the info of the turn
+     * @param playerNickname of the player who just played
+     * @author Irene Lo Presti
+     */
     private void writeOnPlayersFiles(String info, String playerNickname){
 
         String fileName = safeFilePath + playerNickname + ".txt";
@@ -773,6 +867,11 @@ public class MyShelfie {
         }
     }
 
+    /**
+     * This method manages the reconnection of the players after the server's connection drop
+     * @param playerIndex: index of the player reconnecting
+     * @author Irene Lo Presti
+     */
     public void manageReconnectionPersistence(int playerIndex){
         if(clientHandlers.stream().filter(ClientHandler::isConnected).toList().size()==1)
             startCountdown(playerIndex);
@@ -782,6 +881,11 @@ public class MyShelfie {
         }
     }
 
+    /**
+     * This method deletes the player's file
+     * @param playerNickname: nickname of the player
+     * @author Irene Lo Presti
+     */
     public void fileDeleting(String playerNickname){
         //deleting player file
         File file = new File("src/safetxt/"+playerNickname+".txt");
@@ -798,7 +902,6 @@ public class MyShelfie {
     public boolean isGameOver(){
         return gameOver;
     }
-
     public boolean isPlayerInCountdown(){
         return playerInCountdown;
     }
