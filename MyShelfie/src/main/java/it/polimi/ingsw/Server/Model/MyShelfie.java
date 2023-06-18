@@ -545,8 +545,12 @@ public class MyShelfie {
      */
     public void getPlayerChoice(int initialRow, int initialColumn, char direction, int numberOfTiles){
         Player currentPlayer = playersConnected.get(currentPlayerIndex);
-
         board.pickTilesFromBoard(initialRow, initialColumn, numberOfTiles, direction, currentPlayer);
+        redirectToPersonalShelf();
+    }
+
+    private void redirectToPersonalShelf(){
+        Player currentPlayer = playersConnected.get(currentPlayerIndex);
 
         Tile[][] matrix = new Tile[6][5];
         for (int i = 0; i < 6; i++) {
@@ -556,12 +560,14 @@ public class MyShelfie {
         }
 
         ArrayList<Tile> littleHand = new ArrayList<>(currentPlayer.getLittleHand());
+
         ToShelfMsg toShelfMsg = new ToShelfMsg(
                 matrix,
                 littleHand,
                 Board.getCommonGoalCards(),
                 currentPlayer.getPersonalGoalCard()
-                );
+        );
+
         clientHandlers.get(currentPlayerIndex).sendMessageToClient(toShelfMsg);
     }
 
@@ -580,6 +586,7 @@ public class MyShelfie {
         currentPlayer.getTiles(orderIdxs);
         currentPlayer.orderTiles(currentPlayer.getLittleHand(),orderIdxs);
         currentPlayer.myShelfie.insert(columnIdx,playersConnected.get(currentPlayerIndex).getLittleHand());
+        currentPlayer.clearLittleHand();
 
     }
 
@@ -615,14 +622,12 @@ public class MyShelfie {
         return card.getPersonalGoalScore(playerShelfSnapshot);
     }
 
-   private void computeCurrentPlayerIdx(){
-
+    private void computeCurrentPlayerIdx(){
             if(currentPlayerIndex == numberOfPlayers-1)
                 currentPlayerIndex = 0;
             else
                 currentPlayerIndex ++;
     }
-
     public void setNextPlayer(){
         //setting the next player as the current player
         computeCurrentPlayerIdx();
@@ -649,7 +654,10 @@ public class MyShelfie {
             if(firstTurn && currentPlayerIndex==0) {
                 firstTurn = false;
             }
-            startTurn();
+            if(playersConnected.get(currentPlayerIndex).getLittleHand().size() == 0)
+                startTurn();
+            else
+               redirectToPersonalShelf();
         }
         //entered when everyone played last turn
         if(isOver && playersConnected.get(currentPlayerIndex).hasChair()){
@@ -820,6 +828,5 @@ public class MyShelfie {
             }
         }
     }
-
 
 }

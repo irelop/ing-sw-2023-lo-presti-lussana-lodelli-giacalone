@@ -49,22 +49,18 @@ public class ToShelfMsg extends S2CMessage {
      */
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        if(serverHandler.getOwner().gui) {
-            serverHandler.getOwner().getStageManager().loadNextStage(this, "shelf.fxml");
-        } else {
-            serverHandler.getOwner().transitionToView(new InsertInShelfView(this));
-        }
+        serverHandler.getOwner().transitionToView(new InsertInShelfView(this));
+        if(serverHandler.getOwner().getCurrentView().getClass() == WaitingView.class)
+            serverHandler.getOwner().getCurrentView().notifyView();
     }
 
 
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
-            if(client.getOwner().gui) {
-                client.getOwner().getStageManager().loadNextStage(this, "shelf.fxml");
-            } else {
-                client.goToInsertInShelfView(this);
-            }
+            client.goToInsertInShelfView(this);
+            if(client.getCurrentView().getClass() == WaitingView.class)
+                client.notifyView();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
