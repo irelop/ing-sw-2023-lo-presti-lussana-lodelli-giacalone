@@ -25,15 +25,23 @@ public class InitialPositionAnswer extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        ChooseTilesFromBoardView chooseTilesFromBoardView = (ChooseTilesFromBoardView) serverHandler.getOwner().getCurrentView();
-        chooseTilesFromBoardView.setInitialPositionAnswer(this);
-        serverHandler.getOwner().getCurrentView().notifyView();
+        if(serverHandler.getOwner().gui) {
+            serverHandler.getOwner().getStageManager().getController().receiveAnswer(this);
+        } else {
+            ChooseTilesFromBoardView chooseTilesFromBoardView = (ChooseTilesFromBoardView) serverHandler.getOwner().getCurrentView();
+            chooseTilesFromBoardView.setInitialPositionAnswer(this);
+            serverHandler.getOwner().getCurrentView().notifyView();
+        }
     }
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try{
+            if(client.getOwner().gui) {
+                client.getOwner().getStageManager().getController().receiveAnswer(this);
+            } else {
             ChooseTilesFromBoardView chooseTilesFromBoardView = (ChooseTilesFromBoardView) client.getCurrentView();
             chooseTilesFromBoardView.setInitialPositionAnswer(this);
+            }
         }catch(RemoteException e){
             e.printStackTrace();
         }

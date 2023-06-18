@@ -26,16 +26,24 @@ public class NumberOfPlayerManagementMsg extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        serverHandler.getOwner().transitionToView(new LoginView(this));
-        serverHandler.getOwner().getCurrentView().notifyView();
+        if(serverHandler.getOwner().gui) {
+            serverHandler.getOwner().getStageManager().loadNextStage("loginPlayer.fxml");
+        } else {
+            serverHandler.getOwner().transitionToView(new LoginView(this));
+            serverHandler.getOwner().getCurrentView().notifyView();
+        }
     }
 
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client) {
         try {
-            client.goToLoginView(this);
-            if(client.getCurrentView().getClass() == WaitingView.class)
-                client.notifyView();
+            if(client.getOwner().gui) {
+                client.getOwner().getStageManager().loadNextStage("loginPlayer.fxml");
+            } else {
+                client.goToLoginView(this);
+                if (client.getCurrentView().getClass() == WaitingView.class)
+                    client.notifyView();
+            }
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

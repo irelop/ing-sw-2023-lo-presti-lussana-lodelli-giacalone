@@ -29,17 +29,25 @@ public class InsertingTilesAnswer extends S2CMessage {
 
     @Override
     public void processMessage(ServerHandler serverHandler){
+        if(serverHandler.getOwner().gui) {
+            serverHandler.getOwner().getStageManager().getController().receiveAnswer(this);
+        } else {
         InsertInShelfView view = (InsertInShelfView) serverHandler.getOwner().getCurrentView();
         view.setInsertingTilesAnswer(this);
         serverHandler.getOwner().getCurrentView().notifyView();
+        }
     }
 
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try{
-            InsertInShelfView view = (InsertInShelfView) client.getCurrentView();
-            view.setInsertingTilesAnswer(this);
-            //client.notifyView();
+            if(client.getOwner().gui) {
+                client.getOwner().getStageManager().getController().receiveAnswer(this);
+            } else {
+                InsertInShelfView view = (InsertInShelfView) client.getCurrentView();
+                view.setInsertingTilesAnswer(this);
+                //client.notifyView();
+            }
         }catch(RemoteException e){
             e.printStackTrace();
         }

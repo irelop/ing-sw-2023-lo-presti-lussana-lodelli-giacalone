@@ -31,13 +31,21 @@ public class GoalAndScoreMsg extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler){
-        serverHandler.getOwner().transitionToView(new GoalView(this));
+        if(serverHandler.getOwner().gui) {
+            serverHandler.getOwner().getStageManager().getController().receiveAnswer(this);
+        } else {
+            serverHandler.getOwner().transitionToView(new GoalView(this));
+        }
     }
 
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
-            client.goToGoalView(this);
+            if(client.getOwner().gui) {
+                client.getOwner().getStageManager().getController().receiveAnswer(this);
+            } else {
+                client.goToGoalView(this);
+            }
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
