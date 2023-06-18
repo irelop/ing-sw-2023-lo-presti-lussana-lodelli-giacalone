@@ -37,6 +37,7 @@ public class MyShelfie {
     private final Object lock;
     private int firstToFinish;
     private ChatManager chatManager;
+    private boolean playerInCountdown;
 
     //- - - R M I - - - - -
     private File persistenceFile;
@@ -58,6 +59,7 @@ public class MyShelfie {
         this.lock = new Object();
         this.safeFilePath = "src/safetxt/";
         this.chatManager = new ChatManager();
+        this.playerInCountdown = false;
     }//non penso serva più
 
     /**
@@ -82,6 +84,7 @@ public class MyShelfie {
         this.persistenceFile = persistenceFile;
         this.safeFilePath = "src/safetxt/";
         this.chatManager = new ChatManager();
+        this.playerInCountdown = false;
     }
 
     public boolean isGameOver(){
@@ -123,6 +126,11 @@ public class MyShelfie {
         this.clientHandlers = new ArrayList<>();
         this.safeFilePath = "src/safetxt/";
         this.chatManager = new ChatManager();
+        this.playerInCountdown = false;
+    }
+
+    public boolean isPlayerInCountdown(){
+        return playerInCountdown;
     }
 
     /**
@@ -650,6 +658,9 @@ public class MyShelfie {
     }
 
     private void checkIfStartTurnOrEndTheGame(){
+        if(playerInCountdown)
+            playerInCountdown = false;
+
         if(!isOver || !playersConnected.get(currentPlayerIndex).hasChair()){
             if(firstTurn && currentPlayerIndex==0) {
                 firstTurn = false;
@@ -682,6 +693,7 @@ public class MyShelfie {
     }
 
     private void startCountdown(int playerIndex){
+        this.playerInCountdown = true;
         LastOneConnectedMsg msg = new LastOneConnectedMsg(playersConnected.get(playerIndex).getNickname());
         clientHandlers.get(playerIndex).sendMessageToClient(msg);
     }
