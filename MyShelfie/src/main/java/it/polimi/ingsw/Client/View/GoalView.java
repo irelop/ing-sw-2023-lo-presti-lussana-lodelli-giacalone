@@ -4,6 +4,7 @@ import it.polimi.ingsw.Client.View.Exceptions.InvalidChatChoiceException;
 import it.polimi.ingsw.Server.Messages.*;
 import it.polimi.ingsw.Server.Model.ChatStorage;
 
+
 import java.rmi.RemoteException;
 import java.text.Normalizer;
 import java.time.LocalTime;
@@ -103,6 +104,7 @@ public class GoalView extends View {
     private void manageChat(){
         Scanner scanner = new Scanner(System.in);
         boolean goOn = true;
+        int remainingMsgAvailable = 3;
 
         System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -C H A T   R O O M - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
         System.out.println();
@@ -130,34 +132,7 @@ public class GoalView extends View {
             }
 
 
-
-
-            /*
-            Formatter fmt = new Formatter();
-            //fmt.format("%30s %s %30s","","CHAT ROOM","");
-            System.out.println();
-            fmt.format("%s\n","");
-            fmt.format("%10s %s %10s %10s %s %10s %25s %s %25s %10s %s %10s","","[RECEIVER]","","","[SENDER]","","","[MSG]","","","[DATE-TIME]","");
-
-            for (int i = 0; i < chat.getStorage().size(); i++){
-                fmt.format("%10s %s %10s %10s %s %10s %25s %s %25s %10s %s %10s",
-                        "",
-                        chat.getStorage().get(i).getReceiver(),
-                        "",
-                        "",
-                        chat.getStorage().get(i).getSender(),
-                        "",
-                        "",
-                        chat.getStorage().get(i).getContent(),
-                        "",
-                        "",
-                        chat.getStorage().get(i).getLocalTime().format(timeFormatter),
-                        "");
-            }
-            System.out.println(fmt);
-
-             */
-
+            System.out.println("\nYou have still "+ remainingMsgAvailable + "/3 remaining messages");
             while (goOn) {
                 ChatMsgRequest chatMsgRequest;
                 System.out.println();
@@ -207,21 +182,31 @@ public class GoalView extends View {
 
                 if(sendingResult) {
                     System.out.println("(message sent successfully)");
+                    remainingMsgAvailable--;
+
                 }else{
                     System.out.println("(unable to find your receiver)");
                 }
 
-                System.out.println("Do you want to end your turn? Type (Y) if yes, otherwise (N) if you want to leave another message");
+                if(remainingMsgAvailable>0) {
+                    System.out.println("You have still " + remainingMsgAvailable + "/3 remaining messages.");
+                    System.out.println("Do you want to keep chatting? Type (Y) if yes, otherwise (N) if you want to end your turn");
 
-                do {
-                    try {
-                        choice = getChatChoice();
-                        break;
-                    } catch (InvalidChatChoiceException e) {
-                        System.out.println(e);
+                    do {
+                        try {
+                            choice = getChatChoice();
+                            break;
+                        } catch (InvalidChatChoiceException e) {
+                            System.out.println(e);
+                        }
+                    } while (true);
+                    if (choice == 'N') {
+                        goOn = false;
+                        finishTurn();
                     }
-                } while (true);
-                if (choice == 'Y') {
+                }else {
+                    System.out.println("You have just finished your available messages");
+                    System.out.println("Ending your turn ...");
                     goOn = false;
                     finishTurn();
                 }
