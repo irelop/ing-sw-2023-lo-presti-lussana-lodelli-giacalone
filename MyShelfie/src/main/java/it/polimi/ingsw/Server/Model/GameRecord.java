@@ -231,7 +231,7 @@ public class GameRecord {
                 // then this player is the first one to reconnect to the game
 
                 else{
-                    if(playersConnected == 1)
+                    if(playersConnected == 1 && games.get(gameIndex).isPlayerInCountdown())
                         countDownClient = games.get(gameIndex).getLastClientHandler(); //the player who is in Countdown Mode
                     if(clientHandler.getIsRMI()){
                         try {
