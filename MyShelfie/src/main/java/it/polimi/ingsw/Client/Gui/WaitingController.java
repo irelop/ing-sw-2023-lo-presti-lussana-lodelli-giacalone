@@ -1,5 +1,10 @@
 package it.polimi.ingsw.Client.Gui;
 
+/**
+ * GUI view which is shown between turns, while other player are playeing
+ * @author Matteo Lussana
+ * @see Controller
+ */
 
 import it.polimi.ingsw.Server.Messages.C2SMessage;
 import it.polimi.ingsw.Server.Messages.EndGameMsg;
@@ -42,6 +47,9 @@ public class WaitingController extends Controller {
         }
     }
 
+    /**
+     * This method manage the click of a button in order to change the order of tiles in side gridPane
+     */
     public void AnimationGrid(){
         String[] names = {"BLUE", "GREEN", "WHITE", "PINK", "YELLOW", "LIGHTBLUE"};
 

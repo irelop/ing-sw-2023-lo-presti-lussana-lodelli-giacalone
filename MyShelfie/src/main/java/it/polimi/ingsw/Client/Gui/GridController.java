@@ -42,11 +42,8 @@ public class GridController extends Controller{
 
     @FXML VBox numOfTilesButtons;
     Button lastClickedButton = null;
-    Color lastClickedBorderColor = null;
     Button lastClickedButtonDir = null;
-    Color lastClickedBorderColorDir = null;
     Button lastClickedButtonNum = null;
-    Color lastClickedBorderColorNum = null;
     ArrayList<Button> possibleWay = new ArrayList<>();
     String direction = "W";
     int numberOfTiles = 1;
@@ -102,33 +99,42 @@ public class GridController extends Controller{
      * and assign the right score at the CommonGoalCard
      */
     public void setStart(){
+        //filling the shelf
         for(Node node : shelfDisplay.getChildren()){
             String id = shelfSnapshot[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)].name();
             node.setId(id);
         }
+        //filling the board
         for(Node node : grid.getChildren()){
             String id = boardSnapshot[grid.getRowIndex(node).intValue()][grid.getColumnIndex(node).intValue()].name();
             node.setId(id);
         }
-
+        //coloring the default direction (W) and numbers of tiles (1) buttons
+        for(Node node : numOfTilesButtons.getChildren()){
+            if(node.getId().charAt(node.getId().length()-1) == '1') ((Button) node).setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2))));
+        }
+        for(Node node : joystick.getChildren()){
+            if(((Button) node).getText() == "W") ((Button) node).setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2))));
+        }
+        //setting the personal card
         personal_card.setId(personalGoalCard.getImageCode());
-
+        //setting the common cards and their relative score
         common_card_1.setId(commonGoalCards[0].getCardInfo().getName());
         scoringPane_1.setId("SCORE"+yourTurnMsg.commonPoints[0]);
-
         common_card_2.setId(commonGoalCards[1].getCardInfo().getName());
         scoringPane_2.setId("SCORE"+yourTurnMsg.commonPoints[1]);
-
+        //setting the finish game tile
         if(gameIsFinishing) shelfFulledImage.setVisible(false);
-
+        //hide info panes
         errorPane.setVisible(false);
         infoTextPane.setVisible(false);
         confirmationPane.setVisible(false);
-
+        infoCardPane.setVisible(false);
+        //setting text of rule pane
         infoText.setText("It's time to pick tiles from the board! Choose the position of the first tile clicking on the board, " +
                 "then, if you want to pick other tiles, you must select the direction in which you want to choose them and how many tiles you want!\n" +
                       "Remember that every tile you want to pick must have at least one 'free side': without an adjacent tile!");
-        infoCardPane.setVisible(false);
+
     }
     /**
      * this method manage the click of a button in order to make appear and disappear the rules pane
@@ -172,7 +178,7 @@ public class GridController extends Controller{
      * changes the color of the tile clicked and update the preview of the path (calling showPath())
      */
     public void chooseStartingTile(ActionEvent e){
-        if (lastClickedButton != null && lastClickedBorderColor != null) {
+        if (lastClickedButton != null) {
             lastClickedButton.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0))));
         }
         Button button = (Button)e.getSource();
@@ -188,7 +194,7 @@ public class GridController extends Controller{
      * changes the color of the direction clicked and update the preview of the path (calling showPath())
      */
     public void getDirection(ActionEvent e){
-        if (lastClickedButtonDir != null && lastClickedBorderColorDir != null) {
+        if (lastClickedButtonDir != null) {
             lastClickedButtonDir.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0))));
         }
         Button button = (Button)e.getSource();
@@ -202,6 +208,9 @@ public class GridController extends Controller{
         showPath();
     }
 
+    /**
+     * this method manages the click of the buttons of the number of tiles that the player is picking
+     */
     public void setNumberOfTiles(ActionEvent e){
         String valueString = ((Button) e.getSource()).getId();
         char valueChar = valueString.charAt(valueString.length()-1);
@@ -210,8 +219,11 @@ public class GridController extends Controller{
         setNumTilesColor(numberOfTiles);
     }
 
+    /**
+     * this method manages the colors of the buttons of the number of tiles that the player is picking
+     */
     public void setNumTilesColor(int numberOfTiles){
-        if (lastClickedButtonNum != null && lastClickedBorderColorNum != null) {
+        if (lastClickedButtonNum != null) {
             lastClickedButtonNum.setBorder(new Border(new BorderStroke(Color.GRAY, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0))));
         }
         for(Node node : numOfTilesButtons.getChildren()){
