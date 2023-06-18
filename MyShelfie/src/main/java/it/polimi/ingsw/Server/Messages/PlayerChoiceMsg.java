@@ -42,7 +42,7 @@ public class PlayerChoiceMsg extends C2SMessage{
             //???
             clientHandler.getController().getBoard().checkDirectionAndNumberOfTiles(direction, numberOfTiles, initialRow, initialColumn, maxTilesPickable);
             playerChoiceAnswer = new PlayerChoiceAnswer("",true);
-            clientHandler.getController().getPlayerChoice(initialRow, initialColumn, direction, numberOfTiles+1);
+            clientHandler.getController().pickTilesFromBoard(initialRow, initialColumn, direction, numberOfTiles+1);
 
         }catch(OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException
                 | InvalidNumberOfTilesException | InvalidDirectionException e){
@@ -58,7 +58,7 @@ public class PlayerChoiceMsg extends C2SMessage{
             try {
                 server.getController(client).getBoard().checkDirectionAndNumberOfTiles(direction, numberOfTiles, initialRow, initialColumn, maxTilesPickable);
                 playerChoiceAnswer = new PlayerChoiceAnswer("", true);
-                server.getController(client).getPlayerChoice(initialRow, initialColumn, direction, numberOfTiles + 1);
+                server.getController(client).pickTilesFromBoard(initialRow, initialColumn, direction, numberOfTiles + 1);
 
             } catch (OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException
                      | InvalidNumberOfTilesException | InvalidDirectionException e) {
