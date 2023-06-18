@@ -260,7 +260,7 @@ public class GameRecord {
 
         //if all players are reconnecting after the server crashed
         else if(persistenceManaged && msg == null)
-            games.get(gameIndex).persistenceManager(playerIndex);
+            games.get(gameIndex).manageReconnectionPersistence(playerIndex);
     }
 
     /**
