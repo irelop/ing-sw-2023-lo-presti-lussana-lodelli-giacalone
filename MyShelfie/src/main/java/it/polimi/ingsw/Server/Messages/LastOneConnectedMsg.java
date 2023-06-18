@@ -22,16 +22,24 @@ public class LastOneConnectedMsg extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        serverHandler.getOwner().transitionToView(new LastPlayerConnectedView(this));
-        serverHandler.getOwner().getCurrentView().notifyView();
+        if(serverHandler.getOwner().gui) {
+            serverHandler.getOwner().getStageManager().loadNextStage(this,"lastPlayerConnected.fxml");
+        } else {
+            serverHandler.getOwner().transitionToView(new LastPlayerConnectedView(this));
+            serverHandler.getOwner().getCurrentView().notifyView();
+        }
     }
 
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client) {
         try {
-            client.goToLastPlayerConnectedView(this);
-            if(client.getCurrentView().getClass() == WaitingView.class)
-                client.notifyView();
+            if(client.getOwner().gui) {
+                client.getOwner().getStageManager().loadNextStage(this,"lastPlayerConnected.fxml");
+            } else {
+                client.goToLastPlayerConnectedView(this);
+                if (client.getCurrentView().getClass() == WaitingView.class)
+                    client.notifyView();
+            }
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

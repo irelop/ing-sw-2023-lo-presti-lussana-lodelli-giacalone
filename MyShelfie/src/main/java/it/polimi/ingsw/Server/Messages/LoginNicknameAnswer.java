@@ -5,7 +5,6 @@ import it.polimi.ingsw.Client.View.LoginView;
 import it.polimi.ingsw.Client.View.WaitingView;
 import it.polimi.ingsw.Server.RemoteInterface;
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public class LoginNicknameAnswer extends S2CMessage{
@@ -36,19 +35,27 @@ public class LoginNicknameAnswer extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        LoginView loginView = (LoginView) serverHandler.getOwner().getCurrentView();
-        serverHandler.getOwner().setNickname(parent.getInsertedNickname());
-        loginView.setLoginNicknameAnswer(this);
-        serverHandler.getOwner().getCurrentView().notifyView();
+        if (serverHandler.getOwner().gui) {
+            serverHandler.getOwner().getStageManager().getController().receiveAnswer(this);
+        } else {
+            LoginView loginView = (LoginView) serverHandler.getOwner().getCurrentView();
+            serverHandler.getOwner().setNickname(parent.getInsertedNickname());
+            loginView.setLoginNicknameAnswer(this);
+            serverHandler.getOwner().getCurrentView().notifyView();
+        }
     }
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
-            LoginView loginView = (LoginView) client.getCurrentView();
-            loginView.setLoginNicknameAnswer(this);
-            client.getClient().setNickname(parent.getInsertedNickname());
-            if(client.getCurrentView().getClass() == WaitingView.class)
-                client.notifyView();
+            if (client.getOwner().gui) {
+                client.getOwner().getStageManager().getController().receiveAnswer(this);
+            } else {
+                LoginView loginView = (LoginView) client.getCurrentView();
+                loginView.setLoginNicknameAnswer(this);
+                client.getOwner().setNickname(parent.getInsertedNickname());
+                if(client.getCurrentView().getClass() == WaitingView.class)
+                    client.notifyView();
+            }
         }catch (RemoteException e){
             e.printStackTrace();
         }

@@ -28,7 +28,7 @@ public class ChatRecordAnswer extends S2CMessage{
     public void processMessage(RemoteInterface server, RemoteInterface client) {
         GoalView goalView = null;
         try {
-            goalView = (GoalView) client.getClient().getCurrentView();
+            goalView = (GoalView) client.getOwner().getCurrentView();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

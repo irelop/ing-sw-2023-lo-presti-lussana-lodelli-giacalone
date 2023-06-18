@@ -79,26 +79,15 @@ public class StageManager {
     }
 
     /**
-     * This method receives server answer and passes it to
-     * the current controller
-     * @param message: server message
-     */
-    public void manageServerAnswer(S2CMessage message) {
-        //System.out.println("Sono in manage di StageManager <- controller: " + controller);
-        controller.receiveAnswer(message);
-    }
-
-    /**
      * This method loads the next stage, building it with the
      * message passed as parameter
      * @param message: server message
      * @param fxmlAddress: relative path to .fxml file
-     * @param mainApp: JavaGUI instance
      */
-    public void loadNextStage(S2CMessage message, String fxmlAddress, JavaGUI mainApp){
+    public void loadNextStage(S2CMessage message, String fxmlAddress){
         FXMLLoader loader;
         try {
-            loader = mainApp.prepareScene(fxmlAddress);
+            loader = owner.mainApp.prepareScene(fxmlAddress);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -111,7 +100,7 @@ public class StageManager {
 
         AnchorPane root = loader.getRoot();
 
-        mainApp.transitionScene(root);
+        owner.mainApp.transitionScene(root);
     }
 
     /**

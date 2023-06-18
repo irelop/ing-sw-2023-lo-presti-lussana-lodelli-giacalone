@@ -31,8 +31,8 @@ public class ReconnectionAnswer extends S2CMessage{
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client) {
         try {
-            client.getClient().setNickname(nickname);     //re-setting the nickname
-            LoginView loginView = (LoginView) client.getClient().getCurrentView();
+            client.getOwner().setNickname(nickname);     //re-setting the nickname
+            LoginView loginView = (LoginView) client.getOwner().getCurrentView();
             loginView.setReconnectionAnswer(this);
         } catch (RemoteException e) {
             throw new RuntimeException(e);

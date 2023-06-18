@@ -25,17 +25,25 @@ public class PlayerChoiceAnswer extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler){
-        ChooseTilesFromBoardView chooseTilesFromBoardView = (ChooseTilesFromBoardView) serverHandler.getOwner().getCurrentView();
-        chooseTilesFromBoardView.setPlayerChoiceAnswer(this);
-        serverHandler.getOwner().getCurrentView().notifyView();
+        if(serverHandler.getOwner().gui) {
+            serverHandler.getOwner().getStageManager().getController().receiveAnswer(this);
+        } else {
+            ChooseTilesFromBoardView chooseTilesFromBoardView = (ChooseTilesFromBoardView) serverHandler.getOwner().getCurrentView();
+            chooseTilesFromBoardView.setPlayerChoiceAnswer(this);
+            serverHandler.getOwner().getCurrentView().notifyView();
+        }
     }
 
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try{
-            ChooseTilesFromBoardView chooseTilesFromBoardView = (ChooseTilesFromBoardView) client.getCurrentView();
-            chooseTilesFromBoardView.setPlayerChoiceAnswer(this);
-            //client.getCurrentView().notifyView();
+            if(client.getOwner().gui) {
+                client.getOwner().getStageManager().getController().receiveAnswer(this);
+            } else {
+                ChooseTilesFromBoardView chooseTilesFromBoardView = (ChooseTilesFromBoardView) client.getCurrentView();
+                chooseTilesFromBoardView.setPlayerChoiceAnswer(this);
+                //client.getCurrentView().notifyView();
+            }
         }catch(RemoteException e){
             e.printStackTrace();
         }

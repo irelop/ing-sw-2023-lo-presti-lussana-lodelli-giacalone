@@ -61,16 +61,23 @@ public class YourTurnMsg extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-
-        serverHandler.getOwner().transitionToView(new ChooseTilesFromBoardView(this));
-        serverHandler.getOwner().getCurrentView().notifyView();
+        if(serverHandler.getOwner().gui) {
+            serverHandler.getOwner().getStageManager().loadNextStage(this,"pickFromBoard.fxml");
+        } else {
+            serverHandler.getOwner().transitionToView(new ChooseTilesFromBoardView(this));
+            serverHandler.getOwner().getCurrentView().notifyView();
+        }
     }
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
-            client.goToChooseTilesFromBoardView(this);
-            if(client.getCurrentView().getClass() == WaitingView.class)
-                client.notifyView();
+            if(client.getOwner().gui) {
+                client.getOwner().getStageManager().loadNextStage(this,"pickFromBoard.fxml");
+            } else {
+                client.goToChooseTilesFromBoardView(this);
+                if (client.getCurrentView().getClass() == WaitingView.class)
+                    client.notifyView();
+            }
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }

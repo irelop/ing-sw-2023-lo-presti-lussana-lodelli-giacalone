@@ -20,7 +20,7 @@ public class ReconnectionNotifyMsg extends S2CMessage{
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client) {
         try {
-            LastPlayerConnectedView lastPlayerConnectedView = (LastPlayerConnectedView) client.getClient().getCurrentView();
+            LastPlayerConnectedView lastPlayerConnectedView = (LastPlayerConnectedView) client.getOwner().getCurrentView();
             lastPlayerConnectedView.notifyView(nickname);
         } catch (RemoteException e) {
             throw new RuntimeException(e);

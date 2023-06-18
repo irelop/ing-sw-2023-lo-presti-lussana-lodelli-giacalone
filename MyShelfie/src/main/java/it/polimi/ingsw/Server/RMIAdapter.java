@@ -20,7 +20,7 @@ import java.util.HashMap;
 public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
     private ArrayList<RemoteInterface> remoteClients;       //moved from public to private
     public HashMap<RemoteInterface, MyShelfie> mapClientsToController;      //mapping for each client their controller
-    private Client client;      //reference to the client if the rmi object is on the client side
+    private Client owner;      //reference to the client if the rmi object is on the client side
     private GameRecord gameRecord;      //reference to the record for multiple games management
 
     public RMIAdapter() throws RemoteException{
@@ -38,7 +38,7 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
     }
     @Override
     public boolean isClientConnected() throws RemoteException {
-        if(client==null) {
+        if(owner ==null) {
             return false;
         }
         return true;
@@ -58,7 +58,7 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
         System.out.println(msg);
     }
     public void transitionToView(View view){
-        client.transitionToView(view);
+        owner.transitionToView(view);
     }
 
     public void goToLoginView(NumberOfPlayerManagementMsg msg){
@@ -87,13 +87,13 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
     }
 
     public void notifyView(){
-        client.getCurrentView().notifyView();
+        owner.getCurrentView().notifyView();
     }
 
 
     //- - - - - - - - - - - - - - - - - - - - - S E T T E R S - - - - - - - - - - - - - - - - - - - - - -
-    public void setClient(Client client){
-        this.client = client;
+    public void setOwner(Client owner){
+        this.owner = owner;
     }
     public void setGameRecord(GameRecord gameRecord){
         this.gameRecord = gameRecord;
@@ -112,12 +112,12 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
     public MyShelfie getController(RemoteInterface client){
         return mapClientsToController.get(client);
     }
-    public Client getClient(){
-        return client;
+    public Client getOwner(){
+        return owner;
     }
 
     public View getCurrentView(){
-        return client.getCurrentView();
+        return owner.getCurrentView();
     }
 
 

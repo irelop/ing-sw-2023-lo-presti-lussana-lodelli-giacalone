@@ -98,14 +98,14 @@ public interface RemoteInterface extends Remote {
         //- - - - - - - - - - - - - - - - - - - - - S E T T E R S - - - - - - - - - - - - - - - - - - - - - -
 
         void setGameRecord(GameRecord gameRecord) throws RemoteException;
-        void setClient(Client client) throws RemoteException;
+        void setOwner(Client owner) throws RemoteException;
         void setControllerToClient(RemoteInterface client) throws RemoteException;
         void resetControllerToClient(MyShelfie controller, RemoteInterface client) throws RemoteException;
 
         //- - - - - - - - - - - - - - - - - - - - - - G E T T E R S - - - - - - - - - - - - - - - - - - - - -
         GameRecord getGameRecord() throws RemoteException;
         MyShelfie getController(RemoteInterface remoteClient) throws RemoteException;
-        Client getClient() throws RemoteException;
+        Client getOwner() throws RemoteException;
         View getCurrentView() throws RemoteException;
 
 }

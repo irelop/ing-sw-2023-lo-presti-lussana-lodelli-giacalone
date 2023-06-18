@@ -19,13 +19,21 @@ public class ScoreBoardMsg extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler){
-        serverHandler.getOwner().transitionToView(new EndGameView(this));
-        serverHandler.getOwner().getCurrentView().notifyView();
+        if(serverHandler.getOwner().gui) {
+            serverHandler.getOwner().getStageManager().loadNextStage(this,"endGame.fxml");
+        } else {
+            serverHandler.getOwner().transitionToView(new EndGameView(this));
+            serverHandler.getOwner().getCurrentView().notifyView();
+        }
     }
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
-            client.goToEndgameView(this);
+            if(client.getOwner().gui) {
+                client.getOwner().getStageManager().loadNextStage(this,"endGame.fxml");
+            } else {
+                client.goToEndgameView(this);
+            }
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
