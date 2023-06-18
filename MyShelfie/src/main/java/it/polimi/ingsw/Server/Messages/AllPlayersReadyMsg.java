@@ -14,13 +14,13 @@ public class AllPlayersReadyMsg extends C2SMessage{
 
     @Override
     public void processMessage(ClientHandler clientHandler){
-        clientHandler.getController().allPlayersReady();
+        clientHandler.getController().initGame();
     }
 
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
-            server.getController(client).allPlayersReady();
+            server.getController(client).initGame();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
