@@ -2,7 +2,9 @@ package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Client.Gui.JavaGUI;
 import it.polimi.ingsw.Client.Gui.StageManager;
+import it.polimi.ingsw.Client.View.Exceptions.InvalidGUIChoiceException;
 import it.polimi.ingsw.Client.View.Exceptions.InvalidNetworkChoiceException;
+import it.polimi.ingsw.Client.View.Exceptions.InvalidNumberOfPlayersException;
 import it.polimi.ingsw.Client.View.LoginView;
 import it.polimi.ingsw.Client.View.View;
 import it.polimi.ingsw.Client.View.WaitingView;
@@ -32,7 +34,7 @@ public class Client implements Runnable{
     private RemoteInterface remoteServer;
     private RemoteInterface client;
 
-    public int gui;
+    public boolean gui;
 
     private StageManager stageManager;
 
@@ -47,17 +49,33 @@ public class Client implements Runnable{
     public void run(){
         askNetworkChoice();
 
-        System.out.println("do you want the GUI?");
+        System.out.println("do you want the GUI? (y: yes, n: no)");
 
         Scanner input = new Scanner(System.in);
-        this.gui = input.nextInt();
-        if(gui == 0) {
+        String inputString;
+        char GUIchoice;
+        while (true) {
+            try {
+                inputString = input.next().toUpperCase();
+                if (inputString.length() > 1)
+                    throw new InvalidGUIChoiceException();
+                GUIchoice = inputString.charAt(0);
+                if (GUIchoice == 'Y' || GUIchoice == 'N')
+                    break;
+                else
+                    throw new InvalidGUIChoiceException();
+            } catch (InvalidGUIChoiceException e) {
+                System.out.println(e);
+            }
+        }
+        // controllo input
+        this.gui = (GUIchoice == 'Y');
+        if(!gui) {
             nextView = new LoginView();
             runViewStateMachine();
         }
         else{
             stageManager = StageManager.getInstance();
-            //stageManager = new StageManager();
             stageManager.setOwner(this);
             mainApp = new JavaGUI();
             Application.launch(JavaGUI.class);
@@ -170,7 +188,7 @@ public class Client implements Runnable{
             //printing logging message in the server side
             remoteServer.printLoginStatus("["+this.getClass().getName()+"] now connected through RMI");
             remoteServer.addRemoteClient(client);       //adding the remote interface of the client to the remote server
-            client.setClient(this);     //adding the reference of this client to the remote client interface
+            client.setOwner(this);     //adding the reference of this client to the remote client interface
 
         }catch(RemoteException e){
             System.out.println("[ERROR]: Unable to invoke remote method");
