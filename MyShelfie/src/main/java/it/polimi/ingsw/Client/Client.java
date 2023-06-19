@@ -49,7 +49,7 @@ public class Client implements Runnable{
     public void run(){
         askNetworkChoice();
 
-        System.out.println("do you want the GUI? (y: yes, n: no)");
+        System.out.println("do you want the GUI? Type (Y) if yes, otherwise type (N)");
 
         Scanner input = new Scanner(System.in);
         String inputString;
