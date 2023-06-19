@@ -37,10 +37,12 @@ public class LobbyUpdateAnswer extends S2CMessage{
             if(client.getOwner().gui) {
                 client.getOwner().getStageManager().loadNextStage(this,"lobby.fxml");
                 client.getOwner().getStageManager().getController().receiveAnswer(this);
+            }else{
+                client.goToLobbyView(this);
+                if(client.getCurrentView().getClass() == WaitingView.class)
+                    client.notifyView();
             }
-            client.goToLobbyView(this);
-            if(client.getCurrentView().getClass() == WaitingView.class)
-                client.notifyView();
+
 
         } catch (RemoteException e) {
             throw new RuntimeException(e);

@@ -272,6 +272,15 @@ public class MyShelfie {
             for (int j = 0; j < 5; j++)
                 shelfSnapshot[i][j] = playersConnected.get(currentPlayerIndex).myShelfie.getGrid()[i][j];
 
+        for(int i=0; i<playersConnected.size(); i++){
+            if(i!=currentPlayerIndex){
+                GoWaitingGUI goWaitingGUI = new GoWaitingGUI();
+                clientHandlers.get(i).sendMessageToClient(goWaitingGUI);
+            }
+
+
+        }
+
         yourTurnMsg = new YourTurnMsg(
                 playersConnected.get(currentPlayerIndex).getNickname(),
                 maxTilesPickable,
