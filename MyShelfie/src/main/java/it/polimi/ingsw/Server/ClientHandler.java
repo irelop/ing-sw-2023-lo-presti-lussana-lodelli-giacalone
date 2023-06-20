@@ -1,14 +1,8 @@
 package it.polimi.ingsw.Server;
 
-import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Server.Messages.S2CMessage;
 import it.polimi.ingsw.Server.Model.GameRecord;
 import it.polimi.ingsw.Server.Model.MyShelfie;
-
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 
 /**
  * ClientHandler class: an abstract class which represents the client inside the server.
@@ -59,7 +53,7 @@ public abstract class ClientHandler implements Runnable {
         isRMI = value;
     }
     public void stop() {};
-    public boolean getIsRMI(){
+    public boolean isRMI(){
         return isRMI;
     }
 

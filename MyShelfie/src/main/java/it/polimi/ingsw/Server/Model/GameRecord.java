@@ -5,8 +5,6 @@ import it.polimi.ingsw.Server.Messages.*;
 import java.io.File;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Class to manage multiple games
@@ -45,7 +43,8 @@ public class GameRecord {
         if (currentGame == -1 || games.get(currentGame) == null || games.get(currentGame).getAllPlayersReady()) {
             currentGame++;
             persistenceManager.addNewGameFile("game_"+currentGame+".txt");
-            MyShelfie game = new MyShelfie(persistenceManager.getGameFile(currentGame));
+            //MyShelfie game = new MyShelfie(persistenceManager.getGameFile(currentGame));
+            MyShelfie game = new MyShelfie(persistenceManager, currentGame);
             games.add(game);
         }
         return games.get(currentGame);
@@ -82,12 +81,21 @@ public class GameRecord {
      *
      * @author Irene Lo Presti
      */
-    public void reset(){
+    public void reset() {
+        int gamesNum = persistenceManager.reset(); //find how many old games there were
+        for(int i=0; i<gamesNum; i++){
+            games.add(persistenceManager.readOldGame(i));
+            games.get(i).resetPlayers();
+            currentGame++;
+        }
+        persistenceManaged = true;
+    }
+    /*public void reset(){
 
         int gamesNum = persistenceManager.reset(); //find how many old games there were
 
         for(int i=0; i<gamesNum; i++){
-            ReadFileByLines reader;
+            /*ReadFileByLines reader;
             reader = new ReadFileByLines();
             reader.readFrom("src/safetxt/game_"+i+".txt");
 
@@ -107,10 +115,12 @@ public class GameRecord {
             //create a new board
             Board board = new Board();
             //init the new board with the one in the right file
-            board.initFromMatrix(boardMatrix);
+            board.initFromMatrix(boardMatrix);*/
+
+            //Board board = persistenceManager.readBoard(i);
 
             //read the bag
-            Map<Tile,Integer> bag = new HashMap<>();
+            /*Map<Tile,Integer> bag = new HashMap<>();
             row = ReadFileByLines.getLineByIndex(6);
             values = row.replaceAll("\\{", "")
                     .replaceAll("}", "")
@@ -120,15 +130,15 @@ public class GameRecord {
                 bag.put(Tile.valueOf(tile[0]), Integer.valueOf(tile[1]));
             }
             //set the correct bag in the board created above
-            board.setBag(bag);
+            board.setBag(persistenceManager.readBag(i));
 
             //read common goal cards names
-            String[] commonGoalCardsNames = new String[2];
+            /*String[] commonGoalCardsNames = new String[2];
             commonGoalCardsNames[0] = ReadFileByLines.getLineByIndex(1);
-            commonGoalCardsNames[1] = ReadFileByLines.getLineByIndex(2);
+            commonGoalCardsNames[1] = ReadFileByLines.getLineByIndex(2);*/
 
             //read all the other infos
-            int currentPlayerIndex = Integer.parseInt(ReadFileByLines.getLineByIndex(3));
+            /*int currentPlayerIndex = Integer.parseInt(ReadFileByLines.getLineByIndex(3));
             boolean isStarted = Boolean.parseBoolean(ReadFileByLines.getLineByIndex(4));
             int numberOfPlayers = Integer.parseInt(ReadFileByLines.getLineByIndex(5));
             boolean isOver = Boolean.parseBoolean(ReadFileByLines.getLineByIndex(7));
@@ -156,13 +166,23 @@ public class GameRecord {
             //call a function in the right controller to set all the players info
             game.resetPlayers();
 
+            /*MyShelfie game = new MyShelfie(
+                    persistenceManager, i,
+                    board,
+                    persistenceManager.readCommonCards(i),
+                    persistenceManager.readCurrentPlayerIndex(i),
+                    persistenceManager.readIsStarted(i),
+                    persistenceManager.readIsOver(i),
+                    persistenceManager.readNumberOfPlayers(i));*/
+
+            /*game.resetPlayers(persistenceManager.readPlayers(i, game.getPersonalDeck()));
+
             //add this game to the array list
             this.games.add(game);
             this.currentGame++;
         }
-
         persistenceManaged = true;
-    }
+    }*/
 
     /**
      * FA: client resilience. This method is used to reconnect a player whose connection has dropped or
@@ -233,7 +253,7 @@ public class GameRecord {
                 else{
                     if(playersConnected == 1 && games.get(gameIndex).isPlayerInCountdown())
                         countDownClient = games.get(gameIndex).geCountdownClientHandler(); //the player who is in Countdown Mode
-                    if(clientHandler.getIsRMI()){
+                    if(clientHandler.isRMI()){
                         try {
                             //set the correct controller in the map
                             remoteServer.resetControllerToClient(games.get(gameIndex), clientHandler.getClientInterface());
@@ -295,7 +315,7 @@ public class GameRecord {
             }
             clientHandler.sendMessageToClient(loginNicknameAnswer);
             games.get(controllerIdx).addPlayer(loginNicknameRequest.getInsertedNickname(), clientHandler);
-            persistenceManager.addNewPlayerFile(loginNicknameRequest.getInsertedNickname()+".txt", controllerIdx);
+            persistenceManager.addNewPlayerFile(loginNicknameRequest.getInsertedNickname(), controllerIdx);
 
 
         } else {
