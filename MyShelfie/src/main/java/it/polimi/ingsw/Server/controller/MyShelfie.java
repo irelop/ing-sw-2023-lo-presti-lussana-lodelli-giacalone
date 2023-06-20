@@ -750,12 +750,12 @@ public class MyShelfie {
             chatMsgAnswer = new ChatMsgAnswer(false);
         }
         if(!clientHandlers.get(currentPlayerIndex).getIsRMI()) {
-            if (playersConnected.get(currentPlayerIndex).getNickname() == messageToSend.getSender())
+            if (playersConnected.get(currentPlayerIndex).getNickname().equals(messageToSend.getSender()))
                 clientHandlers.get(currentPlayerIndex).sendMessageToClient(chatMsgAnswer);
         }
         else {
             try {
-                if (playersConnected.get(currentPlayerIndex).getNickname() == messageToSend.getSender())
+                if (playersConnected.get(currentPlayerIndex).getNickname().equals(messageToSend.getSender()))
                     clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(chatMsgAnswer);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
