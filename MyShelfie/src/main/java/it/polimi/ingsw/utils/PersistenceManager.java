@@ -288,7 +288,7 @@ public class PersistenceManager {
 
         String cardIdx = null;
 
-        if (playerFile.exists()){
+        if (playerFile.exists() && playerFile.length() > 2){
             reader.readFrom(getPlayerPath(player.getNickname()));
             //set the chair only if the player has it
             if (Boolean.parseBoolean(ReadFileByLines.getLineByIndex(1)))

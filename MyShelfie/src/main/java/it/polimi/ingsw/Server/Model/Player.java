@@ -36,26 +36,11 @@ public class Player {
         this.chair = false;
         this.littleHand = new ArrayList<>();
         this.commonGoalsAchieved = new boolean[2];
-        this.commonGoalsAchieved[0] = false;
-        this.commonGoalsAchieved[1] = false;
         this.hasFinished = false;
     }
-
-
-
-
-
     public void clearLittleHand(){
         littleHand.clear();
     }
-
-
-
-    @Override
-    public String toString(){
-        return nickname+" achived "+myScore.getScore()+" points";
-    }
-
 
     /**
      * OVERVIEW: this method orders the tiles of the little hand
@@ -112,7 +97,6 @@ public class Player {
      * 1 and the number of the tiles that he/she has chosen from the board or if he/she has already chosen it
      */
     public void getTiles(int[] choices) throws InvalidTileIndexInLittleHandException {
-
         for(int i=0; i<choices.length; i++)
             if (choices[i] < 0 || choices[i] >= choices.length)
                 throw new InvalidTileIndexInLittleHandException(choices.length);

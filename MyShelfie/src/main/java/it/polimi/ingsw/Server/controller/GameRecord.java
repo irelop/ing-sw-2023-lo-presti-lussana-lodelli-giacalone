@@ -311,7 +311,7 @@ public class GameRecord {
         String pathFile = "src/safetxt/"+loginNicknameRequest.getInsertedNickname()+".txt";
         File file = new File(pathFile);
 
-        if (!file.exists() || (file.exists() && file.length()<=2)) {
+        if (!file.exists()) {
 
             if (games.get(controllerIdx).isFirstConnected()) {
                 loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
