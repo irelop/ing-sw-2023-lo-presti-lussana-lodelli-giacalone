@@ -7,7 +7,6 @@ import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandExcep
 import it.polimi.ingsw.Server.Model.Exceptions.NotEnoughSpaceInChosenColumnException;
 import it.polimi.ingsw.Server.RemoteInterface;
 import it.polimi.ingsw.utils.ReadFileByLines;
-
 import java.io.*;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -37,16 +36,18 @@ public class MyShelfie {
     private int firstToFinish;
     private final ChatManager chatManager;
     private boolean playerInCountdown;
-    private File persistenceFile;
-    private final String safeFilePath;
+
+    private PersistenceManager persistenceManager;
+    private int gameIndex;
 
     //- - - - - - - - - - - - - - - - - - CONSTRUCTORS - - - - - - - - -  - - - - - - - - - - - -
     /**
      * Constructor for new games
-     * @param persistenceFile is the file where all the info of this game are going to be saved
+     * @param persistenceManager for the FA persistence
+     * @param gameIndex the index of this game in game record
      * @author Irene Lo Presti
      */
-    public MyShelfie(File persistenceFile){
+    public MyShelfie(PersistenceManager persistenceManager, int gameIndex){
         this.board = new Board();
         this.commonDeck = new CommonGoalDeck();
         this.personalDeck = new PersonalGoalDeck();
@@ -60,15 +61,17 @@ public class MyShelfie {
         this.allPlayersReady = false;
         this.gameOver = false;
         this.lock = new Object();
-        this.persistenceFile = persistenceFile;
-        this.safeFilePath = "src/safetxt/";
         this.chatManager = new ChatManager();
         this.playerInCountdown = false;
+
+        this.persistenceManager = persistenceManager;
+        this.gameIndex = gameIndex;
     }
 
     /**
      * Constructor for old games to be restored after the server crash
-     * @param persistenceFile: file with all the info of this game
+     * @param persistenceManager for the FA persistence
+     * @param gameIndex the index of this game in game record
      * @param board: old board
      * @param commonGoalCardsNames: codes of the old common goal cards
      * @param currentPlayerIndex: index of the player that was playing the last turn
@@ -78,7 +81,7 @@ public class MyShelfie {
      *
      * @author Irene Lo Presti
      */
-    public MyShelfie(File persistenceFile, Board board, String[] commonGoalCardsNames, int currentPlayerIndex, boolean isStarted, boolean isOver, int numberOfPlayers){
+    public MyShelfie(PersistenceManager persistenceManager, int gameIndex, Board board, String[] commonGoalCardsNames, int currentPlayerIndex, boolean isStarted, boolean isOver, int numberOfPlayers){
         this.commonDeck = new CommonGoalDeck();
         this.board = board;
         CommonGoalCard[] commonGoalCards = new CommonGoalCard[2];
@@ -87,7 +90,6 @@ public class MyShelfie {
         commonGoalCards[1] = commonDeck.getCard(commonGoalCardsNames[1]);
         board.setCommonGoalCards(commonGoalCards);
 
-        this.persistenceFile = persistenceFile;
         this.isOver = isOver;
         this.isStarted = isStarted;
         this.numberOfPlayers = numberOfPlayers;
@@ -95,13 +97,15 @@ public class MyShelfie {
         //initialize all the others attributes
         this.gameOver = false;
         this.lock = new Object();
-        this.allPlayersReady = false;//?
+        this.allPlayersReady = true;
         this.personalDeck = new PersonalGoalDeck();
         this.playersConnected = new ArrayList<>();
         this.clientHandlers = new ArrayList<>();
-        this.safeFilePath = "src/safetxt/";
         this.chatManager = new ChatManager();
         this.playerInCountdown = false;
+
+        this.persistenceManager = persistenceManager;
+        this.gameIndex = gameIndex;
     }
 
     //- - - - - - - - - - - - - - - - - - - -| L O G I N   M E T H O D S |- - - - - - - - - - - - - - - - - - - - - - - -
@@ -205,7 +209,8 @@ public class MyShelfie {
                 PersonalGoalCard card = personalDeck.drawPersonal();
                 player.setCard(card);
                 String info = card.getId() + "\n0\nshelf\n";
-                writeOnPlayersFiles(info, player.getNickname());
+                //writeOnPlayersFiles(info, player.getNickname());
+                persistenceManager.writeStaticPlayerInfo(player.getNickname(), info);
             }
         }
 
@@ -226,7 +231,8 @@ public class MyShelfie {
 
             for(Player player : playersConnected){
                 String info = player.hasChair()+"\n";
-                writeOnPlayersFiles(info, player.getNickname());
+                //writeOnPlayersFiles(info, player.getNickname());
+                persistenceManager.writeStaticPlayerInfo(player.getNickname(), info);
             }
 
         }
@@ -742,56 +748,17 @@ public class MyShelfie {
 
     //- - - - - - - - - - - - - - - - - - - -| PERSISTENCE |- - - - - - - - - - - - - - - - - - - - -
 
-    /**
-     * Method for the FA: persistence. It reads the files of the players connected to the old game and sets
-     * all the right info
-     * @author Irene Lo Presti
-     */
     public void resetPlayers(){
-        String path;
         int numberOfPlayersConnected = 0;
         for(Player player : playersConnected){
-            path = safeFilePath + player.getNickname()+".txt";
-            ReadFileByLines reader;
-            reader = new ReadFileByLines();
-            File file = new File(path);
-            if(file.exists()){
-                numberOfPlayersConnected ++;
-                reader.readFrom(path);
-
-                //set the chair only if the player has it
-                boolean hasChair = Boolean.parseBoolean(ReadFileByLines.getLineByIndex(1));
-                if (hasChair)
-                    player.setChair();
-
-                //get the right personal card from the deck
-                PersonalGoalCard card = personalDeck.getCard(ReadFileByLines.getLineByIndex(2));
+            String personalCardIndex = persistenceManager.setPlayer(player);
+            if(personalCardIndex != null){
+                PersonalGoalCard card = personalDeck.getCard(personalCardIndex);
                 player.setCard(card);
-
-                //set the old score
-                int score = Integer.parseInt(ReadFileByLines.getLineByIndex(3));
-                player.setScore(score);
-
-                //set the old shelf
-                Tile[][] shelf = new Tile[9][9];
-                String row = ReadFileByLines.getLineByIndex(4);
-
-                //if row.equals("shelf") the player didn't play their turn, so the shelf was all blank
-                if (!row.equals("shelf")) {
-                    String[] values = row.replaceAll("\\[", "")
-                            .replaceAll("]", "")
-                            .split(", ");
-                    int index = 0;
-                    for (int j = 0; j < 6; j++) {
-                        for (int k = 0; k < 5; k++) {
-                            shelf[j][k] = Tile.valueOf(values[index]);
-                            index++;
-                        }
-                    }
-                    player.setShelf(shelf);
-                }
+                numberOfPlayersConnected++;
             }
         }
+
         if(numberOfPlayersConnected == 1) //controllo anche se sono 0?
             this.gameOver = true;
     }
@@ -813,71 +780,17 @@ public class MyShelfie {
             update.append(playersConnected.get(j).getNickname()).append("\n");
 
         //write the info on the game file
-        try {
-            FileWriter fw = new FileWriter(persistenceFile);
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(update.toString());
-            bw.flush();
-            bw.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        persistenceManager.updateGameFile(gameIndex, update.toString());
 
         //update of the player file
-        String playerPath = safeFilePath + playersConnected.get(currentPlayerIndex).getNickname() + ".txt";
+        String playerUpdate = playersConnected.get(currentPlayerIndex).getScore() + "\n" +
+                Arrays.deepToString(playersConnected.get(currentPlayerIndex).getShelfGrid()) + "\n";
 
-        //read all the info to keep the "static" ones: controller number, personal goal card
-        ReadFileByLines reader = new ReadFileByLines();
-        reader.readFrom(playerPath);
-        String line;
-        ArrayList<String> lines = new ArrayList<>();
-        while((line = ReadFileByLines.getLine())!=null){
-            lines.add(line);
-        }
-
-        //set the new score
-        lines.set(lines.size()-2, String.valueOf(playersConnected.get(currentPlayerIndex).getScore()));
-
-        //set the update shelf
-        lines.set(lines.size()-1, Arrays.deepToString(playersConnected.get(currentPlayerIndex).getShelfGrid()));
-
-        //rewrite the file
-        FileWriter fw = null;
-        try {
-            fw = new FileWriter(playerPath);
-            BufferedWriter bw = new BufferedWriter(fw);
-            for(String newLine : lines){
-                bw.write(newLine + "\n");
-            }
-            bw.flush();
-            bw.close();
-        } catch (IOException e) {
-            System.out.println("Error during player file updating");
-        }
-
+        persistenceManager.updatePlayerFile(playersConnected.get(currentPlayerIndex).getNickname(), playerUpdate);
 
     }
 
-    /**
-     * This method writes on the player file the update info
-     * @param info: all the info of the turn
-     * @param playerNickname of the player who just played
-     * @author Irene Lo Presti
-     */
-    private void writeOnPlayersFiles(String info, String playerNickname){
 
-        String fileName = safeFilePath + playerNickname + ".txt";
-        try {
-            FileWriter fw = new FileWriter(fileName, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(info);
-            bw.flush();
-            bw.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     /**
      * This method manages the reconnection of the players after the server's connection drop
@@ -900,13 +813,10 @@ public class MyShelfie {
      */
     public void fileDeleting(String playerNickname){
         //deleting player file
-        File file = new File("src/safetxt/"+playerNickname+".txt");
-        file.delete();
-
+        persistenceManager.deletePlayerFile(playerNickname);
         numberOfPlayers--;
-        if(numberOfPlayers==0){
-            persistenceFile.delete();
-        }
+        if(numberOfPlayers==0)
+            persistenceManager.deleteGameFile(gameIndex, false);
     }
 
     //- - - - - - - - - - - - - - - - - -| GETTER METHODS |- - - - - - - - - - - - - - - - - - - - - - - - - -
