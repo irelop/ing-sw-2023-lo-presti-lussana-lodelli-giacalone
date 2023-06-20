@@ -537,12 +537,16 @@ public class ShelfController extends Controller {
     public void sendMessage(){
         String message = chatMessage.getText();
         String receiver_name  = "EVERYONE";
+        String formattedMsg = message;
         if(message.startsWith("@")){
             receiver_name = message.split(" ")[0];
-            receiver_name.replaceAll("@", "");
-            if(receiver_name.toUpperCase() != getOwner().getNickname()) receiver_name = "";
+            StringBuilder sb = new StringBuilder(receiver_name);
+            sb.deleteCharAt(0);
+            receiver_name = sb.toString();
+            formattedMsg = message.substring(receiver_name.length()+2);
+            if(receiver_name.toUpperCase().equals(getOwner().getNickname())) receiver_name = "";
         }
-        ChatMsgRequest chatMsgRequest = new ChatMsgRequest(getOwner().getNickname(), receiver_name, message);
+        ChatMsgRequest chatMsgRequest = new ChatMsgRequest(getOwner().getNickname(), receiver_name, formattedMsg);
         getOwner().getServerHandler().sendMessageToServer(chatMsgRequest);
         chatMessage.setText(null);
         chatRefresh();
