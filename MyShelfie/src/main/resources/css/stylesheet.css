@@ -60,7 +60,7 @@
 }
 
 #chatButton{
-    -fx-background-image: url("../MyShelfie_IMAGES/misc/chat/chatIcon.png");
+    -fx-background-image: url("../MyShelfie_IMAGES/misc/chat/chat_icon.jpg");
     -fx-background-clip: border-box;
     -fx-background-size: contain;
     -fx-background-repeat: no-repeat;
