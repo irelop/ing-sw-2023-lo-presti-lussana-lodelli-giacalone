@@ -26,7 +26,7 @@ public class LoginPlayerController extends Controller{
     @FXML
     private TextField playerNickname;
     @FXML
-    private Label loginResult;
+    private Text loginResult;
     @FXML
     private Button backButton;
     @FXML
@@ -62,7 +62,7 @@ public class LoginPlayerController extends Controller{
     @Override
     public void receiveAnswer(S2CMessage message) {
         answer = (LoginNicknameAnswer) message;
-        answerReceived = true;
+        manageNicknameAnswer();
     }
 
     /**
@@ -90,11 +90,8 @@ public class LoginPlayerController extends Controller{
             getOwner().getServerHandler().sendMessageToServer(nicknameRequest);
             System.out.println("LoginReq inviata");
 
-            while (!answerReceived) {
-                Thread.onSpinWait();
-            }
 
-            manageNicknameAnswer();
+
         }
 
     }
@@ -114,7 +111,7 @@ public class LoginPlayerController extends Controller{
      * to the next window: game's lobby
      */
     private void manageNicknameAnswer(){
-
+        System.out.println("sono nella manageLogin");
         if (answer.getNicknameStatus() == LoginNicknameAnswer.Status.FIRST_ACCEPTED) {
             numOfPlayersSelection.setOpacity(1);
             numOfPlayersSelection.setDisable(false);
