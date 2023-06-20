@@ -1,8 +1,10 @@
 package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Server.ClientHandler;
-import it.polimi.ingsw.Server.Model.Exceptions.*;
-import it.polimi.ingsw.Server.RemoteInterface;
+
+import it.polimi.ingsw.utils.rmi.RemoteInterface;
+import it.polimi.ingsw.utils.Exceptions.InvalidTileIndexInLittleHandException;
+import it.polimi.ingsw.utils.Exceptions.NotEnoughSpaceInChosenColumnException;
 
 import java.rmi.RemoteException;
 

@@ -4,9 +4,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static it.polimi.ingsw.Client.View.ColorCode.*;
-import static it.polimi.ingsw.Client.View.ColorCode.RESET;
-import static org.junit.jupiter.api.Assertions.*;
+import static it.polimi.ingsw.Client.view.CLI.ColorCode.*;
+import static it.polimi.ingsw.Client.view.CLI.ColorCode.RESET;
 
 class CommonCardInfoTest {
 

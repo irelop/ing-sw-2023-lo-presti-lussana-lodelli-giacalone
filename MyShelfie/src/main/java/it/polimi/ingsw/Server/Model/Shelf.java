@@ -6,7 +6,7 @@ package it.polimi.ingsw.Server.Model;
  *
  */
 
-import it.polimi.ingsw.Server.Model.Exceptions.NotEnoughSpaceInChosenColumnException;
+import it.polimi.ingsw.utils.Exceptions.NotEnoughSpaceInChosenColumnException;
 
 import java.util.ArrayList;
 

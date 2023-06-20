@@ -2,10 +2,8 @@ package it.polimi.ingsw.Server.controller;
 
 import it.polimi.ingsw.Server.*;
 import it.polimi.ingsw.Server.Messages.*;
-import it.polimi.ingsw.Server.Model.Board;
-import it.polimi.ingsw.Server.Model.PersistenceManager;
-import it.polimi.ingsw.Server.Model.Tile;
-import it.polimi.ingsw.Server.controller.MyShelfie;
+import it.polimi.ingsw.utils.rmi.RemoteInterface;
+import it.polimi.ingsw.utils.PersistenceManager;
 import it.polimi.ingsw.utils.ReadFileByLines;
 
 import java.io.File;
@@ -259,7 +257,7 @@ public class GameRecord {
                 else{
                     if(playersConnected == 1 && games.get(gameIndex).isPlayerInCountdown())
                         countDownClient = games.get(gameIndex).getCountdownClientHandler(); //the player who is in Countdown Mode
-                    if(clientHandler.isRMI()){
+                    if(clientHandler.getIsRMI()){
                         try {
                             //set the correct controller in the map
                             remoteServer.resetControllerToClient(games.get(gameIndex), clientHandler.getClientInterface());

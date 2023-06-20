@@ -1,6 +1,9 @@
 package it.polimi.ingsw.Server;
 
 import it.polimi.ingsw.Server.controller.GameRecord;
+import it.polimi.ingsw.utils.rmi.RMIAdapter;
+import it.polimi.ingsw.utils.rmi.RemoteInterface;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Server.Messages.C2SMessage;
-import it.polimi.ingsw.Server.RemoteInterface;
+import it.polimi.ingsw.utils.rmi.RemoteInterface;
 import java.rmi.RemoteException;
 
 /**

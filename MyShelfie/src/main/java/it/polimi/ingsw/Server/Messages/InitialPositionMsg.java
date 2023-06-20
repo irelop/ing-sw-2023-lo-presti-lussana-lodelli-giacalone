@@ -1,10 +1,10 @@
 package it.polimi.ingsw.Server.Messages;
 import it.polimi.ingsw.Server.ClientHandler;
-import it.polimi.ingsw.Server.Model.Exceptions.EmptyCellException;
-import it.polimi.ingsw.Server.Model.Exceptions.InvalidCellException;
-import it.polimi.ingsw.Server.Model.Exceptions.InvalidPositionException;
-import it.polimi.ingsw.Server.Model.Exceptions.OutOfBoardException;
-import it.polimi.ingsw.Server.RemoteInterface;
+import it.polimi.ingsw.utils.Exceptions.EmptyCellException;
+import it.polimi.ingsw.utils.Exceptions.InvalidCellException;
+import it.polimi.ingsw.utils.Exceptions.InvalidPositionException;
+import it.polimi.ingsw.utils.Exceptions.OutOfBoardException;
+import it.polimi.ingsw.utils.rmi.RemoteInterface;
 
 import java.rmi.RemoteException;
 

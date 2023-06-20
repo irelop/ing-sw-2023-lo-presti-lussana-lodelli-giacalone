@@ -1,8 +1,6 @@
 package it.polimi.ingsw.Server.Messages;
 import it.polimi.ingsw.Client.ServerHandler;
-import it.polimi.ingsw.Server.RemoteInterface;
-
-import java.io.IOException;
+import it.polimi.ingsw.utils.rmi.RemoteInterface;
 
 /**
  * Class for a generic message send on a network link from the Server to the Client

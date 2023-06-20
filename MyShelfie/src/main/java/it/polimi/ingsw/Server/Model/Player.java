@@ -8,7 +8,7 @@ package it.polimi.ingsw.Server.Model;
  * @authors Irene Lo Presti, Matteo Lussana
  */
 
-import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
+import it.polimi.ingsw.utils.Exceptions.InvalidTileIndexInLittleHandException;
 
 import java.util.ArrayList;
 

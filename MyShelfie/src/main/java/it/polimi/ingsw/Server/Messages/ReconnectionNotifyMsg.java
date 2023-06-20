@@ -1,8 +1,8 @@
 package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
-import it.polimi.ingsw.Client.View.LastPlayerConnectedView;
-import it.polimi.ingsw.Server.RemoteInterface;
+import it.polimi.ingsw.Client.view.CLI.LastPlayerConnectedView;
+import it.polimi.ingsw.utils.rmi.RemoteInterface;
 import java.rmi.RemoteException;
 
 public class ReconnectionNotifyMsg extends S2CMessage{

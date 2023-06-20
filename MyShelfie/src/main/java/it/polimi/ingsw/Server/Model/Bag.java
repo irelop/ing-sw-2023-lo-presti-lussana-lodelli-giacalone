@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-import it.polimi.ingsw.Server.Model.Exceptions.EmptyBagException;
+import it.polimi.ingsw.utils.Exceptions.EmptyBagException;
 
 /**
  * Bag class: this class represents the bag of all the drawable tiles of the game.

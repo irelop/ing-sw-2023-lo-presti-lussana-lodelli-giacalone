@@ -1,7 +1,8 @@
 package it.polimi.ingsw.Server.Messages;
 import it.polimi.ingsw.Server.ClientHandler;
-import it.polimi.ingsw.Server.Model.Exceptions.*;
-import it.polimi.ingsw.Server.RemoteInterface;
+
+import it.polimi.ingsw.utils.rmi.RemoteInterface;
+import it.polimi.ingsw.utils.Exceptions.*;
 
 import java.rmi.RemoteException;
 
@@ -45,7 +46,7 @@ public class PlayerChoiceMsg extends C2SMessage{
             clientHandler.getController().pickTilesFromBoard(initialRow, initialColumn, direction, numberOfTiles+1);
 
         }catch(OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException
-                | InvalidNumberOfTilesException | InvalidDirectionException e){
+               | InvalidNumberOfTilesException | InvalidDirectionException e){
             playerChoiceAnswer = new PlayerChoiceAnswer(e.toString(),false);
         }
         clientHandler.sendMessageToClient(playerChoiceAnswer);

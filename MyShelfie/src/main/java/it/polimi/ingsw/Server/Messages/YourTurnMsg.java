@@ -7,12 +7,12 @@ package it.polimi.ingsw.Server.Messages;
  */
 
 import it.polimi.ingsw.Client.ServerHandler;
-import it.polimi.ingsw.Client.View.ChooseTilesFromBoardView;
-import it.polimi.ingsw.Client.View.WaitingView;
+import it.polimi.ingsw.Client.view.CLI.ChooseTilesFromBoardView;
+import it.polimi.ingsw.Client.view.CLI.WaitingView;
 import it.polimi.ingsw.Server.Model.CommonGoalCard;
 import it.polimi.ingsw.Server.Model.PersonalGoalCard;
 import it.polimi.ingsw.Server.Model.Tile;
-import it.polimi.ingsw.Server.RemoteInterface;
+import it.polimi.ingsw.utils.rmi.RemoteInterface;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;

@@ -2,9 +2,9 @@ package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
 
-import it.polimi.ingsw.Client.View.GoalView;
-import it.polimi.ingsw.Server.Model.ChatStorage;
-import it.polimi.ingsw.Server.RemoteInterface;
+import it.polimi.ingsw.Client.view.CLI.GoalView;
+import it.polimi.ingsw.Server.chat.ChatStorage;
+import it.polimi.ingsw.utils.rmi.RemoteInterface;
 
 import java.rmi.RemoteException;
 

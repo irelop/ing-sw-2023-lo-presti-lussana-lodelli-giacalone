@@ -1,9 +1,6 @@
 package it.polimi.ingsw.Client;
 
 import it.polimi.ingsw.Server.Messages.C2SMessage;
-import it.polimi.ingsw.Server.RemoteInterface;
-
-import java.io.IOException;
 
 /**
  * ServerHandler class: an abstraction of the network handler used by the client in order to send and process messages
