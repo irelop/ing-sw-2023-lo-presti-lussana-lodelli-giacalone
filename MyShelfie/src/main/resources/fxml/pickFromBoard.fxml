@@ -4,6 +4,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -304,11 +307,31 @@
                         </Text>
                      </children>
                   </Pane>
+                  <Button id="chatButton" fx:id="chatButton" layoutX="14.0" layoutY="101.0" mnemonicParsing="false" onAction="#openChat" prefHeight="50.0" prefWidth="50.0" style="-fx-border-width: 5; -fx-border-color: #422F11;">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Pane id="infoText" fx:id="chatPane" layoutX="70.0" layoutY="100.0" prefHeight="250.0" prefWidth="390.0" style="-fx-background-color: #F6D669; -fx-border-color: #422F11; -fx-border-width: 5; -fx-border-radius: 8; -fx-background-radius: 10;">
+                     <children>
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="12.0" layoutY="5.0" prefHeight="201.0" prefWidth="366.0">
+                           <padding>
+                              <Insets left="5.0" right="5.0" />
+                           </padding>
+                           <content>
+                              <TextArea fx:id="chatText" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
+                           </content>
+                        </ScrollPane>
+                        <Button id="sendMessage" layoutX="346.0" layoutY="211.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="30.0" prefWidth="30.0" />
+                        <Button id="refreshChat" layoutX="9.0" layoutY="212.0" mnemonicParsing="false" onAction="#chatRefresh" prefHeight="30.0" prefWidth="30.0" />
+                        <TextField fx:id="chatMessage" layoutX="43.0" layoutY="211.0" onKeyPressed="#manageKeyPressed" prefHeight="30.0" prefWidth="297.0" />
+                     </children>
+                  </Pane>
                </children>
             </AnchorPane>
          </left>
       </BorderPane>
-      <Pane id="infoText" fx:id="infoCardPane" layoutX="-110.0" layoutY="-800.0" maxHeight="400.0" maxWidth="700.0" minHeight="400.0" minWidth="700.0" prefHeight="400.0" prefWidth="700.0" style="-fx-background-color: #F6D669; -fx-border-color: #422F11; -fx-border-width: 5; -fx-border-radius: 8; -fx-background-radius: 10;" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="200.0">
+      <Pane id="infoText" fx:id="infoCardPane" layoutX="-110.0" layoutY="-800.0" maxHeight="400.0" maxWidth="700.0" minHeight="400.0" minWidth="700.0" prefHeight="400.0" prefWidth="700.0" style="-fx-background-color: #F6D669; -fx-border-color: #422F11; -fx-border-width: 5; -fx-border-radius: 8; -fx-background-radius: 10;" visible="false" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="200.0">
          <children>
             <Text fx:id="infoCardText" layoutX="302.0" layoutY="104.0" strokeWidth="0.0" text="Text" textAlignment="RIGHT" wrappingWidth="339.13671875">
                <font>
@@ -318,7 +341,7 @@
             <Pane fx:id="imageInfoCard" layoutX="39.0" layoutY="63.0" prefHeight="200.0" prefWidth="209.0" />
          </children>
       </Pane>
-      <Pane id="infoText" fx:id="confirmationPane" layoutX="310.0" layoutY="210.0" maxHeight="400.0" maxWidth="700.0" minHeight="400.0" minWidth="700.0" prefHeight="400.0" prefWidth="700.0" style="-fx-background-color: #F6D669; -fx-border-color: #422F11; -fx-border-width: 5; -fx-border-radius: 8; -fx-background-radius: 10;" AnchorPane.bottomAnchor="220.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="180.0">
+      <Pane id="infoText" fx:id="confirmationPane" layoutX="310.0" layoutY="210.0" maxHeight="400.0" maxWidth="700.0" minHeight="400.0" minWidth="700.0" prefHeight="400.0" prefWidth="700.0" style="-fx-background-color: #F6D669; -fx-border-color: #422F11; -fx-border-width: 5; -fx-border-radius: 8; -fx-background-radius: 10;" visible="false" AnchorPane.bottomAnchor="220.0" AnchorPane.leftAnchor="300.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="180.0">
          <children>
             <Text layoutX="170.0" layoutY="58.0" strokeWidth="0.0" text="Do you confirm your choice?" textAlignment="CENTER" wrappingWidth="339.13671875">
                <font>

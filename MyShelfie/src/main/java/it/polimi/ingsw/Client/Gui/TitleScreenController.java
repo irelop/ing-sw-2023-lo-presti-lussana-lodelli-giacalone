@@ -45,6 +45,10 @@ public class TitleScreenController extends Controller {
         getOwner().getStageManager().loadNextStage("loginPlayer.fxml");
     }
 
+    @FXML
+    private void joinGame() {
+        getOwner().getStageManager().loadNextStage("reconnection.fxml");
+    }
     /**
      * This method creates a random colors filled grid
      * and set it as a custom background

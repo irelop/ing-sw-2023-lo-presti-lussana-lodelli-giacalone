@@ -17,9 +17,14 @@ public class ChatRecordAnswer extends S2CMessage{
 
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        GoalView goalView = (GoalView) serverHandler.getOwner().getCurrentView();
-        goalView.setChat(chatStorage);
-        serverHandler.getOwner().getCurrentView().notifyView();
+        if(serverHandler.getOwner().gui){
+            serverHandler.getOwner().getStageManager().getController().receiveAnswer(this);
+        }
+        else{
+            GoalView goalView = (GoalView) serverHandler.getOwner().getCurrentView();
+            goalView.setChat(chatStorage);
+            serverHandler.getOwner().getCurrentView().notifyView();
+        }
 
 
     }
@@ -28,12 +33,22 @@ public class ChatRecordAnswer extends S2CMessage{
     public void processMessage(RemoteInterface server, RemoteInterface client) {
         GoalView goalView = null;
         try {
-            goalView = (GoalView) client.getOwner().getCurrentView();
+            if(client.getOwner().gui){
+                client.getOwner().getStageManager().getController().receiveAnswer(this);
+            }
+            else{
+                goalView = (GoalView) client.getOwner().getCurrentView();
+                goalView.setChat(chatStorage);
+            }
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-        goalView.setChat(chatStorage);
 
 
+
+    }
+
+    public ChatStorage getChatStorage() {
+        return chatStorage;
     }
 }

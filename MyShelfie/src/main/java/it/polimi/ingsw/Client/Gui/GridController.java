@@ -16,12 +16,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -50,7 +56,8 @@ public class GridController extends Controller{
 
     Integer row = null;
     Integer column = null;
-    Boolean isOpen = false;
+    Boolean isRulesOpen = false;
+    Boolean isChatOpen = false;
 
     //rule info
     @FXML Text infoText;
@@ -64,6 +71,10 @@ public class GridController extends Controller{
     @FXML Pane infoCardPane;
     @FXML Text infoCardText;
     @FXML Pane imageInfoCard;
+
+    @FXML Pane chatPane;
+    @FXML TextArea chatText;
+    @FXML TextField chatMessage;
     Boolean isCardOpen = false;
 
     public int maxTilesPickable;
@@ -74,6 +85,7 @@ public class GridController extends Controller{
     public YourTurnMsg yourTurnMsg;
     private InitialPositionAnswer initialPositionAnswer;
     private PlayerChoiceAnswer playerChoiceAnswer;
+    public ChatRecordAnswer chatRecord;
     private Boolean gameIsFinishing;
 
     /**
@@ -134,21 +146,33 @@ public class GridController extends Controller{
         infoText.setText("It's time to pick tiles from the board! Choose the position of the first tile clicking on the board, " +
                 "then, if you want to pick other tiles, you must select the direction in which you want to choose them and how many tiles you want!\n" +
                       "Remember that every tile you want to pick must have at least one 'free side': without an adjacent tile!");
-
+        chatPane.setVisible(false);
+        //chatRefresh();
     }
     /**
-     * this method manage the click of a button in order to make appear and disappear the rules pane
+     * this method manage the click of a button in order to make appear and disappear the rules pane and chat pane
      */
 
-    public void infoText() throws Exception {
-        if (isOpen) {
+    public void infoText(){
+        if (isRulesOpen) {
             infoButton.setId("off");
             infoTextPane.setVisible(false);
-            isOpen = false;
+            isRulesOpen = false;
         } else {
             infoButton.setId("on");
             infoTextPane.setVisible(true);
-            isOpen = true;
+            isRulesOpen = true;
+        }
+    }
+
+    public void openChat(){
+        if (isChatOpen) {
+            chatPane.setVisible(false);
+            isChatOpen = false;
+        } else {
+            chatRefresh();
+            chatPane.setVisible(true);
+            isChatOpen = true;
         }
     }
 
@@ -362,9 +386,13 @@ public class GridController extends Controller{
             initialPositionAnswer = (InitialPositionAnswer) message;
             manageInitialPositionAnswer();
         }
-        else{
+        else if(message instanceof PlayerChoiceAnswer){
             playerChoiceAnswer = (PlayerChoiceAnswer) message;
             managePickTilesAnswer();
+        }
+        else if(message instanceof ChatRecordAnswer){
+            chatRecord = (ChatRecordAnswer) message;
+            manageChatAnswer();
         }
     }
 
@@ -392,4 +420,42 @@ public class GridController extends Controller{
             setError("all the selected Tile must have a free near space");
         }
     }
+
+    public void chatRefresh(){
+        getOwner().getServerHandler().sendMessageToServer(new ChatRecordRequest(getOwner().getNickname()));
+    }
+
+    public void manageChatAnswer(){
+        ArrayList<String> messages = new ArrayList<>();
+        //preparing the chat list
+        for(int i=0; i<chatRecord.getChatStorage().getStorage().size(); i++){
+            String sender = chatRecord.getChatStorage().getStorage().get(i).getSender();
+            String content = chatRecord.getChatStorage().getStorage().get(i).getContent();
+            LocalTime time = chatRecord.getChatStorage().getStorage().get(i).getLocalTime();
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+            //unifying message
+            String message = "{"+time.format(timeFormatter)+"} "+sender+": "+content;
+            messages.add(message+"\n");
+        }
+        String chat = String.valueOf(messages).replaceAll("\\[","").replaceAll("]","").replaceAll(",","");
+        chatText.setText(chat);
+    }
+
+    public void sendMessage(){
+        String message = chatMessage.getText().toLowerCase();
+        String receiver_name  = "EVERYONE";
+        if(message.startsWith("@")){
+            receiver_name = message.split(" ")[0];
+            receiver_name.replaceAll("@", "");
+            if(receiver_name.toUpperCase() == getOwner().getNickname()) receiver_name = "";
+        }
+        ChatMsgRequest chatMsgRequest = new ChatMsgRequest(getOwner().getNickname(), receiver_name, message);
+        getOwner().getServerHandler().sendMessageToServer(chatMsgRequest);
+        chatMessage.setText(null);
+        chatRefresh();
+    }
+    public void manageKeyPressed(KeyEvent e){
+        if(e.getCode() == KeyCode.ENTER) sendMessage();
+    }
 }
+

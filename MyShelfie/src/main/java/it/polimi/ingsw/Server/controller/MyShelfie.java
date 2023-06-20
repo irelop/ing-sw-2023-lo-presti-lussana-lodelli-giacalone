@@ -285,7 +285,8 @@ public class MyShelfie {
                 shelfSnapshot[i][j] = playersConnected.get(currentPlayerIndex).getMyShelfie().getGrid()[i][j];
 
         for(int i=0; i<playersConnected.size(); i++){
-            if(i!=currentPlayerIndex && clientHandlers.get(i).isConnected()){
+            if(i!=currentPlayerIndex && clientHandlers.get(i).isConnected() && clientHandlers.get(i).getIsGui()){
+                System.out.println(playersConnected.get(i).getNickname()+" - ho la gui quindi ricevo questo messaggio");
                 GoWaitingGUI goWaitingGUI = new GoWaitingGUI();
                 clientHandlers.get(i).sendMessageToClient(goWaitingGUI);
             }
@@ -720,11 +721,26 @@ public class MyShelfie {
 
     public void getCustomChat(String requester){
         ChatStorage customChat = chatManager.getCustomChat(requester);
-        if (!clientHandlers.get(currentPlayerIndex).getIsRMI())
-            clientHandlers.get(currentPlayerIndex).sendMessageToClient(new ChatRecordAnswer(customChat));
+        if (!clientHandlers.get(currentPlayerIndex).getIsRMI()) {
+            for(int i=0; i< clientHandlers.size(); i++){
+                if(clientHandlers.get(i).getIsGui()){
+                    clientHandlers.get(i).sendMessageToClient(new ChatRecordAnswer(customChat));
+                }
+            }
+            if(requester.equals(playersConnected.get(currentPlayerIndex).getNickname())) {
+                clientHandlers.get(currentPlayerIndex).sendMessageToClient(new ChatRecordAnswer(customChat));
+            }
+        }
         else {
             try {
-                clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(new ChatRecordAnswer(customChat));
+                for(int i=0; i< clientHandlers.size(); i++){
+                    if(clientHandlers.get(i).getIsGui() || i==currentPlayerIndex){
+                        clientHandlers.get(i).getClientInterface().sendMessageToClient(new ChatRecordAnswer(customChat));
+                    }
+                }
+                if(requester.equals(playersConnected.get(currentPlayerIndex).getNickname())) {
+                    clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(new ChatRecordAnswer(customChat));
+                }
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
@@ -738,11 +754,14 @@ public class MyShelfie {
         }else {
             chatMsgAnswer = new ChatMsgAnswer(false);
         }
-        if(!clientHandlers.get(currentPlayerIndex).getIsRMI())
-            clientHandlers.get(currentPlayerIndex).sendMessageToClient(chatMsgAnswer);
+        if(!clientHandlers.get(currentPlayerIndex).getIsRMI()) {
+            if (playersConnected.get(currentPlayerIndex).getNickname() == messageToSend.getSender())
+                clientHandlers.get(currentPlayerIndex).sendMessageToClient(chatMsgAnswer);
+        }
         else {
             try {
-                clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(chatMsgAnswer);
+                if (playersConnected.get(currentPlayerIndex).getNickname() == messageToSend.getSender())
+                    clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(chatMsgAnswer);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }

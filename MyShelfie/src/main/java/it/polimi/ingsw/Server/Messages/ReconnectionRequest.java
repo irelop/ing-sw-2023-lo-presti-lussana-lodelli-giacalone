@@ -8,21 +8,23 @@ import java.rmi.RemoteException;
 
 public class ReconnectionRequest extends C2SMessage{
     public String nickname;
+    boolean isGui;
 
-    public ReconnectionRequest(String nickname) {
-        this.nickname = nickname;
+    public ReconnectionRequest(String insertedNickname, boolean isGui){
+        this.nickname = insertedNickname;
+        this.isGui = isGui;
     }
 
     @Override
     public void processMessage(ClientHandler clientHandler) {
-        clientHandler.getGameRecord().reconnectPlayer(nickname, clientHandler);
+        clientHandler.getGameRecord().reconnectPlayer(nickname, clientHandler, isGui);
     }
 
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client) {
         try {
             RMIClientHandler reconnectedHandler = new RMIClientHandler(client, server.getGameRecord());
-            server.getGameRecord().reconnectPlayer(nickname, reconnectedHandler);
+            server.getGameRecord().reconnectPlayer(nickname, reconnectedHandler, isGui);
 
             //need to create a new Thread in order to handle connection in RMI
             Thread reconnectedHandlerThread = new Thread(reconnectedHandler);

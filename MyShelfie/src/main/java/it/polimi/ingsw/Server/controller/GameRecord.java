@@ -195,7 +195,9 @@ public class GameRecord {
      * @param clientHandler of the player who wants to reconnect
      * @author Irene Lo Presti, Andrea Giacalone
      */
-    public synchronized void reconnectPlayer(String nickname, ClientHandler clientHandler){
+    public synchronized void reconnectPlayer(String nickname, ClientHandler clientHandler, boolean isGui){
+        clientHandler.setIsGui(isGui);
+
         String msg = null;
         int gameIndex = -1, playerIndex = -1;
         ClientHandler countDownClient = null;
@@ -295,7 +297,8 @@ public class GameRecord {
      * @author Andrea Giacalone, Irene Lo Presti
      */
     public synchronized void manageLogin(ClientHandler clientHandler, LoginNicknameRequest loginNicknameRequest,
-                                         MyShelfie game){
+                                         MyShelfie game, boolean isGui){
+        clientHandler.setIsGui(isGui);
         S2CMessage loginNicknameAnswer;
 
         int controllerIdx = games.indexOf(game);

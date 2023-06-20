@@ -15,6 +15,7 @@ public abstract class ClientHandler implements Runnable {
 
     protected MyShelfie game;
     private boolean isRMI;
+    private boolean isGui;
     private RemoteInterface client;
     protected boolean isConnected;
     protected GameRecord gameRecord;
@@ -53,9 +54,15 @@ public abstract class ClientHandler implements Runnable {
     public void setIsRMI(boolean value){
         isRMI = value;
     }
+
+    public void setIsGui(boolean value) {isGui = value;}
+
     public void stop() {};
     public boolean getIsRMI(){
         return isRMI;
+    }
+    public boolean getIsGui(){
+        return isGui;
     }
 
     public RemoteInterface getClientInterface(){return client;}

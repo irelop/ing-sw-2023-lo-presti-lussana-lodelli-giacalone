@@ -80,7 +80,7 @@ public class LoginView extends View implements ObserverView {
         insertedNickname = input.nextLine().replace(" ", "").toUpperCase();
     }
     private void sendNicknameRequest(){
-        C2SMessage nicknameRequest = new LoginNicknameRequest(insertedNickname);
+        C2SMessage nicknameRequest = new LoginNicknameRequest(insertedNickname, false);
         if(!getOwner().isRMI())
             getOwner().getServerHandler().sendMessageToServer(nicknameRequest);
         else{
@@ -223,7 +223,7 @@ public class LoginView extends View implements ObserverView {
     }
 
     private void manageExistingGameConnection(){
-        ReconnectionRequest reconnectionRequest = new ReconnectionRequest(insertedNickname);
+        ReconnectionRequest reconnectionRequest = new ReconnectionRequest(insertedNickname, false);
         synchronized (lock){
             if (!getOwner().isRMI()) {
                 getOwner().getServerHandler().sendMessageToServer(reconnectionRequest);

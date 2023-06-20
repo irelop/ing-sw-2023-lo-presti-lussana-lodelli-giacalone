@@ -10,8 +10,12 @@ import java.rmi.RemoteException;
 public class LoginNicknameRequest extends C2SMessage{
 
     String insertedNickname;
+    boolean isGui;
 
-    public LoginNicknameRequest(String insertedNickname){ this.insertedNickname = insertedNickname; }
+    public LoginNicknameRequest(String insertedNickname, boolean isGui){
+        this.insertedNickname = insertedNickname;
+        this.isGui = isGui;
+    }
 
 
     public String getInsertedNickname() {
@@ -21,7 +25,7 @@ public class LoginNicknameRequest extends C2SMessage{
     @Override
     public void processMessage(ClientHandler clientHandler) {
         clientHandler.setGameFromGameRecord();  //setting the controller
-        clientHandler.getGameRecord().manageLogin(clientHandler,this,clientHandler.getController());
+        clientHandler.getGameRecord().manageLogin(clientHandler,this,clientHandler.getController(),isGui);
     }
 
     @Override
@@ -30,7 +34,7 @@ public class LoginNicknameRequest extends C2SMessage{
             server.setControllerToClient(client);
             RMIClientHandler clientHandler = new RMIClientHandler(client, server.getGameRecord());
             clientHandler.setGameFromGameRecord();  //setting the controller
-            server.getGameRecord().manageLogin(clientHandler,this,server.getController(client));
+            server.getGameRecord().manageLogin(clientHandler,this,server.getController(client),isGui);
             Thread thread = new Thread(clientHandler);
             thread.start();
         } catch (RemoteException e) {

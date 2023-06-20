@@ -35,6 +35,7 @@ public class LoginPlayerController extends Controller{
     private Text numOfPlayersText;
     @FXML
     private Pane textPane;
+    String playerName = null;
 
     /**
      * This JavaFX method allows to make some operations when the window is created
@@ -72,7 +73,7 @@ public class LoginPlayerController extends Controller{
     @FXML
     private void submitNicknameRequest() {
 
-        String playerName = playerNickname.getText().toUpperCase();
+        playerName = playerNickname.getText().toUpperCase();
         if (playerName.isEmpty()) {
             // case: text field empty
             loginResult.setText("PLEASE TYPE SOMETHING");
@@ -85,7 +86,7 @@ public class LoginPlayerController extends Controller{
             getOwner().getServerHandler().sendMessageToServer(lobbyUpdate);
         } else {
             // other cases
-            C2SMessage nicknameRequest = new LoginNicknameRequest(playerName);
+            C2SMessage nicknameRequest = new LoginNicknameRequest(playerName, true);
             getOwner().getServerHandler().sendMessageToServer(nicknameRequest);
             System.out.println("LoginReq inviata");
 
@@ -125,7 +126,7 @@ public class LoginPlayerController extends Controller{
             backButton.setDisable(true);
             backButton.setOpacity(1);
             loginResult.setText("Select number of players and click SUBMIT!");
-
+            getOwner().setNickname(playerName);
         } else if (answer.getNicknameStatus() == LoginNicknameAnswer.Status.INVALID) {
             loginResult.setText("NICKNAME ALREADY CHOSEN! Please select another one");
 
@@ -133,6 +134,7 @@ public class LoginPlayerController extends Controller{
             loginResult.setText("GAME LOBBY IS FULL! Please wait");
 
         } else {
+            getOwner().setNickname(playerName);
             C2SMessage lobbyUpdate = new LobbyUpdateRequest();
             getOwner().getServerHandler().sendMessageToServer(lobbyUpdate);
 

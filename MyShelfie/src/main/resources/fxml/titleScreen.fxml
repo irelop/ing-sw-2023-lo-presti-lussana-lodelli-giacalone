@@ -77,10 +77,10 @@
           <center>
               <AnchorPane BorderPane.alignment="CENTER">
                   <children>
-                      <Button alignment="BASELINE_CENTER" layoutX="578.0" layoutY="37.0" mnemonicParsing="false" onAction="#startGame" prefHeight="47.0" prefWidth="321.0" styleClass="startButton" stylesheets="@../css/loginStyle.css" text="START GAME" textFill="#e0ff97" textOverrun="WORD_ELLIPSIS" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0">
+                      <Button alignment="BASELINE_CENTER" layoutX="107.0" layoutY="28.0" maxWidth="350.0" minWidth="350.0" mnemonicParsing="false" onAction="#startGame" prefHeight="47.0" prefWidth="350.0" styleClass="startButton" stylesheets="@../css/loginStyle.css" text="START NEW GAME" textFill="#e0ff97" textOverrun="WORD_ELLIPSIS" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0">
                           <graphic>
 
-                    </graphic>
+                          </graphic>
                           <font>
                               <Font name="Baskerville Old Face" size="25.0" />
                           </font>
@@ -102,7 +102,7 @@
                               <Glow level="0.55" />
                           </effect>
                       </Button>
-                      <Button alignment="BASELINE_CENTER" layoutX="578.0" layoutY="126.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="322.0" styleClass="startButton" text="EXIT" textFill="#e0ff97" textOverrun="WORD_ELLIPSIS" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0">
+                      <Button alignment="BASELINE_CENTER" layoutX="107.0" layoutY="177.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="366.0" styleClass="startButton" text="EXIT" textFill="#e0ff97" textOverrun="WORD_ELLIPSIS" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0">
                           <font>
                               <Font name="Baskerville Old Face" size="25.0" />
                           </font>
@@ -113,6 +113,17 @@
                               <Glow level="0.55" />
                           </effect>
                       </Button>
+                  <Button alignment="BASELINE_CENTER" layoutX="107.0" layoutY="99.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="366.0" styleClass="startButton" text="JOIN EXISTING GAME" textFill="#e0ff97" textOverrun="WORD_ELLIPSIS" onAction="#joinGame">
+                     <font>
+                        <Font name="Baskerville Old Face" size="25.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <effect>
+                        <Glow level="0.55" />
+                     </effect>
+                  </Button>
                   </children>
                <BorderPane.margin>
                   <Insets left="350.0" right="200.0" />

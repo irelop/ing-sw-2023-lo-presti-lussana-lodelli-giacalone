@@ -42,6 +42,30 @@
     -fx-background-position: center;
 }
 
+#sendMessage{
+    -fx-background-image: url("../MyShelfie_IMAGES/misc/chat/send.jpg");
+    -fx-background-clip: border-box;
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#refreshChat{
+    -fx-background-image: url("../MyShelfie_IMAGES/misc/chat/refresh.jpg");
+    -fx-background-clip: border-box;
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#chatButton{
+    -fx-background-image: url("../MyShelfie_IMAGES/misc/chat/chat_icon.jpg");
+    -fx-background-clip: border-box;
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
 #numTiles1{
     -fx-background-image: url("../MyShelfie_IMAGES/misc/numOfTiles/one.png");
     -fx-background-clip: border-box;
