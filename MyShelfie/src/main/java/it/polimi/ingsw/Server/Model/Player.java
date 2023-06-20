@@ -9,7 +9,6 @@ package it.polimi.ingsw.Server.Model;
  */
 
 import it.polimi.ingsw.utils.Exceptions.InvalidTileIndexInLittleHandException;
-
 import java.util.ArrayList;
 
 public class Player {
@@ -44,93 +43,13 @@ public class Player {
 
 
 
-    public void setHasFinished(boolean hasFinished) {
-        this.hasFinished = hasFinished;
-    }
 
-
-
-    /**
-     * OVERVIEW: getter method
-     * @see PersonalGoalCard
-     * @return card
-     */
-    public PersonalGoalCard getPersonalGoalCard(){
-        return this.card;
-    }
-
-    /**
-     * OVERVIEW: setter method for chair. It is called only if the player is randomly chosen to be the first
-     * to play.
-     */
-    public void setChair(){
-        this.chair = true;
-    }
-
-    /**
-     * OVERVIEW: getter method
-     * @return chair
-     */
-    public boolean hasChair(){
-        return this.chair;
-    }
-
-    /**
-     * OVERVIEW: setter method for commonGoalAchived. It is called only if the player achieves a common goal.
-     * @see CommonGoalCard
-     * @param indexCommonCard : index of the common goal card (0 or 1)
-     */
-    public void setCommonGoalAchieved(int indexCommonCard){
-        this.commonGoalsAchieved[indexCommonCard] = true;
-    }
-
-    /**
-     * OVERVIEW: setter method for personalGoalCard. This method is used to save the personal goal card after
-     * the player draws it from the deck.
-     * @see PersonalGoalCard
-     * @param card : PersonalGoalCard
-     */
-    public void setCard(PersonalGoalCard card){
-        this.card = card;
-    }
-    public void setScore(int score){
-        this.myScore.addScore(score);
-    }
-
-    public void setShelf(Tile[][] shelf){
-        myShelfie = new Shelf(shelf);
-    }
-
-    public void setLittleHand(ArrayList<Tile> tilesChosen){
-        if(littleHand.size()==0)
-            littleHand.addAll(tilesChosen);
-        else{
-            clearLittleHand();
-            littleHand.addAll(tilesChosen);
-        }
-    }
 
     public void clearLittleHand(){
         littleHand.clear();
     }
 
-    /**
-     * OVERVIEW: getter method
-     * @see Tile
-     * @return littleHand
-     */
-    public ArrayList<Tile> getLittleHand(){
-        return littleHand;
-    }
 
-    /**
-     * OVERVIEW: getter method
-     * @param indexCommonCard : number of the common goal card (0 or 1)
-     * @return commonGoalAchieved[indexCommonCard]
-     */
-    public boolean isCommonGoalAchieved(int indexCommonCard){
-        return this.commonGoalsAchieved[indexCommonCard];
-    }
 
     @Override
     public String toString(){
@@ -139,35 +58,20 @@ public class Player {
 
 
     /**
-     * OVERVIEW: this method orders the chosen tiles from the board in order to put them in the player's shelf
+     * OVERVIEW: this method orders the tiles of the little hand
      * @see Tile
-     * @param chosenTiles : ArrayList<Tile>
+     * @param order: this array contains the index of the tiles in the correct order
      */
-    public void orderTiles(ArrayList<Tile> chosenTiles, int[] choices) {
-        // if the player chooses only one tile, there is no need to order.
-/*
-        if(chosenTiles.size() == 1){
-            this.littleHand.add(chosenTiles.get(0));
-            return;
-        }
+    public void orderTiles(int[] order){
 
-        for(int j=0; j<chosenTiles.size(); j++){
-            for(int k=0; k<chosenTiles.size(); k++){
-                if(choices[k] == j+1 ){
-                    littleHand.add(chosenTiles.get(k));
-                    break;
-                }
-            }
-        }
-*/
-        if (chosenTiles.size() == 1)
+        // if the player chooses only one tile, there is no need to order
+        if(littleHand.size() == 1)
             return;
-        for (int idx : choices) {
-            littleHand.add(chosenTiles.get(idx));
-        }
-        for (int i : choices) {
-            // remove head #choises times
-            littleHand.remove(0);
+
+        ArrayList<Tile> chosenTiles = new ArrayList<>(littleHand);
+
+        for(int i=0; i<littleHand.size(); i++){
+            littleHand.set(order[i] - 1, chosenTiles.get(i));
         }
 
     }
@@ -223,6 +127,52 @@ public class Player {
         myScore.addScore(score);
     }
 
+    //- - - - - - - - - - - - - - - -| SETTER METHODS |- - - - - - - - - - - - - - - - - - - - - - - -
+    /**
+     * OVERVIEW: setter method for commonGoalAchived. It is called only if the player achieves a common goal.
+     * @see CommonGoalCard
+     * @param indexCommonCard : index of the common goal card (0 or 1)
+     */
+    public void setCommonGoalAchieved(int indexCommonCard){
+        this.commonGoalsAchieved[indexCommonCard] = true;
+    }
+
+    /**
+     * OVERVIEW: setter method for personalGoalCard. This method is used to save the personal goal card after
+     * the player draws it from the deck.
+     * @see PersonalGoalCard
+     * @param card : PersonalGoalCard
+     */
+    public void setCard(PersonalGoalCard card){
+        this.card = card;
+    }
+    public void setScore(int score){
+        this.myScore.addScore(score);
+    }
+
+    public void setShelf(Tile[][] shelf){
+        myShelfie = new Shelf(shelf);
+    }
+
+    public void setLittleHand(ArrayList<Tile> tilesChosen){
+        if(littleHand.size()==0)
+            littleHand.addAll(tilesChosen);
+        else{
+            clearLittleHand();
+            littleHand.addAll(tilesChosen);
+        }
+    }
+    public void setHasFinished(boolean hasFinished) {
+        this.hasFinished = hasFinished;
+    }
+    /**
+     * It is called only if the player is randomly chosen to be the first to play.
+     */
+    public void setChair(){
+        this.chair = true;
+    }
+    //- - - - - - - - - - - - - - - -| GETTER METHODS |- - - - - - - - - - - - - - - - - - - - - - - -
+
     public Shelf getMyShelfie() {
         return myShelfie;
     }
@@ -237,12 +187,26 @@ public class Player {
     public boolean getHasFinished(){
         return hasFinished;
     }
-
-    /**
-     * OVERVIEW: getter methof
-     * @return nickname
-     */
     public String getNickname(){
         return nickname;
     }
+    public ArrayList<Tile> getLittleHand(){
+        return littleHand;
+    }
+    /**
+     *
+     * @param indexCommonCard : number of the common goal card (0 or 1)
+     * @return commonGoalAchieved[indexCommonCard]
+     */
+    public boolean isCommonGoalAchieved(int indexCommonCard){
+        return this.commonGoalsAchieved[indexCommonCard];
+    }
+    public PersonalGoalCard getPersonalGoalCard(){
+        return this.card;
+    }
+    public boolean hasChair(){
+        return this.chair;
+    }
+
+
 }

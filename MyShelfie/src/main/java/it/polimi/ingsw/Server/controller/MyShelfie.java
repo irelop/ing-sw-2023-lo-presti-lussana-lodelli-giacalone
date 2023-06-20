@@ -337,8 +337,8 @@ public class MyShelfie {
      * @param numberOfTiles: user choice tiles number
      */
     public void pickTilesFromBoard(int initialRow, int initialColumn, char direction, int numberOfTiles){
-        Player currentPlayer = playersConnected.get(currentPlayerIndex);
-        board.pickTilesFromBoard(initialRow, initialColumn, numberOfTiles, direction, currentPlayer);
+        ArrayList<Tile> chosenTiles = board.pickTilesFromBoard(initialRow, initialColumn, numberOfTiles, direction);
+        playersConnected.get(currentPlayerIndex).setLittleHand(chosenTiles);
         redirectToPersonalShelf();
     }
 
@@ -376,14 +376,9 @@ public class MyShelfie {
      * @throws NotEnoughSpaceInChosenColumnException: thrown if chosen column is full of tiles
      */
     public void insertingTiles(int columnIdx,int[] orderIdxs) throws InvalidTileIndexInLittleHandException, NotEnoughSpaceInChosenColumnException {
-
-        Player currentPlayer = playersConnected.get(currentPlayerIndex);
-
-        currentPlayer.getTiles(orderIdxs);
-        currentPlayer.orderTiles(currentPlayer.getLittleHand(),orderIdxs);
-        currentPlayer.getMyShelfie().insert(columnIdx,playersConnected.get(currentPlayerIndex).getLittleHand());
-        currentPlayer.clearLittleHand();
-
+        playersConnected.get(currentPlayerIndex).orderTiles(orderIdxs);
+        playersConnected.get(currentPlayerIndex).getMyShelfie().insert(columnIdx, playersConnected.get(currentPlayerIndex).getLittleHand());
+        playersConnected.get(currentPlayerIndex).clearLittleHand();
     }
 
         //- - - - - - - - - - - - - - -| SCORE METHODS |- - - - - - - - - - - - - - - - - - - - - - - - -

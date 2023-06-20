@@ -252,8 +252,8 @@ public class Board implements Serializable {
      * @return ArrayList<Tile> chosenTiles != null : the chosen tiles from the board
      * @author Irene Lo Presti
      */
-    public void pickTilesFromBoard(int initialPositionR, int initialPositionC, int numberOfTiles,
-                                   char direction, Player player){
+    public ArrayList<Tile> pickTilesFromBoard(int initialPositionR, int initialPositionC, int numberOfTiles,
+                                   char direction){
         ArrayList<Tile> chosenTiles = new ArrayList<>();
 
         for(int i=0; i<numberOfTiles; i++){
@@ -268,7 +268,8 @@ public class Board implements Serializable {
             else if(direction == 'w')
                 initialPositionC--;
         }
-        player.setLittleHand(chosenTiles);
+
+        return chosenTiles;
     }
 
     /**
