@@ -91,6 +91,12 @@ public class WaitingController extends Controller {
         }
     }
 
+    // -------------------- CHAT METHODS -------------------- //
+
+    /**
+     * This method is called when "chatButton" is clicked.
+     * It shows a Pane with chat controls
+     */
     public void openChat(){
         if (isChatOpen) {
             chatPane.setVisible(false);
@@ -102,6 +108,11 @@ public class WaitingController extends Controller {
         }
     }
 
+    /**
+     * This method creates an array list of messages
+     * (current time + sender + msg content)
+     * and sets chatText to this group of messages
+     */
     public void manageChatAnswer(){
         ArrayList<String> messages = new ArrayList<>();
         //preparing the chat list
@@ -118,23 +129,37 @@ public class WaitingController extends Controller {
         chatText.setText(chat);
     }
 
+    /**
+     * This method is called when a user try to send a message from the chat pane.
+     * It checks if the first word of the message is @playerName in order to
+     * send a private message or to broadcast it, then the method sends the message
+     */
     public void sendMessage(){
-        String message = chatMessage.getText().toLowerCase();
+        String message = chatMessage.getText();
         String receiver_name  = "EVERYONE";
         if(message.startsWith("@")){
             receiver_name = message.split(" ")[0];
             receiver_name.replaceAll("@", "");
-            if(receiver_name.toUpperCase() == getOwner().getNickname()) receiver_name = "";
+            if(receiver_name.toUpperCase() != getOwner().getNickname()) receiver_name = "";
         }
         ChatMsgRequest chatMsgRequest = new ChatMsgRequest(getOwner().getNickname(), receiver_name, message);
         getOwner().getServerHandler().sendMessageToServer(chatMsgRequest);
         chatMessage.setText(null);
         chatRefresh();
     }
+
+    /**
+     * This method allows the user to press ENTER to send a message
+     * @param e: event handling the key pressed
+     */
     public void manageKeyPressed(KeyEvent e){
         if(e.getCode() == KeyCode.ENTER) sendMessage();
     }
 
+    /**
+     * This method sends a message to the server in order to update the current
+     * chat, adding the newest messages to the chat pane
+     */
     public void chatRefresh(){
         getOwner().getServerHandler().sendMessageToServer(new ChatRecordRequest(getOwner().getNickname()));
     }

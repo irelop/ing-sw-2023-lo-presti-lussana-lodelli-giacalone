@@ -150,7 +150,7 @@ public class GridController extends Controller{
         //chatRefresh();
     }
     /**
-     * this method manage the click of a button in order to make appear and disappear the rules pane and chat pane
+     * this method manage the click of a button in order to make appear and disappear the rules pane
      */
 
     public void infoText(){
@@ -162,17 +162,6 @@ public class GridController extends Controller{
             infoButton.setId("on");
             infoTextPane.setVisible(true);
             isRulesOpen = true;
-        }
-    }
-
-    public void openChat(){
-        if (isChatOpen) {
-            chatPane.setVisible(false);
-            isChatOpen = false;
-        } else {
-            chatRefresh();
-            chatPane.setVisible(true);
-            isChatOpen = true;
         }
     }
 
@@ -421,10 +410,35 @@ public class GridController extends Controller{
         }
     }
 
+    // -------------------- CHAT METHODS -------------------- //
+
+    /**
+     * this method manage the click of a button in order to make appear and disappear the chat pane
+     */
+    public void openChat(){
+        if (isChatOpen) {
+            chatPane.setVisible(false);
+            isChatOpen = false;
+        } else {
+            chatRefresh();
+            chatPane.setVisible(true);
+            isChatOpen = true;
+        }
+    }
+
+    /**
+     * This method sends a message to the server in order to update the current
+     * chat, adding the newest messages to the chat pane
+     */
     public void chatRefresh(){
         getOwner().getServerHandler().sendMessageToServer(new ChatRecordRequest(getOwner().getNickname()));
     }
 
+    /**
+     * This method creates an array list of messages
+     * (current time + sender + msg content)
+     * and sets chatText to this group of messages
+     */
     public void manageChatAnswer(){
         ArrayList<String> messages = new ArrayList<>();
         //preparing the chat list
@@ -441,19 +455,29 @@ public class GridController extends Controller{
         chatText.setText(chat);
     }
 
+    /**
+     * This method is called when a user try to send a message from the chat pane.
+     * It checks if the first word of the message is @playerName in order to
+     * send a private message or to broadcast it, then the method sends the message
+     */
     public void sendMessage(){
-        String message = chatMessage.getText().toLowerCase();
+        String message = chatMessage.getText();
         String receiver_name  = "EVERYONE";
         if(message.startsWith("@")){
             receiver_name = message.split(" ")[0];
             receiver_name.replaceAll("@", "");
-            if(receiver_name.toUpperCase() == getOwner().getNickname()) receiver_name = "";
+            if(receiver_name.toUpperCase() != getOwner().getNickname()) receiver_name = "";
         }
         ChatMsgRequest chatMsgRequest = new ChatMsgRequest(getOwner().getNickname(), receiver_name, message);
         getOwner().getServerHandler().sendMessageToServer(chatMsgRequest);
         chatMessage.setText(null);
         chatRefresh();
     }
+
+    /**
+     * This method allows the user to press ENTER to send a message
+     * @param e: event handling the key pressed
+     */
     public void manageKeyPressed(KeyEvent e){
         if(e.getCode() == KeyCode.ENTER) sendMessage();
     }
