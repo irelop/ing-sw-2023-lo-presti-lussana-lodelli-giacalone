@@ -64,7 +64,7 @@ public class BoardTest {
         int inPosC = 3;
         int numTiles = 2;
         char dir = 's';
-        board.pickTilesFromBoard(inPosR,inPosC,numTiles,dir,new Player("player1"));
+        ArrayList<Tile> chosenTiles = board.pickTilesFromBoard(inPosR,inPosC,numTiles,dir);
         grid[1][3] = Tile.BLANK;
         grid[2][3] = Tile.BLANK;
 
@@ -80,16 +80,15 @@ public class BoardTest {
         int inPosC = 3;
         int numTiles = 2;
         char dir = 's';
-        Player player = new Player("player1");
         ArrayList<Tile> correctTiles = new ArrayList<>();
 
-        board.pickTilesFromBoard(inPosR,inPosC,numTiles,dir,player);
+        ArrayList<Tile> chosenTiles = board.pickTilesFromBoard(inPosR,inPosC,numTiles,dir);
 
 
         correctTiles.add(Tile.GREEN);
         correctTiles.add(Tile.GREEN);
 
-        Assertions.assertEquals(player.getLittleHand(), correctTiles);
+        Assertions.assertEquals(chosenTiles, correctTiles);
     }
 
     @Test

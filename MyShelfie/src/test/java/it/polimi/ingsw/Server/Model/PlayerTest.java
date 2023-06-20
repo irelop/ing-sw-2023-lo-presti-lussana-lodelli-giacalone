@@ -1,14 +1,11 @@
 package it.polimi.ingsw.Server.Model;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-        import it.polimi.ingsw.Server.Model.Player;
-        import it.polimi.ingsw.Server.Model.Tile;
-        import org.junit.After;
-        import org.junit.Before;
-        import org.junit.Test;
+import java.util.ArrayList;
 
-        import java.util.ArrayList;
-
-        import static org.junit.Assert.*;
+import static org.junit.Assert.*;
 
 public class PlayerTest {
     Player player;
@@ -25,9 +22,12 @@ public class PlayerTest {
     @Test
     public void orderTiles_singleTile() {
         ArrayList<Tile> chosenTiles = new ArrayList<>();
+
         chosenTiles.add(Tile.BLUE);
+        player.setLittleHand(chosenTiles);
+
         int[] order = new int[] {1};
-        player.orderTiles(chosenTiles,order);
+        player.orderTiles(order);
         assertEquals(chosenTiles, player.getLittleHand());
     }
 
@@ -36,9 +36,12 @@ public class PlayerTest {
         ArrayList<Tile> chosenTiles = new ArrayList<>();
         chosenTiles.add(Tile.BLUE);
         chosenTiles.add(Tile.GREEN);
+
+        player.setLittleHand(chosenTiles);
+
         //set the array of the player's choices
         int[] order = new int[] {2, 1};
-        player.orderTiles(chosenTiles, order);
+        player.orderTiles(order);
 
         //change order of chooseTiles manually
         chosenTiles.remove(0);
@@ -52,9 +55,12 @@ public class PlayerTest {
         chosenTiles.add(Tile.BLUE);
         chosenTiles.add(Tile.GREEN);
         chosenTiles.add(Tile.YELLOW);
+
+        player.setLittleHand(chosenTiles);
+
         //set the array of the player's choices
         int[] order = new int[] {3, 1 ,2};
-        player.orderTiles(chosenTiles, order);
+        player.orderTiles(order);
 
         //change order of chooseTiles manually
         chosenTiles.remove(0);
