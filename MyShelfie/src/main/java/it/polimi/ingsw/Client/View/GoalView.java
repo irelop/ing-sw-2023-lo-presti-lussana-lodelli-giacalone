@@ -5,14 +5,18 @@ import it.polimi.ingsw.Server.Messages.*;
 import it.polimi.ingsw.Server.Model.ChatStorage;
 
 
-import java.rmi.RemoteException;
-import java.text.Normalizer;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+
 import java.util.Formatter;
-import java.util.Locale;
 import java.util.Scanner;
 
+/**
+ * GoalView class: this view is shown at the end of the turn of a player, allowing him/her to get track of his/her game
+ * progresses. It also offers the possibility to chat with other players leaving them messages which may be helpful or
+ * not throughout the game.
+ *
+ * @author Matteo Lussana, Andrea Giacalone
+ */
 public class GoalView extends View {
 
     private GoalAndScoreMsg msg;
@@ -48,44 +52,40 @@ public class GoalView extends View {
         System.out.println("[press enter to continue]");
         goOn = scanner.nextLine();
 
+        if (goOn != null) {
+            System.out.println("Before ending you turn, you can leave a message to everyone or to a lucky receiver");
+            System.out.println("Please select (Y) if you want to chat or (N) otherwise");
+            char answer = 0;
+            do {
 
-
-
-            if (goOn != null) {
-                System.out.println("Before ending you turn, you can leave a message to everyone or to a lucky receiver");
-                System.out.println("Please select (Y) if you want to chat or (N) otherwise");
-                char answer = 0;
-                do {
-
-                    try {
-                        answer = getChatChoice();
-                        break;
-                    } catch (InvalidChatChoiceException e) {
-                        System.out.println(e);
-                    }
-                }while (true);
-
-                if (answer == 'Y') {
-                    manageChat();
-                } else {
-
-                    //non l'abbiamo usata questa cosa....
-                    //forse va bene così BOH
-                    if (msg.lastTurn) {
-                        GameIsEndingUpdateRequest gameIsEndingUpdateRequest = new GameIsEndingUpdateRequest();
-                    }
-                    finishTurn();
-
-
-
-
+                try {
+                    answer = getChatChoice();
+                    break;
+                } catch (InvalidChatChoiceException e) {
+                    System.out.println(e);
                 }
+            }while (true);
+
+            if (answer == 'Y') {
+                manageChat();
+            } else {
+
+                //non l'abbiamo usata questa cosa....
+                //forse va bene così BOH
+                if (msg.lastTurn) {
+                    GameIsEndingUpdateRequest gameIsEndingUpdateRequest = new GameIsEndingUpdateRequest();
+                }
+                finishTurn();
             }
         }
+    }
 
 
-
-
+    /**
+     * OVERVIEW: this method allows to get the user input in order to manage different decisions throughout the chat.
+     * @return answer: the choice inserted by the user.
+     * @throws InvalidChatChoiceException : if a wrong option has been selected.
+     */
     private char getChatChoice() throws InvalidChatChoiceException {
         Scanner scanner = new Scanner(System.in);
         String input = scanner.next().toUpperCase();
@@ -106,8 +106,7 @@ public class GoalView extends View {
         boolean goOn = true;
         int remainingMsgAvailable = 3;
 
-        System.out.println("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -C H A T   R O O M - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -");
-        System.out.println();
+
 
         synchronized (lock) {
             if(!getOwner().isRMI()) {
@@ -121,15 +120,7 @@ public class GoalView extends View {
             else {
                 getOwner().getServerHandler().sendMessageToServer(new ChatRecordRequest(getOwner().getNickname()));
             }
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
-
-            for (int i = 0; i < chat.getStorage().size(); i++) {
-                System.out.printf("\n[%s]: %s \t (%s)\t \t \t \t \n",
-                        chat.getStorage().get(i).getSender(),
-                        chat.getStorage().get(i).getContent(),
-                        chat.getStorage().get(i).getLocalTime().format(timeFormatter)
-                        );
-            }
+            showChat();
 
 
             System.out.println("\nYou have still "+ remainingMsgAvailable + "/3 remaining messages");
@@ -240,5 +231,23 @@ public class GoalView extends View {
         } else {
             getOwner().getServerHandler().sendMessageToServer(finishTurnMsg);
         }
+    }
+
+    private void showChat(){
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");   // in order to properly format the timestamp
+
+        Formatter fmt = new Formatter();
+
+        fmt.format(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - C H A T   R O O M - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+        fmt.format("%30s %30s %30s %30s\n","[CONTENT]","[SENDER]","[RECEIVER]","[TIME]");
+        for (int i = 0; i < chat.getStorage().size(); i++) {
+            fmt.format("%30s %30s %30s %30s\n",
+                    chat.getStorage().get(i).getContent(),
+                    chat.getStorage().get(i).getSender(),
+                    chat.getStorage().get(i).getReceiver(),
+                    chat.getStorage().get(i).getLocalTime().format(timeFormatter));
+        }
+
+        System.out.println(fmt);
     }
 }

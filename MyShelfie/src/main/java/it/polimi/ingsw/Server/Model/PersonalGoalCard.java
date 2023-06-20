@@ -69,16 +69,16 @@ public class PersonalGoalCard implements Serializable {
      * @return an int given by the head of availableScore
      */
     public int getPersonalGoalScore(Tile[][] shelfSnapshot) {
-
+        int pointsEarnedInTurn = 0;
         for (int i = 0; i < maxr; i++) {
             for (int j = 0; j < maxc; j++) {
                 if (shelfSnapshot[i][j] == pattern[i][j] && pattern[i][j] != Tile.BLANK) {
                     pattern[i][j] = Tile.BLANK;
-                    return getScore();
+                    pointsEarnedInTurn += getScore();
                 }
             }
         }
-        return 0;
+        return pointsEarnedInTurn;
     }
 
     public String getImageCode() {

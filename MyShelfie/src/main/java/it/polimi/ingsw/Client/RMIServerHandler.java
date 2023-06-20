@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
  */
 
 public class RMIServerHandler extends ServerHandler{
-    private final RemoteInterface remoteServer;   //reference to the remote interface of the server for RMI connection
+    private  RemoteInterface remoteServer;   //reference to the remote interface of the server for RMI connection
     private boolean stop;
     public RMIServerHandler(Client owner,RemoteInterface remoteServer) {
         super(owner);
@@ -44,14 +44,22 @@ public class RMIServerHandler extends ServerHandler{
 
     @Override
     public void stop(){
-        stop = true;
+        try {
+            stop = true;
+            this.remoteServer.disconnectRemoteClient(getOwner().getRemoteClient());
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+        this.remoteServer = null;
+
+        System.out.println("Connection with RMI server closed");
     }
 
 
     @Override
     public void sendMessageToServer(C2SMessage msg) {
         try {
-            getRemoteServer().sendMessageToServer(msg,getOwner().getClient());
+            getRemoteServer().sendMessageToServer(msg,getOwner().getRemoteClient());
         } catch (RemoteException e) {
             System.out.println("[RMI] Communication error: problems in sending message to the server");
         }

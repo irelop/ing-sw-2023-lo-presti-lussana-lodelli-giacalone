@@ -139,9 +139,11 @@ public class ShelfController extends Controller {
         flowPane.setMaxHeight(130*howManyTiles);
         flowPane.setPrefHeight(130*howManyTiles);
 
+        /*
         // debugging sout
         System.out.println("flowPane: " + flowPaneChildren);
         System.out.println("images: " + tiles);
+        */
 
         // setting a matrix of String corresponding to player's shelf
         previewShelf = new String[6][5];
@@ -205,7 +207,7 @@ public class ShelfController extends Controller {
         columnButton = (Button) event.getSource();
         try {
             columnIdx = Integer.parseInt(columnButton.getEllipsisString());
-            System.out.println(columnIdx);
+            //System.out.println(columnIdx); //debugging sout
         } catch (NumberFormatException e) {
             System.out.println("Can't select column index");
             e.printStackTrace();
@@ -367,7 +369,6 @@ public class ShelfController extends Controller {
         int tilesNumber = littleHand.size();
 
         int chosenIdx = columnIdx;
-        System.out.println("Index: " + chosenIdx);
 
         // getting an array of indexes based on images order
         int[] chosenOrder = new int[tilesNumber];
@@ -394,10 +395,13 @@ public class ShelfController extends Controller {
                 if(chosenOrder[mid+1] == chosenOrder.length) chosenOrder[mid+1] = 0;
             }
         }
+
+        /*
         // debugging sout
         for (int i = 0; i < tilesNumber; i++)
             System.out.print(chosenOrder[i] + "\t");
         System.out.println();
+        */
 
         // creating the insertingTilesMsg and send it
         C2SMessage insertingTilesMsg = new InsertingTilesMsg(chosenIdx, chosenOrder);

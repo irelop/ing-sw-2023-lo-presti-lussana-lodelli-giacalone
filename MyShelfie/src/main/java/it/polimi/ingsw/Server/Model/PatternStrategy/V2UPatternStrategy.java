@@ -17,19 +17,25 @@ public class V2UPatternStrategy implements StrategyInterface {
         int counter = 0;
         int rows = shelfSnapshot.length;
         int columns = shelfSnapshot[0].length;
+        Tile[][] copy = new Tile[rows][columns];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                copy[i][j] = shelfSnapshot[i][j];
+            }
+        }
 
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < columns; j++){
-                if(shelfSnapshot[i][j] != Tile.BLANK && shelfSnapshot[i][j] != Tile.NOT_VALID){
-                    if((i+1) < rows && shelfSnapshot[i][j] == shelfSnapshot[i+1][j]){
+                if(copy[i][j] != Tile.BLANK && copy[i][j] != Tile.NOT_VALID){
+                    if((i+1) < rows && copy[i][j] == copy[i+1][j]){
                         counter++;
-                        shelfSnapshot[i][j] = Tile.NOT_VALID;
-                        shelfSnapshot[i+1][j] = Tile.NOT_VALID;
+                        copy[i][j] = Tile.NOT_VALID;
+                        copy[i+1][j] = Tile.NOT_VALID;
                     }
-                    else if((j+1) < columns && shelfSnapshot[i][j] == shelfSnapshot[i][j+1]){
+                    else if((j+1) < columns && copy[i][j] == copy[i][j+1]){
                         counter++;
-                        shelfSnapshot[i][j] = Tile.NOT_VALID;
-                        shelfSnapshot[i][j+1] = Tile.NOT_VALID;
+                        copy[i][j] = Tile.NOT_VALID;
+                        copy[i][j+1] = Tile.NOT_VALID;
                     }
                 }
             }

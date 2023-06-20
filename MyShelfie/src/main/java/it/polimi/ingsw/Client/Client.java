@@ -4,7 +4,6 @@ import it.polimi.ingsw.Client.Gui.JavaGUI;
 import it.polimi.ingsw.Client.Gui.StageManager;
 import it.polimi.ingsw.Client.View.Exceptions.InvalidGUIChoiceException;
 import it.polimi.ingsw.Client.View.Exceptions.InvalidNetworkChoiceException;
-import it.polimi.ingsw.Client.View.Exceptions.InvalidNumberOfPlayersException;
 import it.polimi.ingsw.Client.View.LoginView;
 import it.polimi.ingsw.Client.View.View;
 import it.polimi.ingsw.Client.View.WaitingView;
@@ -31,7 +30,6 @@ public class Client implements Runnable{
     private View currentView;       //view currently visualized in the client side
     private View nextView;      //the following view after the transition
     private boolean isRMI;      //checks if a client chooses the RMI mode
-    private RemoteInterface remoteServer;
     private RemoteInterface client;
 
     public boolean gui;
@@ -49,7 +47,7 @@ public class Client implements Runnable{
     public void run(){
         askNetworkChoice();
 
-        System.out.println("do you want the GUI? (y: yes, n: no)");
+        System.out.println("do you want the GUI? Type (Y) if yes, otherwise type (N)");
 
         Scanner input = new Scanner(System.in);
         String inputString;
@@ -82,8 +80,6 @@ public class Client implements Runnable{
         }      //allows to run the state machine
 
         serverHandler.stop();
-        if(isRMI)
-            stopRMIConnection();
         System.exit(0);
     }
 
@@ -179,7 +175,7 @@ public class Client implements Runnable{
      * @author Andrea Giacalone, Irene Lo Presti
      */
     public void manageRMIConnection(){
-
+        RemoteInterface remoteServer = null;
         try{
             client = new RMIAdapter();      //instantiating the remote interface of the client
             Registry registry = LocateRegistry.getRegistry();       //getting the reference of the RMI registry
@@ -234,20 +230,6 @@ public class Client implements Runnable{
         serverHandlerThread.start();
     }
 
-    /**
-     * This method stops the RMI connection
-     * @author Andrea Giacalone, Irene Lo Presti
-     */
-    public void stopRMIConnection(){
-        try {
-            this.remoteServer.disconnectRemoteClient(this.client);
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
-        }
-        this.remoteServer = null;
-
-        System.out.println("Connection with RMI server closed");
-    }
 
 
 
@@ -279,7 +261,7 @@ public class Client implements Runnable{
     public boolean isRMI() {
         return isRMI;
     }
-    public RemoteInterface getClient() {
+    public RemoteInterface getRemoteClient() {
         return client;
     }
     public String getNickname() {

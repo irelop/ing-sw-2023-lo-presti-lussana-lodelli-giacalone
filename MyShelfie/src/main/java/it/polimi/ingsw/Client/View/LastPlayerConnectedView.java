@@ -33,11 +33,8 @@ public class LastPlayerConnectedView extends View{
             System.out.println("Congratulation " + msg.nickname + "! You are the winner!");
             System.out.println("See you soon " + msg.nickname + "!");
             FinishGameRequest finishGameRequest = new FinishGameRequest();
-            if (!getOwner().isRMI()) {
-                getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
-            } else {
-                getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
-            }
+            getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
+
             getOwner().setTrueTerminate();
         }
 

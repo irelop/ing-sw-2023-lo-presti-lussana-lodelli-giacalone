@@ -49,10 +49,20 @@ public class ChatManager {
      * @param requester: the nickname of the player who asks to chat.
      * @return customChat: the snapshot of the record of messages
      */
+    /**
+     * OVERVIEW: this method allows to get a snapshot of the record of messages filtering the public messages and the private ones
+     *           redirected to the requester.
+     * @param requester: the nickname of the player who asks to chat.
+     * @return customChat: the snapshot of the record of messages
+     */
     public ChatStorage getCustomChat(String requester){
         ChatStorage customChat = new ChatStorage();
         for(int i = 0; i< commonChatPool.getStorage().size(); i++) {
-            if ((commonChatPool.getStorage().get(i).getReceiver().equals(new String(requester))) || (commonChatPool.getStorage().get(i).getReceiver().equals("EVERYONE"))) {
+            if ((commonChatPool.getStorage().get(i).getReceiver().equals(requester)) ||
+                    (commonChatPool.getStorage().get(i).getReceiver().equals("EVERYONE")) ||
+                    (commonChatPool.getStorage().get(i).getSender().equals(requester))
+            )
+            {
                 customChat.addMessage(commonChatPool.getStorage().get(i));
             }
         }
