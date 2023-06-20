@@ -1,7 +1,6 @@
 package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Server.ClientHandler;
-import it.polimi.ingsw.Server.Model.GameRecord;
 import it.polimi.ingsw.Server.RMIClientHandler;
 import it.polimi.ingsw.Server.RemoteInterface;
 

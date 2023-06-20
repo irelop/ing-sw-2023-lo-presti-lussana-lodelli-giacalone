@@ -2,11 +2,10 @@ package it.polimi.ingsw.Server;
 
 import it.polimi.ingsw.Server.Messages.C2SMessage;
 import it.polimi.ingsw.Server.Messages.S2CMessage;
-import it.polimi.ingsw.Server.Model.GameRecord;
-import it.polimi.ingsw.Server.Model.MyShelfie;
+import it.polimi.ingsw.Server.controller.GameRecord;
+import it.polimi.ingsw.Server.controller.MyShelfie;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;

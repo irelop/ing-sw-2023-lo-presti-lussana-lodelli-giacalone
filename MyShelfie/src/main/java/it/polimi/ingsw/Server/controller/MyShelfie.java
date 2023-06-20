@@ -1,10 +1,13 @@
-package it.polimi.ingsw.Server.Model;
+package it.polimi.ingsw.Server.controller;
 
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.Messages.*;
+import it.polimi.ingsw.Server.Model.*;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
 import it.polimi.ingsw.Server.Model.Exceptions.NotEnoughSpaceInChosenColumnException;
 import it.polimi.ingsw.Server.RemoteInterface;
+import it.polimi.ingsw.utils.ReadFileByLines;
+
 import java.io.*;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -251,7 +254,7 @@ public class MyShelfie {
             board.refill();
 
         // find max pickable tiles by the player
-        int maxTilesPickable = playersConnected.get(currentPlayerIndex).myShelfie.maxTilesPickable();
+        int maxTilesPickable = playersConnected.get(currentPlayerIndex).getMyShelfie().maxTilesPickable();
 
         ArrayList<String> playersNames = new ArrayList<>();
         for (int i = 0; i < numberOfPlayers; i++) {
@@ -270,7 +273,7 @@ public class MyShelfie {
 
         for (int i = 0; i < 6; i++)
             for (int j = 0; j < 5; j++)
-                shelfSnapshot[i][j] = playersConnected.get(currentPlayerIndex).myShelfie.getGrid()[i][j];
+                shelfSnapshot[i][j] = playersConnected.get(currentPlayerIndex).getMyShelfie().getGrid()[i][j];
 
         for(int i=0; i<playersConnected.size(); i++){
             if(i!=currentPlayerIndex && clientHandlers.get(i).isConnected()){
@@ -338,7 +341,7 @@ public class MyShelfie {
         Tile[][] matrix = new Tile[6][5];
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
-                matrix[i][j] = currentPlayer.myShelfie.getGrid()[i][j];
+                matrix[i][j] = currentPlayer.getMyShelfie().getGrid()[i][j];
             }
         }
 
@@ -368,7 +371,7 @@ public class MyShelfie {
 
         currentPlayer.getTiles(orderIdxs);
         currentPlayer.orderTiles(currentPlayer.getLittleHand(),orderIdxs);
-        currentPlayer.myShelfie.insert(columnIdx,playersConnected.get(currentPlayerIndex).getLittleHand());
+        currentPlayer.getMyShelfie().insert(columnIdx,playersConnected.get(currentPlayerIndex).getLittleHand());
         currentPlayer.clearLittleHand();
 
     }
@@ -389,29 +392,29 @@ public class MyShelfie {
             int personalPointsEarned = personalPointsEarned();
             if(personalPointsEarned != 0) {
                 isPersonalGoalAchived = true;
-                playersConnected.get(currentPlayerIndex).myScore.addScore(personalPointsEarned);
+                playersConnected.get(currentPlayerIndex).addScore(personalPointsEarned);
             }
 
             if(!playersConnected.get(currentPlayerIndex).isCommonGoalAchieved(0)) {
                 int commonPointsEarned = commonPointsEarned(0);
                 if(commonPointsEarned != 0) {
                     isCommonGoalAchived = true;
-                    playersConnected.get(currentPlayerIndex).myScore.addScore(commonPointsEarned);
+                    playersConnected.get(currentPlayerIndex).addScore(commonPointsEarned);
                 }
             }
             if(!playersConnected.get(currentPlayerIndex).isCommonGoalAchieved(1)) {
                 int commonPointsEarned = commonPointsEarned(1);
                 if(commonPointsEarned != 0) {
                     isCommonGoalAchived = true;
-                    playersConnected.get(currentPlayerIndex).myScore.addScore(commonPointsEarned);
+                    playersConnected.get(currentPlayerIndex).addScore(commonPointsEarned);
                 }
             }
 
             //checking if a player's shelf is full,
             // if true add +1pt and set the last lap
-            if(playersConnected.get(currentPlayerIndex).myShelfie.isShelfFull() &&  !isOver) {
+            if(playersConnected.get(currentPlayerIndex).getMyShelfie().isShelfFull() &&  !isOver) {
                 isShelfFull = true;
-                playersConnected.get(currentPlayerIndex).myScore.addScore(1);
+                playersConnected.get(currentPlayerIndex).addScore(1);
                 this.isOver = true;
 
                 this.firstToFinish = currentPlayerIndex;
@@ -424,7 +427,7 @@ public class MyShelfie {
 
             updatePersistenceFiles();
 
-            GoalAndScoreMsg goalAndScoreMsg = new GoalAndScoreMsg(isCommonGoalAchived, isPersonalGoalAchived, playersConnected.get(currentPlayerIndex).myScore.getScore(), isShelfFull, isOver);
+            GoalAndScoreMsg goalAndScoreMsg = new GoalAndScoreMsg(isCommonGoalAchived, isPersonalGoalAchived, playersConnected.get(currentPlayerIndex).getScore(), isShelfFull, isOver);
             clientHandlers.get(currentPlayerIndex).sendMessageToClient(goalAndScoreMsg);
         }
 
@@ -439,7 +442,7 @@ public class MyShelfie {
          */
         private int commonPointsEarned(int commonGoalIndex){
             CommonGoalCard card = Board.getCommonGoalCard(commonGoalIndex);
-            Tile[][] playerShelfSnapshot = playersConnected.get(currentPlayerIndex).myShelfie.getGrid();
+            Tile[][] playerShelfSnapshot = playersConnected.get(currentPlayerIndex).getMyShelfie().getGrid();
             if(card.checkPattern(playerShelfSnapshot)) {
                 playersConnected.get(currentPlayerIndex).setCommonGoalAchieved(commonGoalIndex);
                 return card.getScore();
@@ -458,7 +461,7 @@ public class MyShelfie {
          */
         private int personalPointsEarned(){
             PersonalGoalCard card = playersConnected.get(currentPlayerIndex).getPersonalGoalCard();
-            Tile[][] playerShelfSnapshot = playersConnected.get(currentPlayerIndex).myShelfie.getGrid();
+            Tile[][] playerShelfSnapshot = playersConnected.get(currentPlayerIndex).getMyShelfie().getGrid();
             return card.getPersonalGoalScore(playerShelfSnapshot);
         }
 
@@ -527,8 +530,8 @@ public class MyShelfie {
         if(isOver && playersConnected.get(currentPlayerIndex).hasChair()){
             //spot check
             for (Player player : playersConnected) {
-                int spotScore = player.myShelfie.spotCheck();
-                player.myScore.addScore(spotScore);
+                int spotScore = player.getMyShelfie().spotCheck();
+                player.addScore(spotScore);
             }
 
             //sett last player has finished
@@ -621,7 +624,7 @@ public class MyShelfie {
 
             ArrayList<Integer> scoreList = new ArrayList<>();
             for (Player player : playersConnected) {
-                scoreList.add(player.myScore.getScore());
+                scoreList.add(player.getScore());
             }
 
             ScoreBoardMsg msg = new ScoreBoardMsg(playersNames, scoreList, playersNames.get(playerIndex));
@@ -837,7 +840,7 @@ public class MyShelfie {
         lines.set(lines.size()-2, String.valueOf(playersConnected.get(currentPlayerIndex).getScore()));
 
         //set the update shelf
-        lines.set(lines.size()-1, Arrays.deepToString(playersConnected.get(currentPlayerIndex).getPlayerShelf()));
+        lines.set(lines.size()-1, Arrays.deepToString(playersConnected.get(currentPlayerIndex).getShelfGrid()));
 
         //rewrite the file
         FileWriter fw = null;

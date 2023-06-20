@@ -3,7 +3,7 @@ package it.polimi.ingsw.Client.View;
 import it.polimi.ingsw.Server.Model.*;
 import it.polimi.ingsw.Server.Messages.ToShelfMsg;
 import it.polimi.ingsw.Server.Model.PatternStrategy.V2UPatternStrategy;
-import it.polimi.ingsw.Server.Model.ReadFileByLines;
+import it.polimi.ingsw.utils.ReadFileByLines;
 import it.polimi.ingsw.Server.Model.Tile;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

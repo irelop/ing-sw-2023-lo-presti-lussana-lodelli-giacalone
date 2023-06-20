@@ -1,5 +1,7 @@
 package it.polimi.ingsw.Server.Model;
 
+import it.polimi.ingsw.utils.ReadFileByLines;
+
 import java.io.Serializable;
 
 public class CommonCardInfo implements Serializable {

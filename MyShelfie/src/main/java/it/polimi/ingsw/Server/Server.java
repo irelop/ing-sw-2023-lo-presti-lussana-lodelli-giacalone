@@ -1,6 +1,6 @@
 package it.polimi.ingsw.Server;
 
-import it.polimi.ingsw.Server.Model.GameRecord;
+import it.polimi.ingsw.Server.controller.GameRecord;
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;

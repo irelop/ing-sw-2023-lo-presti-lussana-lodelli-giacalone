@@ -1,7 +1,7 @@
 package it.polimi.ingsw;
 
         import it.polimi.ingsw.Server.Model.Exceptions.NotEnoughSpaceInChosenColumnException;
-        import it.polimi.ingsw.Server.Model.ReadFileByLines;
+        import it.polimi.ingsw.utils.ReadFileByLines;
         import it.polimi.ingsw.Server.Model.Shelf;
         import it.polimi.ingsw.Server.Model.Tile;
         import org.junit.After;

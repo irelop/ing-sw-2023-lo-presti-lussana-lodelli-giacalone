@@ -1,7 +1,7 @@
 package it.polimi.ingsw.PatternStrategy;
 
 import it.polimi.ingsw.Server.Model.PatternStrategy.DPatternStrategy;
-import it.polimi.ingsw.Server.Model.ReadFileByLines;
+import it.polimi.ingsw.utils.ReadFileByLines;
 import it.polimi.ingsw.Server.Model.StrategyInterface;
 import it.polimi.ingsw.Server.Model.Tile;
 import org.junit.jupiter.api.BeforeEach;

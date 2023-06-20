@@ -69,12 +69,6 @@ public class GoalView extends View {
             if (answer == 'Y') {
                 manageChat();
             } else {
-
-                //non l'abbiamo usata questa cosa....
-                //forse va bene così BOH
-                if (msg.lastTurn) {
-                    GameIsEndingUpdateRequest gameIsEndingUpdateRequest = new GameIsEndingUpdateRequest();
-                }
                 finishTurn();
             }
         }

@@ -3,8 +3,8 @@ package it.polimi.ingsw.Server;
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Client.View.*;
 import it.polimi.ingsw.Server.Messages.*;
-import it.polimi.ingsw.Server.Model.GameRecord;
-import it.polimi.ingsw.Server.Model.MyShelfie;
+import it.polimi.ingsw.Server.controller.GameRecord;
+import it.polimi.ingsw.Server.controller.MyShelfie;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;

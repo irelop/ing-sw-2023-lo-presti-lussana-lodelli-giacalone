@@ -10,10 +10,9 @@ import it.polimi.ingsw.Server.Messages.*;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidDirectionException;
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidNumberOfTilesException;
 import it.polimi.ingsw.Server.Model.Exceptions.OutOfBoardException;
-import it.polimi.ingsw.Server.Model.ReadFileByLines;
+import it.polimi.ingsw.utils.ReadFileByLines;
 import it.polimi.ingsw.Server.Model.Tile;
 
-import java.rmi.RemoteException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 

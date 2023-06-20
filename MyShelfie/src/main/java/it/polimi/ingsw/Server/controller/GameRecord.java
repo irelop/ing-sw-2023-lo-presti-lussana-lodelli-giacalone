@@ -1,7 +1,13 @@
-package it.polimi.ingsw.Server.Model;
+package it.polimi.ingsw.Server.controller;
 
 import it.polimi.ingsw.Server.*;
 import it.polimi.ingsw.Server.Messages.*;
+import it.polimi.ingsw.Server.Model.Board;
+import it.polimi.ingsw.Server.Model.PersistenceManager;
+import it.polimi.ingsw.Server.Model.Tile;
+import it.polimi.ingsw.Server.controller.MyShelfie;
+import it.polimi.ingsw.utils.ReadFileByLines;
+
 import java.io.File;
 import java.rmi.RemoteException;
 import java.util.ArrayList;

@@ -3,15 +3,13 @@ package it.polimi.ingsw.Client.View;
 import it.polimi.ingsw.Server.Messages.YourTurnMsg;
 import it.polimi.ingsw.Server.Model.*;
 import it.polimi.ingsw.Server.Model.PatternStrategy.Q2UPatternStrategy;
-import it.polimi.ingsw.Server.Model.PatternStrategy.V2UPatternStrategy;
 import it.polimi.ingsw.Server.Model.PatternStrategy.V6DPatternStrategy;
+import it.polimi.ingsw.utils.ReadFileByLines;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ChooseTilesFromBoardViewTest {
 

@@ -10,13 +10,12 @@ package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.Server.Model.Exceptions.InvalidTileIndexInLittleHandException;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Player {
     private final String nickname;
-    protected Shelf myShelfie;
-    protected Score myScore;
+    private Shelf myShelfie;
+    private Score myScore;
     private PersonalGoalCard card;
     private boolean chair;
     private ArrayList<Tile> littleHand;//tiles in player's hand (the ones just picked)
@@ -43,29 +42,13 @@ public class Player {
         this.hasFinished = false;
     }
 
-    public int getScore(){
-        return myScore.getScore();
-    }
 
-    public Tile[][] getPlayerShelf(){
-        return myShelfie.getGrid();
-    }
 
     public void setHasFinished(boolean hasFinished) {
         this.hasFinished = hasFinished;
     }
 
-    public boolean getHasFinished(){
-        return hasFinished;
-    }
 
-    /**
-     * OVERVIEW: getter methof
-     * @return nickname
-     */
-    public String getNickname(){
-        return nickname;
-    }
 
     /**
      * OVERVIEW: getter method
@@ -234,5 +217,32 @@ public class Player {
                 if(choices[i]==choices[j]) throw new InvalidTileIndexInLittleHandException(choices.length);
             }
         }
+    }
+
+    public void addScore(int score){
+        myScore.addScore(score);
+    }
+
+    public Shelf getMyShelfie() {
+        return myShelfie;
+    }
+
+    public int getScore(){
+        return myScore.getScore();
+    }
+
+    public Tile[][] getShelfGrid(){
+        return myShelfie.getGrid();
+    }
+    public boolean getHasFinished(){
+        return hasFinished;
+    }
+
+    /**
+     * OVERVIEW: getter methof
+     * @return nickname
+     */
+    public String getNickname(){
+        return nickname;
     }
 }
