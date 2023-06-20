@@ -13,20 +13,24 @@ import java.rmi.RemoteException;
  */
 
 public class RMIClientHandler extends ClientHandler {
+    private boolean goOn;
     @Deprecated
     public RMIClientHandler(MyShelfie game, RemoteInterface remoteClient){
         super(game, remoteClient);
         setIsRMI(true);
+        goOn = true;
     }
 
     public RMIClientHandler(RemoteInterface remoteClient){
         super(remoteClient);
         setIsRMI(true);
+        goOn = true;
     }
 
     public RMIClientHandler(RemoteInterface remoteClient, GameRecord gameRecord){
         super(remoteClient, gameRecord);
         setIsRMI(true);
+        goOn = true;
     }
 
     /**
@@ -35,10 +39,10 @@ public class RMIClientHandler extends ClientHandler {
      */
     @Override
     public void run(){
-        boolean goOn = true;
         while(goOn){
             try{
                 Thread.sleep(1000);
+                if(!goOn) break;
                 getClientInterface().ping();
             }catch(Exception e){
                 goOn = false;
@@ -74,6 +78,7 @@ public class RMIClientHandler extends ClientHandler {
 
     @Override
     public void stop() {
+        goOn = false;
         isConnected = false;
         if(getController() != null)
             getController().shouldFinishTurn(this);

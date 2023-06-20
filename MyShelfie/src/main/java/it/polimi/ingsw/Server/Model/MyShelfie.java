@@ -273,7 +273,7 @@ public class MyShelfie {
                 shelfSnapshot[i][j] = playersConnected.get(currentPlayerIndex).myShelfie.getGrid()[i][j];
 
         for(int i=0; i<playersConnected.size(); i++){
-            if(i!=currentPlayerIndex){
+            if(i!=currentPlayerIndex && clientHandlers.get(i).isConnected()){
                 GoWaitingGUI goWaitingGUI = new GoWaitingGUI();
                 clientHandlers.get(i).sendMessageToClient(goWaitingGUI);
             }
@@ -696,7 +696,7 @@ public class MyShelfie {
      * @return the client handler of the player in countdown
      * @author Irene Lo Presti, Andrea Giacalone
      */
-    public ClientHandler geCountdownClientHandler(){
+    public ClientHandler getCountdownClientHandler(){
         for(int i=0; i<numberOfPlayers; i++)
             if(clientHandlers.get(i).isConnected())
                 return clientHandlers.get(i);
