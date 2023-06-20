@@ -252,7 +252,7 @@ public class GameRecord {
 
                 else{
                     if(playersConnected == 1 && games.get(gameIndex).isPlayerInCountdown())
-                        countDownClient = games.get(gameIndex).geCountdownClientHandler(); //the player who is in Countdown Mode
+                        countDownClient = games.get(gameIndex).getCountdownClientHandler(); //the player who is in Countdown Mode
                     if(clientHandler.isRMI()){
                         try {
                             //set the correct controller in the map
