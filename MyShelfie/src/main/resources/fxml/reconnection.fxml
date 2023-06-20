@@ -51,11 +51,11 @@
                         <Glow />
                      </effect>
                   </Text>
-                  <Label fx:id="loginResult" layoutX="362.0" layoutY="259.0" prefHeight="60.0" prefWidth="550.0" textFill="RED" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="350.0">
+                  <Text fx:id="loginResult" layoutX="362.0" layoutY="259.0" fill="RED" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="350.0">
                      <font>
                         <Font name="Baskerville Old Face" size="25.0" />
                      </font>
-                  </Label>
+                  </Text>
                   <Text fill="#e0ff97" layoutX="50.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(must be the same of the previous game)" textAlignment="CENTER" wrappingWidth="1180.0">
                      <font>
                         <Font name="Baskerville Old Face" size="62.0" />

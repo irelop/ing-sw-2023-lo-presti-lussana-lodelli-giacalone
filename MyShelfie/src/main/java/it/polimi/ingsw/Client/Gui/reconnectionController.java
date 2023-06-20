@@ -27,7 +27,7 @@ public class reconnectionController extends Controller{
     @FXML
     private TextField playerNickname;
     @FXML
-    private Label reconnectionResult;
+    private Text reconnectionResult;
     @FXML
     private Button backButton;
 
