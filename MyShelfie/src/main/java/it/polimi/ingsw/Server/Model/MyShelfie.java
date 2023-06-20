@@ -787,10 +787,6 @@ public class MyShelfie {
         String playerUpdate = playersConnected.get(currentPlayerIndex).getScore() + "\n" +
                 Arrays.deepToString(playersConnected.get(currentPlayerIndex).getPlayerShelf()) + "\n";
 
-        System.out.println("\nupdate of "+playersConnected.get(currentPlayerIndex).getNickname());
-        System.out.println(Arrays.deepToString(playersConnected.get(currentPlayerIndex).getPlayerShelf()));
-        System.out.println();
-
         persistenceManager.updatePlayerFile(playersConnected.get(currentPlayerIndex).getNickname(), playerUpdate);
 
     }
