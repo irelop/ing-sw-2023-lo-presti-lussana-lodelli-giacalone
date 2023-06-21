@@ -32,6 +32,7 @@ public class GameIsEndingUpdateAnswer extends S2CMessage{
     public void processMessage(ServerHandler serverHandler) {
         if(serverHandler.getOwner().gui) {
             serverHandler.getOwner().getStageManager().loadNextStage("waiting.fxml");
+            serverHandler.getOwner().getStageManager().getController().receiveAnswer(this);
         } else {
             serverHandler.getOwner().transitionToView(new GameIsEndingView(this));
             serverHandler.getOwner().getCurrentView().notifyView();
@@ -43,6 +44,7 @@ public class GameIsEndingUpdateAnswer extends S2CMessage{
         try {
             if(client.getOwner().gui) {
                 client.getOwner().getStageManager().loadNextStage("waiting.fxml");
+                client.getOwner().getStageManager().getController().receiveAnswer(this);
             } else {
                 client.goToGameIsEndingView(this);
                 if (client.getCurrentView().getClass() == WaitingView.class)
