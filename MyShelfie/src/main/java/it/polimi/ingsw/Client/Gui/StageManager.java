@@ -40,6 +40,7 @@ public class StageManager {
     }
     public static void setStage(Stage stage) {
         StageManager.stage = stage;
+        StageManager.stage.setResizable(false);
     }
     public Controller getController() {
         return controller;

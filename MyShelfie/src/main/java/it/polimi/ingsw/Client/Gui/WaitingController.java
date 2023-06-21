@@ -115,6 +115,7 @@ public class WaitingController extends Controller {
      */
     public void manageChatAnswer(){
         ArrayList<String> messages = new ArrayList<>();
+        messages.add("To send a private message tag the player (@playerName) at the beginning\n");
         //preparing the chat list
         for(int i=0; i<chatRecord.getChatStorage().getStorage().size(); i++){
             String sender = chatRecord.getChatStorage().getStorage().get(i).getSender();

@@ -112,17 +112,16 @@
                   </Button>
                   <Pane id="infoText" fx:id="chatPane" layoutX="78.0" layoutY="27.0" prefHeight="321.0" prefWidth="560.0" style="-fx-background-color: #F6D669; -fx-border-color: #422F11; -fx-border-width: 5; -fx-border-radius: 8; -fx-background-radius: 10;">
                      <children>
-                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="12.0" layoutY="5.0" prefHeight="250.0" prefWidth="531.0">
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="12.0" layoutY="8.0" prefHeight="265.0" prefWidth="535.0" vbarPolicy="NEVER">
                            <padding>
-                              <Insets left="5.0" right="5.0" />
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </padding>
                            <content>
-                              <TextArea fx:id="chatText" editable="false" minWidth="500.0" prefHeight="245.0" prefWidth="521.0" wrapText="true" />
+                              <TextArea fx:id="chatText" editable="false" prefHeight="260.0" prefWidth="510.0" wrapText="true" />
                            </content>
                         </ScrollPane>
-                        <Button id="sendMessage" layoutX="516.0" layoutY="277.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="30.0" prefWidth="30.0" />
-                        <Button id="refreshChat" layoutX="12.0" layoutY="277.0" mnemonicParsing="false" onAction="#chatRefresh" prefHeight="30.0" prefWidth="30.0" />
-                        <TextField fx:id="chatMessage" layoutX="46.0" layoutY="276.0" onKeyPressed="#manageKeyPressed" prefHeight="30.0" prefWidth="463.0" />
+                        <Button id="sendMessage" layoutX="517.0" layoutY="279.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="30.0" prefWidth="30.0" />
+                        <TextField fx:id="chatMessage" layoutX="12.0" layoutY="279.0" onKeyPressed="#manageKeyPressed" prefHeight="30.0" prefWidth="500.0" />
                      </children>
                   </Pane>
                </children>

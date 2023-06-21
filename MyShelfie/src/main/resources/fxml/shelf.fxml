@@ -280,19 +280,18 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Pane id="infoText" fx:id="chatPane" layoutX="70.0" layoutY="100.0" prefHeight="250.0" prefWidth="390.0" style="-fx-background-color: #F6D669; -fx-border-color: #422F11; -fx-border-width: 5; -fx-border-radius: 8; -fx-background-radius: 10;" visible="false">
+      <Pane id="infoText" fx:id="chatPane" layoutX="70.0" layoutY="100.0" prefHeight="250.0" prefWidth="390.0" style="-fx-background-color: #F6D669; -fx-border-color: #422F11; -fx-border-width: 5; -fx-border-radius: 8; -fx-background-radius: 10;">
          <children>
-            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="12.0" layoutY="5.0" prefHeight="201.0" prefWidth="366.0">
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="12.0" layoutY="5.0" prefHeight="201.0" prefWidth="366.0" vbarPolicy="NEVER">
                <padding>
-                  <Insets left="5.0" right="5.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
                <content>
                   <TextArea fx:id="chatText" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" />
                </content>
             </ScrollPane>
             <Button id="sendMessage" layoutX="346.0" layoutY="211.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="30.0" prefWidth="30.0" />
-            <Button id="refreshChat" layoutX="9.0" layoutY="212.0" mnemonicParsing="false" onAction="#chatRefresh" prefHeight="30.0" prefWidth="30.0" />
-            <TextField fx:id="chatMessage" layoutX="43.0" layoutY="211.0" onKeyPressed="#manageKeyPressed" prefHeight="30.0" prefWidth="297.0" />
+            <TextField fx:id="chatMessage" layoutX="13.0" layoutY="211.0" onKeyPressed="#manageKeyPressed" prefHeight="30.0" prefWidth="327.0" />
          </children>
       </Pane>
    </children>
