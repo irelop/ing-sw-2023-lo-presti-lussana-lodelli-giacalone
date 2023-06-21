@@ -56,7 +56,7 @@ public class Player {
         ArrayList<Tile> chosenTiles = new ArrayList<>(littleHand);
 
         for(int i=0; i<littleHand.size(); i++){
-            littleHand.set(order[i] - 1, chosenTiles.get(i));
+            littleHand.set(order[i], chosenTiles.get(i));
         }
 
     }
