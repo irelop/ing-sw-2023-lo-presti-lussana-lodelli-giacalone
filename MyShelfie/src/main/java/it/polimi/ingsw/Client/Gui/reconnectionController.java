@@ -64,6 +64,7 @@ public class reconnectionController extends Controller{
             // case: text field empty
             reconnectionResult.setText("PLEASE TYPE SOMETHING");
         }else{
+            getOwner().setNickname(playerName);
             ReconnectionRequest reconnectionRequest = new ReconnectionRequest(playerName, true);
             getOwner().getServerHandler().sendMessageToServer(reconnectionRequest);
         }
