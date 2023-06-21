@@ -396,7 +396,7 @@ public class GridController extends Controller{
             getOwner().getServerHandler().sendMessageToServer(pickTiles);
         }
         else{
-            setError("all the selected Tile must have a free near space");
+            setError("all the selected Tile must have a free near space and you must have enough space in your shelf");
         }
     }
 
@@ -406,7 +406,7 @@ public class GridController extends Controller{
      */
     public void managePickTilesAnswer(){
         if(!playerChoiceAnswer.valid){
-            setError("all the selected Tile must have a free near space");
+            setError("all the selected Tile must have a free near space and you must have enough space in your shelf");
         }
     }
 
