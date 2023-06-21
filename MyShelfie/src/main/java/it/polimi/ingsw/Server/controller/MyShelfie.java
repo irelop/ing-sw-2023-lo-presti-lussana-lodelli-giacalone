@@ -198,6 +198,14 @@ public class MyShelfie {
                 updatePersistenceFiles();
                 startTurn();
             }
+            else
+                for(int i=0; i<playersConnected.size(); i++){
+                    if(i!=currentPlayerIndex && clientHandlers.get(i).isConnected() && clientHandlers.get(i).getIsGui()){
+                        System.out.println(playersConnected.get(i).getNickname()+" - ho la gui quindi ricevo questo messaggio");
+                        GoWaitingGUI goWaitingGUI = new GoWaitingGUI();
+                        clientHandlers.get(i).sendMessageToClient(goWaitingGUI);
+                    }
+            }
         }
 
         /**
@@ -290,8 +298,6 @@ public class MyShelfie {
                 GoWaitingGUI goWaitingGUI = new GoWaitingGUI();
                 clientHandlers.get(i).sendMessageToClient(goWaitingGUI);
             }
-
-
         }
 
         yourTurnMsg = new YourTurnMsg(

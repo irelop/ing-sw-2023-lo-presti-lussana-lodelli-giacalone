@@ -50,9 +50,11 @@ public class LobbyController extends Controller{
     @Override
     public void receiveAnswer(S2CMessage message) {
         if (lobbyUpdateAnswer.allPlayersReady) {
+            /*
             try {
                 TimeUnit.SECONDS.sleep(5);
             } catch (InterruptedException ignored) { }
+            */
 
             C2SMessage allPlayersReadyMsg = new AllPlayersReadyMsg();
             getOwner().getServerHandler().sendMessageToServer(allPlayersReadyMsg);

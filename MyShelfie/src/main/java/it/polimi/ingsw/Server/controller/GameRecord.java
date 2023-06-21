@@ -320,10 +320,10 @@ public class GameRecord {
             else {
                 loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.ACCEPTED);
             }
-            clientHandler.sendMessageToClient(loginNicknameAnswer);
+
             games.get(controllerIdx).addPlayer(loginNicknameRequest.getInsertedNickname(), clientHandler);
             persistenceManager.addNewPlayerFile(loginNicknameRequest.getInsertedNickname(), controllerIdx);
-
+            clientHandler.sendMessageToClient(loginNicknameAnswer);
 
         } else {
             loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.INVALID);
