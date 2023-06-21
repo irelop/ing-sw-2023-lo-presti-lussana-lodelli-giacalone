@@ -32,26 +32,15 @@ public class GoalView extends View {
     @Override
     public void run() {
 
+        //showing the amount of points achieved by the player before ending the turn
+        showScoreRecap();
 
+        //delaying the action as an arcade game
         String goOn;
-
         Scanner scanner = new Scanner(System.in);
-
-        System.out.println("---------------------------------");
-        System.out.println("GOAL ACHIVED IN THIS TURN:");
-        if (msg.commonGoalAchived == true) {
-            System.out.println("Common Goal: yes");
-        } else System.out.println("Common Goal: no");
-        if (msg.personalGoalAchived == true) {
-            System.out.println("Personal Goal: yes");
-        } else System.out.println("Personal Goal: no");
-        if (msg.youFullyShelf) System.out.println("You earned 1 pt. for be the first to complete the shelf, SIUM");
-
-        System.out.println("Total score: " + msg.score);
-        System.out.println("---------------------------------");
-        System.out.println("[press enter to continue]");
         goOn = scanner.nextLine();
 
+        //managing the chat choice
         if (goOn != null) {
             System.out.println("Before ending you turn, you can leave a message to everyone or to a lucky receiver");
             System.out.println("Please select (Y) if you want to chat or (N) otherwise");
@@ -98,7 +87,7 @@ public class GoalView extends View {
     private void manageChat(){
         Scanner scanner = new Scanner(System.in);
         boolean goOn = true;
-        int remainingMsgAvailable = 3;
+        int remainingMsgAvailable = 3;  //the amount of available messages that the current player can send
 
 
 
@@ -115,7 +104,6 @@ public class GoalView extends View {
                 getOwner().getServerHandler().sendMessageToServer(new ChatRecordRequest(getOwner().getNickname()));
             }
             showChat();
-
 
             System.out.println("\nYou have still "+ remainingMsgAvailable + "/3 remaining messages");
             while (goOn) {
@@ -243,5 +231,21 @@ public class GoalView extends View {
         }
 
         System.out.println(fmt);
+    }
+
+    private void showScoreRecap(){
+        System.out.println("---------------------------------");
+        System.out.println("GOAL ACHIVED IN THIS TURN:");
+        if (msg.commonGoalAchived == true) {
+            System.out.println("Common Goal: yes");
+        } else System.out.println("Common Goal: no");
+        if (msg.personalGoalAchived == true) {
+            System.out.println("Personal Goal: yes");
+        } else System.out.println("Personal Goal: no");
+        if (msg.youFullyShelf) System.out.println("You earned 1 pt. for be the first to complete the shelf, SIUM");
+
+        System.out.println("Total score: " + msg.score);
+        System.out.println("---------------------------------");
+        System.out.println("[press enter to continue]");
     }
 }
