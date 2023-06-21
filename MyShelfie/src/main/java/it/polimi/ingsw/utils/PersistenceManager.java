@@ -36,10 +36,10 @@ public class PersistenceManager {
 
     /**
      * Given the name, this method creates a new file for a new game and adds it to the array list
-     * @param name of the new file: game_indexOfTheGame.txt
+     * @param gameIdx index of the controller
      */
-    public void addNewGameFile(String name){
-        File file = new File(path+name);
+    public void addNewGameFile(int gameIdx){
+        File file = new File(getGamePath(gameIdx));
         try {
             if((file.exists() && file.length()==0 ) || file.createNewFile())
                 this.gameFiles.add(file);
@@ -99,15 +99,11 @@ public class PersistenceManager {
      * This method deletes the file of the game with index 'index' and removes it from
      * the array list
      * @param index of the game
-     * @param removeFromList if true the method remove the game from the array list, otherwise it sets it null
-     *                       to preserve the enumeration
      */
-    public void deleteGameFile(int index, boolean removeFromList){
+    public void deleteGameFile(int index){
         boolean success = gameFiles.get(index).delete();
         if(success){
-            if(removeFromList)
-                gameFiles.remove(index);
-            else gameFiles.set(index,null);
+            gameFiles.remove(index);
         }
         else System.out.println("Problems deleting file");
 
@@ -117,28 +113,33 @@ public class PersistenceManager {
      * FA: persistence. This method finds all the persistence file, and it saves them into the arraylist
      * @return the number of the old games
      */
-    public int reset(){
-        int gameIdx = 0;
+    public int[] reset(){
+        String[] filesNames = new File("src/safetxt/games").list();
+        int[] gameIndexes = new int[filesNames.length];
+        int j=0;
 
-        while(true){
-            File file = new File(getGamePath(gameIdx));
-            if (file.exists()){
-                if(file.length()==0)
-                    file.delete();
-                else{
-                    gameFiles.add(file);
-                    gameIdx++;
+        if(filesNames != null){
+            for (int i = 0; i < filesNames.length; i++) {
+                File file = new File(path + "games/" + filesNames[i]);
+                if (file.exists()){
+                    if(file.length()==0)
+                        file.delete();
+                    else{
+                        gameFiles.add(file);
+                        gameIndexes[j] = Integer.parseInt(filesNames[i].replaceAll("game_", "").replaceAll(".txt",""));
+                        j++;
+                    }
                 }
+
             }
-            else break;
         }
-        return gameIdx;
+        return gameIndexes;
     }
 
     public MyShelfie readOldGame(int gameIdx){
         ReadFileByLines reader;
         reader = new ReadFileByLines();
-        reader.readFrom(getGamePath(gameIdx));
+        reader.readFrom(gameFiles.get(gameIdx).getPath());
 
         //read the board matrix
         Tile[][] boardMatrix = new Tile[9][9];
@@ -207,7 +208,8 @@ public class PersistenceManager {
 
     public void updateGameFile(int index, String update){
         try {
-            FileWriter fw = new FileWriter(gameFiles.get(index));
+            File file = new File(getGamePath(index));
+            FileWriter fw = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(fw);
             bw.write(update);
             bw.flush();
@@ -256,7 +258,7 @@ public class PersistenceManager {
     }
 
     private String getPlayerPath(String nickname){
-        return path + nickname + ".txt";
+        return path + "players/" + nickname + ".txt";
     }
 
     /**
@@ -278,7 +280,7 @@ public class PersistenceManager {
     }
 
     private String getGamePath(int gameIndex){
-        return path + "game_" + gameIndex + ".txt";
+        return path + "games/" + "game_" + gameIndex + ".txt";
     }
 
     public String setPlayer(Player player){

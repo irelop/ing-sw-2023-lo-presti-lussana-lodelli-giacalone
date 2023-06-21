@@ -8,13 +8,14 @@ import it.polimi.ingsw.utils.ReadFileByLines;
 
 import java.io.File;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Class to manage multiple games
  */
 public class GameRecord {
-    private ArrayList<MyShelfie> games;
+    //private ArrayList<MyShelfie> games;
+    private HashMap<Integer, MyShelfie> games;
     private int currentGame;
     private RemoteInterface remoteServer;
     private final Object lock;
@@ -26,7 +27,7 @@ public class GameRecord {
      * Constructor method
      */
     public GameRecord() {
-        games = new ArrayList<>();
+        games = new HashMap<>();
         currentGame = -1;
         lock = new Object();
         persistenceManager = new PersistenceManager();
@@ -45,11 +46,13 @@ public class GameRecord {
      */
     public synchronized MyShelfie getGame(){
         if (currentGame == -1 || games.get(currentGame) == null || games.get(currentGame).getAllPlayersReady()) {
-            currentGame++;
-            persistenceManager.addNewGameFile("game_"+currentGame+".txt");
+            do{
+                currentGame++;
+            }while(games.containsKey(currentGame));
+            persistenceManager.addNewGameFile(currentGame);
             //MyShelfie game = new MyShelfie(persistenceManager.getGameFile(currentGame));
             MyShelfie game = new MyShelfie(persistenceManager, currentGame);
-            games.add(game);
+            games.put(currentGame, game);
         }
         return games.get(currentGame);
     }
@@ -59,23 +62,26 @@ public class GameRecord {
      * If the game is the current it removes it from the arrayList, else it doesn't remove it in order to
      * maintain the correct enumeration.
      * It calls the method in the persistence manager that delete the game file and also the player's file
-     * @param game: the one to delete
+     *
      * @param playerNickname: the player that called the function
      * @author Irene Lo Presti
      */
-    public void deleteGame(MyShelfie game, String playerNickname){
-        int index = games.indexOf(game);
-        boolean remove = false;
-        if(index == currentGame) {
+    public void deleteGame(int gameIndex, String playerNickname){
+       // boolean remove = false;
+        /*if(index == currentGame) {
             games.remove(game);
             currentGame--;
             remove = true;
         }
         else
-            games.set(index, null);
+            games.set(index, null);*/
+        //remove = true;
+
+        games.remove(gameIndex);
+        currentGame = gameIndex;
 
         persistenceManager.deletePlayerFile(playerNickname);
-        persistenceManager.deleteGameFile(index, remove);
+        persistenceManager.deleteGameFile(gameIndex);
     }
 
     /**
@@ -86,107 +92,14 @@ public class GameRecord {
      * @author Irene Lo Presti
      */
     public void reset() {
-        int gamesNum = persistenceManager.reset(); //find how many old games there were
-        for(int i=0; i<gamesNum; i++){
-            games.add(persistenceManager.readOldGame(i));
-            games.get(i).resetPlayers();
-            currentGame++;
+        int[] gamesNum = persistenceManager.reset(); //find how many old games there were
+        for(int i=0; i<gamesNum.length; i++){
+            MyShelfie game = persistenceManager.readOldGame(i);
+            game.resetPlayers();
+            games.put(gamesNum[i],game);
         }
         persistenceManaged = true;
     }
-    /*public void reset(){
-
-        int gamesNum = persistenceManager.reset(); //find how many old games there were
-
-        for(int i=0; i<gamesNum; i++){
-            /*ReadFileByLines reader;
-            reader = new ReadFileByLines();
-            reader.readFrom("src/safetxt/game_"+i+".txt");
-
-            //read the board matrix
-            Tile[][] boardMatrix = new Tile[9][9];
-            String row = ReadFileByLines.getLineByIndex(0);
-            String[] values = row.replaceAll("\\[", "")
-                    .replaceAll("]", "")
-                    .split(", ");
-            int index = 0;
-            for(int j=0; j<9; j++){
-                for(int k=0; k<9; k++){
-                    boardMatrix[j][k] = Tile.valueOf(values[index]);
-                    index++;
-                }
-            }
-            //create a new board
-            Board board = new Board();
-            //init the new board with the one in the right file
-            board.initFromMatrix(boardMatrix);*/
-
-            //Board board = persistenceManager.readBoard(i);
-
-            //read the bag
-            /*Map<Tile,Integer> bag = new HashMap<>();
-            row = ReadFileByLines.getLineByIndex(6);
-            values = row.replaceAll("\\{", "")
-                    .replaceAll("}", "")
-                    .split(", ");
-            for(String value : values){
-                String[] tile = value.split("=");
-                bag.put(Tile.valueOf(tile[0]), Integer.valueOf(tile[1]));
-            }
-            //set the correct bag in the board created above
-            board.setBag(persistenceManager.readBag(i));
-
-            //read common goal cards names
-            /*String[] commonGoalCardsNames = new String[2];
-            commonGoalCardsNames[0] = ReadFileByLines.getLineByIndex(1);
-            commonGoalCardsNames[1] = ReadFileByLines.getLineByIndex(2);*/
-
-            //read all the other infos
-            /*int currentPlayerIndex = Integer.parseInt(ReadFileByLines.getLineByIndex(3));
-            boolean isStarted = Boolean.parseBoolean(ReadFileByLines.getLineByIndex(4));
-            int numberOfPlayers = Integer.parseInt(ReadFileByLines.getLineByIndex(5));
-            boolean isOver = Boolean.parseBoolean(ReadFileByLines.getLineByIndex(7));
-
-            //read players names
-            String[] playerNicknames = new String[numberOfPlayers];
-            for(int j=0; j<numberOfPlayers; j++){
-                playerNicknames[j] = ReadFileByLines.getLineByIndex(j+8);
-            }
-
-            //create a new game setting all the old info
-            MyShelfie game = new MyShelfie(persistenceManager.getGameFile(i), board, commonGoalCardsNames,
-                    currentPlayerIndex, isStarted, isOver, numberOfPlayers);
-
-            //setting facade client handlers (they could also be socket) instantiates the players and
-            // to check the connection
-            //when a player reconnects to the game (like the FA client resilience) the facade client handler
-            //will be replaced with the new one (working)
-            for(String player : playerNicknames) {
-                ClientHandler clientHandler = new RMIClientHandler(null);
-                clientHandler.setIsConnected(false);
-                game.addPlayer(player, clientHandler);
-            }
-
-            //call a function in the right controller to set all the players info
-            game.resetPlayers();
-
-            /*MyShelfie game = new MyShelfie(
-                    persistenceManager, i,
-                    board,
-                    persistenceManager.readCommonCards(i),
-                    persistenceManager.readCurrentPlayerIndex(i),
-                    persistenceManager.readIsStarted(i),
-                    persistenceManager.readIsOver(i),
-                    persistenceManager.readNumberOfPlayers(i));*/
-
-            /*game.resetPlayers(persistenceManager.readPlayers(i, game.getPersonalDeck()));
-
-            //add this game to the array list
-            this.games.add(game);
-            this.currentGame++;
-        }
-        persistenceManaged = true;
-    }*/
 
     /**
      * FA: client resilience. This method is used to reconnect a player whose connection has dropped or
@@ -202,7 +115,7 @@ public class GameRecord {
         int gameIndex = -1, playerIndex = -1;
         ClientHandler countDownClient = null;
 
-        String pathFile = "src/safetxt/"+nickname+".txt";
+        String pathFile = "src/safetxt/players/"+nickname+".txt";
         File file = new File(pathFile);
 
         //check if exists a file with the name of the player
@@ -251,7 +164,7 @@ public class GameRecord {
                             Redirecting to a new lobby.""";
 
                     //games.get(gameIndex).fileDeleting(nickname);
-                    deleteGame(games.get(gameIndex), nickname);
+                    deleteGame(gameIndex, nickname);
                 }
                 //if there are no players connected and persistenceManaged == true
                 // then this player is the first one to reconnect to the game
@@ -301,19 +214,18 @@ public class GameRecord {
         clientHandler.setIsGui(isGui);
         S2CMessage loginNicknameAnswer;
 
-        int controllerIdx = games.indexOf(game);
-        if (games.get(controllerIdx).isStarted()) {
+        if (game.isStarted()) {
             loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FULL_LOBBY);
             clientHandler.sendMessageToClient(loginNicknameAnswer);
             return;
         }
 
-        String pathFile = "src/safetxt/"+loginNicknameRequest.getInsertedNickname()+".txt";
+        String pathFile = "src/safetxt/players/"+loginNicknameRequest.getInsertedNickname()+".txt";
         File file = new File(pathFile);
 
         if (!file.exists()) {
 
-            if (games.get(controllerIdx).isFirstConnected()) {
+            if (game.isFirstConnected()) {
                 loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
             }
 
@@ -321,7 +233,14 @@ public class GameRecord {
                 loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.ACCEPTED);
             }
 
-            games.get(controllerIdx).addPlayer(loginNicknameRequest.getInsertedNickname(), clientHandler);
+            game.addPlayer(loginNicknameRequest.getInsertedNickname(), clientHandler);
+            int controllerIdx = -1;
+            for(int i=0; i<games.size(); i++){
+                if(games.get(i).equals(game)) {
+                    controllerIdx = i;
+                    break;
+                }
+            }
             persistenceManager.addNewPlayerFile(loginNicknameRequest.getInsertedNickname(), controllerIdx);
             clientHandler.sendMessageToClient(loginNicknameAnswer);
 

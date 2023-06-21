@@ -10,6 +10,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -55,8 +58,10 @@ public class Server {
      * @return true if the server has crashed, false otherwise
      */
     private static boolean hasCrashed(){
-        File file = new File("src/safetxt/game_0.txt");
-        return file.exists() && file.length() != 0;
+        String[] files = new File("src/safetxt/games").list();
+        if(files == null)
+            return false;
+        else return files.length > 0;
     }
 
     /**

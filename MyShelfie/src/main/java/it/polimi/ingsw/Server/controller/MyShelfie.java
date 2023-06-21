@@ -294,7 +294,6 @@ public class MyShelfie {
 
         for(int i=0; i<playersConnected.size(); i++){
             if(i!=currentPlayerIndex && clientHandlers.get(i).isConnected() && clientHandlers.get(i).getIsGui()){
-                System.out.println(playersConnected.get(i).getNickname()+" - ho la gui quindi ricevo questo messaggio");
                 GoWaitingGUI goWaitingGUI = new GoWaitingGUI();
                 clientHandlers.get(i).sendMessageToClient(goWaitingGUI);
             }
@@ -585,7 +584,7 @@ public class MyShelfie {
             }
         }
         else if(numberOfPlayers == -1 && clientHandlers.indexOf(clientHandler) == 0){
-            clientHandler.getGameRecord().deleteGame(this, playersConnected.get(0).getNickname());
+            clientHandler.getGameRecord().deleteGame(gameIndex, playersConnected.get(0).getNickname());
             if(playersConnected.size() > 1){
                 for(int i=1; i<playersConnected.size(); i++){
                     NumberOfPlayerManagementMsg msg = new NumberOfPlayerManagementMsg(playersConnected.get(i).getNickname());
@@ -814,7 +813,7 @@ public class MyShelfie {
         persistenceManager.deletePlayerFile(playerNickname);
         numberOfPlayers--;
         if(numberOfPlayers==0)
-            persistenceManager.deleteGameFile(gameIndex, false);
+            persistenceManager.deleteGameFile(gameIndex);
     }
 
     //- - - - - - - - - - - - - - - - - -| GETTER METHODS |- - - - - - - - - - - - - - - - - - - - - - - - - -
