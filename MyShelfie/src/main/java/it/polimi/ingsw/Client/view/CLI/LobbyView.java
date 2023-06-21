@@ -5,13 +5,21 @@ import it.polimi.ingsw.Server.Messages.LobbyUpdateAnswer;
 
 import java.util.Formatter;
 import java.util.concurrent.TimeUnit;
-
+/**
+ * LobbyView class: this view shows the lobby in which players are redirected before the start of the game. The lobby
+ * updates every time a new player is connected to the game.
+ * @author Andrea Giacalone
+ */
 public class LobbyView extends View implements ObserverView {
 
     private Object lock = new Object();
-    private LobbyUpdateAnswer lobbyUpdateAnswer;
+    private LobbyUpdateAnswer lobbyUpdateAnswer;    //the updated view of the lobby sent by the server
 
-
+    /**
+     * CONSTRUCTOR: a new LobbyView object is built receiving the updated lobby view containing the players currently
+     * connected to this game and waiting for the start.
+     * @param lobbyUpdateAnswer: the lobby of players currently connected.
+     */
     public LobbyView(LobbyUpdateAnswer lobbyUpdateAnswer) {
         this.lobbyUpdateAnswer = lobbyUpdateAnswer;
     }
@@ -20,9 +28,14 @@ public class LobbyView extends View implements ObserverView {
     public void run() {
         synchronized (lock){
             showPlayerTable();
+            checkPlayersReady();
         }
     }
 
+    /**
+     * OVERVIEW: a printing method showing the lobby of connected players as a formatted table which shows their nicknames
+     * and their order of connection to the game.
+     */
     public void showPlayerTable(){
         Formatter fmt = new Formatter();
 
@@ -34,6 +47,14 @@ public class LobbyView extends View implements ObserverView {
         }
         fmt.format("%s %15s %15s %s\n","╚","","","╝");
         System.out.println(fmt);
+    }
+
+
+    /**
+     * OVERVIEW: this method allows to notify players if, once reached the amount of players set for the lobby,
+     * everything is ready to start the game.
+     */
+    private void checkPlayersReady(){
 
         if(lobbyUpdateAnswer.allPlayersReady){
             System.out.println("All players are connected! The game is starting...");
@@ -42,13 +63,8 @@ public class LobbyView extends View implements ObserverView {
             } catch (InterruptedException ignored) { }
 
             AllPlayersReadyMsg allPlayersReadyMsg = new AllPlayersReadyMsg();
-            if(!getOwner().isRMI())
-                getOwner().getServerHandler().sendMessageToServer(allPlayersReadyMsg);
-            else {
-                getOwner().getServerHandler().sendMessageToServer(allPlayersReadyMsg);
-            }
+            getOwner().getServerHandler().sendMessageToServer(allPlayersReadyMsg);
         }
-
     }
 
     @Override
@@ -57,6 +73,5 @@ public class LobbyView extends View implements ObserverView {
             lock.notify();
         }
     }
-
 
 }
