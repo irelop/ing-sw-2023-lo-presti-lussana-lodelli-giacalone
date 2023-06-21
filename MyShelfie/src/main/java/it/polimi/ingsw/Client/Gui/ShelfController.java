@@ -481,6 +481,7 @@ public class ShelfController extends Controller {
     public void closeConfirmationPane() {
         confirmationPane.setVisible(false);
         flowPane.setDisable(false);
+        columnSelection.setDisable(false);
     }
 
     // -------------------- CHAT METHODS -------------------- //
