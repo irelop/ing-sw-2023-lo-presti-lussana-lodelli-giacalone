@@ -711,12 +711,11 @@ public class MyShelfie {
         return null;
     }
 
-    //- - - - - - - - - - - - - - - - - - -| CHAT |- - - - - - - - - - - - - - - - - - - -
+    //- - - - - - - - - - - - - - - - - - -| C H A T   M E T H O D S |- - - - - - - - - - - - - - - - - - - -
 
 
     public void getCustomChat(String requester){
         ChatStorage customChat = chatManager.getCustomChat(requester);
-        if (!clientHandlers.get(currentPlayerIndex).getIsRMI()) {
             for(int i=0; i< clientHandlers.size(); i++){
                 if(clientHandlers.get(i).getIsGui()){
                     clientHandlers.get(i).sendMessageToClient(new ChatRecordAnswer(customChat));
@@ -725,20 +724,17 @@ public class MyShelfie {
             if(requester.equals(playersConnected.get(currentPlayerIndex).getNickname())) {
                 clientHandlers.get(currentPlayerIndex).sendMessageToClient(new ChatRecordAnswer(customChat));
             }
-        }
+
         else {
-            try {
+
                 for(int i=0; i< clientHandlers.size(); i++){
                     if(clientHandlers.get(i).getIsGui() || i==currentPlayerIndex){
-                        clientHandlers.get(i).getClientInterface().sendMessageToClient(new ChatRecordAnswer(customChat));
+                        clientHandlers.get(i).sendMessageToClient(new ChatRecordAnswer(customChat));
                     }
                 }
                 if(requester.equals(playersConnected.get(currentPlayerIndex).getNickname())) {
-                    clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(new ChatRecordAnswer(customChat));
+                    clientHandlers.get(currentPlayerIndex).sendMessageToClient(new ChatRecordAnswer(customChat));
                 }
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 
@@ -749,21 +745,12 @@ public class MyShelfie {
         }else {
             chatMsgAnswer = new ChatMsgAnswer(false);
         }
-        if(!clientHandlers.get(currentPlayerIndex).getIsRMI()) {
-            if (playersConnected.get(currentPlayerIndex).getNickname().equals(messageToSend.getSender()))
-                clientHandlers.get(currentPlayerIndex).sendMessageToClient(chatMsgAnswer);
-        }
-        else {
-            try {
-                if (playersConnected.get(currentPlayerIndex).getNickname().equals(messageToSend.getSender()))
-                    clientHandlers.get(currentPlayerIndex).getClientInterface().sendMessageToClient(chatMsgAnswer);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-        }
+
+        if (playersConnected.get(currentPlayerIndex).getNickname().equals(messageToSend.getSender()))
+            clientHandlers.get(currentPlayerIndex).sendMessageToClient(chatMsgAnswer);
     }
 
-    //- - - - - - - - - - - - - - - - - - - -| PERSISTENCE |- - - - - - - - - - - - - - - - - - - - -
+    //- - - - - - - - - - - - - - - - - - - -| P E R S I S T E N C E |- - - - - - - - - - - - - - - - - - - - -
 
     public void resetPlayers(){
         int numberOfPlayersConnected = 0;
