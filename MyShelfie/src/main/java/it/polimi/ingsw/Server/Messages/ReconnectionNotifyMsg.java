@@ -13,15 +13,23 @@ public class ReconnectionNotifyMsg extends S2CMessage{
     }
     @Override
     public void processMessage(ServerHandler serverHandler) {
-        LastPlayerConnectedView lastPlayerConnectedView = (LastPlayerConnectedView) serverHandler.getOwner().getCurrentView();
-        lastPlayerConnectedView.notifyView(nickname);
+        if (serverHandler.getOwner().gui) {
+            serverHandler.getOwner().getStageManager().getController().receiveAnswer(this);
+        } else {
+            LastPlayerConnectedView lastPlayerConnectedView = (LastPlayerConnectedView) serverHandler.getOwner().getCurrentView();
+            lastPlayerConnectedView.notifyView(nickname);
+        }
     }
 
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client) {
         try {
-            LastPlayerConnectedView lastPlayerConnectedView = (LastPlayerConnectedView) client.getOwner().getCurrentView();
-            lastPlayerConnectedView.notifyView(nickname);
+            if(client.getOwner().gui) {
+                client.getOwner().getStageManager().getController().receiveAnswer(this);}
+            else {
+                LastPlayerConnectedView lastPlayerConnectedView = (LastPlayerConnectedView) client.getOwner().getCurrentView();
+                lastPlayerConnectedView.notifyView(nickname);
+            }
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
