@@ -23,9 +23,9 @@
                         <Image url="@../MyShelfie_IMAGES/misc/sfondo_parquet.jpg" />
                      </image>
                   </ImageView>
-                  <Text fx:id="alertText" layoutX="124.0" layoutY="153.0" strokeType="OUTSIDE" strokeWidth="0.0" text="strings" textAlignment="CENTER" wrappingWidth="552.13671875">
+                  <Text fx:id="alertText" layoutX="12.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="string" textAlignment="CENTER" wrappingWidth="775.13671875">
                      <font>
-                        <Font name="Bell MT" size="66.0" />
+                        <Font name="Bell MT" size="37.0" />
                      </font>
                   </Text>
                   <Text layoutX="124.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please Wait" textAlignment="CENTER" wrappingWidth="552.13671875">
