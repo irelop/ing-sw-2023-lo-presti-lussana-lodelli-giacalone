@@ -724,18 +724,6 @@ public class MyShelfie {
             if(requester.equals(playersConnected.get(currentPlayerIndex).getNickname())) {
                 clientHandlers.get(currentPlayerIndex).sendMessageToClient(new ChatRecordAnswer(customChat));
             }
-
-        else {
-
-                for(int i=0; i< clientHandlers.size(); i++){
-                    if(clientHandlers.get(i).getIsGui() || i==currentPlayerIndex){
-                        clientHandlers.get(i).sendMessageToClient(new ChatRecordAnswer(customChat));
-                    }
-                }
-                if(requester.equals(playersConnected.get(currentPlayerIndex).getNickname())) {
-                    clientHandlers.get(currentPlayerIndex).sendMessageToClient(new ChatRecordAnswer(customChat));
-                }
-        }
     }
 
     public void updateChat(ChatMessage messageToSend){
