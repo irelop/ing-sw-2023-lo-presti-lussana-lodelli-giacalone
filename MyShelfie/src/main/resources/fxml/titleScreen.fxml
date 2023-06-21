@@ -102,7 +102,7 @@
                               <Glow level="0.55" />
                           </effect>
                       </Button>
-                      <Button alignment="BASELINE_CENTER" layoutX="107.0" layoutY="177.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="366.0" styleClass="startButton" text="EXIT" textFill="#e0ff97" textOverrun="WORD_ELLIPSIS" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0">
+                      <Button alignment="BASELINE_CENTER" layoutX="107.0" layoutY="177.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="366.0" styleClass="startButton" text="EXIT" onAction="#exit" textFill="#e0ff97" textOverrun="WORD_ELLIPSIS" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="107.0">
                           <font>
                               <Font name="Baskerville Old Face" size="25.0" />
                           </font>
