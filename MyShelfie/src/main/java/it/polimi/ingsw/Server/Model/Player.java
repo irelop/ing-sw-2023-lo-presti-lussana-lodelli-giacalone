@@ -53,10 +53,12 @@ public class Player {
         if(littleHand.size() == 1)
             return;
 
-        ArrayList<Tile> chosenTiles = new ArrayList<>(littleHand);
+        Tile[] chosenTiles = new Tile[littleHand.size()];
+        for(int i=0; i< littleHand.size(); i++)
+            chosenTiles[i]=littleHand.get(i);
 
         for(int i=0; i<littleHand.size(); i++){
-            littleHand.set(order[i], chosenTiles.get(i));
+            littleHand.set(i,chosenTiles[order[i]]);
         }
 
     }
