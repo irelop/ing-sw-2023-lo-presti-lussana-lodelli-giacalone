@@ -62,7 +62,7 @@ public class RMIClientHandler extends ClientHandler {
             try {
                 isConnected = getClientInterface().isClientConnected();
             } catch (RemoteException e) {
-                throw new RuntimeException(e);
+                setIsConnected(false);
             }
         }
         return isConnected;
