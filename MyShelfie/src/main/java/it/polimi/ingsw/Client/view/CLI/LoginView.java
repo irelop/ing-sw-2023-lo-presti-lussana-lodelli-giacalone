@@ -13,11 +13,11 @@ import java.util.Scanner;
  * @author Andrea Giacalone
  */
 public class LoginView extends View implements ObserverView {
-    private final Object lock; //in order to stop and continue the run() method computation.
-    private boolean goOn; //in order to check if the nickname is valid, and so we can go ahead.
-    private boolean isFull;
-    private String insertedNickname;
-    private LoginNicknameAnswer answerToShow; //the answer received by the server which needs to be shown.
+    private final Object lock;
+    private boolean goOn;
+    private boolean isFull; //if the game lobby is already full;
+    private String insertedNickname;    //the nickname inserted by the player
+    private LoginNicknameAnswer answerToShow;
 
     private ReconnectionAnswer reconnectionAnswer;
 
@@ -58,6 +58,9 @@ public class LoginView extends View implements ObserverView {
 
     //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+     /**
+      * OVERVIEW: this method allows to show the game title screen.
+      */
     public void showTitleScreen(){
         System.out.println("\n,   .     .                     .         .   ,        ,-.  .       .          \n" +
                 "| . |     |                     |         |\\ /|       (   ` |       |  ,- o    \n" +
@@ -79,19 +82,20 @@ public class LoginView extends View implements ObserverView {
         System.out.println("\nPlease select your nickname:\n");
         insertedNickname = input.nextLine().replace(" ", "").toUpperCase();
     }
+
+     /**
+      * OVERVIEW: this method allows to send the request for the nickname inserted by the user.
+      */
     private void sendNicknameRequest(){
         C2SMessage nicknameRequest = new LoginNicknameRequest(insertedNickname, false);
-        if(!getOwner().isRMI())
-            getOwner().getServerHandler().sendMessageToServer(nicknameRequest);
-        else{
-            getOwner().getServerHandler().sendMessageToServer(nicknameRequest);
-        }
+
+        getOwner().getServerHandler().sendMessageToServer(nicknameRequest);
     }
 
     /**
-     * OVERVIEW: this method allows to show the answer received by the server and, for the first player,
-     *           calls the method responsible for the request of the number of players of the game.
-     * @param nicknameAnswer
+     * OVERVIEW: this method allows to show the answer received by the server regarding the validity status of the
+     * inserted nickname.
+     * @param nicknameAnswer: the answer from the server regarding the user nickname.
      */
     private void showNicknameAnswer(LoginNicknameAnswer nicknameAnswer){
         switch (nicknameAnswer.getNicknameStatus()){
@@ -164,12 +168,23 @@ public class LoginView extends View implements ObserverView {
         }
     }
 
+     /**
+      * OVERVIEW: this setter method allows to set the mailbox wrapping the answer from the server regarding
+      * the validity status of the inserted nickname.
+      * @param answerToShow: the nickname answer from the server.
+      */
     public void setLoginNicknameAnswer(LoginNicknameAnswer answerToShow) {
         this.answerToShow = answerToShow;
     }
 
-    //gestione FA Disconnection Resilience
+    // - - - - - - - - - - - - - - - - - - -D I S C O N N E C T I O N   R E S I L I E N C E - - - - - - - - - - - - - - - - - - -
 
+     /**
+      * OVERVIEW: this method allows to properly get the user reconnection choice.
+      * @return the reconnection choice of the user.
+      * @throws InvalidReconnectionAnswerException: an exception thrown if the user choice isn't valid.
+      * @authors Irene Lo Presti, Andrea Giacalone
+      */
     private char getReconnectionChoice() throws InvalidReconnectionAnswerException{
         Scanner scanner = new Scanner(System.in);
         String input = scanner.next().toUpperCase();
@@ -180,6 +195,11 @@ public class LoginView extends View implements ObserverView {
         else return answer;
     }
 
+     /**
+      * OVERVIEW: this method allows to manage the reconnection choice. According to the user choice, the player can be
+      * redirected to the lobby of a new game or, if he/she previously was disconnected from a game, he/she can rejoin it.
+      * @authors Irene Lo Presti, Andrea Giacalone
+      */
     private void manageReconnectionChoice(){
         System.out.println("\nCONTINUE A GAME [C]");
         System.out.println("NEW GAME [N]");
@@ -198,6 +218,10 @@ public class LoginView extends View implements ObserverView {
 
     }
 
+     /**
+      * OVERVIEW: this method allows to manage the connection of the player to the lobby of a new game.
+      * @authors Irene Lo Presti, Andrea Giacalone
+      */
     private void manageNewLobbyConnection(){
         synchronized (lock) {
             while (!goOn && !isFull) {
@@ -212,16 +236,17 @@ public class LoginView extends View implements ObserverView {
                 showNicknameAnswer(answerToShow);
             }
             if (answerToShow.getNicknameStatus() == LoginNicknameAnswer.Status.ACCEPTED || answerToShow.getNicknameStatus() == LoginNicknameAnswer.Status.FIRST_ACCEPTED) {
-                if (!getOwner().isRMI()) {
-                    getOwner().getServerHandler().sendMessageToServer(new LobbyUpdateRequest());
-                } else {
-                    getOwner().getServerHandler().sendMessageToServer(new LobbyUpdateRequest());
-                }
+                getOwner().getServerHandler().sendMessageToServer(new LobbyUpdateRequest());
+
             }
         }
 
     }
 
+     /**
+      * OVERVIEW: this method allows to manage the reconnection of the player to the game where he/she was disconnected.
+      * @authors Irene Lo Presti, Andrea Giacalone
+      */
     private void manageExistingGameConnection(){
         ReconnectionRequest reconnectionRequest = new ReconnectionRequest(insertedNickname, false);
         synchronized (lock){
@@ -245,6 +270,11 @@ public class LoginView extends View implements ObserverView {
 
     }
 
+     /**
+      * OVERVIEW: this setter method allows to set the mailbox wrapping the reconnection answer sent by the server.
+      * @param reconnectionAnswer: the reconnection answer sent by the server.
+      * @authors Irene Lo Presti, Andrea Giacalone
+      */
     public void setReconnectionAnswer(ReconnectionAnswer reconnectionAnswer) {
         this.reconnectionAnswer = reconnectionAnswer;
     }

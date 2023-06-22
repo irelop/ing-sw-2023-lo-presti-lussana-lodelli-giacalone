@@ -39,11 +39,9 @@ public class GameIsEndingView extends View{
                 //playerIndex needed to choose the right clientHandler
                 System.out.println("Everyone has played their turn!");
                 EndGameMsg endGameMsg = new EndGameMsg(msg.playerIndex);
-                if(!getOwner().isRMI())
-                    getOwner().getServerHandler().sendMessageToServer(endGameMsg);
-                else{
-                    getOwner().getServerHandler().sendMessageToServer(endGameMsg);
-                }
+
+                getOwner().getServerHandler().sendMessageToServer(endGameMsg);
+
             }
         }
     }

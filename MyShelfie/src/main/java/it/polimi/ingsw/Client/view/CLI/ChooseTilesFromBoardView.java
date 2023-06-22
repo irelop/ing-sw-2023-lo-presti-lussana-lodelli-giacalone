@@ -176,11 +176,8 @@ public class ChooseTilesFromBoardView extends View {
         else{
             PlayerChoiceMsg playerChoiceMsg = new PlayerChoiceMsg(r, c, '0', 0,
                     yourTurnMsg.maxTilesPickable);
-            if(!getOwner().isRMI()){
-                getOwner().getServerHandler().sendMessageToServer(playerChoiceMsg);
-            }else{
-                getOwner().getServerHandler().sendMessageToServer(playerChoiceMsg);
-            }
+
+            getOwner().getServerHandler().sendMessageToServer(playerChoiceMsg);
 
         }
     }
