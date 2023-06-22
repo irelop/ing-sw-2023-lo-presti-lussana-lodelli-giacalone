@@ -29,7 +29,14 @@ public class RMIServerHandler extends ServerHandler{
         while(!stop){
             try{
                 Thread.sleep(1000);
-                getRemoteServer().ping();
+                if(getRemoteServer() != null)
+                    getRemoteServer().ping();
+                else {
+                    stop = true;
+                    System.out.println("[ERROR] Connection to the server has been lost");
+                    System.out.println("Disconnecting...");
+                    System.exit(1);
+                }
             }catch(RemoteException e){
                  //goOn= false;
                 stop = true;

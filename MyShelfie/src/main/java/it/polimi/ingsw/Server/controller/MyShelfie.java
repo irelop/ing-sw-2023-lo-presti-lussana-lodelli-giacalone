@@ -646,8 +646,6 @@ public class MyShelfie {
                 scoreList.add(player.getScore());
             }
 
-            fileDeleting(playersConnected.get(playerIndex).getNickname(), playerIndex);
-
             ScoreBoardMsg msg = new ScoreBoardMsg(playersNames, scoreList, playersNames.get(playerIndex));
             clientHandlers.get(playerIndex).sendMessageToClient(msg);
         }
@@ -667,6 +665,8 @@ public class MyShelfie {
 
         clientHandler.stop();
 
+        int playerIndex = clientHandlers.indexOf(clientHandler);
+        fileDeleting(playersConnected.get(playerIndex).getNickname(), playerIndex);
 
     }
 
