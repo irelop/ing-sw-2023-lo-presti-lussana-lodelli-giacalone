@@ -5,6 +5,11 @@ import it.polimi.ingsw.utils.rmi.RemoteInterface;
 
 import java.rmi.RemoteException;
 
+/**
+ * LoginNumPlayersRequest: this message allows to properly send to the send the number of players for the game
+ * requested by the first connected player.
+ * @author Andrea Giacalone
+ */
 public class LoginNumPlayersRequest extends C2SMessage{
     private int insertedNumPlayers;
 

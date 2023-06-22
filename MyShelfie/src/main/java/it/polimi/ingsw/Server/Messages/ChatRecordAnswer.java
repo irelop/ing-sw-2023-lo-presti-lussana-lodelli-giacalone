@@ -8,6 +8,11 @@ import it.polimi.ingsw.utils.rmi.RemoteInterface;
 
 import java.rmi.RemoteException;
 
+/**
+ * ChatRecordAnswer: this message wraps the snapshot of the actual record of chat messages according to their
+ * privacy policy.
+ * @author Andrea Giacalone
+ */
 public class ChatRecordAnswer extends S2CMessage{
     private ChatStorage chatStorage;
 

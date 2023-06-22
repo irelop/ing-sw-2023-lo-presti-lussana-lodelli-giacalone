@@ -7,6 +7,11 @@ import it.polimi.ingsw.utils.rmi.RemoteInterface;
 
 import java.rmi.RemoteException;
 
+/**
+ * ChatMsgAnswer: this message to show if the chat message sent by the user is correct or not. If the message is private,
+ * if correct means that the receiver actually exists, otherwise no.
+ * @author Andrea Giacalone
+ */
 public class ChatMsgAnswer extends S2CMessage{
     boolean isCorrect;
 

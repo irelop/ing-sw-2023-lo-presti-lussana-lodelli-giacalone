@@ -5,9 +5,14 @@ import it.polimi.ingsw.utils.rmi.RemoteInterface;
 
 import java.rmi.RemoteException;
 
+/**
+ * ChatRecordRequest: this message allows to properly send a request to the server in order to return to the chatter
+ * requester the record of chat messages currently available.
+ * @author Andrea Giacalone
+ */
 public class ChatRecordRequest extends C2SMessage{
 
-    private String requester;
+    private String requester; //the chatter who wants to see the chat record
 
     public ChatRecordRequest(String requester){
         this.requester = requester;
