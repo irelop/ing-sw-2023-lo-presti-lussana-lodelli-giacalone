@@ -186,6 +186,7 @@ public class ShelfController extends Controller {
         // setting help and confirmation panes invisible
         helpTextPane.setVisible(false);
         infoCardPane.setVisible(false);
+        chatPane.setVisible(false);
         confirmationPane.setVisible(false);
 
         // initialising switching buttons to null

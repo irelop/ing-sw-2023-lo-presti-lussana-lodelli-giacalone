@@ -6,7 +6,11 @@ import it.polimi.ingsw.utils.rmi.RemoteInterface;
 
 import java.rmi.RemoteException;
 
-
+/**
+ * LoginNicknameRequest: this message allows to properly send to the server the user request regarding its nickname in
+ * order to be checked for its validity.
+ * @author Andrea Giacalone
+ */
 public class LoginNicknameRequest extends C2SMessage{
 
     String insertedNickname;

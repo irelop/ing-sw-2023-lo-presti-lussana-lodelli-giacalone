@@ -6,6 +6,10 @@ import it.polimi.ingsw.utils.rmi.RemoteInterface;
 
 import java.rmi.RemoteException;
 
+/**
+ * ReconnectionRequest: this method allows to properly send to the server the user reconnection request.
+ * @authors Irene Lo Presti, Andrea Giacalone
+ */
 public class ReconnectionRequest extends C2SMessage{
     public String nickname;
     boolean isGui;

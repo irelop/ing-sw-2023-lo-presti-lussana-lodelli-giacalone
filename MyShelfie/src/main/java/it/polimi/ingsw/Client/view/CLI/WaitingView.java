@@ -1,9 +1,11 @@
 package it.polimi.ingsw.Client.view.CLI;
 
-import it.polimi.ingsw.Server.chat.ChatStorage;
-
+/**
+ * WaitingView class: an idle view used to notify the player that notifies the player his/her waiting status while
+ * other players are playing their round.
+ * @author Matteo Lussana
+ */
 public class WaitingView extends View implements ObserverView {
-    private ChatStorage chat = new ChatStorage();
     private final Object lock = new Object();
     @Override
     public void run() {

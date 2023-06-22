@@ -8,6 +8,11 @@ import it.polimi.ingsw.utils.rmi.RemoteInterface;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+/**
+ * LobbyUpdateAnswer: this message wraps the snapshot of the current lobby players and the status of the game, whether
+ * is starting or not if all players connected are ready.
+ * @author Andrea Giacalone
+ */
 public class LobbyUpdateAnswer extends S2CMessage{
     /*private*/public ArrayList<String> lobbyPlayers;
     public boolean allPlayersReady;

@@ -7,14 +7,12 @@ import it.polimi.ingsw.utils.rmi.RemoteInterface;
 
 import java.rmi.RemoteException;
 
+/**
+ * LoginNicknameAnswer: this message wraps the answer of the server regarding the validity of the inserted user nickname.
+ * @author Andrea Giacalone
+ */
 public class LoginNicknameAnswer extends S2CMessage{
-    public LoginNicknameRequest getParent() {
-        return parent;
-    }
 
-    public Status getNicknameStatus() {
-        return nicknameStatus;
-    }
 
     public enum Status{
         INVALID,
@@ -59,6 +57,14 @@ public class LoginNicknameAnswer extends S2CMessage{
         }catch (RemoteException e){
             e.printStackTrace();
         }
+    }
+
+    public LoginNicknameRequest getParent() {
+        return parent;
+    }
+
+    public Status getNicknameStatus() {
+        return nicknameStatus;
     }
 }
 

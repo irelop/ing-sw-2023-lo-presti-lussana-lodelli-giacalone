@@ -7,20 +7,19 @@ import it.polimi.ingsw.utils.rmi.RemoteInterface;
 import java.rmi.RemoteException;
 import java.time.LocalTime;
 
+/**
+ * ChatMsgRequest: this message wraps the chat message inserted by the user. It is forwarded to the server in order
+ * to be properly processed.
+ * @author Andrea Giacalone
+ */
 public class ChatMsgRequest extends C2SMessage{
     ChatMessage messageToSend;
-
-
-
 
     public ChatMsgRequest(String sender, String receiver, String content){
         LocalTime timeSent = LocalTime.now();
 
         this.messageToSend = new ChatMessage(sender.toUpperCase(),receiver.toUpperCase(),timeSent,content);
     }
-
-
-
 
     @Override
     public void processMessage(ClientHandler clientHandler) {
@@ -40,8 +39,5 @@ public class ChatMsgRequest extends C2SMessage{
 
     }
 
-    public ChatMessage getMessageToSend() {
-        return messageToSend;
-    }
 
 }

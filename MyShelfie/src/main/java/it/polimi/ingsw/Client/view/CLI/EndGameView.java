@@ -43,12 +43,9 @@ public class EndGameView extends View {
             System.out.println("See you soon " + msg.playerNickname + "!");
             getOwner().setTrueTerminate();
             FinishGameRequest finishGameRequest = new FinishGameRequest();
-            if (!getOwner().isRMI()) {
-                getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
-            }
-            else {
-                getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
-            }
+
+            getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
+
 
         }
     }
