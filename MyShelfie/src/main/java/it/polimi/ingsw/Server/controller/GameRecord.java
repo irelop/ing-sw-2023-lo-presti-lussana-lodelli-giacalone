@@ -8,6 +8,7 @@ import it.polimi.ingsw.utils.ReadFileByLines;
 
 import java.io.File;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -49,7 +50,7 @@ public class GameRecord {
             do{
                 currentGame++;
             }while(games.containsKey(currentGame));
-            persistenceManager.addNewGameFile(currentGame);
+            persistenceManager.createNewGameFile(currentGame);
             //MyShelfie game = new MyShelfie(persistenceManager.getGameFile(currentGame));
             MyShelfie game = new MyShelfie(persistenceManager, currentGame);
             games.put(currentGame, game);
@@ -62,25 +63,11 @@ public class GameRecord {
      * If the game is the current it removes it from the arrayList, else it doesn't remove it in order to
      * maintain the correct enumeration.
      * It calls the method in the persistence manager that delete the game file and also the player's file
-     *
-     * @param playerNickname: the player that called the function
      * @author Irene Lo Presti
      */
-    public void deleteGame(int gameIndex, String playerNickname){
-       // boolean remove = false;
-        /*if(index == currentGame) {
-            games.remove(game);
-            currentGame--;
-            remove = true;
-        }
-        else
-            games.set(index, null);*/
-        //remove = true;
-
+    public void deleteGame(int gameIndex){
         games.remove(gameIndex);
         currentGame = gameIndex;
-
-        persistenceManager.deletePlayerFile(playerNickname);
         persistenceManager.deleteGameFile(gameIndex);
     }
 
@@ -92,11 +79,11 @@ public class GameRecord {
      * @author Irene Lo Presti
      */
     public void reset() {
-        int[] gamesNum = persistenceManager.reset(); //find how many old games there were
-        for(int i=0; i<gamesNum.length; i++){
+        ArrayList<Integer> gamesNum = persistenceManager.reset(); //find how many old games there were
+        for(int i=0; i<gamesNum.size(); i++){
             MyShelfie game = persistenceManager.readOldGame(i);
             game.resetPlayers();
-            games.put(gamesNum[i],game);
+            games.put(gamesNum.get(i),game);
         }
         persistenceManaged = true;
     }
@@ -166,7 +153,8 @@ public class GameRecord {
                             Redirecting to a new lobby.""";
 
                     //games.get(gameIndex).fileDeleting(nickname);
-                    deleteGame(gameIndex, nickname);
+                    deleteGame(gameIndex);
+                    persistenceManager.deletePlayerFile(nickname);
                 }
                 //if there are no players connected and persistenceManaged == true
                 // then this player is the first one to reconnect to the game
@@ -243,7 +231,7 @@ public class GameRecord {
                     break;
                 }
             }
-            persistenceManager.addNewPlayerFile(loginNicknameRequest.getInsertedNickname(), controllerIdx);
+            persistenceManager.createNewPlayerFile(loginNicknameRequest.getInsertedNickname(), controllerIdx);
             clientHandler.sendMessageToClient(loginNicknameAnswer);
 
         } else {

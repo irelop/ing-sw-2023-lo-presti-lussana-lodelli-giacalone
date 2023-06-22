@@ -592,7 +592,8 @@ public class MyShelfie {
             }
         }
         else if(numberOfPlayers == -1 && clientHandlers.indexOf(clientHandler) == 0){
-            clientHandler.getGameRecord().deleteGame(gameIndex, playersConnected.get(0).getNickname());
+            clientHandler.getGameRecord().deleteGame(gameIndex);
+            persistenceManager.deletePlayerFile(playersConnected.get(0).getNickname());
             if(playersConnected.size() > 1){
                 for(int i=1; i<playersConnected.size(); i++){
                     NumberOfPlayerManagementMsg msg = new NumberOfPlayerManagementMsg(playersConnected.get(i).getNickname());
@@ -644,9 +645,14 @@ public class MyShelfie {
             for (Player player : playersConnected) {
                 scoreList.add(player.getScore());
             }
+
+            fileDeleting(playersConnected.get(playerIndex).getNickname(), playerIndex);
+
             ScoreBoardMsg msg = new ScoreBoardMsg(playersNames, scoreList, playersNames.get(playerIndex));
             clientHandlers.get(playerIndex).sendMessageToClient(msg);
         }
+
+
 
     }
 
@@ -661,8 +667,6 @@ public class MyShelfie {
 
         clientHandler.stop();
 
-        int playerIndex = clientHandlers.indexOf(clientHandler);
-        fileDeleting(playersConnected.get(playerIndex).getNickname());
 
     }
 
@@ -816,12 +820,13 @@ public class MyShelfie {
      * @param playerNickname: nickname of the player
      * @author Irene Lo Presti
      */
-    public void fileDeleting(String playerNickname){
+    public void fileDeleting(String playerNickname, int playerIndex){
         //deleting player file
         persistenceManager.deletePlayerFile(playerNickname);
         numberOfPlayers--;
-        if(numberOfPlayers==0)
-            persistenceManager.deleteGameFile(gameIndex);
+        if(numberOfPlayers==0) {
+            clientHandlers.get(playerIndex).getGameRecord().deleteGame(playerIndex);
+        }
     }
 
     //- - - - - - - - - - - - - - - - - -| GETTER METHODS |- - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -3,7 +3,6 @@ package it.polimi.ingsw.utils;
 import it.polimi.ingsw.Server.Model.Board;
 import it.polimi.ingsw.Server.Model.Player;
 import it.polimi.ingsw.Server.Model.Tile;
-import it.polimi.ingsw.utils.ReadFileByLines;
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.RMIClientHandler;
 import java.io.BufferedWriter;
@@ -23,14 +22,14 @@ import it.polimi.ingsw.Server.controller.*;
  */
 
 public class PersistenceManager {
-    private String path;
-    private ArrayList<File> gameFiles;
-    private ArrayList<File> playersFiles;
+    private final String path;
+    private final String gamePath;
+    private final String playerPath;
 
     public PersistenceManager(){
         this.path = "src/safetxt/";
-        this.gameFiles = new ArrayList<>();
-        this.playersFiles = new ArrayList<>();
+        this.gamePath = path + "games/";
+        this.playerPath = path + "players/";
     }
 
 
@@ -38,11 +37,11 @@ public class PersistenceManager {
      * Given the name, this method creates a new file for a new game and adds it to the array list
      * @param gameIdx index of the controller
      */
-    public void addNewGameFile(int gameIdx){
+    public void createNewGameFile(int gameIdx){
         File file = new File(getGamePath(gameIdx));
         try {
-            if((file.exists() && file.length()==0 ) || file.createNewFile())
-                this.gameFiles.add(file);
+            if(!file.exists())
+                file.createNewFile();
         } catch (IOException e) {
             System.out.println("Problems with file for server persistence creation.");
         }
@@ -53,17 +52,18 @@ public class PersistenceManager {
      * @param nickname of the new player
      * @param gameIdx index of the player's game to be written in the file
      */
-    public void addNewPlayerFile(String nickname, int gameIdx){
+    public void createNewPlayerFile(String nickname, int gameIdx){
         String playerPath = getPlayerPath(nickname);
         File file = new File(playerPath);
         try {
-            if(file.createNewFile()) {
-                FileWriter fw = new FileWriter(file);
-                BufferedWriter bw = new BufferedWriter(fw);
-                bw.write(gameIdx + "\n"); //write the index of the game in the player's file
-                bw.flush();
-                bw.close();
-                this.playersFiles.add(file);
+            if(!file.exists()){
+                if (file.createNewFile()) {
+                    FileWriter fw = new FileWriter(file);
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    bw.write(gameIdx + "\n"); //write the index of the game in the player's file
+                    bw.flush();
+                    bw.close();
+                }
             }
         } catch (IOException e) {
             System.out.println("Problems with file for server persistence creation.");
@@ -79,20 +79,10 @@ public class PersistenceManager {
     public void deletePlayerFile(String nickname){
         String playerPath = getPlayerPath(nickname);
         File file = new File(playerPath);
-        int index = playersFiles.indexOf(file);
-        boolean success = file.delete();
-        if(success)
-            playersFiles.remove(index);
-        else System.out.println("Problems deleting "+nickname+"'s persistence file");
-    }
-
-    /**
-     * Getter method
-     * @param index of the game
-     * @return the file of the game at position 'index'
-     */
-    public File getGameFile(int index){
-        return gameFiles.get(index);
+        if(file.exists()) {
+            boolean success = file.delete();
+            if (!success) System.out.println("Problems deleting " + nickname + "'s persistence file");
+        }
     }
 
     /**
@@ -101,22 +91,22 @@ public class PersistenceManager {
      * @param index of the game
      */
     public void deleteGameFile(int index){
-        boolean success = gameFiles.get(index).delete();
-        if(success){
-            gameFiles.remove(index);
+        File file = new File(getGamePath(index));
+        if(file.exists()){
+            boolean success = file.delete();
+            if(!success)
+                System.out.println("Problems deleting game file number "+index);
         }
-        else System.out.println("Problems deleting file");
-
     }
 
     /**
      * FA: persistence. This method finds all the persistence file, and it saves them into the arraylist
      * @return the number of the old games
      */
-    public int[] reset(){
+    public ArrayList<Integer> reset(){
         String[] filesNames = new File("src/safetxt/games").list();
         assert filesNames != null;
-        int[] gameIndexes = new int[filesNames.length];
+        ArrayList<Integer> gameIndexes = new ArrayList<>();
         int j=0;
 
         for (String fileName : filesNames) {
@@ -124,24 +114,10 @@ public class PersistenceManager {
             if (file.exists()) {
                 if (file.length() == 0)
                     file.delete();
-                else {
-                    gameFiles.add(file);
-                    gameIndexes[j] = Integer.parseInt(fileName.replaceAll("game_", "").replaceAll(".txt", ""));
-                    j++;
-                }
-            }
-
-        }
-
-        String[] players = new File("src/safetxt/players").list();
-        assert players != null;
-        for(String player : players){
-            File file = new File(path + "players/" + player);
-            if (file.exists()){
-                playersFiles.add(file);
+                else
+                    gameIndexes.add(Integer.parseInt(fileName.replaceAll("game_", "").replaceAll(".txt", "")));
             }
         }
-
         return gameIndexes;
     }
 
@@ -269,7 +245,7 @@ public class PersistenceManager {
     }
 
     private String getPlayerPath(String nickname){
-        return path + "players/" + nickname + ".txt";
+        return playerPath + nickname + ".txt";
     }
 
     /**
@@ -291,7 +267,7 @@ public class PersistenceManager {
     }
 
     private String getGamePath(int gameIndex){
-        return path + "games/" + "game_" + gameIndex + ".txt";
+        return gamePath + "game_" + gameIndex + ".txt";
     }
 
     public String setPlayer(Player player){
