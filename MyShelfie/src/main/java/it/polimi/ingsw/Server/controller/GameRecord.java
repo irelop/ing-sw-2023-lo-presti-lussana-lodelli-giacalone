@@ -126,12 +126,14 @@ public class GameRecord {
                     Redirecting to a new lobby.
                     """;
         //file incomplete because the player didn't play any games
-        else if(file.length()<=2)
+        else if(file.length()<=2) {
             msg = """
 
                     You were connected to a game not already started.
                     Redirecting to a new lobby.
                     """;
+            persistenceManager.deletePlayerFile(nickname);
+        }
         else{ //the file exists and it's complete
             ReadFileByLines reader = new ReadFileByLines();
             reader.readFrom(pathFile);
@@ -236,7 +238,7 @@ public class GameRecord {
             game.addPlayer(loginNicknameRequest.getInsertedNickname(), clientHandler);
             int controllerIdx = -1;
             for(int i=0; i<games.size(); i++){
-                if(games.get(i).equals(game)) {
+                if(games.get(i)!=null && games.get(i).equals(game)) {
                     controllerIdx = i;
                     break;
                 }

@@ -8,10 +8,12 @@ name: game_index.txt
 6th line: number of players
 7th line: bag
 8th line: isOver
-9th line: first player's nickname
-10th line: second player's nickname
-11th line: third player's nickname
-12th line: fourth player's nickname
+9th line: firstTurn
+10th line: it is the index of the first player to fill their shelf, if it's -1 nobody filled it
+11th line: first player's nickname
+12th line: second player's nickname
+13th line: third player's nickname
+14th line: fourth player's nickname
 NB: if there are less than 4 players the line are blank
 
 For player txt:

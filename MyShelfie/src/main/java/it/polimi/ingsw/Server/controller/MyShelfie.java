@@ -60,12 +60,12 @@ public class MyShelfie {
         this.playersConnected = new ArrayList<>();
         this.numberOfPlayers = -1;
         this.clientHandlers = new ArrayList<>();
-
         this.allPlayersReady = false;
         this.gameOver = false;
         this.lock = new Object();
         this.chatManager = new ChatManager();
         this.playerInCountdown = false;
+        this.firstToFinish = -1;
 
         this.persistenceManager = persistenceManager;
         this.gameIndex = gameIndex;
@@ -84,7 +84,9 @@ public class MyShelfie {
      *
      * @author Irene Lo Presti
      */
-    public MyShelfie(PersistenceManager persistenceManager, int gameIndex, Board board, String[] commonGoalCardsNames, int currentPlayerIndex, boolean isStarted, boolean isOver, int numberOfPlayers){
+    public MyShelfie(PersistenceManager persistenceManager, int gameIndex, Board board,
+                     String[] commonGoalCardsNames, int currentPlayerIndex, boolean isStarted, boolean isOver,
+                     int numberOfPlayers, boolean firstTurn, int firstToFinish){
         this.commonDeck = new CommonGoalDeck();
         this.board = board;
         CommonGoalCard[] commonGoalCards = new CommonGoalCard[2];
@@ -96,6 +98,8 @@ public class MyShelfie {
         this.isOver = isOver;
         this.isStarted = isStarted;
         this.numberOfPlayers = numberOfPlayers;
+        this.firstTurn = firstTurn;
+        this.firstToFinish = firstToFinish;
 
         //initialize all the others attributes
         this.gameOver = false;
@@ -311,17 +315,8 @@ public class MyShelfie {
         );
 
         //if it's the last turn
-        if (isOver) {
-
-            //the previous player has played their last turn
-            if (currentPlayerIndex == 0)
-                playersConnected.get(numberOfPlayers - 1).setHasFinished(true);
-            else
-                playersConnected.get(currentPlayerIndex - 1).setHasFinished(true);
-
-
+        if (isOver)
             updateGameIsEndingView();
-        }
 
 
         //if the current player is connected, he/she goes to ChooseTilesFromBoardView
@@ -422,7 +417,7 @@ public class MyShelfie {
 
             //checking if a player's shelf is full,
             // if true add +1pt and set the last lap
-            if(playersConnected.get(currentPlayerIndex).getMyShelfie().isShelfFull() &&  !isOver) {
+            if(/*playersConnected.get(currentPlayerIndex).getMyShelfie().isShelfFull() && */ !isOver) {
                 isShelfFull = true;
                 playersConnected.get(currentPlayerIndex).addScore(1);
                 this.isOver = true;
@@ -433,6 +428,9 @@ public class MyShelfie {
                 for(int i=0; i<=currentPlayerIndex; i++) {
                     playersConnected.get(i).setHasFinished(true);
                 }
+            }
+            if(isOver){
+                playersConnected.get(currentPlayerIndex).setHasFinished(true);
             }
 
             updatePersistenceFiles();
@@ -488,6 +486,13 @@ public class MyShelfie {
                 currentPlayerIndex ++;
     }
 
+    private int computeNextPlayerIdx(int currentIndex){
+        if(currentIndex == numberOfPlayers-1)
+            return 0;
+        else
+            return currentIndex ++;
+    }
+
     /**
      * This method sets the player who plays the next turn. It checks if the player is connected and if
      * he/she is the only one.
@@ -528,13 +533,7 @@ public class MyShelfie {
             if(firstTurn && currentPlayerIndex==0) {
                 firstTurn = false;
             }
-
-            //FA: resilience
-                // check if the player has put the tiles in the shelf
-            if(playersConnected.get(currentPlayerIndex).getLittleHand().size() == 0)
-                startTurn();
-            else
-               redirectToPersonalShelf();
+            goToCorrectView();
         }
         //entered when everyone played last turn
         if(isOver && playersConnected.get(currentPlayerIndex).hasChair()){
@@ -556,6 +555,15 @@ public class MyShelfie {
 
             updateGameIsEndingView();
         }
+    }
+
+    private void goToCorrectView(){
+        //FA: resilience
+        // check if the player has put the tiles in the shelf
+        if(playersConnected.get(currentPlayerIndex).getLittleHand().size() == 0)
+            startTurn();
+        else
+            redirectToPersonalShelf();
     }
 
     /**
@@ -636,7 +644,6 @@ public class MyShelfie {
             for (Player player : playersConnected) {
                 scoreList.add(player.getScore());
             }
-
             ScoreBoardMsg msg = new ScoreBoardMsg(playersNames, scoreList, playersNames.get(playerIndex));
             clientHandlers.get(playerIndex).sendMessageToClient(msg);
         }
@@ -770,8 +777,8 @@ public class MyShelfie {
         StringBuilder update = new StringBuilder(Arrays.deepToString(board.getBoardGrid()) + "\n" +
                 board.getCommonGoalCard(0).getCardInfo().getName() + "\n" +
                 board.getCommonGoalCard(1).getCardInfo().getName() + "\n" +
-                currentPlayerIndex + "\n" + isStarted + "\n" + numberOfPlayers + "\n" +
-                board.getBag().toString() + "\n" + isOver + "\n");
+                computeNextPlayerIdx(currentPlayerIndex) + "\n" + isStarted + "\n" + numberOfPlayers + "\n" +
+                board.getBag().toString() + "\n" + isOver + "\n" + firstTurn + "\n" + firstToFinish +"\n");
 
         for(int j=0; j<numberOfPlayers; j++)
             update.append(playersConnected.get(j).getNickname()).append("\n");
@@ -795,12 +802,13 @@ public class MyShelfie {
      * @author Irene Lo Presti
      */
     public void manageReconnectionPersistence(int playerIndex){
-        if(clientHandlers.stream().filter(ClientHandler::isConnected).toList().size()==1)
-            startCountdown(playerIndex);
-
-        else if(playerIndex == currentPlayerIndex){
-            checkIfStartTurnOrEndTheGame();
+        if(playerIndex == currentPlayerIndex){
+            if(firstTurn && playerIndex == 0)
+                goToCorrectView();
+            else checkIfStartTurnOrEndTheGame();
         }
+        else if(clientHandlers.stream().filter(ClientHandler::isConnected).toList().size()==1)
+            startCountdown(playerIndex);
     }
 
     /**

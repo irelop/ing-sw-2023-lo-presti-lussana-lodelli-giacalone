@@ -115,31 +115,40 @@ public class PersistenceManager {
      */
     public int[] reset(){
         String[] filesNames = new File("src/safetxt/games").list();
+        assert filesNames != null;
         int[] gameIndexes = new int[filesNames.length];
         int j=0;
 
-        if(filesNames != null){
-            for (int i = 0; i < filesNames.length; i++) {
-                File file = new File(path + "games/" + filesNames[i]);
-                if (file.exists()){
-                    if(file.length()==0)
-                        file.delete();
-                    else{
-                        gameFiles.add(file);
-                        gameIndexes[j] = Integer.parseInt(filesNames[i].replaceAll("game_", "").replaceAll(".txt",""));
-                        j++;
-                    }
+        for (String fileName : filesNames) {
+            File file = new File(path + "games/" + fileName);
+            if (file.exists()) {
+                if (file.length() == 0)
+                    file.delete();
+                else {
+                    gameFiles.add(file);
+                    gameIndexes[j] = Integer.parseInt(fileName.replaceAll("game_", "").replaceAll(".txt", ""));
+                    j++;
                 }
+            }
 
+        }
+
+        String[] players = new File("src/safetxt/players").list();
+        assert players != null;
+        for(String player : players){
+            File file = new File(path + "players/" + player);
+            if (file.exists()){
+                playersFiles.add(file);
             }
         }
+
         return gameIndexes;
     }
 
     public MyShelfie readOldGame(int gameIdx){
         ReadFileByLines reader;
         reader = new ReadFileByLines();
-        reader.readFrom(gameFiles.get(gameIdx).getPath());
+        reader.readFrom(getGamePath(gameIdx));
 
         //read the board matrix
         Tile[][] boardMatrix = new Tile[9][9];
@@ -182,16 +191,18 @@ public class PersistenceManager {
         boolean isStarted = Boolean.parseBoolean(ReadFileByLines.getLineByIndex(4));
         int numberOfPlayers = Integer.parseInt(ReadFileByLines.getLineByIndex(5));
         boolean isOver = Boolean.parseBoolean(ReadFileByLines.getLineByIndex(7));
+        boolean firstTurn = Boolean.parseBoolean(ReadFileByLines.getLineByIndex(8));
+        int firstToFinish = Integer.parseInt(ReadFileByLines.getLineByIndex(9));
 
         //read players names
         String[] playerNicknames = new String[numberOfPlayers];
         for(int j=0; j<numberOfPlayers; j++){
-            playerNicknames[j] = ReadFileByLines.getLineByIndex(j+8);
+            playerNicknames[j] = ReadFileByLines.getLineByIndex(j+10);
         }
 
         //create a new game setting all the old info
         MyShelfie game = new MyShelfie(this, gameIdx, board, commonGoalCardsNames,
-                currentPlayerIndex, isStarted, isOver, numberOfPlayers);
+                currentPlayerIndex, isStarted, isOver, numberOfPlayers, firstTurn, firstToFinish);
 
         //setting facade client handlers (they could also be socket) instantiates the players and
         // to check the connection
