@@ -10,7 +10,7 @@ import java.rmi.RemoteException;
 public class GameIsEndingUpdateAnswer extends S2CMessage{
 
     public boolean gameOver;
-    public int playerIndex;
+    public int playerIndex; //player who is receiving this message
     public int firstToFinish;
     public String[] players;
     public boolean[] hasFinished;

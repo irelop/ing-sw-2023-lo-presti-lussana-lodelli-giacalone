@@ -2,6 +2,7 @@ package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.view.CLI.EndGameView;
+import it.polimi.ingsw.Client.view.CLI.WaitingView;
 import it.polimi.ingsw.utils.rmi.RemoteInterface;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class ScoreBoardMsg extends S2CMessage{
                 client.getOwner().getStageManager().loadNextStage(this,"endGame.fxml");
             } else {
                 client.goToEndgameView(this);
+                if (client.getCurrentView().getClass() == WaitingView.class)
+                    client.notifyView();
             }
         } catch (RemoteException e) {
             throw new RuntimeException(e);

@@ -60,10 +60,12 @@ public class WaitingController extends Controller {
     }
 
     private void manageGameIsEnding(GameIsEndingUpdateAnswer message) {
-        currentPlayerText.setText(message.players[message.playerIndex] + " is playing...");
+        if(message.firstToFinish == message.playerIndex)
+            currentPlayerText.setText("Congratulation, you are the first one to fill the personal shelf! The game is ending...");
+        else
+            currentPlayerText.setText(message.players[message.firstToFinish]+" is the first one to fill the personal shelf.The game is ending...");
         if(message.gameOver){
             //playerIndex needed to choose the right clientHandler
-            System.out.println("Everyone has played their turn!");
             C2SMessage endGameMsg = new EndGameMsg(message.playerIndex);
             getOwner().getServerHandler().sendMessageToServer(endGameMsg);
         }
