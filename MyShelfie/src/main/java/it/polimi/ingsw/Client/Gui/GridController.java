@@ -123,10 +123,17 @@ public class GridController extends Controller{
         }
         //coloring the default direction (W) and numbers of tiles (1) buttons
         for(Node node : numOfTilesButtons.getChildren()){
-            if(node.getId().charAt(node.getId().length()-1) == '1') ((Button) node).setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2))));
+            if(node.getId().charAt(node.getId().length()-1) == '1') {
+                ((Button) node).setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4))));
+                lastClickedButtonNum = (Button) node;
+            }
         }
         for(Node node : joystick.getChildren()){
-            if(((Button) node).getText() == "W") ((Button) node).setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2))));
+            if(Objects.equals(((Button) node).getText(), "W")) {
+                ((Button) node).setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2))));
+                lastClickedButtonDir = (Button) node;
+            }
+
         }
         //setting the personal card
         personal_card.setId(personalGoalCard.getImageCode());
@@ -147,12 +154,31 @@ public class GridController extends Controller{
                 "then, if you want to pick other tiles, you must select the direction in which you want to choose them and how many tiles you want!\n" +
                       "Remember that every tile you want to pick must have at least one 'free side': without an adjacent tile!");
         chatPane.setVisible(false);
-        //chatRefresh();
     }
+
+    /**
+     * this method manages the reception of messages from server sorting them by type
+     */
+    @Override
+    public void receiveAnswer(S2CMessage message) {
+        if(message instanceof InitialPositionAnswer){
+            initialPositionAnswer = (InitialPositionAnswer) message;
+            manageInitialPositionAnswer();
+        }
+        else if(message instanceof PlayerChoiceAnswer){
+            playerChoiceAnswer = (PlayerChoiceAnswer) message;
+            managePickTilesAnswer();
+        }
+        else if(message instanceof ChatRecordAnswer){
+            chatRecord = (ChatRecordAnswer) message;
+            manageChatAnswer();
+        }
+    }
+
+    // -------------------- INFO PANE METHODS -------------------- //
     /**
      * this method manage the click of a button in order to make appear and disappear the rules pane
      */
-
     public void infoText(){
         if (isRulesOpen) {
             infoButton.setId("off");
@@ -186,6 +212,28 @@ public class GridController extends Controller{
         }
     }
 
+    /**
+     * this method manages the appearing of the error pane which is set with a specific error string
+     * it appears and after an amount of time disappears automatically
+     */
+    public void setError(String error){
+        errorText.setText(error);
+        errorPane.setVisible(true);
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(3), errorPane);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+                    @Override
+                    public void run() {
+                        fadeOut.play();
+                    }
+                },
+                500
+        );
+    }
+
+    // -------------------- GAMEPLAY METHODS -------------------- //
     /**
      * this method manages the choosing of the starting tile by the player, its resets the color of the tile chose previously,
      * changes the color of the tile clicked and update the preview of the path (calling showPath())
@@ -315,26 +363,6 @@ public class GridController extends Controller{
         }
     }
 
-    /**
-     * this method manages the appearing of the error pane which is set with a specific error string
-     * it appears and after an amount of time disappears automatically
-     */
-    public void setError(String error){
-        errorText.setText(error);
-        errorPane.setVisible(true);
-        FadeTransition fadeOut = new FadeTransition(Duration.seconds(3), errorPane);
-        fadeOut.setFromValue(1.0);
-        fadeOut.setToValue(0.0);
-        new java.util.Timer().schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-                        fadeOut.play();
-                    }
-                },
-                500
-        );
-    }
 
     /**
      * this method manages the confirmation of the tiles in the preview (possibleWay),
@@ -366,25 +394,7 @@ public class GridController extends Controller{
         confirmationPane.setVisible(false);
     }
 
-    /**
-     * this method manages the reception of messages from server sorting them by type
-     */
-    @Override
-    public void receiveAnswer(S2CMessage message) {
-        if(message instanceof InitialPositionAnswer){
-            initialPositionAnswer = (InitialPositionAnswer) message;
-            manageInitialPositionAnswer();
-        }
-        else if(message instanceof PlayerChoiceAnswer){
-            playerChoiceAnswer = (PlayerChoiceAnswer) message;
-            managePickTilesAnswer();
-        }
-        else if(message instanceof ChatRecordAnswer){
-            chatRecord = (ChatRecordAnswer) message;
-            manageChatAnswer();
-        }
-    }
-
+    // -------------------- MANAGE MESSAGE METHODS -------------------- //
     /**
      * this method manages the reception of initial position message,
      * if the initial position is valid it sends the PlayerChoiceMSG to the server in order to check the chosen tiles,
@@ -410,30 +420,6 @@ public class GridController extends Controller{
         }
     }
 
-    // -------------------- CHAT METHODS -------------------- //
-
-    /**
-     * this method manage the click of a button in order to make appear and disappear the chat pane
-     */
-    public void openChat(){
-        if (isChatOpen) {
-            chatPane.setVisible(false);
-            isChatOpen = false;
-        } else {
-            chatRefresh();
-            chatPane.setVisible(true);
-            isChatOpen = true;
-        }
-    }
-
-    /**
-     * This method sends a message to the server in order to update the current
-     * chat, adding the newest messages to the chat pane
-     */
-    public void chatRefresh(){
-        getOwner().getServerHandler().sendMessageToServer(new ChatRecordRequest(getOwner().getNickname()));
-    }
-
     /**
      * This method creates an array list of messages
      * (current time + sender + msg content)
@@ -454,6 +440,29 @@ public class GridController extends Controller{
         }
         String chat = String.valueOf(messages).replaceAll("\\[","").replaceAll("]","").replaceAll(",","");
         chatText.setText(chat);
+    }
+
+    // -------------------- CHAT METHODS -------------------- //
+    /**
+     * this method manage the click of a button in order to make appear and disappear the chat pane
+     */
+    public void openChat(){
+        if (isChatOpen) {
+            chatPane.setVisible(false);
+            isChatOpen = false;
+        } else {
+            chatRefresh();
+            chatPane.setVisible(true);
+            isChatOpen = true;
+        }
+    }
+
+    /**
+     * This method sends a message to the server in order to update the current
+     * chat, adding the newest messages to the chat pane
+     */
+    public void chatRefresh(){
+        getOwner().getServerHandler().sendMessageToServer(new ChatRecordRequest(getOwner().getNickname()));
     }
 
     /**

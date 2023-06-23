@@ -29,12 +29,12 @@
                         <Image url="@../MyShelfie_IMAGES/misc/sfondo_parquet.jpg" />
                      </image>
                   </ImageView>
-                  <Text fx:id="currentPlayerText" layoutX="34.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Another player is playing..." wrappingWidth="750.0" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+                  <Text fx:id="currentPlayerText" layoutX="36.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Another player is playing..." wrappingWidth="750.0" AnchorPane.leftAnchor="36.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="32.4736328125">
                      <font>
                         <Font name="Bell MT" size="66.0" />
                      </font>
                   </Text>
-                  <Text layoutX="14.0" layoutY="143.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please Wait" wrappingWidth="552.13671875" AnchorPane.leftAnchor="35.0">
+                  <Text layoutX="36.0" layoutY="309.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please Wait" wrappingWidth="552.13671875" AnchorPane.leftAnchor="36.0">
                      <font>
                         <Font name="Bell MT" size="66.0" />
                      </font>

@@ -72,7 +72,6 @@ public class LoginPlayerController extends Controller{
      */
     @FXML
     private void submitNicknameRequest() {
-
         playerName = playerNickname.getText().toUpperCase();
         if (playerName.isEmpty()) {
             // case: text field empty
@@ -89,11 +88,7 @@ public class LoginPlayerController extends Controller{
             C2SMessage nicknameRequest = new LoginNicknameRequest(playerName, true);
             getOwner().getServerHandler().sendMessageToServer(nicknameRequest);
             System.out.println("LoginReq inviata");
-
-
-
         }
-
     }
 
     /**

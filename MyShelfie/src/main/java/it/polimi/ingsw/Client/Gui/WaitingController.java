@@ -40,15 +40,20 @@ public class WaitingController extends Controller {
     Boolean isChatOpen = false;
 
 
-
+    /**
+     * Message constructor method
+     * @param message: goWaitingGUI message from the server
+     */
     @Override
     public void build(S2CMessage message) {
         if (message instanceof GameIsEndingUpdateAnswer)
             manageGameIsEnding( (GameIsEndingUpdateAnswer) message );
         chatPane.setVisible(false);
-        //chatRefresh();
     }
 
+    /**
+     * this method manages the reception of messages from server sorting them by type
+     */
     @Override
     public void receiveAnswer(S2CMessage message) {
         if (message instanceof GameIsEndingUpdateAnswer)
@@ -59,42 +64,7 @@ public class WaitingController extends Controller {
         }
     }
 
-    private void manageGameIsEnding(GameIsEndingUpdateAnswer message) {
-        if(message.firstToFinish == message.playerIndex)
-            currentPlayerText.setText("Congratulation, you are the first one to fill the personal shelf! The game is ending...");
-        else
-            currentPlayerText.setText(message.players[message.firstToFinish]+" is the first one to fill the personal shelf.The game is ending...");
-        if(message.gameOver){
-            //playerIndex needed to choose the right clientHandler
-            C2SMessage endGameMsg = new EndGameMsg(message.playerIndex);
-            getOwner().getServerHandler().sendMessageToServer(endGameMsg);
-        }
-    }
-
-    /**
-     * This method manage the click of a button in order to change the order of tiles in side gridPane
-     */
-    public void AnimationGrid(){
-        String[] names = {"BLUE", "GREEN", "WHITE", "PINK", "YELLOW", "LIGHTBLUE"};
-
-        Random random = new Random();
-
-        int num = random.nextInt(5);;
-        for(Node node : grid1.getChildren()){
-            node.setId(names[num]);
-            num--;
-            if(num<0) num = 5;
-        }
-        num = random.nextInt(5);
-        for(Node node : grid2.getChildren()){
-            node.setId(names[num]);
-            num--;
-            if(num<0) num = 5;
-        }
-    }
-
-    // -------------------- CHAT METHODS -------------------- //
-
+    // -------------------- PANE METHODS -------------------- //
     /**
      * This method is called when "chatButton" is clicked.
      * It shows a Pane with chat controls
@@ -107,6 +77,25 @@ public class WaitingController extends Controller {
             chatRefresh();
             chatPane.setVisible(true);
             isChatOpen = true;
+        }
+    }
+
+    // -------------------- MANAGE MESSAGE METHODS -------------------- //
+    /**
+     * this method manages the reception of gameIsEndingUpdate,
+     * this message is received wen the player has played his last turn, so now
+     * he has to wait that all players complete their turn
+     * the method show a message with the name of the player that is playing
+     */
+    private void manageGameIsEnding(GameIsEndingUpdateAnswer message) {
+        if(message.firstToFinish == message.playerIndex)
+            currentPlayerText.setText("Congratulation, you are the first one to fill the personal shelf! The game is ending...");
+        else
+            currentPlayerText.setText(message.players[message.firstToFinish]+" is the first one to fill the personal shelf.The game is ending...");
+        if(message.gameOver){
+            //playerIndex needed to choose the right clientHandler
+            C2SMessage endGameMsg = new EndGameMsg(message.playerIndex);
+            getOwner().getServerHandler().sendMessageToServer(endGameMsg);
         }
     }
 
@@ -132,6 +121,7 @@ public class WaitingController extends Controller {
         chatText.setText(chat);
     }
 
+    // -------------------- CHAT METHODS -------------------- //
     /**
      * This method is called when a user try to send a message from the chat pane.
      * It checks if the first word of the message is @playerName in order to
@@ -169,6 +159,29 @@ public class WaitingController extends Controller {
      */
     public void chatRefresh(){
         getOwner().getServerHandler().sendMessageToServer(new ChatRecordRequest(getOwner().getNickname()));
+    }
+
+    // -------------------- EASTER EGG METHODS -------------------- //
+    /**
+     * This method manage the click of a button in order to change the order of tiles in side gridPane
+     */
+    public void AnimationGrid(){
+        String[] names = {"BLUE", "GREEN", "WHITE", "PINK", "YELLOW", "LIGHTBLUE"};
+
+        Random random = new Random();
+
+        int num = random.nextInt(5);;
+        for(Node node : grid1.getChildren()){
+            node.setId(names[num]);
+            num--;
+            if(num<0) num = 5;
+        }
+        num = random.nextInt(5);
+        for(Node node : grid2.getChildren()){
+            node.setId(names[num]);
+            num--;
+            if(num<0) num = 5;
+        }
     }
 }
 

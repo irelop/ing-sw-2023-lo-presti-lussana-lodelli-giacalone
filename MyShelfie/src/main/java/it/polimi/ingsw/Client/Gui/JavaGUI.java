@@ -31,6 +31,7 @@ public class JavaGUI extends Application {
 
 
     }
+
     /**
      * This method is called before the scene transition.
      * @return fxmlLoader: an object that contains all information for the creation of the new scene
@@ -42,12 +43,12 @@ public class JavaGUI extends Application {
         fxmlLoader.load();
         return fxmlLoader;
     }
+
     /**
      * This method set the new scene at the stage
      * @param newRoot: the root of the next scene
      *
      */
-
     public void transitionScene(AnchorPane newRoot) {
         if(StageManager.getStage().getScene() == null) System.out.println("la scena è nulla");
         Platform.runLater(
@@ -66,7 +67,6 @@ public class JavaGUI extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/" + fxml));
         Parent newRoot = fxmlLoader.load();
         StageManager.getStage().setScene(new Scene(newRoot));
-        //StageManager.getStage().getScene().setRoot(newRoot);
     }
 
     public static void main(String args[]){

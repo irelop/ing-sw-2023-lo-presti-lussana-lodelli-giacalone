@@ -51,23 +51,26 @@ public class EndGameController extends Controller {
                     Collections.swap(msg.playerName, j, j + 1);
                 }
             }
-
+        //handle first player info
         textPos_1.setText(msg.playerName.get(0));
         textPos_1.setVisible(true);
         textPos_1_score.setText(msg.totalScore.get(0).toString()+" pt.");
         textPos_1_score.setVisible(true);
 
+        //handle second player info
         textPos_2.setText( msg.playerName.get(1));
         textPos_2.setVisible(true);
         textPos_2_score.setText(msg.totalScore.get(1).toString()+" pt.");
         textPos_2_score.setVisible(true);
         if (msg.playerName.size() > 2) {
+            //handle third player info if there is one
             textPos_3.setText(msg.playerName.get(2));
             textPos_3.setVisible(true);
             textPos_3_score.setText(msg.totalScore.get(2).toString()+" pt.");
             textPos_3_score.setVisible(true);
             podThird.setVisible(true);
             if (msg.playerName.size() > 3) {
+                //handle fourth player info if there is one
                 textPos_4.setText(msg.playerName.get(3));
                 textPos_4.setVisible(true);
                 textPos_4_score.setText(msg.totalScore.get(3).toString()+" pt.");
