@@ -24,4 +24,8 @@
     -fx-font-family: "Baskerville Old Face";
 }
 
+#rulesText{
+    -fx-background-color:  #F6D669;
+}
+
 

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -112,14 +110,7 @@
                   </Button>
                   <Pane id="infoText" fx:id="chatPane" layoutX="78.0" layoutY="27.0" prefHeight="321.0" prefWidth="560.0" style="-fx-background-color: #F6D669; -fx-border-color: #422F11; -fx-border-width: 5; -fx-border-radius: 8; -fx-background-radius: 10;">
                      <children>
-                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="12.0" layoutY="8.0" prefHeight="265.0" prefWidth="535.0" vbarPolicy="NEVER">
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                           <content>
-                              <TextArea fx:id="chatText" editable="false" prefHeight="260.0" prefWidth="510.0" wrapText="true" />
-                           </content>
-                        </ScrollPane>
+                        <TextArea fx:id="chatText" editable="false" layoutX="12.0" layoutY="8.0" prefHeight="260.0" prefWidth="534.0" wrapText="true" />
                         <Button id="sendMessage" layoutX="517.0" layoutY="279.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="30.0" prefWidth="30.0" />
                         <TextField fx:id="chatMessage" layoutX="12.0" layoutY="279.0" onKeyPressed="#manageKeyPressed" prefHeight="30.0" prefWidth="500.0" />
                      </children>
