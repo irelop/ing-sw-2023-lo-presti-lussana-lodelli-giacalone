@@ -60,7 +60,8 @@ public class PersistenceManager {
                 if (file.createNewFile()) {
                     FileWriter fw = new FileWriter(file);
                     BufferedWriter bw = new BufferedWriter(fw);
-                    bw.write(gameIdx + "\n"); //write the index of the game in the player's file
+                    //write the index of the game in the player's file
+                    bw.write(gameIdx + "\n");
                     bw.flush();
                     bw.close();
                 }
@@ -104,12 +105,11 @@ public class PersistenceManager {
      * @return the number of the old games
      */
     public ArrayList<Integer> reset(){
-        String[] filesNames = new File("src/safetxt/games").list();
-        assert filesNames != null;
+        String[] gameFilesNames = new File("src/safetxt/games").list();
         ArrayList<Integer> gameIndexes = new ArrayList<>();
-        int j=0;
 
-        for (String fileName : filesNames) {
+        assert gameFilesNames != null;
+        for (String fileName : gameFilesNames) {
             File file = new File(path + "games/" + fileName);
             if (file.exists()) {
                 if (file.length() == 0)
@@ -118,6 +118,16 @@ public class PersistenceManager {
                     gameIndexes.add(Integer.parseInt(fileName.replaceAll("game_", "").replaceAll(".txt", "")));
             }
         }
+
+        //find players file and delete the empty ones
+        String[]  playerFilesNames = new File("src/safetxt/players").list();
+        assert playerFilesNames != null;
+        for(String player : playerFilesNames){
+            File file = new File(path + "players/" + player);
+            if(file.exists() && file.length() <= 2)
+                file.delete();
+        }
+
         return gameIndexes;
     }
 
@@ -240,6 +250,7 @@ public class PersistenceManager {
         //remove the dynamic info
         info.remove(info.size()-1);
         info.remove(info.size()-1);
+        info.remove(info.size()-1);
 
         return info;
     }
@@ -293,6 +304,10 @@ public class PersistenceManager {
             //set the old shelf
             Tile[][] shelf = new Tile[6][5];
             String row = ReadFileByLines.getLineByIndex(4);
+
+            boolean hasFinished = Boolean.parseBoolean(ReadFileByLines.getLineByIndex(5));
+            if(hasFinished)
+                player.setHasFinished(true);
 
             //if row.equals("shelf") the player didn't play their turn, so the shelf was all blank
             if (!row.equals("shelf")) {

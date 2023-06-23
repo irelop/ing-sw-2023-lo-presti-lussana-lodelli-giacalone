@@ -11,7 +11,6 @@ import it.polimi.ingsw.Server.chat.ChatMessage;
 import it.polimi.ingsw.Server.chat.ChatStorage;
 import it.polimi.ingsw.utils.PersistenceManager;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -40,8 +39,9 @@ public class MyShelfie {
     private final ChatManager chatManager;
     private boolean playerInCountdown;
 
-    private PersistenceManager persistenceManager;
-    private int gameIndex;
+    private final PersistenceManager persistenceManager;
+    private final int gameIndex;
+    private boolean persistenceManaged;
 
     //- - - - - - - - - - - - - - - - - - CONSTRUCTORS - - - - - - - - -  - - - - - - - - - - - -
     /**
@@ -69,6 +69,7 @@ public class MyShelfie {
 
         this.persistenceManager = persistenceManager;
         this.gameIndex = gameIndex;
+        this.persistenceManaged = false;
     }
 
     /**
@@ -100,6 +101,7 @@ public class MyShelfie {
         this.numberOfPlayers = numberOfPlayers;
         this.firstTurn = firstTurn;
         this.firstToFinish = firstToFinish;
+        this.currentPlayerIndex = currentPlayerIndex;
 
         //initialize all the others attributes
         this.gameOver = false;
@@ -113,6 +115,7 @@ public class MyShelfie {
 
         this.persistenceManager = persistenceManager;
         this.gameIndex = gameIndex;
+        this.persistenceManaged = true; //this constructor is called after a server reconnection
     }
 
     //- - - - - - - - - - - - - - - - - - - -| L O G I N   M E T H O D S |- - - - - - - - - - - - - - - - - - - - - - - -
@@ -199,7 +202,7 @@ public class MyShelfie {
                 drawCommonGoalCards();
                 currentPlayerIndex = 0;
                 firstTurn = true;
-                updatePersistenceFiles();
+                updatePersistenceFile();
                 startTurn();
             }
             else
@@ -223,7 +226,7 @@ public class MyShelfie {
             for(Player player : playersConnected) {
                 PersonalGoalCard card = personalDeck.drawPersonal();
                 player.setCard(card);
-                String info = card.getId() + "\n0\nshelf\n";
+                String info = card.getId() + "\n0\nshelf\n"+player.getHasFinished()+"\n";
                 //writeOnPlayersFiles(info, player.getNickname());
                 persistenceManager.writeStaticPlayerInfo(player.getNickname(), info);
             }
@@ -417,7 +420,7 @@ public class MyShelfie {
 
             //checking if a player's shelf is full,
             // if true add +1pt and set the last lap
-            if(/*playersConnected.get(currentPlayerIndex).getMyShelfie().isShelfFull() && */ !isOver) {
+            if(playersConnected.get(currentPlayerIndex).getMyShelfie().isShelfFull() && !isOver) {
                 isShelfFull = true;
                 playersConnected.get(currentPlayerIndex).addScore(1);
                 this.isOver = true;
@@ -433,7 +436,7 @@ public class MyShelfie {
                 playersConnected.get(currentPlayerIndex).setHasFinished(true);
             }
 
-            updatePersistenceFiles();
+            updatePlayerFile();
 
             GoalAndScoreMsg goalAndScoreMsg = new GoalAndScoreMsg(isCommonGoalAchived, isPersonalGoalAchived, playersConnected.get(currentPlayerIndex).getScore(), isShelfFull, isOver);
             clientHandlers.get(currentPlayerIndex).sendMessageToClient(goalAndScoreMsg);
@@ -486,13 +489,6 @@ public class MyShelfie {
                 currentPlayerIndex ++;
     }
 
-    private int computeNextPlayerIdx(int currentIndex){
-        if(currentIndex == numberOfPlayers-1)
-            return 0;
-        else
-            return currentIndex ++;
-    }
-
     /**
      * This method sets the player who plays the next turn. It checks if the player is connected and if
      * he/she is the only one.
@@ -501,6 +497,8 @@ public class MyShelfie {
     public void setNextPlayer(){
         //setting the next player as the current player
         computeCurrentPlayerIdx();
+
+        updatePersistenceFile();
 
         //skipping when a player is disconnected from the game (FA Resilienza alle disconessioni)
         int numOfPlayersConnected = numberOfPlayers;
@@ -519,6 +517,18 @@ public class MyShelfie {
             checkIfStartTurnOrEndTheGame();
     }
 
+    private boolean checkGameOver(){
+        if(isOver && playersConnected.get(currentPlayerIndex).hasChair())
+            return true;
+        int  x = 0;
+        for(int i=0; i<numberOfPlayers; i++){
+            if((clientHandlers.get(i).isConnected() && playersConnected.get(i).getHasFinished()) ||
+                !clientHandlers.get(i).isConnected())
+                x++;
+        }
+        return x == numberOfPlayers;
+    }
+
     /**
      * This method checks if the player can begin their turn or the game is over.
      * @author Irene Lo Presti, Andrea Giacalone
@@ -529,14 +539,16 @@ public class MyShelfie {
         if(playerInCountdown)
             playerInCountdown = false;
 
-        if(!isOver || !playersConnected.get(currentPlayerIndex).hasChair()){
+        if((!isOver || !playersConnected.get(currentPlayerIndex).hasChair())){
             if(firstTurn && currentPlayerIndex==0) {
                 firstTurn = false;
+                updatePersistenceFile();
             }
             goToCorrectView();
         }
+
         //entered when everyone played last turn
-        if(isOver && playersConnected.get(currentPlayerIndex).hasChair()){
+        else if(checkGameOver()){
             //spot check
             for (Player player : playersConnected) {
                 int spotScore = player.getMyShelfie().spotCheck();
@@ -555,6 +567,7 @@ public class MyShelfie {
 
             updateGameIsEndingView();
         }
+
     }
 
     private void goToCorrectView(){
@@ -775,24 +788,28 @@ public class MyShelfie {
      * This method updates the files for the FA persistence after all turns
      * @author Irene Lo Presti
      */
-    public void updatePersistenceFiles(){
+    public void updatePersistenceFile(){
 
         //set the string with all the info about this game
         StringBuilder update = new StringBuilder(Arrays.deepToString(board.getBoardGrid()) + "\n" +
                 board.getCommonGoalCard(0).getCardInfo().getName() + "\n" +
                 board.getCommonGoalCard(1).getCardInfo().getName() + "\n" +
-                computeNextPlayerIdx(currentPlayerIndex) + "\n" + isStarted + "\n" + numberOfPlayers + "\n" +
+                currentPlayerIndex + "\n" + isStarted + "\n" + numberOfPlayers + "\n" +
                 board.getBag().toString() + "\n" + isOver + "\n" + firstTurn + "\n" + firstToFinish +"\n");
 
         for(int j=0; j<numberOfPlayers; j++)
             update.append(playersConnected.get(j).getNickname()).append("\n");
-
         //write the info on the game file
         persistenceManager.updateGameFile(gameIndex, update.toString());
 
+    }
+
+    private void updatePlayerFile(){
+        Player player = playersConnected.get(currentPlayerIndex);
         //update of the player file
-        String playerUpdate = playersConnected.get(currentPlayerIndex).getScore() + "\n" +
-                Arrays.deepToString(playersConnected.get(currentPlayerIndex).getShelfGrid()) + "\n";
+        String playerUpdate = player.getScore() + "\n" +
+                Arrays.deepToString(player.getShelfGrid()) + "\n" +
+                player.getHasFinished()+"\n";
 
         persistenceManager.updatePlayerFile(playersConnected.get(currentPlayerIndex).getNickname(), playerUpdate);
 
@@ -805,7 +822,7 @@ public class MyShelfie {
      * @param playerIndex: index of the player reconnecting
      * @author Irene Lo Presti
      */
-    public void manageReconnectionPersistence(int playerIndex){
+    public void manageReconnectionPersistence(int playerIndex, boolean stopCountdown){
         if(playerIndex == currentPlayerIndex){
             if(firstTurn && playerIndex == 0)
                 goToCorrectView();
@@ -813,6 +830,8 @@ public class MyShelfie {
         }
         else if(clientHandlers.stream().filter(ClientHandler::isConnected).toList().size()==1)
             startCountdown(playerIndex);
+        //check if the current player is connected, if not set another player to play
+        else if(!clientHandlers.get(currentPlayerIndex).isConnected() || stopCountdown) setNextPlayer();
     }
 
     /**
@@ -851,6 +870,9 @@ public class MyShelfie {
     }
     public ChatManager getChatManager() {
         return chatManager;
+    }
+    public boolean getPersistenceManaged(){
+        return persistenceManaged;
     }
 
 }

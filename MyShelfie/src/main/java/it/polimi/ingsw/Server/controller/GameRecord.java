@@ -21,7 +21,6 @@ public class GameRecord {
     private RemoteInterface remoteServer;
     private final Object lock;
     private final PersistenceManager persistenceManager;
-    private boolean persistenceManaged;
 
 
     /**
@@ -32,7 +31,6 @@ public class GameRecord {
         currentGame = -1;
         lock = new Object();
         persistenceManager = new PersistenceManager();
-        persistenceManaged = false;
     }
 
     public void setRemoteServer(RemoteInterface remoteServer){
@@ -81,11 +79,10 @@ public class GameRecord {
     public void reset() {
         ArrayList<Integer> gamesNum = persistenceManager.reset(); //find how many old games there were
         for(int i=0; i<gamesNum.size(); i++){
-            MyShelfie game = persistenceManager.readOldGame(i);
+            MyShelfie game = persistenceManager.readOldGame(gamesNum.get(i));
             game.resetPlayers();
             games.put(gamesNum.get(i),game);
         }
-        persistenceManaged = true;
     }
 
     /**
@@ -112,15 +109,6 @@ public class GameRecord {
                     There isn't any disconnected player matching with your nickname.
                     Redirecting to a new lobby.
                     """;
-        //file incomplete because the player didn't play any games
-        else if(file.length()<=2) {
-            msg = """
-
-                    You were connected to a game not already started.
-                    Redirecting to a new lobby.
-                    """;
-            persistenceManager.deletePlayerFile(nickname);
-        }
         else{ //the file exists and it's complete
             ReadFileByLines reader = new ReadFileByLines();
             reader.readFrom(pathFile);
@@ -142,7 +130,7 @@ public class GameRecord {
 
                 int playersConnected = games.get(gameIndex).getClientHandlers().stream().filter(ClientHandler::isConnected).toList().size();
 
-                if(playersConnected == 0 && (!persistenceManaged || games.get(gameIndex).isGameOver())){
+                if(playersConnected == 0 && (!games.get(gameIndex).getPersistenceManaged() || games.get(gameIndex).isGameOver())){
                     //if there aren't players connected we are in 2 possible scenarios:
                         //1) the server connection dropped so all players are reconnecting so the player can
                         //   reconnect to the game -> !persistenceManaged
@@ -184,12 +172,13 @@ public class GameRecord {
             //stop the countdown
             countDownClient.sendMessageToClient(new ReconnectionNotifyMsg(nickname));
             //go on with the game
-            games.get(gameIndex).setNextPlayer();
+            if(!games.get(gameIndex).getPersistenceManaged())
+                games.get(gameIndex).setNextPlayer();
         }
 
         //if all players are reconnecting after the server crashed
-        else if(persistenceManaged && msg == null)
-            games.get(gameIndex).manageReconnectionPersistence(playerIndex);
+        if(msg == null && games.get(gameIndex).getPersistenceManaged())
+            games.get(gameIndex).manageReconnectionPersistence(playerIndex, countDownClient != null);
     }
 
     /**
