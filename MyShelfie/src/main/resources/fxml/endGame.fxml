@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -18,24 +22,24 @@
                         <Image url="@../MyShelfie_IMAGES/misc/soggiorno_v4.png" />
                      </image>
                   </ImageView>
-                  <Text fx:id="textPos_1" layoutX="617.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="n_first" textAlignment="CENTER" visible="false" wrappingWidth="282.13671875">
+                  <Text fx:id="textPos_1" layoutX="617.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="n_first" textAlignment="CENTER" wrappingWidth="282.13671875">
                      <font>
-                        <Font name="Georgia" size="42.0" />
+                        <Font name="Georgia" size="30.0" />
                      </font>
                   </Text>
-                  <Text fx:id="textPos_2" layoutX="772.0" layoutY="238.0" strokeType="OUTSIDE" strokeWidth="0.0" text="n-second" textAlignment="CENTER" visible="false" wrappingWidth="282.13671875">
+                  <Text fx:id="textPos_2" layoutX="772.0" layoutY="238.0" strokeType="OUTSIDE" strokeWidth="0.0" text="n-second" textAlignment="CENTER" wrappingWidth="282.13671875">
                      <font>
-                        <Font name="Georgia" size="39.0" />
+                        <Font name="Georgia" size="30.0" />
                      </font>
                   </Text>
-                  <Text fx:id="textPos_3" layoutX="719.0" layoutY="379.0" strokeType="OUTSIDE" strokeWidth="0.0" text="n_third" textAlignment="CENTER" visible="false" wrappingWidth="282.13671875">
+                  <Text fx:id="textPos_3" layoutX="719.0" layoutY="379.0" strokeType="OUTSIDE" strokeWidth="0.0" text="n_third" textAlignment="CENTER" wrappingWidth="282.13671875">
                      <font>
-                        <Font name="Georgia" size="38.0" />
+                        <Font name="Georgia" size="30.0" />
                      </font>
                   </Text>
-                  <Text fx:id="textPos_4" layoutX="803.0" layoutY="514.0" strokeType="OUTSIDE" strokeWidth="0.0" text="n_fourth" textAlignment="CENTER" visible="false" wrappingWidth="318.13671875">
+                  <Text fx:id="textPos_4" layoutX="803.0" layoutY="514.0" strokeType="OUTSIDE" strokeWidth="0.0" text="n_fourth" textAlignment="CENTER" wrappingWidth="318.13671875">
                      <font>
-                        <Font name="Georgia" size="34.0" />
+                        <Font name="Georgia" size="30.0" />
                      </font>
                   </Text>
                   <ImageView fx:id="podFirst" fitHeight="65.0" fitWidth="45.0" layoutX="631.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true" rotate="12.5">
@@ -53,26 +57,38 @@
                         <Image url="@../MyShelfie_IMAGES/misc/podium/third.png" />
                      </image>
                   </ImageView>
-                  <Text fx:id="textPos_1_score" fill="WHITE" layoutX="665.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="s_first" textAlignment="CENTER" visible="false" wrappingWidth="282.13671875">
+                  <Text fx:id="textPos_1_score" fill="WHITE" layoutX="665.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="s_first" textAlignment="CENTER" wrappingWidth="282.13671875">
                      <font>
                         <Font name="Georgia" size="22.0" />
                      </font>
                   </Text>
-                  <Text fx:id="textPos_2_score" fill="WHITE" layoutX="750.0" layoutY="265.0" strokeType="OUTSIDE" strokeWidth="0.0" text="s_second" textAlignment="CENTER" visible="false" wrappingWidth="282.13671875">
+                  <Text fx:id="textPos_2_score" fill="WHITE" layoutX="750.0" layoutY="265.0" strokeType="OUTSIDE" strokeWidth="0.0" text="s_second" textAlignment="CENTER" wrappingWidth="282.13671875">
                      <font>
                         <Font name="Georgia" size="22.0" />
                      </font>
                   </Text>
-                  <Text fx:id="textPos_3_score" fill="WHITE" layoutX="798.0" layoutY="400.0" strokeType="OUTSIDE" strokeWidth="0.0" text="s_third" textAlignment="CENTER" visible="false" wrappingWidth="259.13671875">
+                  <Text fx:id="textPos_3_score" fill="WHITE" layoutX="798.0" layoutY="400.0" strokeType="OUTSIDE" strokeWidth="0.0" text="s_third" textAlignment="CENTER" wrappingWidth="259.13671875">
                      <font>
                         <Font name="Georgia" size="17.0" />
                      </font>
                   </Text>
-                  <Text fx:id="textPos_4_score" fill="WHITE" layoutX="808.0" layoutY="550.0" strokeType="OUTSIDE" strokeWidth="0.0" text="s_fourth" textAlignment="CENTER" visible="false" wrappingWidth="259.13671875">
+                  <Text fx:id="textPos_4_score" fill="WHITE" layoutX="853.0" layoutY="540.0" strokeType="OUTSIDE" strokeWidth="0.0" text="s_fourth" textAlignment="CENTER" wrappingWidth="259.13671875">
                      <font>
                         <Font name="Georgia" size="17.0" />
                      </font>
                   </Text>
+                  <Button alignment="BASELINE_CENTER" layoutX="74.0" layoutY="511.0" mnemonicParsing="false" onAction="#exit" prefHeight="47.0" prefWidth="260.0" styleClass="startButton" text="EXIT" textFill="#e0ff97" textOverrun="WORD_ELLIPSIS" AnchorPane.leftAnchor="74.0" AnchorPane.rightAnchor="946.0">
+                     <font>
+                        <Font name="Baskerville Old Face" size="25.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <effect>
+                        <Glow level="0.55" />
+                     </effect>
+                  </Button>
+
                </children>
             </AnchorPane>
          </center>
@@ -99,4 +115,7 @@
          </top>
       </BorderPane>
    </children>
+   <stylesheets>
+      <URL value="@../css/loginStyle.css" />
+   </stylesheets>
 </AnchorPane>

@@ -74,25 +74,14 @@ public class EndGameController extends Controller {
                 textPos_4_score.setVisible(true);
             }
         }
-        //resize();
-
     }
 
     @Override
     public void receiveAnswer(S2CMessage message) {
 
     }
-    /*
-    public void resize(){
-        Group names = new Group();
-        names.getChildren().add(textPos_1);
-        names.getChildren().add(textPos_2);
-        names.getChildren().add(textPos_3);
-        names.getChildren().add(textPos_4);
 
-        for(Node node : names.getChildren()){
-            if(node!=null && ((Text) node).getText().length()>8) ((Text) node).setFont(Font.font(14));
-        }
+    public void exit() {
+        getOwner().getStageManager().getStage().close();
     }
-    */
 }
