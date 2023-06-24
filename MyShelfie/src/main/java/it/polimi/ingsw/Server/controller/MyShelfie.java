@@ -304,7 +304,7 @@ public class MyShelfie {
         yourTurnMsg = new YourTurnMsg(
                 playersConnected.get(currentPlayerIndex).getNickname(),
                 maxTilesPickable,
-                boardSnapshot, Board.getCommonGoalCards(),
+                boardSnapshot, board.getCommonGoalCards(),
                 playersConnected.get(currentPlayerIndex).getPersonalGoalCard(),
                 firstTurn,
                 playersNames,
@@ -358,7 +358,7 @@ public class MyShelfie {
         ToShelfMsg toShelfMsg = new ToShelfMsg(
                 matrix,
                 littleHand,
-                Board.getCommonGoalCards(),
+                board.getCommonGoalCards(),
                 currentPlayer.getPersonalGoalCard()
         );
 
@@ -447,7 +447,7 @@ public class MyShelfie {
          * @author Irene Lo Presti
          */
         private int commonPointsEarned(int commonGoalIndex){
-            CommonGoalCard card = Board.getCommonGoalCard(commonGoalIndex);
+            CommonGoalCard card = board.getCommonGoalCard(commonGoalIndex);
             Tile[][] playerShelfSnapshot = playersConnected.get(currentPlayerIndex).getMyShelfie().getGrid();
             if(card.checkPattern(playerShelfSnapshot)) {
                 playersConnected.get(currentPlayerIndex).setCommonGoalAchieved(commonGoalIndex);

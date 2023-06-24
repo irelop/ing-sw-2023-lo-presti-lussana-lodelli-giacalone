@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for Board class
- * @authors Matteo Lussana, Irene Lo Presti
+ * @author Matteo Lussana, Irene Lo Presti
  */
 public class BoardTest {
 
@@ -30,7 +30,6 @@ public class BoardTest {
     void setUp() {
         grid = new Tile[9][9];
         board = new Board();
-        Board.getBoardInstance();
 
         reader = new ReadFileByLines();
         reader.readFrom("src/test/testFiles/board_3p.txt");
