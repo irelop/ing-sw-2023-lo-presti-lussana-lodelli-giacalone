@@ -16,7 +16,7 @@ import it.polimi.ingsw.Server.Model.Tile;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import static it.polimi.ingsw.Client.view.CLI.ColorCode.*;
+import static it.polimi.ingsw.utils.ColorCode.*;
 
 public class ChooseTilesFromBoardView extends View {
 
