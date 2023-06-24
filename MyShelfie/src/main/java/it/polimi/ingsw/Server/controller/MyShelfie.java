@@ -877,7 +877,7 @@ public class MyShelfie {
     public ChatManager getChatManager() {
         return chatManager;
     }
-    public boolean getPersistenceManaged(){
+    public boolean isPersistenceManaged(){
         return persistenceManaged;
     }
 

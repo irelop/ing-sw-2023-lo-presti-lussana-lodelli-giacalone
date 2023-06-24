@@ -15,12 +15,11 @@ import java.util.HashMap;
  * Class to manage multiple games
  */
 public class GameRecord {
-    //private ArrayList<MyShelfie> games;
     private HashMap<Integer, MyShelfie> games;
     private int currentGame;
     private RemoteInterface remoteServer;
-    private final Object lock;
     private final PersistenceManager persistenceManager;
+    private final String playersPath;
 
 
     /**
@@ -29,38 +28,34 @@ public class GameRecord {
     public GameRecord() {
         games = new HashMap<>();
         currentGame = -1;
-        lock = new Object();
         persistenceManager = new PersistenceManager();
-    }
-
-    public void setRemoteServer(RemoteInterface remoteServer){
-        this.remoteServer = remoteServer;
+        playersPath = "src/safetxt/players/";
     }
 
     /**
      * This method checks if all players are connected to the current game, if not it returns the current game
-     * else it adds a new game to the array list
+     * else it adds a new game to the hashmap, computing the correct index
      * @return current game or a new one
-     * @author Lo Presti, Giacalone
+     * @author Irene Lo Presti, Andrea Giacalone
      */
     public synchronized MyShelfie getGame(){
         if (currentGame == -1 || games.get(currentGame) == null || games.get(currentGame).getAllPlayersReady()) {
+            //after a server reconnection the indexes of the games could be not ordered, so
+            // we have to find the first free index
             do{
                 currentGame++;
             }while(games.containsKey(currentGame));
-            persistenceManager.createNewGameFile(currentGame);
-            //MyShelfie game = new MyShelfie(persistenceManager.getGameFile(currentGame));
+
             MyShelfie game = new MyShelfie(persistenceManager, currentGame);
+            persistenceManager.createNewGameFile(currentGame);
             games.put(currentGame, game);
         }
         return games.get(currentGame);
     }
 
     /**
-     * This method delete the game passed as a parameter and the file of the player that called this method.
-     * If the game is the current it removes it from the arrayList, else it doesn't remove it in order to
-     * maintain the correct enumeration.
-     * It calls the method in the persistence manager that delete the game file and also the player's file
+     * This method deletes the game passed as a parameter and the file of the player that called this method.
+     * It calls the method in the persistence manager that delete the game's file
      * @author Irene Lo Presti
      */
     public void deleteGame(int gameIndex){
@@ -71,17 +66,16 @@ public class GameRecord {
 
     /**
      * This method is used for the FA persistence. After the server reconnects, this method recreates all the old
-     * games: first it call the reset() function to recovery all the files, then it sets all the information from
-     * the files in the games
+     * games: first it call the reset() function to recover all the files then resets the old games
      *
      * @author Irene Lo Presti
      */
     public void reset() {
-        ArrayList<Integer> gamesNum = persistenceManager.reset(); //find how many old games there were
-        for(int i=0; i<gamesNum.size(); i++){
-            MyShelfie game = persistenceManager.readOldGame(gamesNum.get(i));
+        ArrayList<Integer> gamesIndexes = persistenceManager.reset(); //find the indexes of the old games
+        for(Integer index : gamesIndexes){
+            MyShelfie game = persistenceManager.readOldGame(index);
             game.resetPlayers();
-            games.put(gamesNum.get(i),game);
+            games.put(index, game);
         }
     }
 
@@ -99,7 +93,7 @@ public class GameRecord {
         int gameIndex = -1, playerIndex = -1;
         ClientHandler countDownClient = null;
 
-        String pathFile = "src/safetxt/players/"+nickname+".txt";
+        String pathFile = playersPath + nickname + ".txt";
         File file = new File(pathFile);
 
         //check if exists a file with the name of the player
@@ -130,7 +124,7 @@ public class GameRecord {
 
                 int playersConnected = games.get(gameIndex).getClientHandlers().stream().filter(ClientHandler::isConnected).toList().size();
 
-                if(playersConnected == 0 && (!games.get(gameIndex).getPersistenceManaged() || games.get(gameIndex).isGameOver())){
+                if(playersConnected == 0 && (!games.get(gameIndex).isPersistenceManaged() || games.get(gameIndex).isGameOver())){
                     //if there aren't players connected we are in 2 possible scenarios:
                         //1) the server connection dropped so all players are reconnecting so the player can
                         //   reconnect to the game -> !persistenceManaged
@@ -172,17 +166,17 @@ public class GameRecord {
             //stop the countdown
             countDownClient.sendMessageToClient(new ReconnectionNotifyMsg(nickname));
             //go on with the game
-            if(!games.get(gameIndex).getPersistenceManaged())
+            if(!games.get(gameIndex).isPersistenceManaged())
                 games.get(gameIndex).setNextPlayer();
         }
 
         //if all players are reconnecting after the server crashed
-        if(msg == null && games.get(gameIndex).getPersistenceManaged())
+        if(msg == null && games.get(gameIndex).isPersistenceManaged())
             games.get(gameIndex).manageReconnectionPersistence(playerIndex, countDownClient != null);
     }
 
     /**
-     * This method check the nickname of the new player and if it's valid, connects them to the game
+     * This method checks the nickname of the new player and if it's valid, connects them to the game
      * @param clientHandler of the new player
      * @param loginNicknameRequest message with the new player's nickname
      * @param game where the new player is connecting
@@ -199,28 +193,19 @@ public class GameRecord {
             return;
         }
 
-        String pathFile = "src/safetxt/players/"+loginNicknameRequest.getInsertedNickname()+".txt";
+        String pathFile = playersPath + loginNicknameRequest.getInsertedNickname() + ".txt";
         File file = new File(pathFile);
 
         if (!file.exists()) {
 
-            if (game.isFirstConnected()) {
+            if (game.isFirstConnected())
                 loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.FIRST_ACCEPTED);
-            }
-
-            else {
+            else
                 loginNicknameAnswer = new LoginNicknameAnswer(loginNicknameRequest, LoginNicknameAnswer.Status.ACCEPTED);
-            }
 
             game.addPlayer(loginNicknameRequest.getInsertedNickname(), clientHandler);
-            int controllerIdx = -1;
-            for(int i=0; i<games.size(); i++){
-                if(games.get(i)!=null && games.get(i).equals(game)) {
-                    controllerIdx = i;
-                    break;
-                }
-            }
-            persistenceManager.createNewPlayerFile(loginNicknameRequest.getInsertedNickname(), controllerIdx);
+
+            persistenceManager.createNewPlayerFile(loginNicknameRequest.getInsertedNickname(), getGameIndex(game));
             clientHandler.sendMessageToClient(loginNicknameAnswer);
 
         } else {
@@ -228,5 +213,19 @@ public class GameRecord {
             clientHandler.sendMessageToClient(loginNicknameAnswer);
         }
 
+    }
+
+    private int getGameIndex(MyShelfie game){
+        int gameIdx = -1;
+        for(int i=0; i<games.size(); i++){
+            if(games.get(i)!=null && games.get(i).equals(game)) {
+                gameIdx = i;
+                break;
+            }
+        }
+        return gameIdx;
+    }
+    public void setRemoteServer(RemoteInterface remoteServer){
+        this.remoteServer = remoteServer;
     }
 }
