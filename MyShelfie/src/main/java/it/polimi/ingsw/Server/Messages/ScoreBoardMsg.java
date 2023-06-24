@@ -14,11 +14,13 @@ public class ScoreBoardMsg extends S2CMessage{
     public ArrayList<String> playerName;
     public ArrayList<Integer> totalScore;
     public String playerNickname;
+    public boolean boardEmpty;
 
-    public ScoreBoardMsg(ArrayList<String> playerName, ArrayList<Integer> totalScore, String playerNickname){
+    public ScoreBoardMsg(ArrayList<String> playerName, ArrayList<Integer> totalScore, String playerNickname, boolean boardEmpty){
         this.playerName = playerName;
         this.totalScore = totalScore;
         this.playerNickname = playerNickname;
+        this.boardEmpty = boardEmpty;
     }
 
     @Override

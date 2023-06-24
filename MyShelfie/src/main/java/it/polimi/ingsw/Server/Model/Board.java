@@ -295,16 +295,22 @@ public class Board implements Serializable {
      * OVERVIEW: this method refills the board with tiles from the bag
      * @author Irene Lo Presti
      */
-    public void refill(){
+    public boolean refill(){
         for(int r=0; r<MAX_ROWS; r++)
             for(int c=0; c<MAX_COLUMNS; c++)
                 if(boardGrid[r][c] == Tile.BLANK)
                     try {
                         boardGrid[r][c] = bag.draw();
                     } catch (EmptyBagException ex){
-                        ex.toString();
-                        ex.printStackTrace();
+                        /*ex.toString();
+                        ex.printStackTrace();*/
+                        for(int i=0; i<MAX_ROWS; i++)
+                            for(int j=0; j<MAX_COLUMNS; j++)
+                                if(boardGrid[i][j] != Tile.BLANK && boardGrid[i][j] != Tile.NOT_VALID)
+                                    return true;
+                        return false;
                     }
+        return true;
     }
 
     /**

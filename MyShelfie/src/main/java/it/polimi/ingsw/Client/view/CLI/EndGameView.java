@@ -28,7 +28,8 @@ public class EndGameView extends View {
                     Collections.swap(msg.playerName, j, j + 1);
                 }
             }
-
+        if(msg.boardEmpty)
+            System.out.println("The tiles are fished, it's impossible to refill the board, the game is over.");
         System.out.println("---------------------------------");
         System.out.println("SCORE BOARD:");
         for (int i = 0; i < msg.playerName.size(); i++) {

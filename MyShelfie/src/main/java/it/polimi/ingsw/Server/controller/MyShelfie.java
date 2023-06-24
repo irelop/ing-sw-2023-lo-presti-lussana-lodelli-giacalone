@@ -157,7 +157,8 @@ public class MyShelfie {
         else if(playersConnected.size() > numberOfPlayers){
             for(int i=playersConnected.size()-1; i>numberOfPlayers-1; i--) {
                 NumberOfPlayerManagementMsg msg = new NumberOfPlayerManagementMsg(playersConnected.get(i).getNickname());
-                clientHandlers.get(i).sendMessageToClient(msg);
+                if(clientHandlers.get(i).isConnected())
+                    clientHandlers.get(i).sendMessageToClient(msg);
                 playersConnected.remove(i);
                 clientHandlers.remove(i);
             }
@@ -174,7 +175,8 @@ public class MyShelfie {
         ArrayList<String> lobbyPlayers = playersConnected.stream().map(Player::getNickname).collect(Collectors.toCollection(ArrayList::new));
         for (int i = 0; i<playersConnected.size();i++) {
             LobbyUpdateAnswer msg = new LobbyUpdateAnswer(lobbyPlayers, allPlayersReady);
-            clientHandlers.get(i).sendMessageToClient(msg);
+            if(clientHandlers.get(i).isConnected())
+                clientHandlers.get(i).sendMessageToClient(msg);
         }
     }
 
@@ -267,63 +269,69 @@ public class MyShelfie {
      * @author Irene Lo Presti, Matteo Lussana
      */
     private void startTurn() {
-
+        boolean isBoardRefilled = true;
         //checking if the board need to be refilled
-        if (board.needRefill())
-            board.refill();
-
-        // find max pickable tiles by the player
-        int maxTilesPickable = playersConnected.get(currentPlayerIndex).getMyShelfie().maxTilesPickable();
-
-        ArrayList<String> playersNames = new ArrayList<>();
-        for (int i = 0; i < numberOfPlayers; i++) {
-            playersNames.add(playersConnected.get(i).getNickname());
+        if (board.needRefill()) {
+            isBoardRefilled = board.refill();
         }
 
-        YourTurnMsg yourTurnMsg;
+        if(isBoardRefilled) {
+            // find max pickable tiles by the player
+            int maxTilesPickable = playersConnected.get(currentPlayerIndex).getMyShelfie().maxTilesPickable();
 
-        Tile[][] boardSnapshot = new Tile[9][9];
+            ArrayList<String> playersNames = new ArrayList<>();
+            for (int i = 0; i < numberOfPlayers; i++) {
+                playersNames.add(playersConnected.get(i).getNickname());
+            }
 
-        for (int i = 0; i < 9; i++)
-            for (int j = 0; j < 9; j++)
-                boardSnapshot[i][j] = board.getBoardGrid()[i][j];
+            YourTurnMsg yourTurnMsg;
 
-        Tile[][] shelfSnapshot = new Tile[6][5];
+            Tile[][] boardSnapshot = new Tile[9][9];
 
-        for (int i = 0; i < 6; i++)
-            for (int j = 0; j < 5; j++)
-                shelfSnapshot[i][j] = playersConnected.get(currentPlayerIndex).getMyShelfie().getGrid()[i][j];
+            for (int i = 0; i < 9; i++)
+                for (int j = 0; j < 9; j++)
+                    boardSnapshot[i][j] = board.getBoardGrid()[i][j];
 
-        for(int i=0; i<playersConnected.size(); i++){
-            if(i!=currentPlayerIndex && clientHandlers.get(i).isConnected() && clientHandlers.get(i).getIsGui()){
-                GoWaitingGUI goWaitingGUI = new GoWaitingGUI();
-                clientHandlers.get(i).sendMessageToClient(goWaitingGUI);
+            Tile[][] shelfSnapshot = new Tile[6][5];
+
+            for (int i = 0; i < 6; i++)
+                for (int j = 0; j < 5; j++)
+                    shelfSnapshot[i][j] = playersConnected.get(currentPlayerIndex).getMyShelfie().getGrid()[i][j];
+
+            for (int i = 0; i < playersConnected.size(); i++) {
+                if (i != currentPlayerIndex && clientHandlers.get(i).isConnected() && clientHandlers.get(i).getIsGui()) {
+                    GoWaitingGUI goWaitingGUI = new GoWaitingGUI();
+                    clientHandlers.get(i).sendMessageToClient(goWaitingGUI);
+                }
+            }
+
+            yourTurnMsg = new YourTurnMsg(
+                    playersConnected.get(currentPlayerIndex).getNickname(),
+                    maxTilesPickable,
+                    boardSnapshot, board.getCommonGoalCards(),
+                    playersConnected.get(currentPlayerIndex).getPersonalGoalCard(),
+                    firstTurn,
+                    playersNames,
+                    shelfSnapshot,
+                    isOver
+            );
+
+            //if it's the last turn
+            if (isOver)
+                updateGameIsEndingView();
+
+
+            //if the current player is connected, he/she goes to ChooseTilesFromBoardView
+            if (clientHandlers.get(currentPlayerIndex).isConnected()) {
+                clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
+            } else {
+                computeCurrentPlayerIdx();
+                startTurn();
             }
         }
-
-        yourTurnMsg = new YourTurnMsg(
-                playersConnected.get(currentPlayerIndex).getNickname(),
-                maxTilesPickable,
-                boardSnapshot, board.getCommonGoalCards(),
-                playersConnected.get(currentPlayerIndex).getPersonalGoalCard(),
-                firstTurn,
-                playersNames,
-                shelfSnapshot,
-                isOver
-        );
-
-        //if it's the last turn
-        if (isOver)
-            updateGameIsEndingView();
-
-
-        //if the current player is connected, he/she goes to ChooseTilesFromBoardView
-        if(clientHandlers.get(currentPlayerIndex).isConnected()){
-            clientHandlers.get(currentPlayerIndex).sendMessageToClient(yourTurnMsg);
-        }
         else{
-            computeCurrentPlayerIdx();
-            startTurn();
+            for(int i=0; i<numberOfPlayers; i++)
+                endGame(i, true);
         }
     }
 
@@ -361,8 +369,8 @@ public class MyShelfie {
                 board.getCommonGoalCards(),
                 currentPlayer.getPersonalGoalCard()
         );
-
-        clientHandlers.get(currentPlayerIndex).sendMessageToClient(toShelfMsg);
+        if(clientHandlers.get(currentPlayerIndex).isConnected())
+            clientHandlers.get(currentPlayerIndex).sendMessageToClient(toShelfMsg);
     }
 
     /**
@@ -434,7 +442,8 @@ public class MyShelfie {
             updatePlayerFile();
 
             GoalAndScoreMsg goalAndScoreMsg = new GoalAndScoreMsg(isCommonGoalAchived, isPersonalGoalAchived, playersConnected.get(currentPlayerIndex).getScore(), isShelfFull, isOver);
-            clientHandlers.get(currentPlayerIndex).sendMessageToClient(goalAndScoreMsg);
+            if(clientHandlers.get(currentPlayerIndex).isConnected())
+                clientHandlers.get(currentPlayerIndex).sendMessageToClient(goalAndScoreMsg);
         }
 
         /**
@@ -594,7 +603,8 @@ public class MyShelfie {
     private void startCountdown(int playerIndex){
         this.playerInCountdown = true;
         LastOneConnectedMsg msg = new LastOneConnectedMsg(playersConnected.get(playerIndex).getNickname());
-        clientHandlers.get(playerIndex).sendMessageToClient(msg);
+        if(clientHandlers.get(playerIndex).isConnected())
+            clientHandlers.get(playerIndex).sendMessageToClient(msg);
     }
 
     /**
@@ -617,7 +627,8 @@ public class MyShelfie {
             if(playersConnected.size() > 1){
                 for(int i=1; i<playersConnected.size(); i++){
                     NumberOfPlayerManagementMsg msg = new NumberOfPlayerManagementMsg(playersConnected.get(i).getNickname());
-                    clientHandlers.get(1).sendMessageToClient(msg);
+                    if(clientHandlers.get(i).isConnected())
+                        clientHandlers.get(1).sendMessageToClient(msg);
                 }
             }
 
@@ -651,9 +662,10 @@ public class MyShelfie {
     /**
      * This method sends the players to the scoreboard
      * @param playerIndex: index of the player going to the scoreboard
+     * @param boardEmpty: true if the game ends because the tiles are finished
      * @author Matteo Lussana, Irene Lo Presti, Andrea Giacalone
      */
-    public void endGame(int playerIndex) {
+    public void endGame(int playerIndex, boolean boardEmpty) {
         synchronized (lock){
             ArrayList<String> playersNames = new ArrayList<>();
             for (int i = 0; i < numberOfPlayers; i++) {
@@ -665,8 +677,9 @@ public class MyShelfie {
                 scoreList.add(player.getScore());
             }
 
-            ScoreBoardMsg msg = new ScoreBoardMsg(playersNames, scoreList, playersNames.get(playerIndex));
-            clientHandlers.get(playerIndex).sendMessageToClient(msg);
+            ScoreBoardMsg msg = new ScoreBoardMsg(playersNames, scoreList, playersNames.get(playerIndex), boardEmpty);
+            if(clientHandlers.get(playerIndex).isConnected())
+                clientHandlers.get(playerIndex).sendMessageToClient(msg);
         }
     }
 
@@ -760,7 +773,8 @@ public class MyShelfie {
                 clientHandler.sendMessageToClient(new ChatRecordAnswer(customChat));
             }
         }
-            if(requester.equals(playersConnected.get(currentPlayerIndex).getNickname())) {
+            if(requester.equals(playersConnected.get(currentPlayerIndex).getNickname()) &&
+                    clientHandlers.get(currentPlayerIndex).isConnected()) {
                 clientHandlers.get(currentPlayerIndex).sendMessageToClient(new ChatRecordAnswer(customChat));
             }
     }
@@ -778,7 +792,8 @@ public class MyShelfie {
             chatMsgAnswer = new ChatMsgAnswer(false);
         }
 
-        if (playersConnected.get(currentPlayerIndex).getNickname().equals(messageToSend.getSender()))
+        if (playersConnected.get(currentPlayerIndex).getNickname().equals(messageToSend.getSender()) &&
+                clientHandlers.get(currentPlayerIndex).isConnected())
             clientHandlers.get(currentPlayerIndex).sendMessageToClient(chatMsgAnswer);
     }
 

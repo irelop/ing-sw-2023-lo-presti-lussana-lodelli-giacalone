@@ -19,14 +19,14 @@ public class EndGameMsg extends C2SMessage{
 
     @Override
     public void processMessage(ClientHandler clientHandler){
-            clientHandler.getController().endGame(playerIndex);
+            clientHandler.getController().endGame(playerIndex, false);
 
     }
 
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client){
         try {
-            server.getController(client).endGame(playerIndex);
+            server.getController(client).endGame(playerIndex, false);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
