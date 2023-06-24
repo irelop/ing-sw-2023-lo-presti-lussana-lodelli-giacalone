@@ -9,7 +9,7 @@ package it.polimi.ingsw.utils.Exceptions;
 
 public class InvalidNumberOfTilesException extends Exception {
 
-    private int maxTilesPickable;
+    private final int maxTilesPickable;
     public InvalidNumberOfTilesException(int maxTilesPickable){
         super();
         this.maxTilesPickable = maxTilesPickable;
