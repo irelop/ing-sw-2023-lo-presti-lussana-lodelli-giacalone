@@ -59,7 +59,7 @@ public class StageManager {
      * This method is called once at the beginning.
      * It opens a window containing the Title Screen scene, taken from
      * the .fxml file in resources
-     * @throws IOException
+     * @throws IOException: Input/Output exception
      */
     public void firstLaunch() throws IOException {
 

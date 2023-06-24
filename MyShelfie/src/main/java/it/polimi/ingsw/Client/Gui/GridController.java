@@ -1,11 +1,5 @@
 package it.polimi.ingsw.Client.Gui;
 
-/**
- * GUI view that prints the board, the common goal cards and the personal card of the player and his/her shelf,
- * it manages the picking of tiles from the board.
- * @author Matteo Lussana
- * @see Controller
- */
 
 import it.polimi.ingsw.Server.Messages.*;
 import it.polimi.ingsw.Server.Model.CommonGoalCard;
@@ -32,6 +26,12 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 
+/**
+ * GUI view that prints the board, the common goal cards and the personal card of the player and his/her shelf,
+ * it manages the picking of tiles from the board.
+ * @author Matteo Lussana
+ * @see Controller
+ */
 public class GridController extends Controller{
     @FXML GridPane grid;
     @FXML GridPane shelfDisplay;
@@ -350,14 +350,22 @@ public class GridController extends Controller{
                         }
                     }
                 switch (direction) {
-                    case "N": y--; contatore++;
-                        break;
-                    case "S": y++; contatore++;
-                        break;
-                    case "E": x++; contatore++;
-                        break;
-                    case "W": x--; contatore++;
-                        break;
+                    case "N" -> {
+                        y--;
+                        contatore++;
+                    }
+                    case "S" -> {
+                        y++;
+                        contatore++;
+                    }
+                    case "E" -> {
+                        x++;
+                        contatore++;
+                    }
+                    case "W" -> {
+                        x--;
+                        contatore++;
+                    }
                 }
             }
         }

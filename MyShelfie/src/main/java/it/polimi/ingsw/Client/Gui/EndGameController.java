@@ -1,12 +1,5 @@
 package it.polimi.ingsw.Client.Gui;
 
-/**
- * Controller that manages the last GUI view that player will see
- * it shows the scoreboard
- * @author Matteo Lussana
- * @see Controller
- */
-
 import it.polimi.ingsw.Server.Messages.S2CMessage;
 import it.polimi.ingsw.Server.Messages.ScoreBoardMsg;
 import javafx.fxml.FXML;
@@ -15,6 +8,12 @@ import javafx.scene.text.Text;
 
 import java.util.Collections;
 
+/**
+ * Controller that manages the last GUI view that player will see
+ * it shows the scoreboard
+ * @author Matteo Lussana
+ * @see Controller
+ */
 
 public class EndGameController extends Controller {
 

@@ -25,7 +25,7 @@ public class JavaGUI extends Application {
                 ()->{
                     try{
                         StageManager.getInstance().firstLaunch();
-                    }catch (Exception e){}
+                    }catch (Exception ignored){}
                 }
         );
 
@@ -36,7 +36,7 @@ public class JavaGUI extends Application {
      * This method is called before the scene transition.
      * @return fxmlLoader: an object that contains all information for the creation of the new scene
      * @param fxml: the name of the file FXML with the next scene
-     * @throws IOException
+     * @throws IOException: Input/Output exception
      */
     public FXMLLoader prepareScene(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/" + fxml));

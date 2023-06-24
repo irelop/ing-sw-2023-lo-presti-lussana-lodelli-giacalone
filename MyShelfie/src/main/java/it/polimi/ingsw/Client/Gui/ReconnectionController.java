@@ -2,7 +2,6 @@ package it.polimi.ingsw.Client.Gui;
 
 import it.polimi.ingsw.Server.Messages.*;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -23,8 +22,6 @@ public class ReconnectionController extends Controller{
     private TextField playerNickname;
     @FXML
     private Text reconnectionResult;
-    @FXML
-    private Button backButton;
 
 
     /**
