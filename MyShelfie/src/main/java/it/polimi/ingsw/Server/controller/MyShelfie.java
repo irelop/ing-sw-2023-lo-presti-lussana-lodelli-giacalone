@@ -746,7 +746,7 @@ public class MyShelfie {
     public void getCustomChat(String requester){
         ChatStorage customChat = chatManager.getCustomChat(requester);
             for(int i=0; i< clientHandlers.size(); i++){
-                if(clientHandlers.get(i).getIsGui()){
+                if(clientHandlers.get(i).getIsGui() && clientHandlers.get(i).isConnected()){
                     clientHandlers.get(i).sendMessageToClient(new ChatRecordAnswer(customChat));
                 }
             }

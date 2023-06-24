@@ -26,7 +26,7 @@ public class PlayerTest {
         chosenTiles.add(Tile.BLUE);
         player.setLittleHand(chosenTiles);
 
-        int[] order = new int[] {1};
+        int[] order = new int[] {0};
         player.orderTiles(order);
         assertEquals(chosenTiles, player.getLittleHand());
     }
@@ -40,7 +40,7 @@ public class PlayerTest {
         player.setLittleHand(chosenTiles);
 
         //set the array of the player's choices
-        int[] order = new int[] {2, 1};
+        int[] order = new int[] {1, 0};
         player.orderTiles(order);
 
         //change order of chooseTiles manually
@@ -59,7 +59,7 @@ public class PlayerTest {
         player.setLittleHand(chosenTiles);
 
         //set the array of the player's choices
-        int[] order = new int[] {3, 1 ,2};
+        int[] order = new int[] {1, 2 ,0};
         player.orderTiles(order);
 
         //change order of chooseTiles manually

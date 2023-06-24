@@ -1,25 +1,17 @@
 package it.polimi.ingsw.Client.Gui;
+
+
+import it.polimi.ingsw.Server.Messages.*;
+import javafx.fxml.FXML;
+import javafx.scene.text.Text;
+
+import static java.lang.Thread.sleep;
+
 /**
  * GUI view which appears when all players but one are disconnected
  * @author Matteo Lussana
  * @see Controller
  */
-
-import it.polimi.ingsw.Server.Messages.*;
-import javafx.animation.PauseTransition;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
-import javafx.util.Duration;
-
-import java.net.URL;
-import java.util.Random;
-import java.util.ResourceBundle;
-
-import static java.lang.Thread.sleep;
-
 public class LastPlayerConnectedController extends Controller{
     @FXML Text alertText;
 
@@ -32,7 +24,7 @@ public class LastPlayerConnectedController extends Controller{
      */
     @Override
     public void build(S2CMessage message) {
-        Thread thread = new Thread(()->timer());
+        Thread thread = new Thread(this::timer);
         thread.start();
         lastOneConnectedMsg = (LastOneConnectedMsg) message;
         alertText.setText("\n"+lastOneConnectedMsg.nickname+", all the other players have disconnected.\n" +
@@ -57,8 +49,8 @@ public class LastPlayerConnectedController extends Controller{
     }
 
     /**
-     * Method called when the thead that was counting down 30sec has finished and no one reconnect
-     * it shows the pane with a win message and than send a message to the server that will close the game
+     * Method called when the thread that was counting down 30sec has finished and no one reconnect
+     * it shows the pane with a win message and then send a message to the server that will close the game
      */
     public void finish(){
         alertText.setText("Congratulation! You are the winner!");

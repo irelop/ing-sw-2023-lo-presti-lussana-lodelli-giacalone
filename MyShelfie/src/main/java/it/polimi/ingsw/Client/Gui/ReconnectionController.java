@@ -1,16 +1,10 @@
 package it.polimi.ingsw.Client.Gui;
 
 import it.polimi.ingsw.Server.Messages.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
 import static java.lang.Thread.sleep;
@@ -20,7 +14,7 @@ import static java.lang.Thread.sleep;
  * It contains a form to insert player's nickname and some other stuff
  * @see Controller
  */
-public class reconnectionController extends Controller{
+public class ReconnectionController extends Controller{
 
     private ReconnectionAnswer answer;
 
@@ -28,8 +22,6 @@ public class reconnectionController extends Controller{
     private TextField playerNickname;
     @FXML
     private Text reconnectionResult;
-    @FXML
-    private Button backButton;
 
 
     /**
@@ -92,7 +84,7 @@ public class reconnectionController extends Controller{
     public void manageReconnection(){
         if(answer.msg != null) {
             reconnectionResult.setText(answer.msg);
-            Thread delayingComputationThread = new Thread(()->delayComputation());
+            Thread delayingComputationThread = new Thread(this::delayComputation);
             delayingComputationThread.start();
         }
         else{

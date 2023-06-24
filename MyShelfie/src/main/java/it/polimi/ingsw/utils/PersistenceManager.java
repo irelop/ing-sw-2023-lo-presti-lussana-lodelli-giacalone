@@ -15,27 +15,28 @@ import java.util.Map;
 import it.polimi.ingsw.Server.controller.*;
 
 
-
 /**
  * Class to manage the files for the FA persistence
  * @author Irene Lo Presti
  */
-
 public class PersistenceManager {
     private final String path;
     private final String gamePath;
     private final String playerPath;
 
+    /**
+     * Constructor method
+     */
     public PersistenceManager(){
         this.path = "src/safetxt/";
         this.gamePath = path + "games/";
         this.playerPath = path + "players/";
     }
 
-
+    //- - - - - - - - - - - - - - - -| FILE MANAGEMENT |- - - - - - - - - - - - - - - - - - - -
     /**
-     * Given the name, this method creates a new file for a new game and adds it to the array list
-     * @param gameIdx index of the controller
+     * Given the index of the new game, this method creates a new file for the new game
+     * @param gameIdx index of the new game
      */
     public void createNewGameFile(int gameIdx){
         File file = new File(getGamePath(gameIdx));
@@ -48,7 +49,7 @@ public class PersistenceManager {
     }
 
     /**
-     * Given the name, this method creates a new file for a new player and adds it to the array list
+     * Given the nickname, this method creates a new file for a new player
      * @param nickname of the new player
      * @param gameIdx index of the player's game to be written in the file
      */
@@ -60,8 +61,7 @@ public class PersistenceManager {
                 if (file.createNewFile()) {
                     FileWriter fw = new FileWriter(file);
                     BufferedWriter bw = new BufferedWriter(fw);
-                    //write the index of the game in the player's file
-                    bw.write(gameIdx + "\n");
+                    bw.write(gameIdx + "\n");//write the index of the game in the player's file
                     bw.flush();
                     bw.close();
                 }
@@ -73,22 +73,25 @@ public class PersistenceManager {
     }
 
     /**
-     * This method deletes the file of the player whose nickname is passed as a parameter and removes it from
-     * the array list
-     * @param nickname of the player
+     * This method gets the correct path of the file of the game with index 'gameIndex'
+     * @param gameIndex: index of the game
+     * @return the path of the game's file
      */
-    public void deletePlayerFile(String nickname){
-        String playerPath = getPlayerPath(nickname);
-        File file = new File(playerPath);
-        if(file.exists()) {
-            boolean success = file.delete();
-            if (!success) System.out.println("Problems deleting " + nickname + "'s persistence file");
-        }
+    private String getGamePath(int gameIndex){
+        return gamePath + "game_" + gameIndex + ".txt";
     }
 
     /**
-     * This method deletes the file of the game with index 'index' and removes it from
-     * the array list
+     * This method gets the correct path of the file of the player with nickname 'nickname'
+     * @param nickname of the player
+     * @return the path of the player's file
+     */
+    private String getPlayerPath(String nickname){
+        return playerPath + nickname + ".txt";
+    }
+
+    /**
+     * This method deletes the file of the game with index 'index'
      * @param index of the game
      */
     public void deleteGameFile(int index){
@@ -101,10 +104,111 @@ public class PersistenceManager {
     }
 
     /**
-     * FA: persistence. This method finds all the persistence file, and it saves them into the arraylist
-     * @return the number of the old games
+     * This method deletes the file of the player whose nickname is passed as a parameter
+     * @param nickname of the player
+     */
+    public void deletePlayerFile(String nickname){
+        String playerPath = getPlayerPath(nickname);
+        File file = new File(playerPath);
+        if(file.exists()) {
+            boolean success = file.delete();
+            if (!success) System.out.println("Problems deleting " + nickname + "'s persistence file");
+        }
+    }
+    //- - - - - - - - - - - - - - - -| UPDATE FILES METHODS |- - - - - - - - - - - - - - - - - - - -
+    /**
+     * This method updates the file of the game with index 'index' with the 'update'
+     * @param index of the game
+     * @param update with the new information
+     */
+    public void updateGameFile(int index, String update){
+        try {
+            File file = new File(getGamePath(index));
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(update);
+            bw.flush();
+            bw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * This method updates the file of the player, it reads the static info calling a method, and then it
+     * adds the new info
+     * @param nickname of the player
+     * @param update new information
+     */
+    public void updatePlayerFile(String nickname, String update){
+
+        ArrayList<String> staticInfo = readPlayerStaticInfo(nickname);
+
+        String playerPath = getPlayerPath(nickname);
+
+        FileWriter fw;
+        try {
+            fw = new FileWriter(playerPath);
+            BufferedWriter bw = new BufferedWriter(fw);
+            for(String info : staticInfo)
+                bw.write(info + "\n");
+            bw.write(update);
+            bw.flush();
+            bw.close();
+        } catch (IOException e) {
+            System.out.println("Error during player file updating");
+        }
+    }
+    /**
+     * This method writes on the player file the update info
+     * @param staticInfo information that don't change during the game
+     * @param nickname of the player who just played
+     */
+    public void writeStaticPlayerInfo(String nickname, String staticInfo){
+        String playerPath = getPlayerPath(nickname);
+        try {
+            FileWriter fw = new FileWriter(playerPath, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(staticInfo);
+            bw.flush();
+            bw.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    /**
+     * This method reads the player file and keeps the static information (the ones that don't change
+     * during the game) and removing the dynamic ones
+     * @param nickname of the player
+     * @return arraylist with the static info
+     */
+    private ArrayList<String> readPlayerStaticInfo(String nickname){
+        String playerPath = getPlayerPath(nickname);
+
+        ReadFileByLines reader = new ReadFileByLines();
+        reader.readFrom(playerPath);
+        String line;
+        ArrayList<String> info = new ArrayList<>();
+        while((line = ReadFileByLines.getLine())!=null){
+            info.add(line);
+        }
+
+        //remove the dynamic info
+        info.remove(info.size()-1);
+        info.remove(info.size()-1);
+        info.remove(info.size()-1);
+
+        return info;
+    }
+
+    //- - - - - - - - - - - - - - - -| RESET OLD GAMES METHODS |- - - - - - - - - - - - - - - - - -
+    /**
+     * This method finds all the persistence files, returns the indexes of the old games and deletes the
+     * empty files (both players' and games')
+     * @return arraylist of old games indexes
      */
     public ArrayList<Integer> reset(){
+        //find all the names of the old games files that are in folder
         String[] gameFilesNames = new File("src/safetxt/games").list();
         ArrayList<Integer> gameIndexes = new ArrayList<>();
 
@@ -113,13 +217,13 @@ public class PersistenceManager {
             File file = new File(path + "games/" + fileName);
             if (file.exists()) {
                 if (file.length() == 0)
-                    file.delete();
-                else
+                    file.delete(); //if the file is empty
+                else //save the index in the arraylist to be returned
                     gameIndexes.add(Integer.parseInt(fileName.replaceAll("game_", "").replaceAll(".txt", "")));
             }
         }
 
-        //find players file and delete the empty ones
+        //find players files and delete the empty ones
         String[]  playerFilesNames = new File("src/safetxt/players").list();
         assert playerFilesNames != null;
         for(String player : playerFilesNames){
@@ -131,6 +235,11 @@ public class PersistenceManager {
         return gameIndexes;
     }
 
+    /**
+     * This method reads the file of the game with the index 'gameIdx' and creates a new game with these information
+     * @param gameIdx : index of the game to read
+     * @return a new MyShelfie with the old information
+     */
     public MyShelfie readOldGame(int gameIdx){
         ReadFileByLines reader;
         reader = new ReadFileByLines();
@@ -203,84 +312,11 @@ public class PersistenceManager {
         return game;
     }
 
-    public void updateGameFile(int index, String update){
-        try {
-            File file = new File(getGamePath(index));
-            FileWriter fw = new FileWriter(file);
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(update);
-            bw.flush();
-            bw.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void updatePlayerFile(String nickname, String update){
-        ArrayList<String> staticInfo = getPlayerStaticInfo(nickname);
-
-        String playerPath = getPlayerPath(nickname);
-
-        FileWriter fw = null;
-        try {
-            fw = new FileWriter(playerPath);
-            BufferedWriter bw = new BufferedWriter(fw);
-            for(String info : staticInfo){
-                bw.write(info + "\n");
-            }
-            bw.write(update);
-            bw.flush();
-            bw.close();
-        } catch (IOException e) {
-            System.out.println("Error during player file updating");
-        }
-    }
-
-    private ArrayList<String> getPlayerStaticInfo(String nickname){
-        String playerPath = getPlayerPath(nickname);
-
-        ReadFileByLines reader = new ReadFileByLines();
-        reader.readFrom(playerPath);
-        String line;
-        ArrayList<String> info = new ArrayList<>();
-        while((line = ReadFileByLines.getLine())!=null){
-            info.add(line);
-        }
-
-        //remove the dynamic info
-        info.remove(info.size()-1);
-        info.remove(info.size()-1);
-        info.remove(info.size()-1);
-
-        return info;
-    }
-
-    private String getPlayerPath(String nickname){
-        return playerPath + nickname + ".txt";
-    }
-
     /**
-     * This method writes on the player file the update info
-     * @param staticInfo information that don't change during the game
-     * @param nickname of the player who just played
+     * This method sets the old player's info in the new instance of Player
+     * @param player: new instance of Player
+     * @return the id of the personal card of 'player' that will be set correctly by the controller
      */
-    public void writeStaticPlayerInfo(String nickname, String staticInfo){
-        String playerPath = getPlayerPath(nickname);
-        try {
-            FileWriter fw = new FileWriter(playerPath, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(staticInfo);
-            bw.flush();
-            bw.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private String getGamePath(int gameIndex){
-        return gamePath + "game_" + gameIndex + ".txt";
-    }
-
     public String setPlayer(Player player){
         File playerFile = new File(getPlayerPath(player.getNickname()));
         ReadFileByLines reader;

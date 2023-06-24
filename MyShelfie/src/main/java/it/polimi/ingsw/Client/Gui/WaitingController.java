@@ -1,11 +1,5 @@
 package it.polimi.ingsw.Client.Gui;
 
-/**
- * GUI view which is shown between turns, while other player are playeing
- * @author Matteo Lussana
- * @see Controller
- */
-
 import it.polimi.ingsw.Server.Messages.*;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -22,6 +16,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * GUI view which is shown between turns, while other player are playing
+ * @author Matteo Lussana
+ * @see Controller
+ */
 public class WaitingController extends Controller {
     @FXML GridPane grid1;
     @FXML GridPane grid2;
@@ -131,6 +130,10 @@ public class WaitingController extends Controller {
         String message = chatMessage.getText();
         String receiver_name  = "EVERYONE";
         String formattedMsg = message;
+        if(message == null) {
+            message = "KEKW";
+            formattedMsg = "KEKW";
+        }
         if(message.startsWith("@")){
             receiver_name = message.split(" ")[0];
             StringBuilder sb = new StringBuilder(receiver_name);
@@ -170,7 +173,7 @@ public class WaitingController extends Controller {
 
         Random random = new Random();
 
-        int num = random.nextInt(5);;
+        int num = random.nextInt(5);
         for(Node node : grid1.getChildren()){
             node.setId(names[num]);
             num--;
