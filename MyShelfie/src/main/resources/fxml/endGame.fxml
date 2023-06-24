@@ -32,12 +32,12 @@
                         <Font name="Georgia" size="30.0" />
                      </font>
                   </Text>
-                  <Text fx:id="textPos_3" layoutX="719.0" layoutY="379.0" strokeType="OUTSIDE" strokeWidth="0.0" text="n_third" textAlignment="CENTER" wrappingWidth="282.13671875">
+                  <Text fx:id="textPos_3" layoutX="719.0" layoutY="379.0" strokeType="OUTSIDE" strokeWidth="0.0" text="n_third" textAlignment="CENTER" visible="false" wrappingWidth="282.13671875">
                      <font>
                         <Font name="Georgia" size="30.0" />
                      </font>
                   </Text>
-                  <Text fx:id="textPos_4" layoutX="803.0" layoutY="514.0" strokeType="OUTSIDE" strokeWidth="0.0" text="n_fourth" textAlignment="CENTER" wrappingWidth="318.13671875">
+                  <Text fx:id="textPos_4" layoutX="803.0" layoutY="514.0" strokeType="OUTSIDE" strokeWidth="0.0" text="n_fourth" textAlignment="CENTER" visible="false" wrappingWidth="318.13671875">
                      <font>
                         <Font name="Georgia" size="30.0" />
                      </font>
@@ -67,12 +67,12 @@
                         <Font name="Georgia" size="22.0" />
                      </font>
                   </Text>
-                  <Text fx:id="textPos_3_score" fill="WHITE" layoutX="798.0" layoutY="400.0" strokeType="OUTSIDE" strokeWidth="0.0" text="s_third" textAlignment="CENTER" wrappingWidth="259.13671875">
+                  <Text fx:id="textPos_3_score" fill="WHITE" layoutX="798.0" layoutY="400.0" strokeType="OUTSIDE" strokeWidth="0.0" text="s_third" textAlignment="CENTER" visible="false" wrappingWidth="259.13671875">
                      <font>
                         <Font name="Georgia" size="17.0" />
                      </font>
                   </Text>
-                  <Text fx:id="textPos_4_score" fill="WHITE" layoutX="853.0" layoutY="540.0" strokeType="OUTSIDE" strokeWidth="0.0" text="s_fourth" textAlignment="CENTER" wrappingWidth="259.13671875">
+                  <Text fx:id="textPos_4_score" fill="WHITE" layoutX="853.0" layoutY="540.0" strokeType="OUTSIDE" strokeWidth="0.0" text="s_fourth" textAlignment="CENTER" visible="false" wrappingWidth="259.13671875">
                      <font>
                         <Font name="Georgia" size="17.0" />
                      </font>
