@@ -8,15 +8,15 @@ import it.polimi.ingsw.Server.Messages.LastOneConnectedMsg;
  * A countdown will start and until its end, all the other players, who has disconnected before, have the possibility
  * to rejoin the game, otherwise the player waiting in this view will be declared as the winner.
  *
- * @authors Irene Lo Presti, Andrea Giacalone
+ * @author Irene Lo Presti, Andrea Giacalone
  */
 public class LastPlayerConnectedView extends View{
 
-    private LastOneConnectedMsg msg;
+    private final LastOneConnectedMsg msg;
     private boolean goOn = true;
 
     /**
-     * CONSTRUCTOR: a new LastPlayerConnectedView is built wrapping a message containing the infos about the last player
+     * CONSTRUCTOR: a new LastPlayerConnectedView is built wrapping a message containing the info about the last player
      * connected to the game.
      * @param msg : message wrapping info of the last player connected.
      */

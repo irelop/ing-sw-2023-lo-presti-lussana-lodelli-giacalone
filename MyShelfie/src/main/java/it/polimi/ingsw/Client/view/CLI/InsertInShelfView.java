@@ -6,7 +6,7 @@ import it.polimi.ingsw.utils.Exceptions.InvalidTileIndexInLittleHandException;
 import it.polimi.ingsw.Server.Model.Tile;
 import it.polimi.ingsw.Server.Messages.InsertingTilesMsg;
 import it.polimi.ingsw.Server.Messages.ToShelfMsg;
-import static it.polimi.ingsw.Client.view.CLI.ColorCode.*;
+import static it.polimi.ingsw.utils.ColorCode.*;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;

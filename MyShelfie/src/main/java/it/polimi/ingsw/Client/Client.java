@@ -11,7 +11,9 @@ import it.polimi.ingsw.utils.rmi.RMIAdapter;
 import it.polimi.ingsw.utils.rmi.RemoteInterface;
 import javafx.application.Application;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -181,15 +183,20 @@ public class Client implements Runnable{
             Registry registry = LocateRegistry.getRegistry();       //getting the reference of the RMI registry
             remoteServer = (RemoteInterface) registry.lookup("server");     //getting the remote interface of the server
 
+
             //printing logging message in the server side
-            remoteServer.printLoginStatus("["+this.getClass().getName()+"] now connected through RMI");
+            try {
+                remoteServer.printLoginStatus("["+ InetAddress.getByName("localhost") +"] now connected through RMI");
+            } catch (UnknownHostException e) {
+                System.out.println("[RMI] Error in retrieving host address");
+            }
             remoteServer.addRemoteClient(client);       //adding the remote interface of the client to the remote server
             client.setOwner(this);     //adding the reference of this client to the remote client interface
 
         }catch(RemoteException e){
-            System.out.println("[ERROR]: Unable to invoke remote method");
+            System.out.println("[RMI] Error: unable to invoke remote method");
         } catch (NotBoundException e) {
-            System.out.println("[ERROR]: Server unreachable");
+            System.out.println("[RMI] Error: Server unreachable");
         }
 
         //creating the handler for the RMI connection
@@ -219,7 +226,7 @@ public class Client implements Runnable{
                     break;
                 }
             }catch(IOException e){
-                System.out.println("server unreachable, try another address, or insert 'exit' if you don't want to connect to the server anymore");
+                System.out.println("[SKT] Server unreachable: try another address, or insert 'exit' if you don't want to connect to the server anymore");
             }
         }while(true);
 

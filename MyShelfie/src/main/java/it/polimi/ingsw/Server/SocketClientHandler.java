@@ -50,11 +50,11 @@ public class SocketClientHandler extends ClientHandler{
             outputStream = new ObjectOutputStream(client.getOutputStream());
             inputStream = new ObjectInputStream(client.getInputStream());
         } catch (IOException ex) {
-            System.out.println("Failed to open connection to " + client.getInetAddress());
+            System.out.println("[SKT] Error: failed to open connection to " + client.getInetAddress());
             return;
         }
 
-        System.out.println("Established connection with client: " + client.getInetAddress());
+        System.out.println("[" + client.getInetAddress() + "] "+"now connected through SKT");
 
         try {
             handleClientConnection();
@@ -63,7 +63,7 @@ public class SocketClientHandler extends ClientHandler{
             this.isConnected = false;
             if(getController() != null)
                 getController().shouldFinishTurn(this);
-            System.out.println("client" + client.getInetAddress() + " connection dropped");
+            System.out.println("[SKT] Client" + client.getInetAddress() + " connection dropped");
         }
 
         try {
@@ -71,7 +71,7 @@ public class SocketClientHandler extends ClientHandler{
             client.close();
         } catch (IOException ex) {
             stop();
-            System.out.println("Failed to close connection with client" + client.getInetAddress());
+            System.out.println("[SKT] Error: failed to close connection with client" + client.getInetAddress());
         }
     }
 
@@ -95,7 +95,7 @@ public class SocketClientHandler extends ClientHandler{
                 }
             }
         }catch(ClassNotFoundException | ClassCastException e){
-            System.out.println("Invalid stream from the client");
+            System.out.println("[SKT] Error: invalid stream from the client");
         }
     }
 
@@ -120,7 +120,7 @@ public class SocketClientHandler extends ClientHandler{
         try {
             InetAddress i = client.getInetAddress();
             client.shutdownInput();
-            System.out.println("Connection closed with "+i);
+            System.out.println("[SKT] Connection closed with "+i);
         } catch (IOException e) {
             e.printStackTrace();
         }
