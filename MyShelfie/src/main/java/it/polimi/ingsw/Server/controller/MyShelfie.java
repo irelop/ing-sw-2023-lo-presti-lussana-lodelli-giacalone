@@ -709,7 +709,7 @@ public class MyShelfie {
      */
     public int checkPlayerDisconnected(String nickname){
         int found = -1;
-        for(int i = 0; i< numberOfPlayers;i++){
+        for(int i = 0; i< playersConnected.size();i++){
             if(nickname.equals(playersConnected.get(i).getNickname()) && !clientHandlers.get(i).isConnected())
                 found = i;
         }

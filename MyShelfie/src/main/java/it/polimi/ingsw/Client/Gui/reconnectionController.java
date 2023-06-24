@@ -92,15 +92,22 @@ public class reconnectionController extends Controller{
     public void manageReconnection(){
         if(answer.msg != null) {
             reconnectionResult.setText(answer.msg);
-            try {
-                sleep(3000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            getOwner().getStageManager().loadNextStage("loginPlayer.fxml");
+            Thread delayingComputationThread = new Thread(()->delayComputation());
+            delayingComputationThread.start();
         }
         else{
             getOwner().getStageManager().loadNextStage("waiting.fxml");
         }
+    }
+
+    private void delayComputation(){
+        for(int i = 0; i<5; i++){
+            try {
+                sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        getOwner().getStageManager().loadNextStage("loginPlayer.fxml");
     }
 }

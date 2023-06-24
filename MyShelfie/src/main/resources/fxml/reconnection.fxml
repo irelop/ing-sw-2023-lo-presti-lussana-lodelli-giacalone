@@ -51,7 +51,7 @@
                         <Glow />
                      </effect>
                   </Text>
-                  <Text fx:id="loginResult" layoutX="362.0" layoutY="259.0" fill="RED" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="350.0">
+                  <Text fx:id="reconnectionResult" layoutX="362.0" layoutY="259.0" fill="RED" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="350.0">
                      <font>
                         <Font name="Baskerville Old Face" size="25.0" />
                      </font>
