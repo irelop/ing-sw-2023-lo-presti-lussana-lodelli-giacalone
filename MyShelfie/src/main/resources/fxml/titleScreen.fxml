@@ -136,9 +136,12 @@
                         <Glow level="0.55" />
                      </effect>
                   </Button>
-                  <Pane id="infoText" fx:id="rulesPane" layoutX="143.0" layoutY="-147.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="774.0" style="-fx-background-color: #F6D669; -fx-border-color: #422F11; -fx-border-width: 5; -fx-border-radius: 8; -fx-background-radius: 10;" visible="false">
+                  <Pane id="infoText" fx:id="rulesPane" layoutX="143.0" layoutY="-147.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0" prefWidth="774.0" style="-fx-background-color: #F6D669; -fx-border-color: #422F11; -fx-border-width: 5; -fx-border-radius: 8; -fx-background-radius: 10;">
                      <children>
-                        <TextArea id="rulesText" fx:id="rulesText" layoutX="9.0" layoutY="7.0" prefHeight="461.0" prefWidth="758.0" />
+                        <TextArea id="rulesText" fx:id="rulesText" layoutX="9.0" layoutY="7.0" prefHeight="461.0" prefWidth="758.0" wrapText="true">
+                           <font>
+                              <Font size="20.0" />
+                           </font></TextArea>
                      </children>
                   </Pane>
                       <Button fx:id="closeRules" layoutX="920.0" layoutY="289.0" mnemonicParsing="false" onAction="#closeRulesPane" prefHeight="39.0" prefWidth="149.0" styleClass="startButton" text="CLOSE RULES" textFill="#e0ff97">

@@ -130,6 +130,10 @@ public class WaitingController extends Controller {
         String message = chatMessage.getText();
         String receiver_name  = "EVERYONE";
         String formattedMsg = message;
+        if(message == null) {
+            message = "KEKW";
+            formattedMsg = "KEKW";
+        }
         if(message.startsWith("@")){
             receiver_name = message.split(" ")[0];
             StringBuilder sb = new StringBuilder(receiver_name);
