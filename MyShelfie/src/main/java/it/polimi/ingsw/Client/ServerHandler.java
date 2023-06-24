@@ -14,7 +14,7 @@ public abstract class ServerHandler implements Runnable{
         this.owner = owner;
     }
 
-    //private void handleClientConnection() throws IOException{}
+
 
     /**
      * OVERVIEW: this method allows to send a message from the client to the server independently from the
