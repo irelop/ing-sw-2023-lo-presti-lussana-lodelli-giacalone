@@ -57,7 +57,7 @@ public abstract class ClientHandler implements Runnable {
 
     public void setIsGui(boolean value) {isGui = value;}
 
-    public void stop() {};
+    public void stop() {}
     public boolean getIsRMI(){
         return isRMI;
     }

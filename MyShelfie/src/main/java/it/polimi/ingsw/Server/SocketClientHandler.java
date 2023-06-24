@@ -22,8 +22,8 @@ public class SocketClientHandler extends ClientHandler{
     //the socket used for communicate with the connected client.
     ObjectOutputStream outputStream;
     ObjectInputStream inputStream;
-    private Socket client;
-    private AtomicBoolean shouldStop = new AtomicBoolean(false);
+    private final Socket client;
+    private final AtomicBoolean shouldStop = new AtomicBoolean(false);
 
 
     public SocketClientHandler(Socket client, MyShelfie game){
@@ -77,7 +77,7 @@ public class SocketClientHandler extends ClientHandler{
 
     /**
      * OVERVIEW: this method manages an event loop in order to receive messages from the client and processes them.
-     * @throws IOException
+     * @throws IOException: Input/Output exception
      */
     void handleClientConnection() throws IOException {
 

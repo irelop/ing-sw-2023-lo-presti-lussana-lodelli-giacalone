@@ -8,10 +8,10 @@ import java.time.LocalTime;
  *                    the receiver, a timestamp of the sending and its content.
  */
 public class ChatMessage implements Serializable {
-    private String sender;
-    private String receiver;
-    private LocalTime localTime;
-    private String content;
+    private final String sender;
+    private final String receiver;
+    private final LocalTime localTime;
+    private final String content;
 
     public ChatMessage(String sender, String receiver, LocalTime localTime, String content) {
         this.sender = sender.toUpperCase();
