@@ -1,10 +1,4 @@
 package it.polimi.ingsw.Server.Model;
-/**
- * Tests for Board class
- * @authors Matteo Lussana, Irene Lo Presti
- */
-
-import it.polimi.ingsw.Server.Model.*;
 
 import it.polimi.ingsw.utils.Exceptions.*;
 import it.polimi.ingsw.utils.ReadFileByLines;
@@ -16,10 +10,13 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static it.polimi.ingsw.Client.view.CLI.ColorCode.*;
-import static it.polimi.ingsw.Client.view.CLI.ColorCode.RESET;
+import static it.polimi.ingsw.utils.ColorCode.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for Board class
+ * @authors Matteo Lussana, Irene Lo Presti
+ */
 public class BoardTest {
 
     Board board;
