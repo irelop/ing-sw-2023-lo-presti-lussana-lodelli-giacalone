@@ -20,6 +20,7 @@ public class ChatMessage implements Serializable {
         this.content = content;
     }
 
+    //- - - - - - - -  - G E T T E R S - - - - - - - - - - - - - - - -
     public String getSender() {
         return sender;
     }
