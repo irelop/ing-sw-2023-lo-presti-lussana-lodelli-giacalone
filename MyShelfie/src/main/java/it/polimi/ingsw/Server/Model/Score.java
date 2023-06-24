@@ -1,6 +1,6 @@
 package it.polimi.ingsw.Server.Model;
 /**
- *  Store the points gained by the player during the game
+ *  Score class: this class wraps the points gained by the player during the game and provide methods to update them.
  */
 public class Score {
     private int score;

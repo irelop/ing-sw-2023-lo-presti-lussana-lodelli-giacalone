@@ -1,5 +1,8 @@
 package it.polimi.ingsw.utils;
 
+/**
+ * ColorCode enum: this enum class wraps the code associated to colors which can be shown in a CLI.
+ */
 public enum ColorCode {
     GREEN("\u001B[32m"),
     PINK("\u001B[35m"),

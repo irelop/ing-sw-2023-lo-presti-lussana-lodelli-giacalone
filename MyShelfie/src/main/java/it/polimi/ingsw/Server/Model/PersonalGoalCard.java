@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * This class represents a single personal goal card with its specific color pattern.
+ * PersonalGoalCard class : this class represents a single personal goal card with its specific color pattern.
  *
  * @author Riccardo Lodelli
  */
@@ -57,18 +57,18 @@ public class PersonalGoalCard implements Serializable {
     }
 
     /**
-     *  This method removes the head of availableScore in order to give points to the player who put a tile
-     *  in the place indicated on the personal goal card
+     *  OVERVIEW: this method removes the head of availableScore in order to give points to the player who put a tile
+     *  in the place indicated on the personal goal card.
      */
     private int getScore() {
         return availableScore.remove(0);
     }
 
     /**
-     * Check if the current player puts a tile in the right place and returns the amount of points gained
-     * from this move
-     * @param shelfSnapshot: a snapshot of the current player's shelf
-     * @return an int given by the head of availableScore
+     * OVERVIEW: this method checks if the current player puts a tile in the right place and returns the amount of points gained
+     * from this move.
+     * @param shelfSnapshot: a snapshot of the current player's shelf.
+     * @return an int given by the head of availableScore.
      */
     public int getPersonalGoalScore(Tile[][] shelfSnapshot) {
         int pointsEarnedInTurn = 0;

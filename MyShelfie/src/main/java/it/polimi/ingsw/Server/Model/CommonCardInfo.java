@@ -4,6 +4,11 @@ import it.polimi.ingsw.utils.ReadFileByLines;
 
 import java.io.Serializable;
 
+/**
+ * CommonCardInfo class: this class wraps all info associated to a common goal card, useful in order to be shown in
+ * a CLI.
+ * @author Matteo Lussana
+ */
 public class CommonCardInfo implements Serializable {
     private String name;
     private Tile[][] schema;
@@ -23,7 +28,7 @@ public class CommonCardInfo implements Serializable {
         this.times = times;
         this.description = description;
     }
-    //it.polimi.ingsw.Server.Model.PatternStrategy.
+
     public CommonCardInfo(String name){
         this.schema = new Tile[6][5];
         this.name = name.replaceAll("it.polimi.ingsw.Server.Model.PatternStrategy.","");

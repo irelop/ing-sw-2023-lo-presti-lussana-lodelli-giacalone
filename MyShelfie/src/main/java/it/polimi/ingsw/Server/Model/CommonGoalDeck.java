@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * CommonGoalDeck class: this class represent the set of the playable common goal cards of the game, providing the
- * necessary functions for a random draw.
+ * CommonGoalDeck class: this class represents the set of the playable common goal cards of the game, providing the
+ * necessary methods for a random draw.
  *
  * @author Andrea Giacalone
  */
@@ -49,6 +49,11 @@ public class CommonGoalDeck {
         return (commonGoalCardDeck.size());
     }
 
+    /**
+     * OVERVIEW: this method allows to get the common goal card matching the type name given.
+     * @param name: the type name of the card to be found.
+     * @return if exists the common goal card whose type matches the name.
+     */
     public CommonGoalCard getCard(String name){
         for(CommonGoalCard card : commonGoalCardDeck){
             if(card.getCardInfo().getName().equals(name))
