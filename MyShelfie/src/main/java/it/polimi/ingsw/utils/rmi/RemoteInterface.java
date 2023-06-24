@@ -10,9 +10,9 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
- * RemoteInterface: this interface allows to expose methods which can be remotely invoked bu actors who has set up
+ * RemoteInterface: this interface allows to expose methods which can be remotely invoked by actors who have set up
  * an RMI communication.
- * @authors Irene Lo Presti, Andrea Giacalone
+ * @author Irene Lo Presti, Andrea Giacalone
  */
 
 public interface RemoteInterface extends Remote {

@@ -236,7 +236,7 @@ public class PersistenceManager {
     }
 
     /**
-     * This method reads the file of the game with the index 'gameIdx' and creates a new game with these information
+     * This method reads the file of the game with the index 'gameIdx' and creates a new game with this information
      * @param gameIdx : index of the game to read
      * @return a new MyShelfie with the old information
      */
@@ -330,7 +330,7 @@ public class PersistenceManager {
             if (Boolean.parseBoolean(ReadFileByLines.getLineByIndex(1)))
                 player.setChair();
 
-            //get the personal card index (the right card will be set in mysheflie)
+            //get the personal card index (the right card will be set in myshelfie)
             cardIdx = ReadFileByLines.getLineByIndex(2);
 
             //set the old score
