@@ -21,7 +21,8 @@ public class ScoreBoardMsg extends S2CMessage{
     @Override
     public void processMessage(ServerHandler serverHandler){
         if(serverHandler.getOwner().gui) {
-            serverHandler.getOwner().getStageManager().loadNextStage(this,"endGame.fxml");
+            serverHandler.getOwner().getStageManager().loadNextStage(this, "endGame.fxml");
+            serverHandler.getOwner().getStageManager().getController().receiveAnswer(this);
         } else {
             serverHandler.getOwner().transitionToView(new EndGameView(this));
             serverHandler.getOwner().getCurrentView().notifyView();
@@ -32,6 +33,7 @@ public class ScoreBoardMsg extends S2CMessage{
         try {
             if(client.getOwner().gui) {
                 client.getOwner().getStageManager().loadNextStage(this,"endGame.fxml");
+                client.getOwner().getStageManager().getController().receiveAnswer(this);
             } else {
                 client.goToEndgameView(this);
                 if (client.getCurrentView().getClass() == WaitingView.class)

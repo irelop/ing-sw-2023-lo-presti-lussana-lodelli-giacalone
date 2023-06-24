@@ -2,6 +2,7 @@ package it.polimi.ingsw.Client.Gui;
 
 import it.polimi.ingsw.Server.Messages.S2CMessage;
 import it.polimi.ingsw.Server.Messages.ScoreBoardMsg;
+import it.polimi.ingsw.Server.Messages.FinishGameRequest;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
@@ -21,7 +22,6 @@ public class EndGameController extends Controller {
     @FXML Text textPos_2;
     @FXML Text textPos_3;
     @FXML Text textPos_4;
-
     @FXML Text textPos_1_score;
     @FXML Text textPos_2_score;
     @FXML Text textPos_3_score;
@@ -80,7 +80,10 @@ public class EndGameController extends Controller {
 
     @Override
     public void receiveAnswer(S2CMessage message) {
-
+        if(message instanceof ScoreBoardMsg) {
+            FinishGameRequest finishGameRequest = new FinishGameRequest();
+            getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
+        }
     }
 
     public void exit() {

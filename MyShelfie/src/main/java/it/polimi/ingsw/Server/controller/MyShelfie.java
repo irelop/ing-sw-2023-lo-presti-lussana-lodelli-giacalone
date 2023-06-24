@@ -674,7 +674,8 @@ public class MyShelfie {
         if(!gameOver)
             gameOver = true;
 
-        clientHandler.stop();
+        if(!clientHandler.getIsGui())
+            clientHandler.stop();
 
         int playerIndex = clientHandlers.indexOf(clientHandler);
         fileDeleting(playersConnected.get(playerIndex).getNickname(), playerIndex);
