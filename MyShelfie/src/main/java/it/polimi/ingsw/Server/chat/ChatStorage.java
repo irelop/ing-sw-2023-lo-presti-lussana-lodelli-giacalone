@@ -7,7 +7,6 @@ import java.util.ArrayList;
  * ChatStorage class: it represents a buffer of chat messages collecting all the messages of the chat in game.
  */
 public class ChatStorage implements Serializable {
-
     private ArrayList<ChatMessage> storage;
 
     public ChatStorage() {

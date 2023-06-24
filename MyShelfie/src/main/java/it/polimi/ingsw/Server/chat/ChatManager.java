@@ -43,12 +43,7 @@ public class ChatManager {
         this.chatters.add(player);
     }
 
-    /**
-     * OVERVIEW: this method allows to get a snapshot of the record of messages filtering the public messages and the private ones
-     *           redirected to the requester.
-     * @param requester: the nickname of the player who asks to chat.
-     * @return customChat: the snapshot of the record of messages
-     */
+
     /**
      * OVERVIEW: this method allows to get a snapshot of the record of messages filtering the public messages and the private ones
      *           redirected to the requester.
