@@ -1,15 +1,14 @@
 package it.polimi.ingsw.Server.Model;
 
+import it.polimi.ingsw.utils.Exceptions.NotEnoughSpaceInChosenColumnException;
+
+import java.util.ArrayList;
+
 /**
  * Shelf Class: this class manages each player's library, in particular it allows the insertion of new tiles
  * and counts the adjacent tiles of the same color returning the final score
  *
  */
-
-import it.polimi.ingsw.utils.Exceptions.NotEnoughSpaceInChosenColumnException;
-
-import java.util.ArrayList;
-
 public class Shelf {
     private Tile[][] grid;
     private int[][] beenThere;
@@ -53,7 +52,7 @@ public class Shelf {
     }
 
     /**
-     * OVERVIEW: this method takes the tiles in the player's hand (lttleHand), that are already in the
+     * OVERVIEW: this method takes the tiles in the player's hand (littleHand), that are already in the
      * right order, and puts them in the player's shelf.
      * @param columnIndex : index of the column where the player wants to insert the tiles
      * @param littleHand : ArrayList of the tiles that the player has chosen from the board
