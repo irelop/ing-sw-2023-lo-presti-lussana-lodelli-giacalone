@@ -264,7 +264,18 @@ public class InsertInShelfView extends View {
     private int getTile() throws InvalidTileIndexInLittleHandException {
         Scanner scanner = new Scanner(System.in);
         int size = msg.getLittleHand().size();
-        int choice = scanner.nextInt() - 1; // user's indexes start from one
+
+        int choice;
+        do{
+            try{
+                choice = scanner.nextInt() - 1;// user's indexes start from one
+                break;
+            }catch(InputMismatchException e){
+                System.out.println("You have to insert a number. Try again!");
+                scanner.next();
+            }
+        }while(true);
+
         if(choice < 0 || choice >= size) throw new InvalidTileIndexInLittleHandException(size);
         return choice;
     }
@@ -280,7 +291,17 @@ public class InsertInShelfView extends View {
         Scanner scanner = new Scanner(System.in);
 
         for(int i=0; i<choices.length; i++){
-            choices[i] = scanner.nextInt() - 1; // user's indexes start from one
+
+            do{
+                try{
+                    choices[i] = scanner.nextInt() -1 ; // user's indexes start from one
+                    break;
+                }catch(InputMismatchException e){
+                    System.out.println("You have to insert a number. Try again!");
+                    scanner.next();
+                }
+            }while(true);
+
             if(choices[i] < 0 || choices[i] >= choices.length) throw new InvalidTileIndexInLittleHandException(choices.length);
         }
         for(int i=0; i< choices.length-1; i++){
