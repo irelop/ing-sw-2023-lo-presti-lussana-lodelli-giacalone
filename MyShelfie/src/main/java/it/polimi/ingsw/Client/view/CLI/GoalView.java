@@ -19,8 +19,8 @@ import java.util.Scanner;
  */
 public class GoalView extends View {
 
-    private GoalAndScoreMsg msg;
-    private Object lock;
+    private final GoalAndScoreMsg msg;
+    private final Object lock;
     private ChatStorage chat;
     private boolean sendingResult;
     public GoalView(GoalAndScoreMsg msg) {
@@ -44,7 +44,7 @@ public class GoalView extends View {
         if (goOn != null) {
             System.out.println("Before ending you turn, you can leave a message to everyone or to a lucky receiver");
             System.out.println("Please select (Y) if you want to chat or (N) otherwise");
-            char answer = 0;
+            char answer;
             do {
 
                 try {
@@ -236,10 +236,10 @@ public class GoalView extends View {
     private void showScoreRecap(){
         System.out.println("---------------------------------");
         System.out.println("GOAL ACHIVED IN THIS TURN:");
-        if (msg.commonGoalAchived == true) {
+        if (msg.commonGoalAchived) {
             System.out.println("Common Goal: yes");
         } else System.out.println("Common Goal: no");
-        if (msg.personalGoalAchived == true) {
+        if (msg.personalGoalAchived) {
             System.out.println("Personal Goal: yes");
         } else System.out.println("Personal Goal: no");
         if (msg.youFullyShelf) System.out.println("You earned 1 pt. for be the first to complete the shelf, SIUM");

@@ -8,6 +8,6 @@ package it.polimi.ingsw.Client.view.CLI;
  * @author Andrea Giacalone
  */
 public interface ObserverView {
-    public void notifyView();
+    void notifyView();
 
 }
