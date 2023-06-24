@@ -13,7 +13,7 @@ public enum ColorCode {
 
     public final String code;
 
-    private ColorCode(String code){
+    ColorCode(String code){
         this.code = code;
     }
 }

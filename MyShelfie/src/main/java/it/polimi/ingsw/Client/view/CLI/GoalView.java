@@ -19,8 +19,8 @@ import java.util.Scanner;
  */
 public class GoalView extends View {
 
-    private GoalAndScoreMsg msg;
-    private Object lock;
+    private final GoalAndScoreMsg msg;
+    private final Object lock;
     private ChatStorage chat;
     private boolean sendingResult;
     public GoalView(GoalAndScoreMsg msg) {

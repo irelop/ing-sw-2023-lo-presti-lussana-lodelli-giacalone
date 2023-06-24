@@ -1,7 +1,5 @@
 package it.polimi.ingsw.Client;
 
-import it.polimi.ingsw.Client.Client;
-import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Server.Messages.C2SMessage;
 import it.polimi.ingsw.Server.Messages.S2CMessage;
 
@@ -19,8 +17,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class SocketServerHandler extends ServerHandler {
     public ObjectInputStream input;
     public ObjectOutputStream output;
-    private Socket server;
-    private AtomicBoolean shouldStop = new AtomicBoolean(false);
+    private final Socket server;
+    private final AtomicBoolean shouldStop = new AtomicBoolean(false);
 
     public SocketServerHandler(Socket server, Client owner){
        super(owner);

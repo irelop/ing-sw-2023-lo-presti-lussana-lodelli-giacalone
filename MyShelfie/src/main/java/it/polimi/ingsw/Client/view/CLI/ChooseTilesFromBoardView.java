@@ -1,10 +1,5 @@
 package it.polimi.ingsw.Client.view.CLI;
 
-/**
- * VIEW that prints the board, the common goal cards and the personal card of the player.
- * @author Irene Lo Presti
- */
-
 import it.polimi.ingsw.utils.Exceptions.InvalidRuleAnswerException;
 import it.polimi.ingsw.Server.Messages.*;
 import it.polimi.ingsw.utils.Exceptions.InvalidDirectionException;
@@ -18,6 +13,10 @@ import java.util.Scanner;
 
 import static it.polimi.ingsw.utils.ColorCode.*;
 
+/**
+ * VIEW that prints the board, the common goal cards and the personal card of the player.
+ * @author Irene Lo Presti
+ */
 public class ChooseTilesFromBoardView extends View {
 
     public int MAX_COLUMNS = 9;
@@ -72,8 +71,10 @@ public class ChooseTilesFromBoardView extends View {
                 " after you choose it, you have to select the number of tiles you want and\n" +
                 " the direction (north, south, east, west) in which\n" +
                 " you want to choose these other tiles\n");
-        System.out.println("Remember also that the board is 9x9 and that you have to choose a cell\n" +
-                "with a tile (so it has to be valid and not empty) with a free side\n");
+        System.out.println("""
+                Remember also that the board is 9x9 and that you have to choose a cell
+                with a tile (so it has to be valid and not empty) with a free side
+                """);
 
         //choosing initial row and initial column
         synchronized (this) {
@@ -235,6 +236,7 @@ public class ChooseTilesFromBoardView extends View {
 
     /**
      * this method prints the common cards and the personal card
+     * @deprecated
      */
     public void printCommonGoalCardsInfo(){
 
@@ -512,29 +514,33 @@ public class ChooseTilesFromBoardView extends View {
     public void printRules(){
         System.out.println("RULES TO PLAY MY SHELFIE:");
         System.out.println("Goal of the game:");
-        System.out.println("Players take item tiles from the living room (the board) and place them in\n" +
-                "their bookshelves to score points; the game ends when a player\n" +
-                "completely fills their bookshelf. The player with more points at\n" +
-                "the end will win the game. There are 4 ways to score points:");
+        System.out.println("""
+                Players take item tiles from the living room (the board) and place them in
+                their bookshelves to score points; the game ends when a player
+                completely fills their bookshelf. The player with more points at
+                the end will win the game. There are 4 ways to score points:""");
         System.out.println("\n1) Personal goal card:");
-        System.out.println("\tThe personal goal card grants points if you match the highlighted spaces\n" +
-                "\twith the corresponding item tiles. You will see the personal goal directly in your\n" +
-                "\tpersonal shelf");
+        System.out.println("""
+                \tThe personal goal card grants points if you match the highlighted spaces
+                \twith the corresponding item tiles. You will see the personal goal directly in your
+                \tpersonal shelf""");
         System.out.println("\n2) Common goal cards:");
-        System.out.println("\tThe common goal cards grant points to the players who achieve the illustrated\n" +
-                "\tpattern. Every common goal card has a detailed description, so don't worry!\n" +
-                "\tThe first player to achieve the personal goal wins 8 points, the second one 6 points\n" +
-                "\tthe third one 4 points and the last one 2 points. It isn't possible to achieve the\n" +
-                "\tsame goal multiple times.");
+        System.out.println("""
+                \tThe common goal cards grant points to the players who achieve the illustrated
+                \tpattern. Every common goal card has a detailed description, so don't worry!
+                \tThe first player to achieve the personal goal wins 8 points, the second one 6 points
+                \tthe third one 4 points and the last one 2 points. It isn't possible to achieve the
+                \tsame goal multiple times.""");
         System.out.println("\n3) Adjacent Item tiles:");
-        System.out.println("\tGroups of adjacent item tiles of the same color on your bookshelf grant points\n" +
-                "\tdepending on how many tiles are connected (with one side touching).\n" +
-                "\tPoints:\n" +
-                "\t\t 3 tiles connected: 2 points\n" +
-                "\t\t 4 tiles connected: 3 points\n" +
-                "\t\t 5 tiles connected: 5 points\n" +
-                "\t\t6+ tiles connected: 8 points\n" +
-                "\tLet's make an example:");
+        System.out.println("""
+                \tGroups of adjacent item tiles of the same color on your bookshelf grant points
+                \tdepending on how many tiles are connected (with one side touching).
+                \tPoints:
+                \t\t 3 tiles connected: 2 points
+                \t\t 4 tiles connected: 3 points
+                \t\t 5 tiles connected: 5 points
+                \t\t6+ tiles connected: 8 points
+                \tLet's make an example:""");
 
         Tile[][] example = new Tile[6][5];
         ReadFileByLines reader = new ReadFileByLines();
@@ -553,33 +559,46 @@ public class ChooseTilesFromBoardView extends View {
         }
         printSmallMatrix(example);
 
-        System.out.println("\t8 PINK tiles: 8 points\n" +
-                "\t4 LIGHT BLUE tiles: 3 points\n" +
-                "\t5 GREEN tiles: 5 points\n" +
-                "\t4 BLUE tiles: 3 points\n" +
-                "\t3 YELLOW tiles: 2 points\n" +
-                "\tTotal: 21 points");
+        System.out.println("""
+                \t8 PINK tiles: 8 points
+                \t4 LIGHT BLUE tiles: 3 points
+                \t5 GREEN tiles: 5 points
+                \t4 BLUE tiles: 3 points
+                \t3 YELLOW tiles: 2 points
+                \tTotal: 21 points""");
         System.out.println("\n4) Game-end trigger:");
         System.out.println("\tThe first player who completely fills their bookshelf scores 1 additional point.");
 
         System.out.println("\n\nGame play:");
-        System.out.println("The game is divided in turns that take place in a clockwise order starting from\n" +
-                "the first player. The first player is chosen randomly.\n" +
-                "During your turn, you must take 1, 2 o 3 item tiles from living room board, following \n" +
-                "these rules:\n");
+        System.out.println("""
+                The game is divided in turns that take place in a clockwise order starting from
+                the first player. The first player is chosen randomly.
+                During your turn, you must take 1, 2 o 3 item tiles from living room board, following\s
+                these rules:
+                """);
         System.out.println("\tThe tiles you take must be adjacent to each other and form a straight line.\n");
-        System.out.println("\tAll the tiles you take have at least one side free (not touching directly other\n" +
-                "\ttiles) at the beginning of your turn (i.e. you cannot take a tile that becomes free\n" +
-                "\tafter your first pick).\n");
-        System.out.print("\tThen, you must place all the tiles you've picked into 1 column of your bookshelf.\n" +
-                "\tYou can decide the order, but you cannot place tiles in more than 1 column in a single turn.\n");
+        System.out.println("""
+                \tAll the tiles you take have at least one side free (not touching directly other
+                \ttiles) at the beginning of your turn (i.e. you cannot take a tile that becomes free
+                \tafter your first pick).
+                """);
+        System.out.print("""
+                \tThen, you must place all the tiles you've picked into 1 column of your bookshelf.
+                \tYou can decide the order, but you cannot place tiles in more than 1 column in a single turn.
+                """);
         System.out.println("Note: You cannot take tiles if you don't have enough available space in your bookshelf\n");
-        System.out.print("At the end of a turn, if there are only item tiles without any other adjacent tile on\n" +
-                "the board, the board will automatically refill.\n\n");
+        System.out.print("""
+                At the end of a turn, if there are only item tiles without any other adjacent tile on
+                the board, the board will automatically refill.
+
+                """);
         System.out.println("Game end:");
-        System.out.println("\tThe first player who fills all the spaces of their bookshelf takes the end game\n" +
-                "\ttoken. The game continues until the last player(the one before the first)\n" +
-                "\thas played their turn.\n\n");
+        System.out.println("""
+                \tThe first player who fills all the spaces of their bookshelf takes the end game
+                \ttoken. The game continues until the last player(the one before the first)
+                \thas played their turn.
+
+                """);
         System.out.println("[press enter to continue]");
         Scanner scanner = new Scanner(System.in);
         String goOn = scanner.nextLine();

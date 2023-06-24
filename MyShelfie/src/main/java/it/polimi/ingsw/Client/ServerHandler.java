@@ -17,7 +17,7 @@ public abstract class ServerHandler implements Runnable{
 
 
     /**
-     * OVERVIEW: this method allows to send a message from the client to the server independently from the
+     * OVERVIEW: this method allows to send a message from the client to the server independently of the
      *           network technology chosen.
      * @param msg : message to be forwarded to the server.
      */
