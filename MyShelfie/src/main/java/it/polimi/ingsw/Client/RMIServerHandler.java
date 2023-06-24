@@ -33,14 +33,14 @@ public class RMIServerHandler extends ServerHandler{
                     getRemoteServer().ping();
                 else {
                     stop = true;
-                    System.out.println("[ERROR] Connection to the server has been lost");
+                    System.out.println("[RMI] Error: connection to the server has been lost");
                     System.out.println("Disconnecting...");
                     System.exit(1);
                 }
             }catch(RemoteException e){
                  //goOn= false;
                 stop = true;
-                System.out.println("[ERROR] Connection to the server has been lost");
+                System.out.println("[RMI] Error: connection to the server has been lost");
                 System.out.println("Disconnecting...");
                 System.exit(1);
             } catch (InterruptedException e) {
@@ -59,7 +59,7 @@ public class RMIServerHandler extends ServerHandler{
         }
         this.remoteServer = null;
 
-        System.out.println("Connection with RMI server closed");
+        System.out.println("[RMI] Connection with RMI server closed");
     }
 
 

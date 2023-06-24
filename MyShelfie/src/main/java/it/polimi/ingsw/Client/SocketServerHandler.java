@@ -29,7 +29,7 @@ public class SocketServerHandler extends ServerHandler {
             output = new ObjectOutputStream(server.getOutputStream());
             input = new ObjectInputStream(server.getInputStream());
         }catch(IOException e){
-            System.out.println("can't open the connection to: "+server.getInetAddress());
+            System.out.println("[SKT] Error: can't open the connection to: "+server.getInetAddress());
             owner.setTrueTerminate();
         }
     }
@@ -39,7 +39,7 @@ public class SocketServerHandler extends ServerHandler {
         try{
             handleClientConnection();
         }catch(IOException e){
-            System.out.println("server "+ server.getInetAddress()+" connection dropped");
+            System.out.println("[SKT] Server "+ server.getInetAddress()+" connection dropped");
             System.exit(0);
         }
 
@@ -72,7 +72,7 @@ public class SocketServerHandler extends ServerHandler {
                 }
             }
         }catch(ClassNotFoundException | ClassCastException e){
-            System.out.println("Invalid stream from server");
+            System.out.println("[SKT] Invalid stream from server");
         }
     }
     @Override
@@ -91,7 +91,7 @@ public class SocketServerHandler extends ServerHandler {
         shouldStop.set(true);   //notifying the handling method that it should stop in the next loop ASAP
         try {
             server.shutdownInput();
-            System.out.println("Connection closed.");
+            System.out.println("[SKT] Connection closed.");
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -11,7 +11,7 @@ import it.polimi.ingsw.Server.Model.Tile;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import static it.polimi.ingsw.Client.view.CLI.ColorCode.*;
+import static it.polimi.ingsw.utils.ColorCode.*;
 
 /**
  * VIEW that prints the board, the common goal cards and the personal card of the player.
