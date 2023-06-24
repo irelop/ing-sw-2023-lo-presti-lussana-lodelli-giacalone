@@ -165,6 +165,11 @@ public class MyShelfie {
         }
     }
 
+    /**
+     * OVERVIEW: this method allows to return to each player connected an updated snapshot of the current players waiting
+     * in the lobby to start the game.
+     * @author Andrea Giacalone
+     */
     public void updateLobby(){
         ArrayList<String> lobbyPlayers = playersConnected.stream().map(Player::getNickname).collect(Collectors.toCollection(ArrayList::new));
         for (int i = 0; i<playersConnected.size();i++) {
@@ -741,7 +746,13 @@ public class MyShelfie {
 
     //- - - - - - - - - - - - - - - - - - -| C H A T   M E T H O D S |- - - - - - - - - - - - - - - - - - - -
 
-
+    /**
+     * OVERVIEW: this method allows to return the record of chat messages filtered according to the their privacy flag.
+     * The filtered chat will contain messages which are public, or, if private, only those whose receiver or whose sender
+     * is equal to the requester of the chat record.
+     * @param requester: the player who wants the chat to be shown.
+     * @author Andrea Giacalone
+     */
     public void getCustomChat(String requester){
         ChatStorage customChat = chatManager.getCustomChat(requester);
         for (ClientHandler clientHandler : clientHandlers) {
@@ -754,6 +765,11 @@ public class MyShelfie {
             }
     }
 
+    /**
+     * OVERVIEW: this method allow to update and so to add a valid message to the chat record of messages.
+     * @param messageToSend: the message sent by the chatter.
+     * @aythor Andrea Giacalone
+     */
     public void updateChat(ChatMessage messageToSend){
         ChatMsgAnswer chatMsgAnswer;
         if(getChatManager().updateChat(messageToSend)){
