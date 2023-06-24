@@ -2,9 +2,13 @@ package it.polimi.ingsw.Client.view.CLI;
 
 import it.polimi.ingsw.Server.Messages.FinishGameRequest;
 import it.polimi.ingsw.Server.Messages.ScoreBoardMsg;
-
 import java.util.Collections;
 import java.util.Scanner;
+
+/**
+ * Last view: it prints the score board
+ * @author Matteo Lussana, Andrea Giacalone
+ */
 
 public class EndGameView extends View {
     private final ScoreBoardMsg msg;
@@ -16,7 +20,7 @@ public class EndGameView extends View {
     @Override
     public void run() {
 
-        //sorting arrayList
+        //sorting arrayList based on the total score
         for (int i = 0; i < msg.playerName.size(); i++)
             for (int j = 0; j < msg.playerName.size() - 1; j++) {
                 if (msg.totalScore.get(j) < msg.totalScore.get(j + 1) && i != j) {
@@ -43,13 +47,9 @@ public class EndGameView extends View {
             System.out.println("See you soon " + msg.playerNickname + "!");
             getOwner().setTrueTerminate();
             FinishGameRequest finishGameRequest = new FinishGameRequest();
-
             getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
-
-
         }
     }
-
 }
 
 

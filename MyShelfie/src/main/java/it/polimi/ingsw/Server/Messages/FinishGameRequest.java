@@ -2,8 +2,12 @@ package it.polimi.ingsw.Server.Messages;
 
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.utils.rmi.RemoteInterface;
-
 import java.rmi.RemoteException;
+
+/**
+ * This message is sent by a player that has finished to see the scoreboard or which countdown is terminated
+ * @author Irene Lo Presti, Andrea Giacalone
+ */
 
 public class FinishGameRequest extends C2SMessage{
 

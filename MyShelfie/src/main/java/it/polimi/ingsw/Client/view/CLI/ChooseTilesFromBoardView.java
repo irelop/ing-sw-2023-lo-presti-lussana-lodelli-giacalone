@@ -7,10 +7,8 @@ import it.polimi.ingsw.utils.Exceptions.InvalidNumberOfTilesException;
 import it.polimi.ingsw.utils.Exceptions.OutOfBoardException;
 import it.polimi.ingsw.utils.ReadFileByLines;
 import it.polimi.ingsw.Server.Model.Tile;
-
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
 import static it.polimi.ingsw.utils.ColorCode.*;
 
 /**
