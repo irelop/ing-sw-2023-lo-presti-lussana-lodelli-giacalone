@@ -61,7 +61,7 @@ public class ChooseTilesFromBoardView extends View {
         }
         //printCommonGoalCardsInfo();
         printCommonGoalCardsInfoSide2Side();
-        printShelfAndPersonalGoalCard();
+        printPersonalGoalCardOnPlayerShelf();
 
         printBoard(-1, -1);
 
@@ -195,322 +195,10 @@ public class ChooseTilesFromBoardView extends View {
         }
     }
 
-    private char getRuleAnswer() throws InvalidRuleAnswerException {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Do you want to read the rules? (y-n) ");
-        String input = scanner.next().toUpperCase();
-        if(input.length() > 1 && !input.equals("NO") && !input.equals("YES")) throw new InvalidRuleAnswerException();
-
-        char answer = input.charAt(0);
-        if(answer!='Y' && answer!='N') throw new InvalidRuleAnswerException();
-        else return answer;
-    }
-
-    private void printShelfAndPersonalGoalCard(){
-
-        System.out.println(yourTurnMsg.nickname + ", this is your shelf, empty circles represent where to place tiles to\n" +
-                "achieve personal goal card:");
-        printPersonalGoalCardOnPlayerShelf(yourTurnMsg.shelfSnapshot);
-        System.out.println();
-    }
-
-    public void setInitialPositionAnswer(InitialPositionAnswer answer){
-        this.initialPositionAnswer = answer;
-    }
-    public void setPlayerChoiceAnswer(PlayerChoiceAnswer answer){
-        this.playerChoiceAnswer = answer;
-    }
-
-
+    //- - - - - - - - - - - - - - - - - - -| PRINT METHODS |- - - - - - - - - - - - - - - - - - -
     /**
-     * this method prints the order of the players
+     * This method prints all the rules, with an example
      */
-    public void printOrderOfPlayers(){
-        if(yourTurnMsg.nickname.equals(yourTurnMsg.playersNames.get(0)))
-            System.out.println(yourTurnMsg.nickname + ", you have the chair so you are the first one to play!");
-        System.out.println("This is the order of playing:");
-        for(int i=0; i<yourTurnMsg.playersNames.size(); i++)
-            System.out.println((i+1)+") "+yourTurnMsg.playersNames.get(i));
-        System.out.println();
-    }
-
-    /**
-     * this method prints the common cards and the personal card
-     * @deprecated
-     */
-    public void printCommonGoalCardsInfo(){
-
-        System.out.println("Common goal cards:");
-        for(int i=0; i<yourTurnMsg.commonGoalCards.length; i++){
-            printSmallMatrix(yourTurnMsg.commonGoalCards[i].getCardInfo().getSchema());
-            System.out.println("x"+yourTurnMsg.commonGoalCards[i].getCardInfo().getTimes());
-            System.out.println(yourTurnMsg.commonGoalCards[i].getCardInfo().getDescription());
-            System.out.println();
-        }
-    }
-
-    /**
-     * this method allows to print the goal cards with the possibility to visualize the common cards side to side.
-     */
-
-    public void printCommonGoalCardsInfoSide2Side(){
-
-        System.out.println("Common goal cards:");
-
-        String code = "\u25CF";
-        for(int r=0; r<6; r++) {
-            for (int i = 0; i < yourTurnMsg.commonGoalCards.length; i++) {
-                for (int c = 0; c < 5; c++) {
-
-                    switch (yourTurnMsg.commonGoalCards[i].getCardInfo().getSchema()[r][c]) {
-                        case NOT_VALID -> System.out.print(" ");
-                        case BLANK -> System.out.print(BLANK.code + code + RESET.code);
-                        case PINK -> System.out.print(PINK.code + code + RESET.code);
-                        case GREEN -> System.out.print(GREEN.code + code + RESET.code);
-                        case BLUE -> System.out.print(BLUE.code + code + RESET.code);
-                        case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + code + RESET.code);
-                        case WHITE -> System.out.print(WHITE.code + code + RESET.code);
-                        case YELLOW -> System.out.print(YELLOW.code + code + RESET.code);
-                    }
-                    System.out.print("\t");
-                }
-                System.out.print("\t");
-                System.out.print("\t");
-            }
-            System.out.println();
-        }
-
-        for(int i=0; i<yourTurnMsg.commonGoalCards.length; i++){
-            System.out.println("Common Goal Card #" +(i+1));
-            System.out.println("x"+yourTurnMsg.commonGoalCards[i].getCardInfo().getTimes());
-            System.out.println(yourTurnMsg.commonGoalCards[i].getCardInfo().getDescription());
-            System.out.println();
-        }
-
-    }
-
-
-    /**
-     * This method prints the pattern of the cards
-     * @param pattern: matrix of tiles with the pattern to follow in order to achieve the goal (personal or common)
-     */
-    public void printSmallMatrix(Tile[][] pattern){
-        String code = "\u25CF";
-        for(int r=0; r<6; r++){
-
-            for(int c=0; c<5; c++){
-                if(c==0)
-                    System.out.print("\t");
-                switch (pattern[r][c]) {
-                    case NOT_VALID -> System.out.print(" ");
-                    case BLANK -> System.out.print(BLANK.code + code + RESET.code);
-                    case PINK -> System.out.print(PINK.code + code + RESET.code);
-                    case GREEN -> System.out.print(GREEN.code + code + RESET.code);
-                    case BLUE -> System.out.print(BLUE.code + code + RESET.code);
-                    case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + code + RESET.code);
-                    case WHITE -> System.out.print(WHITE.code + code + RESET.code);
-                    case YELLOW -> System.out.print(YELLOW.code + code + RESET.code);
-                }
-                System.out.print("\t");
-            }
-            System.out.println();
-        }
-    }
-
-    public void printPersonalGoalCardOnPlayerShelf(Tile[][] myShelf) {
-
-        Tile[][] personalGoalCardShelf = yourTurnMsg.personalGoalCard.getPattern();
-
-        // Printing column's indexes...
-        System.out.print(/*"\u2716" +*/ "\t");
-        for (int i = 0; i < myShelf[0].length; i++)
-            System.out.print( (i+1) + "\t" );
-        System.out.println();
-
-        for (int i = 0; i < myShelf.length; i++) {
-            // Printing row's indexes...
-            System.out.print( /*(i+1) +*/ "\t" );
-            // Printing the shelf...
-            for (int j = 0; j < myShelf[0].length; j++) {
-                // printing empty circles in personal goal card positions, filled circles in other cases
-                if (personalGoalCardShelf[i][j] != Tile.BLANK && myShelf[i][j] == Tile.BLANK)
-                    printTile(personalGoalCardShelf[i][j],"\u25cb");
-                else
-                    printTile(myShelf[i][j],"\u25CF");
-                System.out.print("\t");
-            }
-            System.out.println();
-        }
-    }
-
-    public void printTile(Tile tile, String code) {
-        switch (tile) {
-            case NOT_VALID -> System.out.print(" ");
-            case BLANK -> System.out.print(BLANK.code + code + RESET.code);
-            case PINK -> System.out.print(PINK.code + code + RESET.code);
-            case GREEN -> System.out.print(GREEN.code + code + RESET.code);
-            case BLUE -> System.out.print(BLUE.code + code + RESET.code);
-            case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + code + RESET.code);
-            case WHITE -> System.out.print(WHITE.code + code + RESET.code);
-            case YELLOW -> System.out.print(YELLOW.code + code + RESET.code);
-        }
-    }
-
-
-    /**
-     * This method prints the board
-     */
-    public void printBoard(int initialRow, int initialColumn){
-
-        String code;
-
-        //printing the indexes of the columns
-        System.out.print(/*"\u2716\t"*/ "\t");
-        for(int i=0; i<MAX_COLUMNS; i++)
-            System.out.print((i+1)+"\t");
-        System.out.println();
-
-
-
-
-        for(int r=0; r<MAX_ROWS; r++){
-            //printing the indexes of the rows
-            System.out.print((r+1)+"\t");
-
-            //printing the tiles
-            for(int c=0; c<MAX_COLUMNS; c++){
-
-                if(r == initialRow && c == initialColumn)
-                    code = "*";
-                else
-                    code = "\u25CF";
-
-                switch (yourTurnMsg.boardSnapshot[r][c]) {
-                    case NOT_VALID -> System.out.print(" ");
-                    case BLANK -> System.out.print(BLANK.code + code + RESET.code);
-                    case PINK -> System.out.print(PINK.code + code + RESET.code);
-                    case GREEN -> System.out.print(GREEN.code + code + RESET.code);
-                    case BLUE -> System.out.print(BLUE.code + code + RESET.code);
-                    case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + code + RESET.code);
-                    case WHITE -> System.out.print(WHITE.code + code + RESET.code);
-                    case YELLOW -> System.out.print(YELLOW.code + code + RESET.code);
-                }
-                System.out.print("\t");
-            }
-            System.out.print(r+1);
-            System.out.println();
-        }
-
-        System.out.print(/*"\u2716\t"*/ " \t");
-        for(int r=0; r<MAX_ROWS; r++)
-            //printing the indexes of the rows
-            System.out.print((r+1)+"\t");
-        System.out.println();
-
-    }
-
-    /**
-     * Getter method for the initial row
-     * @return row>=1 && row<MAX_ROWS
-     * @throws OutOfBoardException if the row is not between 1 and MAX_ROWS
-     */
-    private int getInitialRow() throws OutOfBoardException {
-        int r;
-        System.out.print("Please insert the row of the initial position: ");
-        Scanner scanner = new Scanner(System.in);
-        do{
-            try{
-                r = scanner.nextInt();
-                break;
-            }catch(InputMismatchException e){
-                System.out.println("You have to insert a number. Try again!");
-                scanner.next();
-            }
-        }while(true);
-        if(r<=0 || r>MAX_ROWS) throw new OutOfBoardException();
-        return r;
-    }
-
-    /**
-     * Getter method for the initial column
-     * @return column>=1 && column<MAX_ROW
-     * @throws OutOfBoardException if the column is not between 1 and MAX_COLUMNS
-     */
-    private int getInitialColumn() throws OutOfBoardException{
-        int c;
-        System.out.print("Please insert the column of the initial position: ");
-        Scanner scanner = new Scanner(System.in);
-        do{
-            try{
-                c = scanner.nextInt();
-                break;
-            }catch(InputMismatchException e){
-                System.out.println("You have to insert a number. Try again!");
-                scanner.next();
-            }
-        }while(true);
-        if(c<=0 || c>MAX_COLUMNS) throw new OutOfBoardException();
-        else return c;
-    }
-
-    /**
-     * Getter method for the number of tiles
-     * @return number of tiles >= 0 && number of tiles < maxTilesPickable-1
-     * @throws InvalidNumberOfTilesException if the number of tiles is not between 0 and axTilesPickable-1
-     */
-    private int getNumberOfTiles() throws InvalidNumberOfTilesException{
-
-        System.out.println(yourTurnMsg.nickname + ", now it's time to" +
-                " insert the number of tiles that you\n" +
-                "want to chose (other than the one that you have already chose).");
-
-        System.out.println("Remember: you can chose between 0 (if you don't want to pick others tiles)\n" +
-                "and "+(yourTurnMsg.maxTilesPickable-1)+".");
-        System.out.print("Please insert the number of tiles: ");
-
-        Scanner scanner = new Scanner(System.in);
-        int numberOfTiles;
-        do{
-            try{
-                numberOfTiles = scanner.nextInt();
-                break;
-            }catch(InputMismatchException e){
-                System.out.println("You have to insert a number. Try again!");
-                scanner.next();
-            }
-        }while(true);
-
-        if(numberOfTiles<0 || numberOfTiles>yourTurnMsg.maxTilesPickable-1)
-            throw new InvalidNumberOfTilesException(yourTurnMsg.maxTilesPickable);
-
-        else
-            return numberOfTiles;
-    }
-
-    /**
-     * Getter method for direction
-     * @return direction (n, s, w or e)
-     * @throws InvalidDirectionException if the direction is not n, s, w or e
-     */
-    private char getDirection() throws InvalidDirectionException {
-
-        System.out.println(yourTurnMsg.nickname + ", now it's time to" +
-                " insert the direction in which you want to choose those tiles.");
-        System.out.println("Remember: you can choose between n (north), s (south), e (east), w (west).");
-        System.out.print("Please insert the direction: ");
-
-        Scanner scanner = new Scanner(System.in);
-        String answer;
-        answer = scanner.next().toLowerCase();
-        if(answer.length()>1) throw new InvalidDirectionException();
-
-        char direction;
-        direction = answer.charAt(0);
-
-        if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w') throw new InvalidDirectionException();
-        else return direction;
-    }
-
     public void printRules(){
         System.out.println("RULES TO PLAY MY SHELFIE:");
         System.out.println("Goal of the game:");
@@ -607,10 +295,328 @@ public class ChooseTilesFromBoardView extends View {
             return;
     }
 
+    /**
+     * This method prints the order of the players
+     */
+    public void printOrderOfPlayers(){
+        if(yourTurnMsg.nickname.equals(yourTurnMsg.playersNames.get(0)))
+            System.out.println(yourTurnMsg.nickname + ", you have the chair so you are the first one to play!");
+        System.out.println("This is the order of playing:");
+        for(int i=0; i<yourTurnMsg.playersNames.size(); i++)
+            System.out.println((i+1)+") "+yourTurnMsg.playersNames.get(i));
+        System.out.println();
+    }
+
+    /**
+     * This method prints the common cards
+     * @deprecated
+     */
+    public void printCommonGoalCardsInfo(){
+        System.out.println("Common goal cards:");
+        for(int i=0; i<yourTurnMsg.commonGoalCards.length; i++){
+            printSmallMatrix(yourTurnMsg.commonGoalCards[i].getCardInfo().getSchema());
+            System.out.println("x"+yourTurnMsg.commonGoalCards[i].getCardInfo().getTimes());
+            System.out.println(yourTurnMsg.commonGoalCards[i].getCardInfo().getDescription());
+            System.out.println();
+        }
+    }
+
+    /**
+     * This method allows to print the goal cards with the possibility to visualize the common cards side to side.
+     * @author Andrea Giacalone
+     */
+    public void printCommonGoalCardsInfoSide2Side(){
+
+        System.out.println("Common goal cards:");
+        String code = "\u25CF";
+        for(int r=0; r<6; r++) {
+            for (int i = 0; i < yourTurnMsg.commonGoalCards.length; i++) {
+                for (int c = 0; c < 5; c++) {
+
+                    switch (yourTurnMsg.commonGoalCards[i].getCardInfo().getSchema()[r][c]) {
+                        case NOT_VALID -> System.out.print(" ");
+                        case BLANK -> System.out.print(BLANK.code + code + RESET.code);
+                        case PINK -> System.out.print(PINK.code + code + RESET.code);
+                        case GREEN -> System.out.print(GREEN.code + code + RESET.code);
+                        case BLUE -> System.out.print(BLUE.code + code + RESET.code);
+                        case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + code + RESET.code);
+                        case WHITE -> System.out.print(WHITE.code + code + RESET.code);
+                        case YELLOW -> System.out.print(YELLOW.code + code + RESET.code);
+                    }
+                    System.out.print("\t");
+                }
+                System.out.print("\t");
+                System.out.print("\t");
+            }
+            System.out.println();
+        }
+
+        for(int i=0; i<yourTurnMsg.commonGoalCards.length; i++){
+            System.out.println("Common Goal Card #" +(i+1));
+            System.out.println("x"+yourTurnMsg.commonGoalCards[i].getCardInfo().getTimes());
+            System.out.println(yourTurnMsg.commonGoalCards[i].getCardInfo().getDescription());
+            System.out.println();
+        }
+
+    }
+
+    /**
+     * This method prints the player's shelf with the instruction for the personal goal
+     * @author Riccardo Lodelli
+     */
+    public void printPersonalGoalCardOnPlayerShelf() {
+        Tile[][] myShelf = yourTurnMsg.shelfSnapshot;
+        Tile[][] personalGoalCardShelf = yourTurnMsg.personalGoalCard.getPattern();
+
+        System.out.println(yourTurnMsg.nickname + ", this is your shelf, empty circles represent where to place tiles to\n" +
+                "achieve personal goal card:");
+
+        // Printing column's indexes...
+        System.out.print(/*"\u2716" +*/ "\t");
+        for (int i = 0; i < myShelf[0].length; i++)
+            System.out.print( (i+1) + "\t" );
+        System.out.println();
+
+        for (int i = 0; i < myShelf.length; i++) {
+            // Printing row's indexes...
+            System.out.print( /*(i+1) +*/ "\t" );
+            // Printing the shelf...
+            for (int j = 0; j < myShelf[0].length; j++) {
+                // printing empty circles in personal goal card positions, filled circles in other cases
+                if (personalGoalCardShelf[i][j] != Tile.BLANK && myShelf[i][j] == Tile.BLANK)
+                    printTile(personalGoalCardShelf[i][j],"\u25cb");
+                else
+                    printTile(myShelf[i][j],"\u25CF");
+                System.out.print("\t");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    /**
+     * This method prints the pattern of the cards
+     * @param pattern: matrix of tiles with the pattern to follow in order to achieve the goal (personal or common)
+     */
+    public void printSmallMatrix(Tile[][] pattern){
+        String code = "\u25CF";
+        for(int r=0; r<6; r++){
+
+            for(int c=0; c<5; c++){
+                if(c==0)
+                    System.out.print("\t");
+                switch (pattern[r][c]) {
+                    case NOT_VALID -> System.out.print(" ");
+                    case BLANK -> System.out.print(BLANK.code + code + RESET.code);
+                    case PINK -> System.out.print(PINK.code + code + RESET.code);
+                    case GREEN -> System.out.print(GREEN.code + code + RESET.code);
+                    case BLUE -> System.out.print(BLUE.code + code + RESET.code);
+                    case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + code + RESET.code);
+                    case WHITE -> System.out.print(WHITE.code + code + RESET.code);
+                    case YELLOW -> System.out.print(YELLOW.code + code + RESET.code);
+                }
+                System.out.print("\t");
+            }
+            System.out.println();
+        }
+    }
+
+    /**
+     * This method prints the correct color given the tile
+     * @param tile to print
+     * @param code: dot or *
+     */
+    public void printTile(Tile tile, String code) {
+        switch (tile) {
+            case NOT_VALID -> System.out.print(" ");
+            case BLANK -> System.out.print(BLANK.code + code + RESET.code);
+            case PINK -> System.out.print(PINK.code + code + RESET.code);
+            case GREEN -> System.out.print(GREEN.code + code + RESET.code);
+            case BLUE -> System.out.print(BLUE.code + code + RESET.code);
+            case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + code + RESET.code);
+            case WHITE -> System.out.print(WHITE.code + code + RESET.code);
+            case YELLOW -> System.out.print(YELLOW.code + code + RESET.code);
+        }
+    }
+
+    /**
+     * This method prints the board
+     */
+    public void printBoard(int initialRow, int initialColumn){
+
+        String code;
+
+        //printing the indexes of the columns
+        System.out.print(/*"\u2716\t"*/ "\t");
+        for(int i=0; i<MAX_COLUMNS; i++)
+            System.out.print((i+1)+"\t");
+        System.out.println();
+
+        for(int r=0; r<MAX_ROWS; r++){
+            //printing the indexes of the rows
+            System.out.print((r+1)+"\t");
+
+            //printing the tiles
+            for(int c=0; c<MAX_COLUMNS; c++){
+
+                if(r == initialRow && c == initialColumn)
+                    code = "*";
+                else
+                    code = "\u25CF";
+
+                switch (yourTurnMsg.boardSnapshot[r][c]) {
+                    case NOT_VALID -> System.out.print(" ");
+                    case BLANK -> System.out.print(BLANK.code + code + RESET.code);
+                    case PINK -> System.out.print(PINK.code + code + RESET.code);
+                    case GREEN -> System.out.print(GREEN.code + code + RESET.code);
+                    case BLUE -> System.out.print(BLUE.code + code + RESET.code);
+                    case LIGHTBLUE -> System.out.print(LIGHTBLUE.code + code + RESET.code);
+                    case WHITE -> System.out.print(WHITE.code + code + RESET.code);
+                    case YELLOW -> System.out.print(YELLOW.code + code + RESET.code);
+                }
+                System.out.print("\t");
+            }
+            System.out.print(r+1);
+            System.out.println();
+        }
+        System.out.print(" \t");
+        for(int r=0; r<MAX_ROWS; r++)
+            //printing the indexes of the rows
+            System.out.print((r+1)+"\t");
+        System.out.println();
+    }
+
+    //- - - - - - - - - - - - - - - - -| INPUT METHODS |- - - - - - - - - - - - -  - - - -
+    /**
+     * This method gets if the player wants to read the rules
+     * @return 'Y' (yes) or 'N' (no)
+     * @throws InvalidRuleAnswerException if the answer is not 'y', 'n', 'yes', 'no'
+     */
+    private char getRuleAnswer() throws InvalidRuleAnswerException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Do you want to read the rules? (y-n) ");
+        String input = scanner.next().toUpperCase();
+        if(input.length() > 1 && !input.equals("NO") && !input.equals("YES")) throw new InvalidRuleAnswerException();
+
+        char answer = input.charAt(0);
+        if(answer!='Y' && answer!='N') throw new InvalidRuleAnswerException();
+        else return answer;
+    }
+
+    /**
+     * Getter method for the initial row
+     * @return row>=1 && row<MAX_ROWS
+     * @throws OutOfBoardException if the row is not between 1 and MAX_ROWS
+     */
+    private int getInitialRow() throws OutOfBoardException {
+        int r;
+        System.out.print("Please insert the row of the initial position: ");
+        Scanner scanner = new Scanner(System.in);
+        do{
+            try{
+                r = scanner.nextInt();
+                break;
+            }catch(InputMismatchException e){
+                System.out.println("You have to insert a number. Try again!");
+                scanner.next();
+            }
+        }while(true);
+        if(r<=0 || r>MAX_ROWS) throw new OutOfBoardException();
+        return r;
+    }
+
+    /**
+     * Getter method for the initial column
+     * @return column>=1 && column<MAX_ROW
+     * @throws OutOfBoardException if the column is not between 1 and MAX_COLUMNS
+     */
+    private int getInitialColumn() throws OutOfBoardException{
+        int c;
+        System.out.print("Please insert the column of the initial position: ");
+        Scanner scanner = new Scanner(System.in);
+        do{
+            try{
+                c = scanner.nextInt();
+                break;
+            }catch(InputMismatchException e){
+                System.out.println("You have to insert a number. Try again!");
+                scanner.next();
+            }
+        }while(true);
+        if(c<=0 || c>MAX_COLUMNS) throw new OutOfBoardException();
+        else return c;
+    }
+
+    /**
+     * Getter method for the number of tiles
+     * @return number of tiles >= 0 && number of tiles < maxTilesPickable-1
+     * @throws InvalidNumberOfTilesException if the number of tiles is not between 0 and axTilesPickable-1
+     */
+    private int getNumberOfTiles() throws InvalidNumberOfTilesException{
+
+        System.out.println(yourTurnMsg.nickname + ", now it's time to" +
+                " insert the number of tiles that you\n" +
+                "want to chose (other than the one that you have already chose).");
+
+        System.out.println("Remember: you can chose between 0 (if you don't want to pick others tiles)\n" +
+                "and "+(yourTurnMsg.maxTilesPickable-1)+".");
+        System.out.print("Please insert the number of tiles: ");
+
+        Scanner scanner = new Scanner(System.in);
+        int numberOfTiles;
+        do{
+            try{
+                numberOfTiles = scanner.nextInt();
+                break;
+            }catch(InputMismatchException e){
+                System.out.println("You have to insert a number. Try again!");
+                scanner.next();
+            }
+        }while(true);
+
+        if(numberOfTiles<0 || numberOfTiles>yourTurnMsg.maxTilesPickable-1)
+            throw new InvalidNumberOfTilesException(yourTurnMsg.maxTilesPickable);
+
+        else
+            return numberOfTiles;
+    }
+
+    /**
+     * Getter method for direction
+     * @return direction (n, s, w or e)
+     * @throws InvalidDirectionException if the direction is not n, s, w or e
+     */
+    private char getDirection() throws InvalidDirectionException {
+
+        System.out.println(yourTurnMsg.nickname + ", now it's time to" +
+                " insert the direction in which you want to choose those tiles.");
+        System.out.println("Remember: you can choose between n (north), s (south), e (east), w (west).");
+        System.out.print("Please insert the direction: ");
+
+        Scanner scanner = new Scanner(System.in);
+        String answer;
+        answer = scanner.next().toLowerCase();
+        if (answer.length() > 1) throw new InvalidDirectionException();
+
+        char direction;
+        direction = answer.charAt(0);
+
+        if (direction != 'n' && direction != 's' && direction != 'e' && direction != 'w')
+            throw new InvalidDirectionException();
+        else return direction;
+    }
+
+    //- - - - - - - - - - - - - - - - - - - -| SETTER METHODS |- - - - - - - - - - - - - - - - - - - - - -
+    public void setInitialPositionAnswer(InitialPositionAnswer answer){
+        this.initialPositionAnswer = answer;
+    }
+    public void setPlayerChoiceAnswer(PlayerChoiceAnswer answer){
+        this.playerChoiceAnswer = answer;
+    }
+
     public void notifyView(){
         synchronized (this) {
             this.notify();
         }
     }
-
 }

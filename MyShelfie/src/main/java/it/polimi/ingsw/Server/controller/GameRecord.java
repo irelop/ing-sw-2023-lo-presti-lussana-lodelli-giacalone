@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Class to manage multiple games
+ * Class to manage multiple games, FA: Multiple Parallel Games
  */
 public class GameRecord {
     private HashMap<Integer, MyShelfie> games;
