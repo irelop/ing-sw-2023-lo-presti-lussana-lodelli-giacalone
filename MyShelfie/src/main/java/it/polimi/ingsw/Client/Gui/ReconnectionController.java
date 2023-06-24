@@ -12,6 +12,7 @@ import static java.lang.Thread.sleep;
 /**
  * Controller implementation for the login management
  * It contains a form to insert player's nickname and some other stuff
+ * @author Matteo Lussana
  * @see Controller
  */
 public class ReconnectionController extends Controller{
@@ -80,7 +81,11 @@ public class ReconnectionController extends Controller{
         if(e.getCode() == KeyCode.ENTER) submitNicknameRequest();
     }
 
-
+    /**
+     * this method manages the reception of reconnection answer,
+     * if the answer.msg received is not null it means that something went wrong
+     * so the player would be redirected to the login view
+     */
     public void manageReconnection(){
         if(answer.msg != null) {
             reconnectionResult.setText(answer.msg);
