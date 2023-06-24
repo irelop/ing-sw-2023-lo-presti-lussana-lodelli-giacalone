@@ -277,7 +277,7 @@ public class MyShelfie {
 
         if(isBoardRefilled) {
             // find max pickable tiles by the player
-            int maxTilesPickable = playersConnected.get(currentPlayerIndex).getMyShelfie().maxTilesPickable();
+            int maxTilesPickable = playersConnected.get(currentPlayerIndex).getShelf().maxTilesPickable();
 
             ArrayList<String> playersNames = new ArrayList<>();
             for (int i = 0; i < numberOfPlayers; i++) {
@@ -296,7 +296,7 @@ public class MyShelfie {
 
             for (int i = 0; i < 6; i++)
                 for (int j = 0; j < 5; j++)
-                    shelfSnapshot[i][j] = playersConnected.get(currentPlayerIndex).getMyShelfie().getGrid()[i][j];
+                    shelfSnapshot[i][j] = playersConnected.get(currentPlayerIndex).getShelf().getGrid()[i][j];
 
             for (int i = 0; i < playersConnected.size(); i++) {
                 if (i != currentPlayerIndex && clientHandlers.get(i).isConnected() && clientHandlers.get(i).getIsGui()) {
@@ -357,7 +357,7 @@ public class MyShelfie {
         Tile[][] matrix = new Tile[6][5];
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
-                matrix[i][j] = currentPlayer.getMyShelfie().getGrid()[i][j];
+                matrix[i][j] = currentPlayer.getShelf().getGrid()[i][j];
             }
         }
 
@@ -383,7 +383,7 @@ public class MyShelfie {
      */
     public void insertingTiles(int columnIdx,int[] orderIdxs) throws InvalidTileIndexInLittleHandException, NotEnoughSpaceInChosenColumnException {
         playersConnected.get(currentPlayerIndex).orderTiles(orderIdxs);
-        playersConnected.get(currentPlayerIndex).getMyShelfie().insert(columnIdx, playersConnected.get(currentPlayerIndex).getLittleHand());
+        playersConnected.get(currentPlayerIndex).getShelf().insert(columnIdx, playersConnected.get(currentPlayerIndex).getLittleHand());
         playersConnected.get(currentPlayerIndex).clearLittleHand();
     }
 
@@ -423,7 +423,7 @@ public class MyShelfie {
 
             //checking if a player's shelf is full,
             // if true add +1pt and set the last lap
-            if(playersConnected.get(currentPlayerIndex).getMyShelfie().isShelfFull() && !isOver) {
+            if(playersConnected.get(currentPlayerIndex).getShelf().isShelfFull() && !isOver) {
                 isShelfFull = true;
                 playersConnected.get(currentPlayerIndex).addScore(1);
                 this.isOver = true;
@@ -457,7 +457,7 @@ public class MyShelfie {
          */
         private int commonPointsEarned(int commonGoalIndex){
             CommonGoalCard card = board.getCommonGoalCard(commonGoalIndex);
-            Tile[][] playerShelfSnapshot = playersConnected.get(currentPlayerIndex).getMyShelfie().getGrid();
+            Tile[][] playerShelfSnapshot = playersConnected.get(currentPlayerIndex).getShelf().getGrid();
             if(card.checkPattern(playerShelfSnapshot)) {
                 playersConnected.get(currentPlayerIndex).setCommonGoalAchieved(commonGoalIndex);
                 return card.getScore();
@@ -476,7 +476,7 @@ public class MyShelfie {
          */
         private int personalPointsEarned(){
             PersonalGoalCard card = playersConnected.get(currentPlayerIndex).getPersonalGoalCard();
-            Tile[][] playerShelfSnapshot = playersConnected.get(currentPlayerIndex).getMyShelfie().getGrid();
+            Tile[][] playerShelfSnapshot = playersConnected.get(currentPlayerIndex).getShelf().getGrid();
             return card.getPersonalGoalScore(playerShelfSnapshot);
         }
 
@@ -543,7 +543,7 @@ public class MyShelfie {
         else if(checkGameOver()){
             //spot check
             for (Player player : playersConnected) {
-                int spotScore = player.getMyShelfie().spotCheck();
+                int spotScore = player.getShelf().spotCheck();
                 player.addScore(spotScore);
             }
 

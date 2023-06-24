@@ -1,6 +1,5 @@
 package it.polimi.ingsw.Server.Model;
 
-
 import it.polimi.ingsw.utils.Exceptions.InvalidTileIndexInLittleHandException;
 import java.util.ArrayList;
 
@@ -63,40 +62,14 @@ public class Player {
 
     }
 
-    /**
-     * OVERVIEW: this method manage the user input of order
-     * @deprecated
-     * @see Tile
-     * @param chosenTiles : ArrayList of the tiles that the player has chosen from the board
-     */
-    public int[] askOrder(ArrayList<Tile> chosenTiles){
-
-        int tilesNumber = chosenTiles.size();
-        int[] choices = new int[tilesNumber];
-
-        if(chosenTiles.size()==1){
-            choices[0] = 1;
-            return choices;
-        }
-        System.out.print("Your tiles are: ");
-        for(int i=0; i<tilesNumber; i++)
-            System.out.println((i+1)+ ") " + chosenTiles.get(i));
-
-        System.out.println("Choose the order (the first one is the lowest):");
-        try{
-            getTiles(choices);
-        }catch(InvalidTileIndexInLittleHandException e){
-            System.out.println(e);
-        }
-        return choices;
-    }
-
 
     /**
      * OVERVIEW: this method gets the right order
+     * @deprecated
      * @param choices : array of the indexes that represent the chosen tiles
      * @throws InvalidTileIndexInLittleHandException if the player chooses a number that is not between
-     * 1 and the number of the tiles that he/she has chosen from the board or if he/she has already chosen it
+     * 1 and the number of the tiles that he/she has chosen from the board or if he/she has already chosen
+     * it. Used for testing
      */
     public void getTiles(int[] choices) throws InvalidTileIndexInLittleHandException {
         for(int i=0; i<choices.length; i++)
@@ -159,7 +132,7 @@ public class Player {
     }
     //- - - - - - - - - - - - - - - -| GETTER METHODS |- - - - - - - - - - - - - - - - - - - - - - - -
 
-    public Shelf getMyShelfie() {
+    public Shelf getShelf() {
         return myShelfie;
     }
 
@@ -193,6 +166,5 @@ public class Player {
     public boolean hasChair(){
         return this.chair;
     }
-
 
 }
