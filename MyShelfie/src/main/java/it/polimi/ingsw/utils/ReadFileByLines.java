@@ -5,7 +5,11 @@ import java.io.FileNotFoundException;  // Import this class to handle errors
 import java.util.ArrayList;
 import java.util.Scanner; // Import the Scanner class to read text files
 
-
+/**
+ * ReadFileByLines class: this utility class allows to read formatted txt files and to read them line by line in order
+ * to properly initialize data structures.
+ * @author Riccardo Lodelli
+ */
 public class ReadFileByLines {
     private static ArrayList<String> text = null;
 

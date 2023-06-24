@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * Draft of class PersonalGoalCardDeck: this version wraps the base structure and a method that allows to randomly
- * draw a common goal card among the possible ones.
+ * PersonalGoalCardDeck class: this class wraps the game deck of personal goal cards and provides methods to allow the random
+ * drawing process.
  *
  * @author Riccardo Lodelli
  */
@@ -29,8 +29,8 @@ public class PersonalGoalDeck {
     }
 
     /**
-     * Draw a card
-     * @return a random chosen PersonalGoalCard form the 12 created
+     * OVERVIEW: this method allows to draw a personal goal card from the deck.
+     * @return a random chosen PersonalGoalCard form the 12 created.
      */
     public PersonalGoalCard drawPersonal() {
         Random random = new Random();
@@ -46,6 +46,11 @@ public class PersonalGoalDeck {
         return personalGoalCardDeck;
     }
 
+    /**
+     * OVERVIEW: this method allows to find the personal goal card associated to the given id.
+     * @param id: the ID of the card to be found.
+     * @return if exists the matching card.
+     */
     public PersonalGoalCard getCard(String id){
         for(PersonalGoalCard card : personalGoalCardDeck){
             if(card.getId().equals(id))

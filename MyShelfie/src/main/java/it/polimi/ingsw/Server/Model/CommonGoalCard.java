@@ -43,7 +43,7 @@ public class CommonGoalCard implements Serializable {
     }
 
     /**
-     * OVERVIEW: this method returns the score, which depends on from the timing of players' gaol achievement.
+     * OVERVIEW: this method returns the score, which depends on from the timing of players' goal achievement.
      * @return score: the available score for the completed goal.
      */
     public int getScore(){
@@ -54,6 +54,12 @@ public class CommonGoalCard implements Serializable {
         return commonStrategy;
     }
 
+    /**
+     * OVERVIEW: this method allows to check if, given a snapshot of the player's shelf, the strategy pattern of tiles
+     * associated to the card matches or not with the position of tiles in the shelf.
+     * @param shelfSnapshot: a snapshot of the player's shelf.
+     * @return true if it maches with the pattern, false otherwise.
+     */
     public boolean checkPattern(Tile[][] shelfSnapshot){
         return (this.commonStrategy.checkPattern(shelfSnapshot));
     }
