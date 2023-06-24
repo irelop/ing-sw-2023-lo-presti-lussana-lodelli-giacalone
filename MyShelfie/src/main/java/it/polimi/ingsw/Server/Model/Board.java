@@ -122,55 +122,6 @@ public class Board implements Serializable {
     }
 
     /**
-     * OVERVIEW: this method sets the position of the first tile, the number of tiles that the player wants and
-     * which direction (north, south, est, west) the player wants to follow in order to pick the other one/s.
-     * Then it call the method pickTilesFromBoard to pick the tiles. Used for testing
-     * @deprecated
-     * @param maxTilesPickable: the maximum number of tiles that the player can pick
-     * @author Irene Lo Presti
-     */
-    public void chooseTilesFromBoard(int maxTilesPickable){
-        int initialPositionR, initialPositionC, numberOfTiles;
-        char direction;
-        ArrayList<Tile> chosenTiles = new ArrayList<>();
-
-        System.out.println("Insert the initial position of the tile: ");
-        do{
-            try{
-                initialPositionR = getInitialRow();
-                initialPositionC = getInitialColumn();
-                checkPosition(initialPositionR, initialPositionC);
-                break;
-            }catch(OutOfBoardException | InvalidPositionException | InvalidCellException | EmptyCellException e){
-                System.out.println(e);
-            }
-        }while(true);
-
-        //One tile is chosen so the maximum number of tiles must be reduced
-        maxTilesPickable--;
-
-        System.out.println("Insert the number of tiles that you want to pick (other than the first)" +
-                " and the direction you want to follow (north n, south s, east e, west w");
-        do{
-            try{
-                numberOfTiles = getNumberOfTiles(maxTilesPickable);
-                if(numberOfTiles == 0){
-                    direction = '0';
-                    break;
-                }
-                direction = getDirection();
-                checkDirectionAndNumberOfTiles(direction, numberOfTiles, initialPositionR, initialPositionC, maxTilesPickable);
-                break;
-            }catch(InvalidNumberOfTilesException | InvalidDirectionException | InvalidPositionException
-                   | InvalidCellException | EmptyCellException | OutOfBoardException e){
-                System.out.println(e);
-            }
-        }while(true);
-
-        //return pickTilesFromBoard(initialPositionR, initialPositionC, numberOfTiles+1, direction);
-    }
-
-    /**
      * OVERVIEW: this method picks the tiles from the board, and it returns them to the player's hand.
      * @see Tile
      * @param initialPositionR : index of the initial row
@@ -333,22 +284,6 @@ public class Board implements Serializable {
 
     /**
      * OVERVIEW: this method asks the index of the row of the initial position
-     * WITH SCANNER FROM INPUT for testing
-     * @deprecated
-     * @return row >=0 || row < MAX_ROWS
-     * @throws OutOfBoardException if the chosen row is not between 0 and MAX_ROWS-1
-     * @author Irene Lo Presti
-     */
-    public int getInitialRow() throws OutOfBoardException {
-        int r;
-        System.out.print("Row: ");
-        Scanner scanner = new Scanner(System.in);
-        r = scanner.nextInt() - 1;
-        if(r<0 || r>=MAX_ROWS) throw new OutOfBoardException();
-        else return r;
-    }
-    /**
-     * OVERVIEW: this method asks the index of the row of the initial position
      * WITHOUT SCANNER, for testing
      * @param r : int
      * @return row >=0 || row < MAX_ROWS
@@ -362,22 +297,6 @@ public class Board implements Serializable {
     }
 
     /**
-     * OVERVIEW: this method asks the index of the column of the initial position,
-     * WITH SCANNER for testing
-     * @deprecated
-     * @return row >=0 || row < MAX_COLUMN
-     * @throws OutOfBoardException if the chosen column is not between 0 and MAX_ROWS-1
-     * @author Irene Lo Presti
-     */
-    private int getInitialColumn() throws OutOfBoardException {
-        int c;
-        System.out.print("Column: ");
-        Scanner scanner = new Scanner(System.in);
-        c = scanner.nextInt() - 1;
-        if(c<0 || c>=MAX_COLUMNS) throw new OutOfBoardException();
-        else return c;
-    }
-    /**
      * OVERVIEW: this method asks the index of the column of the initial position
      * WITHOUT SCANNER for testing
      * @return row >=0 || row < MAX_COLUMN
@@ -389,24 +308,7 @@ public class Board implements Serializable {
         if(c<0 || c>=MAX_COLUMNS) throw new OutOfBoardException();
         else return c;
     }
-    /**
-     * OVERVIEW: this method get the number of tiles
-     * SCANNER
-     * @deprecated
-     * @param maxTilesPickable : int
-     * @return numberOfTiles > 0 && numberOfTiles <= maxTilesPickable
-     * @throws InvalidNumberOfTilesException if the number of tiles chosen is not between 1 and
-     *              the maximum number of tiles pickable
-     * @author Irene Lo Presti
-     */
-    private int getNumberOfTiles(int maxTilesPickable) throws InvalidNumberOfTilesException {
-        Scanner scanner = new Scanner(System.in);
-        int numberOfTiles;
-        numberOfTiles = scanner.nextInt();
-        if(numberOfTiles>maxTilesPickable || numberOfTiles < 0)
-            throw new InvalidNumberOfTilesException(maxTilesPickable);   // cambia il nome perchè toomany non ha senso
-        else return numberOfTiles;
-    }
+
 
     /**
      * OVERVIEW: this method get the number of tiles
@@ -422,23 +324,6 @@ public class Board implements Serializable {
         else return numberOfTiles;
     }
 
-    /**
-     * OVERVIEW: this method gets the direction
-     * SCANNER for testing
-     * @deprecated
-     * @return direction
-     * @throws InvalidDirectionException  if the direction chosen is not n, s, e or w
-     * @author Irene Lo Presti
-     */
-    private char getDirection() throws InvalidDirectionException{
-        Scanner scanner = new Scanner(System.in);
-        char direction;
-        direction = scanner.next().charAt(0);
-        if(direction != 'n' && direction != 's' && direction != 'e' && direction != 'w')
-            throw new InvalidDirectionException();
-        else return direction;
-
-    }
 
     /**
      * OVERVIEW: this method gets the direction

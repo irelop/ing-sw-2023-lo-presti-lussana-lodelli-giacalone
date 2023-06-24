@@ -57,8 +57,8 @@ public class ChooseTilesFromBoardView extends View {
                 printRules();
             printOrderOfPlayers();
         }
-        //printCommonGoalCardsInfo();
-        printCommonGoalCardsInfoSide2Side();
+        printCommonGoalCardsInfo();
+        //printCommonGoalCardsInfoSide2Side();
         printPersonalGoalCardOnPlayerShelf();
 
         printBoard(-1, -1);
@@ -307,7 +307,6 @@ public class ChooseTilesFromBoardView extends View {
 
     /**
      * This method prints the common cards
-     * @deprecated
      */
     public void printCommonGoalCardsInfo(){
         System.out.println("Common goal cards:");
@@ -321,6 +320,7 @@ public class ChooseTilesFromBoardView extends View {
 
     /**
      * This method allows to print the goal cards with the possibility to visualize the common cards side to side.
+     * @deprecated
      * @author Andrea Giacalone
      */
     public void printCommonGoalCardsInfoSide2Side(){
