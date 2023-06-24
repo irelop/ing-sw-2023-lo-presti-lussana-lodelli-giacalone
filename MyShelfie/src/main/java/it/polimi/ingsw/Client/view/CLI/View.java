@@ -2,7 +2,11 @@ package it.polimi.ingsw.Client.view.CLI;
 
 import it.polimi.ingsw.Client.Client;
 
-
+/**
+ * View abstract class: this class abstracts a text user interface view and all useful methods in order to be properly
+ * executed and managed in the view state machine transition process.
+ * @author Andrea Giacalone
+ */
 public abstract class View implements Runnable, ObserverView {
     private Client owner;
     private boolean stopInteraction;
