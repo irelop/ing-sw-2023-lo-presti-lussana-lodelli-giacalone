@@ -131,7 +131,7 @@ public class GridController extends Controller{
         }
         for(Node node : joystick.getChildren()){
             if(Objects.equals(((Button) node).getText(), "W")) {
-                ((Button) node).setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2))));
+                ((Button) node).setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4))));
                 lastClickedButtonDir = (Button) node;
             }
 
@@ -261,7 +261,7 @@ public class GridController extends Controller{
         }
         Button button = (Button)e.getSource();
         lastClickedButtonDir = button;
-        button.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(2))));
+        button.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(4))));
         Integer y = GridPane.getRowIndex(button);
         Integer x = GridPane.getColumnIndex(button);
         for(Node node : joystick.getChildren()){

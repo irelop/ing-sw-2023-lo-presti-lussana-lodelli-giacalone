@@ -1,8 +1,6 @@
 package it.polimi.ingsw.Server.Model;
 
-import it.polimi.ingsw.Server.Model.PersonalGoalCard;
 import it.polimi.ingsw.utils.ReadFileByLines;
-import it.polimi.ingsw.Server.Model.Tile;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
