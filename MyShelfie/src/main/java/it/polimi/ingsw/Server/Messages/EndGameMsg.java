@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
 
 public class EndGameMsg extends C2SMessage{
 
-    private int playerIndex;
+    private final int playerIndex;
 
     public EndGameMsg(int playerIndex){
         this.playerIndex = playerIndex;

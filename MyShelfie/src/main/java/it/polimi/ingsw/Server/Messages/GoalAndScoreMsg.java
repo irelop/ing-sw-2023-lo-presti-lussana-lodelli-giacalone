@@ -14,16 +14,16 @@ import java.rmi.RemoteException;
  */
 public class GoalAndScoreMsg extends S2CMessage{
 
-    public boolean commonGoalAchived;
-    public boolean personalGoalAchived;
+    public boolean commonGoalAchieved;
+    public boolean personalGoalAchieved;
     public int score;
     public boolean youFullyShelf;
     public boolean lastTurn;
 
-    public GoalAndScoreMsg(boolean commonGoalAchived, boolean personalGoalAchived, int score,
+    public GoalAndScoreMsg(boolean commonGoalAchieved, boolean personalGoalAchieved, int score,
                            boolean youFullyShelf, boolean lastTurn){
-        this.commonGoalAchived = commonGoalAchived;
-        this.personalGoalAchived = personalGoalAchived;
+        this.commonGoalAchieved = commonGoalAchieved;
+        this.personalGoalAchieved = personalGoalAchieved;
         this.score = score;
         this.youFullyShelf = youFullyShelf;
         this.lastTurn = lastTurn;

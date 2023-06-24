@@ -7,12 +7,6 @@ import java.rmi.RemoteException;
 
 public class FinishGameRequest extends C2SMessage{
 
-    //public String nickname;
-
-    /*public FinishGameRequest(){
-        this.nickname = nickname;
-    }*/
-
     @Override
     public void processMessage(ClientHandler clientHandler){
         clientHandler.getController().finishGame(clientHandler);

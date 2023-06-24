@@ -236,10 +236,10 @@ public class GoalView extends View {
     private void showScoreRecap(){
         System.out.println("---------------------------------");
         System.out.println("GOAL ACHIVED IN THIS TURN:");
-        if (msg.commonGoalAchived) {
+        if (msg.commonGoalAchieved) {
             System.out.println("Common Goal: yes");
         } else System.out.println("Common Goal: no");
-        if (msg.personalGoalAchived) {
+        if (msg.personalGoalAchieved) {
             System.out.println("Personal Goal: yes");
         } else System.out.println("Personal Goal: no");
         if (msg.youFullyShelf) System.out.println("You earned 1 pt. for be the first to complete the shelf, SIUM");

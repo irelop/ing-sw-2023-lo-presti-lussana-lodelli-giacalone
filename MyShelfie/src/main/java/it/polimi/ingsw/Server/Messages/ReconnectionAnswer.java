@@ -15,7 +15,7 @@ import java.rmi.RemoteException;
  * 4) if the reconnection request, despite being valid, was too late and in the meanwhile, the game has already finished.
  * 5) if the request is valid and the player can reconnect to his/her game.
  *
- * @authors Irene Lo Presti, Andrea Giacalone
+ * @author Irene Lo Presti, Andrea Giacalone
  */
 public class ReconnectionAnswer extends S2CMessage{
 

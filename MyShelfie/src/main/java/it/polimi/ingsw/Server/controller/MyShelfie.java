@@ -209,7 +209,7 @@ public class MyShelfie {
 
         /**
          * OVERVIEW: this method calls the method drawPersonal for each player, so every player has his/her own
-         * personal goal card and then it updates the player's file
+         * personal goal card, then it updates the player's file
          * @see Player
          * @see PersonalGoalDeck
          * @author Irene Lo Presti, Matteo Lussana
@@ -247,7 +247,7 @@ public class MyShelfie {
 
         /**
          * OVERVIEW: this method draws 2 common goal cards from the deck
-         * @auhtor Irene Lo Presti, Matteo Lussana
+         * @author Irene Lo Presti, Matteo Lussana
          */
         private void drawCommonGoalCards(){
             CommonGoalCard[] commonGoalCards = new CommonGoalCard[2];
@@ -743,11 +743,11 @@ public class MyShelfie {
 
     public void getCustomChat(String requester){
         ChatStorage customChat = chatManager.getCustomChat(requester);
-            for(int i=0; i< clientHandlers.size(); i++){
-                if(clientHandlers.get(i).getIsGui() && clientHandlers.get(i).isConnected()){
-                    clientHandlers.get(i).sendMessageToClient(new ChatRecordAnswer(customChat));
-                }
+        for (ClientHandler clientHandler : clientHandlers) {
+            if (clientHandler.getIsGui() && clientHandler.isConnected()) {
+                clientHandler.sendMessageToClient(new ChatRecordAnswer(customChat));
             }
+        }
             if(requester.equals(playersConnected.get(currentPlayerIndex).getNickname())) {
                 clientHandlers.get(currentPlayerIndex).sendMessageToClient(new ChatRecordAnswer(customChat));
             }
@@ -755,7 +755,7 @@ public class MyShelfie {
 
     public void updateChat(ChatMessage messageToSend){
         ChatMsgAnswer chatMsgAnswer;
-        if(getChatManager().updateChat(messageToSend)==true){
+        if(getChatManager().updateChat(messageToSend)){
             chatMsgAnswer = new ChatMsgAnswer(true);
         }else {
             chatMsgAnswer = new ChatMsgAnswer(false);
@@ -783,7 +783,7 @@ public class MyShelfie {
             }
         }
 
-        if(numberOfPlayersConnected == 1) //controllo anche se sono 0?
+        if(numberOfPlayersConnected == 1) //also checking for 0?
             this.gameOver = true;
     }
 
