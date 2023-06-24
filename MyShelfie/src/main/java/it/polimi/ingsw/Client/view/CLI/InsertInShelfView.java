@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 
 /**
- * This view is shown when the current player has to insert the tiles he/she took from the board into
+ * InsertInShelfView class: this view is shown when the current player has to insert the tiles he/she took from the board into
  * his/her personal shelf. The player interacts with this view to choose the column he/she wants to fill
  * with tiles and to put in order the tiles that must be placed in the shelf
  *
@@ -143,6 +143,11 @@ public class InsertInShelfView extends View {
         }
     }
 
+    /**
+     * OVERVIEW: this method allows to print each tile associating it with its corresponding color to be shown.
+     * @param tile: the tile to be shown.
+     * @param code: the color code matching the tile.
+     */
     public void printTile(Tile tile, String code) {
         switch (tile) {
             case NOT_VALID -> System.out.print(" ");
@@ -157,8 +162,8 @@ public class InsertInShelfView extends View {
     }
 
     /**
-     * This method prints both common goal cards and player's personal
-     * goal card in order to help him to decide the best move to achieve points
+     * OVERVIEW: this method prints both common goal cards and player's personal goal card infos in order to help him to decide
+     * the best move to achieve points.
      */
     public void printCommonGoalCardsInfo(){
         System.out.println();
@@ -172,9 +177,9 @@ public class InsertInShelfView extends View {
     }
 
     /**
-     * This method allows the player to choose the column where he/she wants to place tiles
-     * @return the index of the column chosen by the player
-     * @throws InvalidShelfColumnException: thrown to avoid wrong indexes for the column
+     * OVERVIEW: this method allows the player to choose the column where he/she wants to place tiles.
+     * @return the index of the column chosen by the player.
+     * @throws InvalidShelfColumnException: thrown if a  wrong index for the column is chosen.
      */
     public int chooseColumn() throws InvalidShelfColumnException {
         int columnChosen;
@@ -196,10 +201,11 @@ public class InsertInShelfView extends View {
     }
 
     /**
-     * This method allows the player to choose the order for the tiles he/she wants to place
-     * @param chosenTiles: an array containing the tiles that the player has chosen from the board
-     * @return an array of indexes which indicates the order wanted by the player
-     * @throws InvalidTileIndexInLittleHandException: thrown to avoid wrong order indexes
+     * OVERVIEW: this method allows the player to choose the order for the tiles he/she wants to place.
+     * @param chosenTiles: an array containing the tiles that the player has chosen from the board.
+     * @return an array of indexes which indicates the order wanted by the player.
+     * @throws InvalidTileIndexInLittleHandException: thrown if a wrong index exceeding the bounds of the size of the
+     * little hand is chosen by the user.
      */
     private int[] askOrder(ArrayList<Tile> chosenTiles) throws InvalidTileIndexInLittleHandException {
 
@@ -250,10 +256,10 @@ public class InsertInShelfView extends View {
     }
 
     /**
-     * This private method is called by askOrder(), more than once
-     * It takes player's input and check if it's right
-     * @return choice: index chosen by the player
-     * @throws InvalidTileIndexInLittleHandException: thrown to avoid wrong order indexes
+     * OVERVIEW: this method allows to get the user input for an index, to check for the validity of the inserted index and
+     * eventually to return it if the input was valid.
+     * @return choice: index chosen by the player.
+     * @throws InvalidTileIndexInLittleHandException: thrown if wrong order indexes are chosen.
      */
     private int getTile() throws InvalidTileIndexInLittleHandException {
         Scanner scanner = new Scanner(System.in);
@@ -264,9 +270,10 @@ public class InsertInShelfView extends View {
     }
 
     /**
-     * This private method is called by askOrder(). It takes player's inputs and check if they are right
-     * @param choices: an array of indexes
-     * @throws InvalidTileIndexInLittleHandException: thrown to avoid wrong order indexes
+     * OVERVIEW: this method allows to get the user multiple inputs for indexes of the little hand, to check for the validity of the
+     * inserted indexes and eventually to return them if the inputs were valid.
+     * @param choices: an array of indexes inserted by the user.
+     * @throws InvalidTileIndexInLittleHandException: thrown if wrong order indexes are chosen.
      */
     @Deprecated
     public void getTiles(int[] choices) throws InvalidTileIndexInLittleHandException {

@@ -330,20 +330,20 @@ public class GridController extends Controller{
             possibleWay.add((Button)startTile);
         }
         else{
-            int contatore = 0;
+            int count = 0;
             int x= column;
             int y = row;
-            while (contatore < value) {
+            while (count < value) {
                 for (Node node : grid.getChildren())
                     if(grid.getRowIndex(node) == y && grid.getColumnIndex(node) == x) {
                         if(node.getId().equals("BLANK") || node.getId().equals("NOT_VALID")){
                             setError("Cell not valid, change the route or reduce the number of tiles");
-                            value=contatore;
+                            value=count;
                             setNumTilesColor(value);
                         }
                         else if(x > 8 || x < 0 || y > 8 || y < 0){
                            setError("Cell out of border, change the route or reduce the number of tiles");
-                            value=contatore;
+                            value=count;
                             setNumTilesColor(value);
                         }
                         else {
@@ -353,19 +353,19 @@ public class GridController extends Controller{
                 switch (direction) {
                     case "N" -> {
                         y--;
-                        contatore++;
+                        count++;
                     }
                     case "S" -> {
                         y++;
-                        contatore++;
+                        count++;
                     }
                     case "E" -> {
                         x++;
-                        contatore++;
+                        count++;
                     }
                     case "W" -> {
                         x--;
-                        contatore++;
+                        count++;
                     }
                 }
             }

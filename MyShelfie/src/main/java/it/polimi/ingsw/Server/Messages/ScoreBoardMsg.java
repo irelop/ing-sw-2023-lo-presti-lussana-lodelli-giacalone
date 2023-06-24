@@ -6,7 +6,10 @@ import it.polimi.ingsw.Client.view.CLI.WaitingView;
 import it.polimi.ingsw.utils.rmi.RemoteInterface;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-
+/**
+ * This message send player to the final view, the one with the score board
+ * @author Matteo Lussana
+ */
 public class ScoreBoardMsg extends S2CMessage{
     public ArrayList<String> playerName;
     public ArrayList<Integer> totalScore;
