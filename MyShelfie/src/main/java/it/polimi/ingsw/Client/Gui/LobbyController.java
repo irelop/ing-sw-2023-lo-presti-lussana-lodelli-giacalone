@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 
-import java.util.concurrent.TimeUnit;
+import static java.lang.Thread.sleep;
 
 /**
  * Controller implementation for game's lobby
@@ -50,15 +50,20 @@ public class LobbyController extends Controller{
     @Override
     public void receiveAnswer(S2CMessage message) {
         if (lobbyUpdateAnswer.allPlayersReady) {
-            /*
-            try {
-                TimeUnit.SECONDS.sleep(5);
-            } catch (InterruptedException ignored) { }
-            */
-
-            C2SMessage allPlayersReadyMsg = new AllPlayersReadyMsg();
-            getOwner().getServerHandler().sendMessageToServer(allPlayersReadyMsg);
+            Thread delayingComputationThread = new Thread(this::delayComputation);
+            delayingComputationThread.start();
         }
+    }
+
+    private void delayComputation(){
+
+        try {
+            sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        C2SMessage allPlayersReadyMsg = new AllPlayersReadyMsg();
+        getOwner().getServerHandler().sendMessageToServer(allPlayersReadyMsg);
     }
 
 }
