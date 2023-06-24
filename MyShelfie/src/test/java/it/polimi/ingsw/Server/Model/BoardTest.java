@@ -4,7 +4,6 @@ package it.polimi.ingsw.Server.Model;
  * @authors Matteo Lussana, Irene Lo Presti
  */
 
-import it.polimi.ingsw.Server.Model.*;
 
 import it.polimi.ingsw.utils.Exceptions.*;
 import it.polimi.ingsw.utils.ReadFileByLines;
@@ -12,12 +11,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-
 import java.util.ArrayList;
 
-import static it.polimi.ingsw.Client.view.CLI.ColorCode.*;
-import static it.polimi.ingsw.Client.view.CLI.ColorCode.RESET;
+import static it.polimi.ingsw.utils.ColorCode.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTest {
@@ -33,7 +29,6 @@ public class BoardTest {
     void setUp() {
         grid = new Tile[9][9];
         board = new Board();
-        Board.getBoardInstance();
 
         reader = new ReadFileByLines();
         reader.readFrom("src/test/testFiles/board_3p.txt");

@@ -1,62 +1,30 @@
 package it.polimi.ingsw.Server.Model;
 
-/**
- * Board class: this class manages the board with the singleton pattern. There is only one initialization, then
- * it is only possible to pick a tile or to refill the board if necessary.
- *
- */
-
-
 import it.polimi.ingsw.utils.Exceptions.*;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
 
+
+/**
+ * Class to manage the board
+ */
+
 public class Board implements Serializable {
     protected final static int MAX_ROWS = 9;
     protected final static int MAX_COLUMNS = 9;
     protected final static int MAX_DRAWABLE_COMMON = 2;
-    private static Board boardInstance = null;
-    private static Bag bag;
+    private Bag bag;
     private Tile[][] boardGrid;
-    private static CommonGoalCard[] commonGoalCards;
+    private final CommonGoalCard[] commonGoalCards;
 
     public Board(){
         bag = new Bag();
         commonGoalCards = new CommonGoalCard[MAX_DRAWABLE_COMMON];
         boardGrid = new Tile[MAX_ROWS][MAX_COLUMNS];
     }
-
-    public Map<Tile,Integer> getBag(){
-        return bag.getBag();
-    }
-
-    public void setBag(Map<Tile,Integer> bag){
-        this.bag.setBag(bag);
-    }
-
-
-    //dobbiamo toglierlo?
-    /**
-     * OVERVIEW: this method returns the singleton instance of the Board class.
-     * @return the instance of the game board.
-     * @author Andrea Giacalone
-     */
-    public static Board getBoardInstance(){
-        if(boardInstance == null){
-            boardInstance = new Board();
-            /*
-            boardGrid = new Tile[MAX_ROWS][MAX_COLUMNS];
-            bag = new Bag();
-            commonGoalCards = new CommonGoalCard[MAX_DRAWABLE_COMMON];
-            */
-        }
-
-        return boardInstance;
-    }
-
+    //- - - - - - - - - - - - - - - -| INIT BOARD |- - - - - - - - - - - - - - - - - - - - - - -
     /**
      * OVERVIEW: this method allows to initialize the grid of a board given a matrix of tiles which
      * can be read by a file.
@@ -81,7 +49,6 @@ public class Board implements Serializable {
      * @author Matteo Lussana
      */
     public void initGridParabolic(int numPlayers){
-        int max_col = MAX_COLUMNS, max_raw = MAX_ROWS;
         for(int i=0; i<MAX_ROWS; i++) {
             for (int j = 0; j < MAX_COLUMNS; j++) {
                 boardGrid[i][j] = Tile.NOT_VALID;
@@ -90,9 +57,9 @@ public class Board implements Serializable {
         boardGrid[MAX_ROWS/2][MAX_COLUMNS/2] = Tile.BLANK;
 
         switch(numPlayers){
-            case 2: init2PlayesParabolic(); break;
-            case 3: init3PlayesParabolic(); break;
-            case 4: init4PlayesParabolic(); break;
+            case 2: init2PlayersParabolic(); break;
+            case 3: init3PlayersParabolic(); break;
+            case 4: init4PlayersParabolic(); break;
         }
 
         //rotate
@@ -108,7 +75,7 @@ public class Board implements Serializable {
      * OVERVIEW: initialization of the board for 2 players
      *  @author Matteo Lussana
      */
-    private void init2PlayesParabolic(){
+    private void init2PlayersParabolic(){
         float x;
         for(int i=3; i<MAX_ROWS-1; i++){
             if(i!=3){
@@ -126,7 +93,7 @@ public class Board implements Serializable {
      * OVERVIEW: initialization of the board for 3 players
      *  @author Matteo Lussana
      */
-    private void init3PlayesParabolic(){
+    private void init3PlayersParabolic(){
         int x;
         for(int i=3; i<MAX_ROWS-1; i++){
                 x = (int) (0.03 + Math.pow(1.256,i));
@@ -142,7 +109,7 @@ public class Board implements Serializable {
      * OVERVIEW: initialization of the board for 4 players
      * @author Matteo Lussana
      */
-    private void init4PlayesParabolic(){
+    private void init4PlayersParabolic(){
         int x;
         for(int i=3; i<MAX_ROWS-1; i++){
                 x = (int) Math.pow(1.27,i);
@@ -155,50 +122,11 @@ public class Board implements Serializable {
     }
 
     /**
-     * OVERVIEW: in the class Game there is the common deck where there is the draw of the two common
-     * cards. This method saves the common cards in board.
-     * @see CommonGoalCard
-     * @param commonCards: the two drawn commonGoalCards
-     * @author Irene Lo Presti, Matteo Lussana
-     */
-    public void setCommonGoalCards(CommonGoalCard[] commonCards){
-        System.arraycopy(commonCards, 0, commonGoalCards, 0, MAX_DRAWABLE_COMMON);
-    }
-
-    /**
-     * OVERVIEW: getter method
-     * @see CommonGoalCard
-     * @param index: indicates which commonGoalCard is (the number 0 or the number 1)
-     * @return commonGoalCard in the position 'index'
-     * @author Irene Lo Presti
-     */
-    public static CommonGoalCard getCommonGoalCard(int index){
-        return commonGoalCards[index];
-    }
-
-    public static CommonGoalCard[] getCommonGoalCards() {
-        return commonGoalCards;
-    }
-
-    /**
-     * OVERVIEW: getter method
-     * @see Tile
-     * @return boardGrid (matrix of Tile)
-     * @author Irene Lo Presti
-     */
-    public Tile[][] getBoardGrid(){
-        return boardGrid;
-    }
-
-
-
-    /**
      * OVERVIEW: this method sets the position of the first tile, the number of tiles that the player wants and
      * which direction (north, south, est, west) the player wants to follow in order to pick the other one/s.
-     * Then it call the method pickTilesFromBoard to pick the tiles.
+     * Then it call the method pickTilesFromBoard to pick the tiles. Used for testing
      * @deprecated
      * @param maxTilesPickable: the maximum number of tiles that the player can pick
-     * @return ArrayList<Tile> chosenTiles != null
      * @author Irene Lo Presti
      */
     public void chooseTilesFromBoard(int maxTilesPickable){
@@ -363,8 +291,6 @@ public class Board implements Serializable {
             }
         }
     }
-
-    //gestire l'eccezione!
     /**
      * OVERVIEW: this method refills the board with tiles from the bag
      * @author Irene Lo Presti
@@ -401,7 +327,7 @@ public class Board implements Serializable {
 
     /**
      * OVERVIEW: this method asks the index of the row of the initial position
-     * WITH SCANNER FROM INPUT
+     * WITH SCANNER FROM INPUT for testing
      * @deprecated
      * @return row >=0 || row < MAX_ROWS
      * @throws OutOfBoardException if the chosen row is not between 0 and MAX_ROWS-1
@@ -417,7 +343,7 @@ public class Board implements Serializable {
     }
     /**
      * OVERVIEW: this method asks the index of the row of the initial position
-     * WITHOUT SCANNER, now we used it for testing
+     * WITHOUT SCANNER, for testing
      * @param r : int
      * @return row >=0 || row < MAX_ROWS
      * @throws OutOfBoardException if the chosen row is not between 0 and MAX_ROWS-1
@@ -431,7 +357,7 @@ public class Board implements Serializable {
 
     /**
      * OVERVIEW: this method asks the index of the column of the initial position,
-     * WITH SCANNER
+     * WITH SCANNER for testing
      * @deprecated
      * @return row >=0 || row < MAX_COLUMN
      * @throws OutOfBoardException if the chosen column is not between 0 and MAX_ROWS-1
@@ -447,7 +373,7 @@ public class Board implements Serializable {
     }
     /**
      * OVERVIEW: this method asks the index of the column of the initial position
-     * WITHOUT SCANNER, now we used it for testing
+     * WITHOUT SCANNER for testing
      * @return row >=0 || row < MAX_COLUMN
      * @throws OutOfBoardException if the chosen column is not between 0 and MAX_ROWS-1
      * @author Irene Lo Presti
@@ -492,7 +418,7 @@ public class Board implements Serializable {
 
     /**
      * OVERVIEW: this method gets the direction
-     * SCANNER
+     * SCANNER for testing
      * @deprecated
      * @return direction
      * @throws InvalidDirectionException  if the direction chosen is not n, s, e or w
@@ -521,8 +447,6 @@ public class Board implements Serializable {
         else return direction;
 
     }
-
-
 
     /**
      * OVERVIEW: a first draft of the initialization of the board. In this method we use some variables
@@ -680,5 +604,26 @@ public class Board implements Serializable {
             ns++;
             sn--;
         }
+    }
+    //- - - - - - - - - - - - - - - -| GETTER METHODS |- - - - - - - - - - - - - - - - - - - -
+    public Map<Tile,Integer> getBag(){
+        return bag.getBag();
+    }
+    public CommonGoalCard getCommonGoalCard(int index){
+        return commonGoalCards[index];
+    }
+    public CommonGoalCard[] getCommonGoalCards() {
+        return commonGoalCards;
+    }
+    public Tile[][] getBoardGrid(){
+        return boardGrid;
+    }
+
+    //- - - - - - - - - - - - - - - -| SETTER METHODS |- - - - - - - - - - - - - - - - - - - -
+    public void setBag(Map<Tile,Integer> bag){
+        this.bag.setBag(bag);
+    }
+    public void setCommonGoalCards(CommonGoalCard[] commonCards){
+        System.arraycopy(commonCards, 0, commonGoalCards, 0, MAX_DRAWABLE_COMMON);
     }
 }

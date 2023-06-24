@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 /**
  * Last view: it prints the score board
- * @author Matteo Lussana, Andrea Giacalone
+ * @author Matteo Lussana
  */
 
 public class EndGameView extends View {

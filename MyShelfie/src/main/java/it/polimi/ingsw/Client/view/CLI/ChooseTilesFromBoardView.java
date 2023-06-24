@@ -17,8 +17,8 @@ import static it.polimi.ingsw.utils.ColorCode.*;
  */
 public class ChooseTilesFromBoardView extends View {
 
-    public int MAX_COLUMNS = 9;
-    public int MAX_ROWS = 9;
+    public static int MAX_COLUMNS = 9;
+    public static int MAX_ROWS = 9;
 
     private final YourTurnMsg yourTurnMsg;
     private InitialPositionAnswer initialPositionAnswer;
