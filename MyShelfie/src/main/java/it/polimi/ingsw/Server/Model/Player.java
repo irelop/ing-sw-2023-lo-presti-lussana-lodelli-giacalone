@@ -1,16 +1,16 @@
 package it.polimi.ingsw.Server.Model;
 
+
+import it.polimi.ingsw.utils.Exceptions.InvalidTileIndexInLittleHandException;
+import java.util.ArrayList;
+
 /**
  * Player class: this class contains all the information about a player: nickname, score, shelf,
  * personal goal card, the tiles in his/her hand chosen from the board, if he/she has achieved some
  * common goal and if he/she has the chair.
  *
- * @authors Irene Lo Presti, Matteo Lussana
+ * @author Irene Lo Presti, Matteo Lussana
  */
-
-import it.polimi.ingsw.utils.Exceptions.InvalidTileIndexInLittleHandException;
-import java.util.ArrayList;
-
 public class Player {
     private final String nickname;
     private Shelf myShelfie;

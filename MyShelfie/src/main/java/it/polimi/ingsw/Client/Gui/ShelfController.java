@@ -460,9 +460,9 @@ public class ShelfController extends Controller {
     private void manageGoalAndScoreMsg() {
 
         goalPane.setVisible(true);
-        if (goalAndScoreMsg.personalGoalAchived)
+        if (goalAndScoreMsg.personalGoalAchieved)
             greenPGTick.setVisible(true);
-        if (goalAndScoreMsg.commonGoalAchived)
+        if (goalAndScoreMsg.commonGoalAchieved)
             greenCGTick.setVisible(true);
         if (goalAndScoreMsg.youFullyShelf)
             greenFSTick.setVisible(true);

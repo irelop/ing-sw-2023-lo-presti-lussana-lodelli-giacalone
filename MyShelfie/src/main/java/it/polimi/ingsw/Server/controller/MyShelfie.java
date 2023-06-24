@@ -10,7 +10,6 @@ import it.polimi.ingsw.Server.chat.ChatManager;
 import it.polimi.ingsw.Server.chat.ChatMessage;
 import it.polimi.ingsw.Server.chat.ChatStorage;
 import it.polimi.ingsw.utils.PersistenceManager;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -29,7 +28,7 @@ public class MyShelfie {
     private final Board board;
     private int numberOfPlayers;
     private boolean isStarted;
-    private final ArrayList<ClientHandler> clientHandlers;
+    private ArrayList<ClientHandler> clientHandlers;
     private int currentPlayerIndex;
     private boolean allPlayersReady;
     private boolean firstTurn;
@@ -38,10 +37,9 @@ public class MyShelfie {
     private int firstToFinish;
     private final ChatManager chatManager;
     private boolean playerInCountdown;
-
     private final PersistenceManager persistenceManager;
     private final int gameIndex;
-    private boolean persistenceManaged;
+    private final boolean persistenceManaged;
 
     //- - - - - - - - - - - - - - - - - - CONSTRUCTORS - - - - - - - - -  - - - - - - - - - - - -
     /**
@@ -55,16 +53,11 @@ public class MyShelfie {
         this.commonDeck = new CommonGoalDeck();
         this.personalDeck = new PersonalGoalDeck();
 
-        this.isOver = false;
-        this.isStarted = false;
         this.playersConnected = new ArrayList<>();
         this.numberOfPlayers = -1;
         this.clientHandlers = new ArrayList<>();
-        this.allPlayersReady = false;
-        this.gameOver = false;
         this.lock = new Object();
         this.chatManager = new ChatManager();
-        this.playerInCountdown = false;
         this.firstToFinish = -1;
 
         this.persistenceManager = persistenceManager;
@@ -73,7 +66,7 @@ public class MyShelfie {
     }
 
     /**
-     * Constructor for old games to be restored after the server crash
+     * Constructor for old games to be restored after the server crashes
      * @param persistenceManager for the FA persistence
      * @param gameIndex the index of this game in game record
      * @param board: old board
@@ -82,7 +75,8 @@ public class MyShelfie {
      * @param isStarted: boolean to know if the game was started
      * @param isOver: boolean to know if the games was finishing
      * @param numberOfPlayers: number of players connected to the old game
-     *
+     * @param firstTurn: boolean to know if it is the first turn
+     * @param firstToFinish: index of the first player who fill the board (-1 if nobody filled it)
      * @author Irene Lo Presti
      */
     public MyShelfie(PersistenceManager persistenceManager, int gameIndex, Board board,
@@ -90,6 +84,7 @@ public class MyShelfie {
                      int numberOfPlayers, boolean firstTurn, int firstToFinish){
         this.commonDeck = new CommonGoalDeck();
         this.board = board;
+
         CommonGoalCard[] commonGoalCards = new CommonGoalCard[2];
         //get the right cards form the deck
         commonGoalCards[0] = commonDeck.getCard(commonGoalCardsNames[0]);
@@ -102,19 +97,17 @@ public class MyShelfie {
         this.firstTurn = firstTurn;
         this.firstToFinish = firstToFinish;
         this.currentPlayerIndex = currentPlayerIndex;
+        this.persistenceManager = persistenceManager;
+        this.gameIndex = gameIndex;
 
         //initialize all the others attributes
-        this.gameOver = false;
         this.lock = new Object();
         this.allPlayersReady = true;
         this.personalDeck = new PersonalGoalDeck();
         this.playersConnected = new ArrayList<>();
         this.clientHandlers = new ArrayList<>();
         this.chatManager = new ChatManager();
-        this.playerInCountdown = false;
 
-        this.persistenceManager = persistenceManager;
-        this.gameIndex = gameIndex;
         this.persistenceManaged = true; //this constructor is called after a server reconnection
     }
 
@@ -174,7 +167,6 @@ public class MyShelfie {
 
     public void updateLobby(){
         ArrayList<String> lobbyPlayers = playersConnected.stream().map(Player::getNickname).collect(Collectors.toCollection(ArrayList::new));
-
         for (int i = 0; i<playersConnected.size();i++) {
             LobbyUpdateAnswer msg = new LobbyUpdateAnswer(lobbyPlayers, allPlayersReady);
             clientHandlers.get(i).sendMessageToClient(msg);
@@ -216,8 +208,8 @@ public class MyShelfie {
         }
 
         /**
-         * OVERVIEW: this method calls the method drawPersonal for each player, so every player has his / her own
-         * personal goal card
+         * OVERVIEW: this method calls the method drawPersonal for each player, so every player has his/her own
+         * personal goal card, then it updates the player's file
          * @see Player
          * @see PersonalGoalDeck
          * @author Irene Lo Presti, Matteo Lussana
@@ -226,14 +218,14 @@ public class MyShelfie {
             for(Player player : playersConnected) {
                 PersonalGoalCard card = personalDeck.drawPersonal();
                 player.setCard(card);
+                //update the file
                 String info = card.getId() + "\n0\nshelf\n"+player.getHasFinished()+"\n";
-                //writeOnPlayersFiles(info, player.getNickname());
                 persistenceManager.writeStaticPlayerInfo(player.getNickname(), info);
             }
         }
 
         /**
-         * OVERVIEW: this method gives, randomly, a chair to one player
+         * OVERVIEW: this method gives, randomly, a chair to one player and then updates the players' files
          * @author Irene Lo Presti, Matteo Lussana
          */
         private void setChair(){
@@ -246,18 +238,16 @@ public class MyShelfie {
             playersConnected.add(0, firstPlayer);
             clientHandlers.remove(firstPlayerClientHandler);
             clientHandlers.add(0, firstPlayerClientHandler);
-
+            //update file
             for(Player player : playersConnected){
                 String info = player.hasChair()+"\n";
-                //writeOnPlayersFiles(info, player.getNickname());
                 persistenceManager.writeStaticPlayerInfo(player.getNickname(), info);
             }
-
         }
 
         /**
          * OVERVIEW: this method draws 2 common goal cards from the deck
-         * @auhtor Irene Lo Presti, Matteo Lussana
+         * @author Irene Lo Presti, Matteo Lussana
          */
         private void drawCommonGoalCards(){
             CommonGoalCard[] commonGoalCards = new CommonGoalCard[2];
@@ -517,18 +507,6 @@ public class MyShelfie {
             checkIfStartTurnOrEndTheGame();
     }
 
-    private boolean checkGameOver(){
-        if(isOver && playersConnected.get(currentPlayerIndex).hasChair())
-            return true;
-        int  x = 0;
-        for(int i=0; i<numberOfPlayers; i++){
-            if((clientHandlers.get(i).isConnected() && playersConnected.get(i).getHasFinished()) ||
-                !clientHandlers.get(i).isConnected())
-                x++;
-        }
-        return x == numberOfPlayers;
-    }
-
     /**
      * This method checks if the player can begin their turn or the game is over.
      * @author Irene Lo Presti, Andrea Giacalone
@@ -570,9 +548,33 @@ public class MyShelfie {
 
     }
 
+    /**
+     * This method checks if the game is over, two cases:
+     *  - if all players are connected and everybody has played their turn then isOver == true and the
+     *      current player is the one with the chair => the game is over
+     *  - if not all players are connected, in particularly the one with the chair is disconnected, it's
+     *      necessary to check if all the remaining players have played their last turn
+     * @return true if the game is over, false otherwise
+     * @author Irene Lo Presti
+     */
+    private boolean checkGameOver(){
+        if(isOver && playersConnected.get(currentPlayerIndex).hasChair())
+            return true;
+        int  countPlayers = 0;
+        for(int i=0; i<numberOfPlayers; i++){
+            if((clientHandlers.get(i).isConnected() && playersConnected.get(i).getHasFinished()) ||
+                    !clientHandlers.get(i).isConnected())
+                countPlayers++;
+        }
+        return countPlayers == numberOfPlayers;
+    }
+
+    /**
+     * FA: resilience
+     * This method checks if the player has put the tiles in the shelf
+     * @author Irene Lo Presti
+     */
     private void goToCorrectView(){
-        //FA: resilience
-        // check if the player has put the tiles in the shelf
         if(playersConnected.get(currentPlayerIndex).getLittleHand().size() == 0)
             startTurn();
         else
@@ -647,7 +649,6 @@ public class MyShelfie {
      * @author Matteo Lussana, Irene Lo Presti, Andrea Giacalone
      */
     public void endGame(int playerIndex) {
-
         synchronized (lock){
             ArrayList<String> playersNames = new ArrayList<>();
             for (int i = 0; i < numberOfPlayers; i++) {
@@ -662,9 +663,6 @@ public class MyShelfie {
             ScoreBoardMsg msg = new ScoreBoardMsg(playersNames, scoreList, playersNames.get(playerIndex));
             clientHandlers.get(playerIndex).sendMessageToClient(msg);
         }
-
-
-
     }
 
     /**
@@ -685,7 +683,7 @@ public class MyShelfie {
 
     /**
      * This method finds the correct client handler and calls finishGame
-     * @param client: remote inteface of the RMI client disconnecting
+     * @param client: remote interface of the RMI client disconnecting
      * @author Andrea Giacalone, Irene Lo Presti
      */
     public void finishGameRMI(RemoteInterface client){
@@ -745,11 +743,11 @@ public class MyShelfie {
 
     public void getCustomChat(String requester){
         ChatStorage customChat = chatManager.getCustomChat(requester);
-            for(int i=0; i< clientHandlers.size(); i++){
-                if(clientHandlers.get(i).getIsGui() && clientHandlers.get(i).isConnected()){
-                    clientHandlers.get(i).sendMessageToClient(new ChatRecordAnswer(customChat));
-                }
+        for (ClientHandler clientHandler : clientHandlers) {
+            if (clientHandler.getIsGui() && clientHandler.isConnected()) {
+                clientHandler.sendMessageToClient(new ChatRecordAnswer(customChat));
             }
+        }
             if(requester.equals(playersConnected.get(currentPlayerIndex).getNickname())) {
                 clientHandlers.get(currentPlayerIndex).sendMessageToClient(new ChatRecordAnswer(customChat));
             }
@@ -757,7 +755,7 @@ public class MyShelfie {
 
     public void updateChat(ChatMessage messageToSend){
         ChatMsgAnswer chatMsgAnswer;
-        if(getChatManager().updateChat(messageToSend)==true){
+        if(getChatManager().updateChat(messageToSend)){
             chatMsgAnswer = new ChatMsgAnswer(true);
         }else {
             chatMsgAnswer = new ChatMsgAnswer(false);
@@ -769,6 +767,11 @@ public class MyShelfie {
 
     //- - - - - - - - - - - - - - - - - - - -| P E R S I S T E N C E |- - - - - - - - - - - - - - - - - - - - -
 
+    /**
+     * This method is used after the server reconnection. It resets the old info of the players connected
+     * to this game
+     * @author Irene Lo Presti
+     */
     public void resetPlayers(){
         int numberOfPlayersConnected = 0;
         for(Player player : playersConnected){
@@ -780,7 +783,7 @@ public class MyShelfie {
             }
         }
 
-        if(numberOfPlayersConnected == 1) //controllo anche se sono 0?
+        if(numberOfPlayersConnected == 1) //also checking for 0?
             this.gameOver = true;
     }
 
@@ -804,21 +807,24 @@ public class MyShelfie {
 
     }
 
+    /**
+     * This method gets all the player's dynamic information and call the PersistenceManager to update
+     * their file
+     * @author Irene Lo Presti
+     */
     private void updatePlayerFile(){
         Player player = playersConnected.get(currentPlayerIndex);
         //update of the player file
         String playerUpdate = player.getScore() + "\n" +
                 Arrays.deepToString(player.getShelfGrid()) + "\n" +
                 player.getHasFinished()+"\n";
-
         persistenceManager.updatePlayerFile(playersConnected.get(currentPlayerIndex).getNickname(), playerUpdate);
-
     }
 
 
 
     /**
-     * This method manages the reconnection of the players after the server's connection drop
+     * This method manages the reconnection of the players after the server's connection drops
      * @param playerIndex: index of the player reconnecting
      * @author Irene Lo Presti
      */

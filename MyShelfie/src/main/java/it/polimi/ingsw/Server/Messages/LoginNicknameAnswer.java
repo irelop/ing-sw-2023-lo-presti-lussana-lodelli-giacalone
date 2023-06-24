@@ -18,7 +18,7 @@ public class LoginNicknameAnswer extends S2CMessage{
         INVALID,
         ACCEPTED,
         FIRST_ACCEPTED,
-        FULL_LOBBY;
+        FULL_LOBBY
     }
 
     LoginNicknameRequest parent;

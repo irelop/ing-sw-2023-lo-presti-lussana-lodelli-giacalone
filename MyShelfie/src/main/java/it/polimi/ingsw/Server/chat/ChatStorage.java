@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class ChatStorage implements Serializable {
 
-    private ArrayList<ChatMessage> storage;
+    private final ArrayList<ChatMessage> storage;
 
     public ChatStorage() {
         this.storage = new ArrayList<>();

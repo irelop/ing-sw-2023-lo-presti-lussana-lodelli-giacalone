@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Client.view.CLI;
+package it.polimi.ingsw.utils;
 
 public enum ColorCode {
     GREEN("\u001B[32m"),
@@ -13,7 +13,7 @@ public enum ColorCode {
 
     public final String code;
 
-    private ColorCode(String code){
+    ColorCode(String code){
         this.code = code;
     }
 }

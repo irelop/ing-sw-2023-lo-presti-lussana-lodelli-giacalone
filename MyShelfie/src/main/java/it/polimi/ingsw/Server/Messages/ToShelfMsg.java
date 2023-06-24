@@ -22,8 +22,8 @@ import java.util.ArrayList;
 public class ToShelfMsg extends S2CMessage {
 
     public String[] commonPoints;
-    private Tile[][] shelf;
-    private ArrayList<Tile> littleHand;
+    private final Tile[][] shelf;
+    private final ArrayList<Tile> littleHand;
     public CommonGoalCard[] commonGoalCards;
     public PersonalGoalCard personalGoalCard;
     public Tile[][] getShelf() {

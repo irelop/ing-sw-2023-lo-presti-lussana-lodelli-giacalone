@@ -6,7 +6,7 @@ import it.polimi.ingsw.utils.Exceptions.InvalidTileIndexInLittleHandException;
 import it.polimi.ingsw.Server.Model.Tile;
 import it.polimi.ingsw.Server.Messages.InsertingTilesMsg;
 import it.polimi.ingsw.Server.Messages.ToShelfMsg;
-import static it.polimi.ingsw.Client.view.CLI.ColorCode.*;
+import static it.polimi.ingsw.utils.ColorCode.*;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -265,11 +265,11 @@ public class InsertInShelfView extends View {
 
     /**
      * This private method is called by askOrder(). It takes player's inputs and check if they are right
-     * @deprecated
      * @param choices: an array of indexes
      * @throws InvalidTileIndexInLittleHandException: thrown to avoid wrong order indexes
      */
-    private void getTiles(int[] choices) throws InvalidTileIndexInLittleHandException {
+    @Deprecated
+    public void getTiles(int[] choices) throws InvalidTileIndexInLittleHandException {
         Scanner scanner = new Scanner(System.in);
 
         for(int i=0; i<choices.length; i++){
@@ -281,7 +281,6 @@ public class InsertInShelfView extends View {
                 if(choices[i]==choices[j]) throw new InvalidTileIndexInLittleHandException(choices.length);
             }
         }
-        // better insert them one per time
     }
 
 }

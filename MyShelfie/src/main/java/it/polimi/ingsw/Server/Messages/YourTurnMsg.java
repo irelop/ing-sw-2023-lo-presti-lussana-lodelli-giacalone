@@ -1,11 +1,5 @@
 package it.polimi.ingsw.Server.Messages;
 
-/**
- * Message that allows the player to see the ChooseTilesFromBoardView.
- *
- * @author Irene Lo Presti
- */
-
 import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.view.CLI.ChooseTilesFromBoardView;
 import it.polimi.ingsw.Client.view.CLI.WaitingView;
@@ -17,6 +11,11 @@ import it.polimi.ingsw.utils.rmi.RemoteInterface;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+/**
+ * Message that allows the player to see the ChooseTilesFromBoardView.
+ *
+ * @author Irene Lo Presti
+ */
 public class YourTurnMsg extends S2CMessage{
 
     public String nickname;

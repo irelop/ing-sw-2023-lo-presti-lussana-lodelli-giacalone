@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * M8PatternStrategy class: this class represents the strategy of the common goal card which checks if there are 8 tiles
- *                          of the same type in the player's shelf, without any restrictions on the position of these ones.
+ *                          of the same type in the player's shelf, without any restrictions on the position of these.
  *
  * @author Riccardo Lodelli
  */

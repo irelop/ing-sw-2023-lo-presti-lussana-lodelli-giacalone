@@ -1,15 +1,12 @@
 package it.polimi.ingsw.Client.Gui;
 
 import it.polimi.ingsw.Server.Messages.S2CMessage;
-import it.polimi.ingsw.Server.Model.Tile;
-import it.polimi.ingsw.utils.ReadFileByLines;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.TextFlow;
 
 import java.util.Objects;
 import java.util.Random;

@@ -12,7 +12,7 @@ import java.rmi.RemoteException;
  */
 public class ChatRecordRequest extends C2SMessage{
 
-    private String requester; //the chatter who wants to see the chat record
+    private final String requester; //the chatter who wants to see the chat record
 
     public ChatRecordRequest(String requester){
         this.requester = requester;

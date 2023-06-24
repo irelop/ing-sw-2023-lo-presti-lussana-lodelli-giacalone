@@ -14,7 +14,7 @@ import java.rmi.RemoteException;
  * @author Andrea Giacalone
  */
 public class ChatRecordAnswer extends S2CMessage{
-    private ChatStorage chatStorage;
+    private final ChatStorage chatStorage;
 
     public ChatRecordAnswer(ChatStorage chatStorage){
         this.chatStorage= chatStorage;
@@ -36,7 +36,7 @@ public class ChatRecordAnswer extends S2CMessage{
 
     @Override
     public void processMessage(RemoteInterface server, RemoteInterface client) {
-        GoalView goalView = null;
+        GoalView goalView;
         try {
             if(client.getOwner().gui){
                 client.getOwner().getStageManager().getController().receiveAnswer(this);

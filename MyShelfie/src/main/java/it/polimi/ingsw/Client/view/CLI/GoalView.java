@@ -19,8 +19,8 @@ import java.util.Scanner;
  */
 public class GoalView extends View {
 
-    private GoalAndScoreMsg msg;
-    private Object lock;
+    private final GoalAndScoreMsg msg;
+    private final Object lock;
     private ChatStorage chat;
     private boolean sendingResult;
     public GoalView(GoalAndScoreMsg msg) {
@@ -44,7 +44,7 @@ public class GoalView extends View {
         if (goOn != null) {
             System.out.println("Before ending you turn, you can leave a message to everyone or to a lucky receiver");
             System.out.println("Please select (Y) if you want to chat or (N) otherwise");
-            char answer = 0;
+            char answer;
             do {
 
                 try {
@@ -62,6 +62,43 @@ public class GoalView extends View {
             }
         }
     }
+
+    /**
+     * OVERVIEW: this method allows to print and show the current player the result of his/her choices and goals achieved
+     * until this turn.
+     * @author Matteo Lussana
+     */
+    private void showScoreRecap(){
+        System.out.println("---------------------------------");
+        System.out.println("GOAL ACHIEVED IN THIS TURN:");
+        if (msg.commonGoalAchieved) {
+            System.out.println("Common Goal: yes");
+        } else System.out.println("Common Goal: no");
+        if (msg.personalGoalAchieved) {
+            System.out.println("Personal Goal: yes");
+        } else System.out.println("Personal Goal: no");
+        if (msg.youFullyShelf) System.out.println("You earned 1 pt. for be the first to complete the shelf, SIUM");
+
+        System.out.println("Total score: " + msg.score);
+        System.out.println("---------------------------------");
+        System.out.println("[press enter to continue]");
+    }
+
+    /**
+     * OVERVIEW: this method allows to properly finish the turn.
+     * @author Matteo Lussana
+     */
+    private void finishTurn(){
+        FinishTurnMsg finishTurnMsg = new FinishTurnMsg();
+        if (!getOwner().isRMI()) {
+            getOwner().getServerHandler().sendMessageToServer(finishTurnMsg);
+        } else {
+            getOwner().getServerHandler().sendMessageToServer(finishTurnMsg);
+        }
+    }
+
+
+    // - - - - - - - - - - - - - - - - - - - - - - C H A T   M E T H O D S-  - - - - - - - - - - - - - - - - - - - - -
 
 
     /**
@@ -83,7 +120,37 @@ public class GoalView extends View {
     }
 
 
+    /**
+     * OVERVIEW: this method allows to show the current record of chat messages in CLI unfolding their fields and printing
+     * them in a formatted table.
+     * @author Andrea Giacalone
+     */
+    private void showChat(){
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");   // in order to properly format the timestamp
 
+        Formatter fmt = new Formatter();
+
+        fmt.format(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - C H A T   R O O M - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
+        fmt.format("%30s %30s %30s %30s\n","[CONTENT]","[SENDER]","[RECEIVER]","[TIME]");
+        for (int i = 0; i < chat.getStorage().size(); i++) {
+            fmt.format("%30s %30s %30s %30s\n",
+                    chat.getStorage().get(i).getContent(),
+                    chat.getStorage().get(i).getSender(),
+                    chat.getStorage().get(i).getReceiver(),
+                    chat.getStorage().get(i).getLocalTime().format(timeFormatter));
+        }
+
+        System.out.println(fmt);
+    }
+
+
+    /**
+     * OVERVIEW: this method allows to manage the chat in CLI allowing the player to see the record
+     * of the actual chat messages and to send public messages or private ones,
+     * checking if the receiver actually exists. The player can send a maximum number of 3 messages and after that
+     * the turn will be automatically considered finished.
+     * @author Andrea Giacalone
+     */
     private void manageChat(){
         Scanner scanner = new Scanner(System.in);
         boolean goOn = true;
@@ -188,16 +255,7 @@ public class GoalView extends View {
     }
 
 
-    public void setChat(ChatStorage chat) {
-        this.chat = chat;
-    }
 
-
-
-
-    public void setSendingResult(boolean sendingResult) {
-        this.sendingResult = sendingResult;
-    }
 
     @Override
     public void notifyView() {
@@ -206,46 +264,26 @@ public class GoalView extends View {
         }
     }
 
-    private void finishTurn(){
-        FinishTurnMsg finishTurnMsg = new FinishTurnMsg();
-        if (!getOwner().isRMI()) {
-            getOwner().getServerHandler().sendMessageToServer(finishTurnMsg);
-        } else {
-            getOwner().getServerHandler().sendMessageToServer(finishTurnMsg);
-        }
+
+    //- - - - - - - - - - - - - - - - - S E T T E R S - - - - - - - - - - - - -  - -
+
+    /**
+     * OVERVIEW: this method allows to set the chat snapshot returned by the chat manager.
+     * @param chat: the chat record.
+     */
+    public void setChat(ChatStorage chat) {
+        this.chat = chat;
     }
 
-    private void showChat(){
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");   // in order to properly format the timestamp
 
-        Formatter fmt = new Formatter();
-
-        fmt.format(" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - C H A T   R O O M - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - \n");
-        fmt.format("%30s %30s %30s %30s\n","[CONTENT]","[SENDER]","[RECEIVER]","[TIME]");
-        for (int i = 0; i < chat.getStorage().size(); i++) {
-            fmt.format("%30s %30s %30s %30s\n",
-                    chat.getStorage().get(i).getContent(),
-                    chat.getStorage().get(i).getSender(),
-                    chat.getStorage().get(i).getReceiver(),
-                    chat.getStorage().get(i).getLocalTime().format(timeFormatter));
-        }
-
-        System.out.println(fmt);
+    /**
+     * OVERVIEW: this method allows to set the sending result of the message checked and returned by the chat manager.
+     * @param sendingResult: the sending result of sending the message.
+     */
+    public void setSendingResult(boolean sendingResult) {
+        this.sendingResult = sendingResult;
     }
 
-    private void showScoreRecap(){
-        System.out.println("---------------------------------");
-        System.out.println("GOAL ACHIVED IN THIS TURN:");
-        if (msg.commonGoalAchived == true) {
-            System.out.println("Common Goal: yes");
-        } else System.out.println("Common Goal: no");
-        if (msg.personalGoalAchived == true) {
-            System.out.println("Personal Goal: yes");
-        } else System.out.println("Personal Goal: no");
-        if (msg.youFullyShelf) System.out.println("You earned 1 pt. for be the first to complete the shelf, SIUM");
 
-        System.out.println("Total score: " + msg.score);
-        System.out.println("---------------------------------");
-        System.out.println("[press enter to continue]");
-    }
+
 }

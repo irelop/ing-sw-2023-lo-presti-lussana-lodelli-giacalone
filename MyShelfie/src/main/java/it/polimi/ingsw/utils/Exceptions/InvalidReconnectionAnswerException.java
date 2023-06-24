@@ -8,7 +8,9 @@ public class InvalidReconnectionAnswerException extends Exception{
 
     @Override
     public String toString(){
-        return "Sorry, the choice inserted is not valid: please select another one. \n" +
-                "You have to choose between the lobby (L) and the game (G).\n";
+        return """
+                Sorry, the choice inserted is not valid: please select another one.\s
+                You have to choose between the lobby (L) and the game (G).
+                """;
     }
 }

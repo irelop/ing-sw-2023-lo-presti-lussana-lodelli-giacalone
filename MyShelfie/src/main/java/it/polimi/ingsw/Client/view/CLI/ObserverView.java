@@ -8,6 +8,10 @@ package it.polimi.ingsw.Client.view.CLI;
  * @author Andrea Giacalone
  */
 public interface ObserverView {
-    public void notifyView();
+    /**
+     * OVERVIEW: this method allows to notify the view triggering a different action according to its implementation.
+     * @author Andrea Giacalone
+     */
+     void notifyView();
 
 }

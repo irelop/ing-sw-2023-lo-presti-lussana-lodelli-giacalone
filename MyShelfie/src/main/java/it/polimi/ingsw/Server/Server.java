@@ -10,9 +10,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -45,12 +42,6 @@ public class Server {
         System.out.println("Server is open: listening for new clients...");
         manageServerSocket();
 
-        /*Thread socketServer = new Thread(()->manageServerSocket());
-        Thread RMIServer = new Thread(()->manageServerRMI());
-        socketServer.start();
-        RMIServer.start();*/
-
-
     }
 
     /**
@@ -73,14 +64,13 @@ public class Server {
         try{
             socket = new ServerSocket(serverPort);
         }catch (IOException ex){
-            System.out.println("Failed to open socket server");
+            System.out.println("[SKT] Error: failed to open socket server");
             System.exit(1);
             return;
         }
 
         while(true){
             try{
-                //lo lasciamo synchronized?
                 synchronized (lock){
                     Socket client = socket.accept();
                     SocketClientHandler clientHandler = new SocketClientHandler(client, gameRecord);
@@ -88,7 +78,7 @@ public class Server {
                     clientHandlerThread.start();
                 }
             }catch (IOException ex){
-                System.out.println("Connection with server dropped");
+                System.out.println("[SKT] Error: connection with server dropped");
             }
         }
     }
@@ -106,35 +96,10 @@ public class Server {
             serverInterface.setGameRecord(gameRecord);
             gameRecord.setRemoteServer(serverInterface);
         }catch(Exception e){
-            System.out.println("Failed to open RMI server");
+            System.out.println("[RMI] Error: failed to open RMI server");
             System.exit(1);
         }
-/*
-        while(true){
 
-            //non penso serva più
-            //checking if a new client is connected
-            int clientsConnected = numRMIClients;
-            do{
-                try{
-                    clientsConnected = serverInterface.getNumClients();
-                    Thread.sleep(50); //siamo sicuri?
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
-            }while(clientsConnected<=numRMIClients);
-
-            try{
-                if (serverInterface.getNumClients() > numRMIClients) {
-                    synchronized (lock) {
-                        numRMIClients++;
-                    }
-                }
-            }catch(Exception e){
-                System.out.println("Problems connecting new RMI client");
-                System.exit(1);
-            }
-        }*/
     }
 
 

@@ -7,7 +7,7 @@ import it.polimi.ingsw.utils.rmi.RemoteInterface;
 import java.rmi.RemoteException;
 
 /**
- * LobbyUpdateRequest: this message allows to properly the send the user request in order to get a snapshot of the actual
+ * LobbyUpdateRequest: this message allows to properly send the user request in order to get a snapshot of the actual
  * lobby players connected to the game.
  * @author Andrea Giacalone
  */

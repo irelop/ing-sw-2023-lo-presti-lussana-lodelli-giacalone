@@ -6,7 +6,7 @@ import it.polimi.ingsw.Server.Messages.GameIsEndingUpdateAnswer;
 public class GameIsEndingView extends View{
 
     private final Object lock;
-    private GameIsEndingUpdateAnswer msg;
+    private final GameIsEndingUpdateAnswer msg;
 
     public GameIsEndingView(GameIsEndingUpdateAnswer msg){
         lock = new Object();

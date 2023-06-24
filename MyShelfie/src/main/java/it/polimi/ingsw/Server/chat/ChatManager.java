@@ -3,12 +3,12 @@ import java.util.ArrayList;
 
 /**
  * ChatManager class: this class manages the chat among players in a game. It allows to send messages, check their
- *                    validity and filter them depending their privacy policy.
+ *                    validity and filter them depending on their privacy policy.
  *
  */
 public class ChatManager {
-    private ChatStorage commonChatPool;     //record of all messages in the pool
-    private ArrayList<String> chatters;     //players of the game who can chat
+    private final ChatStorage commonChatPool;     //record of all messages in the pool
+    private final ArrayList<String> chatters;     //players of the game who can chat
 
 
     public ChatManager() {
@@ -43,12 +43,6 @@ public class ChatManager {
         this.chatters.add(player);
     }
 
-    /**
-     * OVERVIEW: this method allows to get a snapshot of the record of messages filtering the public messages and the private ones
-     *           redirected to the requester.
-     * @param requester: the nickname of the player who asks to chat.
-     * @return customChat: the snapshot of the record of messages
-     */
     /**
      * OVERVIEW: this method allows to get a snapshot of the record of messages filtering the public messages and the private ones
      *           redirected to the requester.

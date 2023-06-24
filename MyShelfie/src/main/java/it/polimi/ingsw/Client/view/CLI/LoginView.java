@@ -62,13 +62,16 @@ public class LoginView extends View implements ObserverView {
       * OVERVIEW: this method allows to show the game title screen.
       */
     public void showTitleScreen(){
-        System.out.println("\n,   .     .                     .         .   ,        ,-.  .       .          \n" +
-                "| . |     |                     |         |\\ /|       (   ` |       |  ,- o    \n" +
-                "| ) ) ,-. | ,-. ,-. ;-.-. ,-.   |-  ,-.   | V | . .    `-.  |-. ,-. |  |  . ,-.\n" +
-                "|/|/  |-' | |   | | | | | |-'   |   | |   |   | | |   .   ) | | |-' |  |- | |-'\n" +
-                "' '   `-' ' `-' `-' ' ' ' `-'   `-' `-'   '   ' `-|    `-'  ' ' `-' '  |  ' `-'\n" +
-                "                                                `-'                   -'       \n" +
-                "\n");
+        System.out.println("""
+
+                ,   .     .                     .         .   ,        ,-.  .       .         \s
+                | . |     |                     |         |\\ /|       (   ` |       |  ,- o   \s
+                | ) ) ,-. | ,-. ,-. ;-.-. ,-.   |-  ,-.   | V | . .    `-.  |-. ,-. |  |  . ,-.
+                |/|/  |-' | |   | | | | | |-'   |   | |   |   | | |   .   ) | | |-' |  |- | |-'
+                ' '   `-' ' `-' `-' ' ' ' `-'   `-' `-'   '   ' `-|    `-'  ' ' `-' '  |  ' `-'
+                                                                `-'                   -'      \s
+
+                """);
     }
 
 
@@ -183,7 +186,7 @@ public class LoginView extends View implements ObserverView {
       * OVERVIEW: this method allows to properly get the user reconnection choice.
       * @return the reconnection choice of the user.
       * @throws InvalidReconnectionAnswerException: an exception thrown if the user choice isn't valid.
-      * @authors Irene Lo Presti, Andrea Giacalone
+      * @author Irene Lo Presti, Andrea Giacalone
       */
     private char getReconnectionChoice() throws InvalidReconnectionAnswerException{
         Scanner scanner = new Scanner(System.in);
@@ -198,7 +201,7 @@ public class LoginView extends View implements ObserverView {
      /**
       * OVERVIEW: this method allows to manage the reconnection choice. According to the user choice, the player can be
       * redirected to the lobby of a new game or, if he/she previously was disconnected from a game, he/she can rejoin it.
-      * @authors Irene Lo Presti, Andrea Giacalone
+      * @author Irene Lo Presti, Andrea Giacalone
       */
     private void manageReconnectionChoice(){
         System.out.println("\nCONTINUE A GAME [C]");
@@ -220,7 +223,7 @@ public class LoginView extends View implements ObserverView {
 
      /**
       * OVERVIEW: this method allows to manage the connection of the player to the lobby of a new game.
-      * @authors Irene Lo Presti, Andrea Giacalone
+      * @author Irene Lo Presti, Andrea Giacalone
       */
     private void manageNewLobbyConnection(){
         synchronized (lock) {
@@ -245,7 +248,7 @@ public class LoginView extends View implements ObserverView {
 
      /**
       * OVERVIEW: this method allows to manage the reconnection of the player to the game where he/she was disconnected.
-      * @authors Irene Lo Presti, Andrea Giacalone
+      * @author Irene Lo Presti, Andrea Giacalone
       */
     private void manageExistingGameConnection(){
         ReconnectionRequest reconnectionRequest = new ReconnectionRequest(insertedNickname, false);
@@ -273,7 +276,7 @@ public class LoginView extends View implements ObserverView {
      /**
       * OVERVIEW: this setter method allows to set the mailbox wrapping the reconnection answer sent by the server.
       * @param reconnectionAnswer: the reconnection answer sent by the server.
-      * @authors Irene Lo Presti, Andrea Giacalone
+      * @author Irene Lo Presti, Andrea Giacalone
       */
     public void setReconnectionAnswer(ReconnectionAnswer reconnectionAnswer) {
         this.reconnectionAnswer = reconnectionAnswer;

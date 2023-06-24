@@ -73,7 +73,7 @@ public class RMIClientHandler extends ClientHandler {
         try {
             getClientInterface().sendMessageToClient(message);
         } catch (RemoteException e) {
-            throw new RuntimeException(e);
+            System.out.println("[RMI] Error: failed to send message to client");
         }
     }
 
@@ -83,6 +83,6 @@ public class RMIClientHandler extends ClientHandler {
         isConnected = false;
         if(getController() != null)
             getController().shouldFinishTurn(this);
-        System.out.println("RMI client disconnected");
+        System.out.println("[RMI] RMI client disconnected");
     }
 }

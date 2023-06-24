@@ -8,7 +8,7 @@ import java.rmi.RemoteException;
 /**
  * ReconnectionNotifyMsg: this message allows to notify the last connected player, if he/she exists, of the reconnection
  * of a player previously connected to the game. After that, the game can continue.
- * @authors Irene Lo Presti, Andrea Giacalone
+ * @author Irene Lo Presti, Andrea Giacalone
  */
 public class ReconnectionNotifyMsg extends S2CMessage{
     public String nickname;

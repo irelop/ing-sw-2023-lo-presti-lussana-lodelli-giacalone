@@ -26,7 +26,7 @@ public class CommonCardInfo implements Serializable {
     //it.polimi.ingsw.Server.Model.PatternStrategy.
     public CommonCardInfo(String name){
         this.schema = new Tile[6][5];
-        this.name = name.replaceAll("it.polimi.ingsw.Server.Model.PatternStrategy.","");;
+        this.name = name.replaceAll("it.polimi.ingsw.Server.Model.PatternStrategy.","");
         int index = 0;
         ReadFileByLines reader = new ReadFileByLines();
         //reader.readFrom("MyShelfie/src/txtfiles/CommonGoalCardsInfo.txt");

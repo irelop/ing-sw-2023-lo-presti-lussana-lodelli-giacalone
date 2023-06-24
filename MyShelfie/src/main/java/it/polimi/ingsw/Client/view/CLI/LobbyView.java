@@ -12,8 +12,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class LobbyView extends View implements ObserverView {
 
-    private Object lock = new Object();
-    private LobbyUpdateAnswer lobbyUpdateAnswer;    //the updated view of the lobby sent by the server
+    private final Object lock = new Object();
+    private final LobbyUpdateAnswer lobbyUpdateAnswer;    //the updated view of the lobby sent by the server
 
     /**
      * CONSTRUCTOR: a new LobbyView object is built receiving the updated lobby view containing the players currently
