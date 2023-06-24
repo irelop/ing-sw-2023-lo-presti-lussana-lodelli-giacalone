@@ -4,10 +4,9 @@ import it.polimi.ingsw.Client.ServerHandler;
 import it.polimi.ingsw.Client.view.CLI.GameIsEndingView;
 import it.polimi.ingsw.Client.view.CLI.WaitingView;
 import it.polimi.ingsw.utils.rmi.RemoteInterface;
-
 import java.rmi.RemoteException;
 
-public class GameIsEndingUpdateAnswer extends S2CMessage{
+public class GameIsEndingUpdate extends S2CMessage{
 
     public boolean gameOver;
     public int playerIndex; //player who is receiving this message
@@ -15,8 +14,8 @@ public class GameIsEndingUpdateAnswer extends S2CMessage{
     public String[] players;
     public boolean[] hasFinished;
 
-    public GameIsEndingUpdateAnswer(boolean gameOver, int playerIndex, int firstToFinish,
-                                    String[] players, boolean[] hasFinished){
+    public GameIsEndingUpdate(boolean gameOver, int playerIndex, int firstToFinish,
+                              String[] players, boolean[] hasFinished){
         this.gameOver = gameOver;
         this.playerIndex = playerIndex;
         this.firstToFinish = firstToFinish;

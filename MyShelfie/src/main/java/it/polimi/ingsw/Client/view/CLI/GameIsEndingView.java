@@ -1,14 +1,19 @@
 package it.polimi.ingsw.Client.view.CLI;
 
 import it.polimi.ingsw.Server.Messages.EndGameMsg;
-import it.polimi.ingsw.Server.Messages.GameIsEndingUpdateAnswer;
+import it.polimi.ingsw.Server.Messages.GameIsEndingUpdate;
+
+/**
+ * Last waiting view: this view informs the players that one of them has filled their shelf and
+ * the game is ending
+ */
 
 public class GameIsEndingView extends View{
 
     private final Object lock;
-    private final GameIsEndingUpdateAnswer msg;
+    private final GameIsEndingUpdate msg;
 
-    public GameIsEndingView(GameIsEndingUpdateAnswer msg){
+    public GameIsEndingView(GameIsEndingUpdate msg){
         lock = new Object();
         this.msg = msg;
     }
@@ -34,23 +39,13 @@ public class GameIsEndingView extends View{
                 }
             }
 
-            //se la partita è finita devo andare nella view con la classifica
+            //if everybody has played their last turn, the players can see the scoreboard
             else{
                 //playerIndex needed to choose the right clientHandler
                 System.out.println("Everyone has played their turn!");
                 EndGameMsg endGameMsg = new EndGameMsg(msg.playerIndex);
-
                 getOwner().getServerHandler().sendMessageToServer(endGameMsg);
-
             }
-        }
-    }
-
-
-    @Override
-    public void notifyView() {
-        synchronized (lock){
-            lock.notify();
         }
     }
 }

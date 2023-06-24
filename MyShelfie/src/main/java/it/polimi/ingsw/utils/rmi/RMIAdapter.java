@@ -73,7 +73,7 @@ public class RMIAdapter extends UnicastRemoteObject implements RemoteInterface {
     public void goToLobbyView(LobbyUpdateAnswer msg){
         transitionToView(new LobbyView(msg));
     }
-    public void goToGameIsEndingView(GameIsEndingUpdateAnswer msg){
+    public void goToGameIsEndingView(GameIsEndingUpdate msg){
         transitionToView(new GameIsEndingView(msg));
     }
     public void goToEndgameView(ScoreBoardMsg msg){

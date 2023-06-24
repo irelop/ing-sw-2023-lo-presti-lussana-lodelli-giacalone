@@ -642,7 +642,7 @@ public class MyShelfie {
             //sending to gameIsEndingView players who have played their last turn
             if (playersConnected.get(i).getHasFinished() && clientHandlers.get(i).isConnected()) {
                 clientHandlers.get(i).sendMessageToClient(
-                        new GameIsEndingUpdateAnswer(gameOver, i, firstToFinish, players, hasFinished));
+                        new GameIsEndingUpdate(gameOver, i, firstToFinish, players, hasFinished));
             }
         }
 

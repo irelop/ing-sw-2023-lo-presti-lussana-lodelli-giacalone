@@ -83,7 +83,7 @@ public interface RemoteInterface extends Remote {
         void goToChooseTilesFromBoardView(YourTurnMsg msg) throws RemoteException;
         void goToInsertInShelfView(ToShelfMsg msg) throws RemoteException;
         void goToGoalView(GoalAndScoreMsg msg) throws RemoteException;
-        void goToGameIsEndingView(GameIsEndingUpdateAnswer msg) throws RemoteException;
+        void goToGameIsEndingView(GameIsEndingUpdate msg) throws RemoteException;
         void goToEndgameView(ScoreBoardMsg msg) throws RemoteException;
         void goToLastPlayerConnectedView(LastOneConnectedMsg msg) throws RemoteException;
 

@@ -45,8 +45,8 @@ public class WaitingController extends Controller {
      */
     @Override
     public void build(S2CMessage message) {
-        if (message instanceof GameIsEndingUpdateAnswer)
-            manageGameIsEnding( (GameIsEndingUpdateAnswer) message );
+        if (message instanceof GameIsEndingUpdate)
+            manageGameIsEnding( (GameIsEndingUpdate) message );
         chatPane.setVisible(false);
     }
 
@@ -55,8 +55,8 @@ public class WaitingController extends Controller {
      */
     @Override
     public void receiveAnswer(S2CMessage message) {
-        if (message instanceof GameIsEndingUpdateAnswer)
-            manageGameIsEnding( (GameIsEndingUpdateAnswer) message );
+        if (message instanceof GameIsEndingUpdate)
+            manageGameIsEnding( (GameIsEndingUpdate) message );
         else if(message instanceof ChatRecordAnswer){
             chatRecord = (ChatRecordAnswer) message;
             manageChatAnswer();
@@ -86,7 +86,7 @@ public class WaitingController extends Controller {
      * he has to wait that all players complete their turn
      * the method show a message with the name of the player that is playing
      */
-    private void manageGameIsEnding(GameIsEndingUpdateAnswer message) {
+    private void manageGameIsEnding(GameIsEndingUpdate message) {
         if(message.firstToFinish == message.playerIndex)
             currentPlayerText.setText("Congratulation, you are the first one to fill the personal shelf! The game is ending...");
         else
