@@ -22,7 +22,6 @@ public class EndGameController extends Controller {
     @FXML Text textPos_2;
     @FXML Text textPos_3;
     @FXML Text textPos_4;
-
     @FXML Text textPos_1_score;
     @FXML Text textPos_2_score;
     @FXML Text textPos_3_score;

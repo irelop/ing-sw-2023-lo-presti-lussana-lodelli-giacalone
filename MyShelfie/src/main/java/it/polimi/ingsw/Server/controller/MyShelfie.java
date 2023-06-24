@@ -410,7 +410,7 @@ public class MyShelfie {
 
             //checking if a player's shelf is full,
             // if true add +1pt and set the last lap
-            if(/*playersConnected.get(currentPlayerIndex).getMyShelfie().isShelfFull() &&*/ !isOver) {
+            if(playersConnected.get(currentPlayerIndex).getMyShelfie().isShelfFull() && !isOver) {
                 isShelfFull = true;
                 playersConnected.get(currentPlayerIndex).addScore(1);
                 this.isOver = true;
@@ -673,6 +673,7 @@ public class MyShelfie {
     public void finishGame(ClientHandler clientHandler){
         if(!gameOver)
             gameOver = true;
+
         if(!clientHandler.getIsGui())
             clientHandler.stop();
 
