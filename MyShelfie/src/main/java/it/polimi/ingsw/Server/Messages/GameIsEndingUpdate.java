@@ -6,6 +6,10 @@ import it.polimi.ingsw.Client.view.CLI.WaitingView;
 import it.polimi.ingsw.utils.rmi.RemoteInterface;
 import java.rmi.RemoteException;
 
+/**
+ * This message sets all the information for the GameIsEndingView
+ * @author Irene Lo Presti
+ */
 public class GameIsEndingUpdate extends S2CMessage{
 
     public boolean gameOver;
