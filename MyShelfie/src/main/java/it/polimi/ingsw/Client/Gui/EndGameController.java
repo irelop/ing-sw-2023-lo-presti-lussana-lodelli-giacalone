@@ -30,6 +30,7 @@ public class EndGameController extends Controller {
     @FXML ImageView podFirst;
     @FXML ImageView podSecond;
     @FXML ImageView podThird;
+    @FXML Text emptyBoard;
 
     /**
      * This method sets all the elements from message parameters,
@@ -76,6 +77,9 @@ public class EndGameController extends Controller {
                 textPos_4_score.setVisible(true);
             }
         }
+        // showing advice if the board is empty
+        if (msg.boardEmpty)
+            emptyBoard.setVisible(true);
     }
 
     @Override

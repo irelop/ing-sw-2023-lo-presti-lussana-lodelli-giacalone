@@ -88,6 +88,11 @@
                         <Glow level="0.55" />
                      </effect>
                   </Button>
+                  <Text fx:id="emptyBoard" layoutX="43.0" layoutY="305.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The tiles are fished, it's impossible to refill the board, the game is over." textAlignment="CENTER" visible="false" wrappingWidth="350.0">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
 
                </children>
             </AnchorPane>
