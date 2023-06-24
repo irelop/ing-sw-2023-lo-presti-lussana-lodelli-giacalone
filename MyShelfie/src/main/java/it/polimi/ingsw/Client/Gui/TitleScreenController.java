@@ -105,15 +105,27 @@ public class TitleScreenController extends Controller{
         getOwner().getStageManager().loadNextStage("loginPlayer.fxml");
     }
 
+    /**
+     * This method is called when the joinExistingGame button is clicked.
+     * It switches the scene to the next section
+     */
     @FXML
     private void joinGame() {
         getOwner().getStageManager().loadNextStage("reconnection.fxml");
     }
 
+    /**
+     * This method is called when the exit button is clicked.
+     * It closes the window
+     */
     public void exit() {
         getOwner().getStageManager().getStage().close();
     }
 
+    /**
+     * This method is called when the rules button is clicked.
+     * It makes appear the rules of the game
+     */
     public void showRules(){
         rulesPane.setVisible(true);
         closeRules.setVisible(true);
