@@ -7,6 +7,7 @@ package it.polimi.ingsw.Client.Gui;
  * @see Controller
  */
 
+import it.polimi.ingsw.Server.Messages.FinishGameRequest;
 import it.polimi.ingsw.Server.Messages.S2CMessage;
 import it.polimi.ingsw.Server.Messages.ScoreBoardMsg;
 import javafx.fxml.FXML;
@@ -81,7 +82,10 @@ public class EndGameController extends Controller {
 
     @Override
     public void receiveAnswer(S2CMessage message) {
-
+        if(message instanceof ScoreBoardMsg) {
+            FinishGameRequest finishGameRequest = new FinishGameRequest();
+            getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
+        }
     }
 
     public void exit() {
