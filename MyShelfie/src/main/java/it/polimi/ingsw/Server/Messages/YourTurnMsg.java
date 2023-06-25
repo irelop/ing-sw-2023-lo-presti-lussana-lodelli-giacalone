@@ -12,7 +12,8 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /**
- * Message that allows the player to see the ChooseTilesFromBoardView.
+ * YourTurnMsg class: this message wraps all useful infos of the current playing player, linked to the start of his/her
+ * new turn.
  *
  * @author Irene Lo Presti
  */

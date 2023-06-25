@@ -68,7 +68,7 @@ public class Client implements Runnable{
                 System.out.println(e);
             }
         }
-        // controllo input
+        // checks input
         this.gui = (GUIchoice == 'Y');
         if(!gui) {
             nextView = new LoginView();

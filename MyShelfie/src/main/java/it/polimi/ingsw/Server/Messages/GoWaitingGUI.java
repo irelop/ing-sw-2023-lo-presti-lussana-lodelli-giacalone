@@ -5,6 +5,11 @@ import it.polimi.ingsw.utils.rmi.RemoteInterface;
 
 import java.rmi.RemoteException;
 
+/**
+ * GoWaitingGUI msg: this message allows to make the transition to an idle view in GUI for the current player, who
+ * should be waiting for the start of his turn.
+ * @author Riccardo Lodelli
+ */
 public class GoWaitingGUI extends S2CMessage {
 
     @Override

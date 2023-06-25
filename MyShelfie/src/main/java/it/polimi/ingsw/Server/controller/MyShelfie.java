@@ -17,7 +17,9 @@ import java.util.stream.Collectors;
 
 
 /**
- * CONTROLLER
+ * MyShelfie class: this class represents the controller in the MVC design pattern. It offers methods to properly init all
+ * data structures of the model, to manage players' turn, to manage critic network decisions linked to the status of the model
+ * due to additional features of persistence, resilience and chat.
  */
 public class MyShelfie {
     
