@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Client.Gui;
+package it.polimi.ingsw.Client.view.GUI;
 
 import it.polimi.ingsw.Server.Messages.*;
 import javafx.collections.FXCollections;
