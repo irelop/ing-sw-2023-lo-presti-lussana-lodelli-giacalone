@@ -10,6 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for XPatternStrategy class
+ * @author Andrea Giacalone
+ */
 class XPatternStrategyTest {
     StrategyInterface commonStrategy;
     Tile[][] correctPattern = null;
@@ -60,11 +64,19 @@ class XPatternStrategyTest {
         wrongPattern = null;
     }
 
+    /**
+     * Test for shelf containing 5 tiles of the same color forming a "X"
+     * Test should ensure that checkPattern returns true
+     */
     @Test
     void checkCorrectPattern_ShouldAssertTrue() {
         assertTrue(commonStrategy.checkPattern(correctPattern));
     }
 
+    /**
+     * Test for shelf that DOESN'T contain the "X" pattern
+     * Test should ensure that checkPattern returns false
+     */
     @Test
     void checkWrongPattern_ShouldAssertFalse() {
         assertFalse(commonStrategy.checkPattern(wrongPattern));

@@ -9,6 +9,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests for APatternStrategy class
+ * @author Riccardo Lodelli
+ */
 public class APatternStrategyTest {
 
     StrategyInterface aPatternStrategy = null;
@@ -29,6 +33,10 @@ public class APatternStrategyTest {
     public void tearDown() throws Exception {
     }
 
+    /**
+     * Test for 4 corner tiles of the same color.
+     * Test should ensure that checkPattern returns true
+     */
     @Test
     public void checkPattern_correctInput_correctOutput_true() {
         shelf[0][0] = Tile.BLUE;
@@ -40,6 +48,10 @@ public class APatternStrategyTest {
 
     }
 
+    /**
+     * Test for less than 4 corner tiles.
+     * Test should ensure that checkPattern returns false
+     */
     @Test
     public void checkPattern_correctInput_correctOutput_false() {
 
@@ -48,6 +60,10 @@ public class APatternStrategyTest {
 
     }
 
+    /**
+     * Test for 4 corner tiles of different colors.
+     * Test should ensure that checkPattern returns false
+     */
     @Test
     public void checkPattern_correctInput_correctOutput_false2() {
         shelf[0][0] = Tile.BLUE;
