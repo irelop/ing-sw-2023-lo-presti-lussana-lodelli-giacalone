@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Client.Gui;
+package it.polimi.ingsw.Client.view.GUI;
 
 import it.polimi.ingsw.Client.Client;
 import it.polimi.ingsw.Server.Messages.S2CMessage;
