@@ -1,7 +1,7 @@
 package it.polimi.ingsw.Client;
 
-import it.polimi.ingsw.Client.Gui.JavaGUI;
-import it.polimi.ingsw.Client.Gui.StageManager;
+import it.polimi.ingsw.Client.view.GUI.JavaGUI;
+import it.polimi.ingsw.Client.view.GUI.StageManager;
 import it.polimi.ingsw.utils.Exceptions.InvalidGUIChoiceException;
 import it.polimi.ingsw.utils.Exceptions.InvalidNetworkChoiceException;
 import it.polimi.ingsw.Client.view.CLI.LoginView;

@@ -9,6 +9,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for DPatternStrategy class
+ * @author Riccardo Lodelli
+ */
 class DPatternStrategyTest {
 
     StrategyInterface strategy;
@@ -66,16 +70,28 @@ class DPatternStrategyTest {
         }
     }
 
+    /**
+     * Test for 5 tiles forming a diagonal from n-w to s-e.
+     * Test should ensure that checkPattern returns true
+     */
     @Test
     void checkPattern_true() {
         assertTrue(strategy.checkPattern(correctPattern));
     }
 
+    /**
+     * Test for a shelf without any diagonal pattern.
+     * Test should ensure that checkPattern returns false
+     */
     @Test
     void checkPattern_false() {
         assertFalse(strategy.checkPattern(wrongPattern));
     }
 
+    /**
+     * Test for 5 tiles forming a diagonal from s-w to n-e.
+     * Test should ensure that checkPattern returns true
+     */
     @Test
     void checkPattern_otherSideTrue() {
         assertTrue(strategy.checkPattern(thirdPattern));

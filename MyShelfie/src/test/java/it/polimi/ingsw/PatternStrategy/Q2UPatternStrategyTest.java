@@ -10,6 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for Q2UPatternStrategy class
+ * @author Andrea Giacalone
+ */
 class Q2UPatternStrategyTest {
     StrategyInterface commonStrategy;
     Tile[][] correctPattern = null;
@@ -49,9 +53,6 @@ class Q2UPatternStrategyTest {
                 wrongPattern[i][j] = Tile.valueOf(values[j]);
             }
         }
-
-
-
     }
 
     @AfterEach
@@ -60,11 +61,19 @@ class Q2UPatternStrategyTest {
         wrongPattern = null;
     }
 
+    /**
+     * Test for shelf containing two 2x2 squares formed by tiles of the same color.
+     * Test should ensure that checkPattern returns true
+     */
     @Test
     void checkCorrectPattern_ShouldAssertTrue() {
         assertTrue(commonStrategy.checkPattern(correctPattern));
     }
 
+    /**
+     * Test for shelf containing ONE 2x2 squares formed by tiles of the same color.
+     * Test should ensure that checkPattern returns false
+     */
     @Test
     void checkWrongPattern_ShouldAssertFalse() {
         assertFalse(commonStrategy.checkPattern(wrongPattern));

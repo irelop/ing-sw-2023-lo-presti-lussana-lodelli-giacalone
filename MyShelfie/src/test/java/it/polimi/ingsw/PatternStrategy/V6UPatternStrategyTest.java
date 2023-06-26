@@ -10,6 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for V6UPatternStrategy class
+ * @author Andrea Giacalone
+ */
 class V6UPatternStrategyTest {
     StrategyInterface commonStrategy;
     Tile[][] correctPattern = null;
@@ -60,11 +64,19 @@ class V6UPatternStrategyTest {
         wrongPattern = null;
     }
 
+    /**
+     * Test for shelf containing 2 columns filled with one tile for each color
+     * Test should ensure that checkPattern returns true
+     */
     @Test
     void checkCorrectPattern_ShouldAssertTrue() {
         assertTrue(commonStrategy.checkPattern(correctPattern));
     }
 
+    /**
+     * Test for shelf containing ONLY 1 column filled with one tile for each color
+     * Test should ensure that checkPattern returns false
+     */
     @Test
     void checkWrongPattern_ShouldAssertFalse() {
         assertFalse(commonStrategy.checkPattern(wrongPattern));

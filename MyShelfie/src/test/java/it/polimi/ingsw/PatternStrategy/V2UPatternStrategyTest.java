@@ -10,6 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for V2UPatternStrategy class
+ * @author Andrea Giacalone
+ */
 class V2UPatternStrategyTest {
     StrategyInterface commonStrategy;
     Tile[][] correctPattern = null;
@@ -60,11 +64,19 @@ class V2UPatternStrategyTest {
         wrongPattern = null;
     }
 
+    /**
+     * Test for shelf containing 6 "couples" of same color tiles.
+     * Test should ensure that checkPattern returns true
+     */
     @Test
     void checkCorrectPattern_ShouldAssertTrue() {
         assertTrue(commonStrategy.checkPattern(correctPattern));
     }
 
+    /**
+     * Test for shelf containing 5 "couples" of same color tiles.
+     * Test should ensure that checkPattern returns false
+     */
     @Test
     void checkWrongPattern_ShouldAssertFalse() {
         assertFalse(commonStrategy.checkPattern(wrongPattern));

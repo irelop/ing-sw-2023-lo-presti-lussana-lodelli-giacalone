@@ -1,4 +1,4 @@
-package it.polimi.ingsw.Client.Gui;
+package it.polimi.ingsw.Client.view.GUI;
 
 import it.polimi.ingsw.Server.Messages.AllPlayersReadyMsg;
 import it.polimi.ingsw.Server.Messages.C2SMessage;

@@ -10,6 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for PPatternStrategy class
+ * @author Andrea Giacalone
+ */
 class PPatternStrategyTest {
     StrategyInterface commonStrategy;
     Tile[][] correctPatternWest;
@@ -75,16 +79,29 @@ class PPatternStrategyTest {
         wrongPattern = null;
     }
 
+    /**
+     * Test for shelf "half" filled, creating a pyramid from n-w to s-e.
+     * Test should ensure that checkPattern returns true
+     */
     @Test
     void checkCorrectPatternFromWest_ShouldAssertTrue() {
         assertTrue(commonStrategy.checkPattern(correctPatternWest));
     }
 
+
+    /**
+     * Test for shelf "half" filled, creating a pyramid from n-e to s-w.
+     * Test should ensure that checkPattern returns true
+     */
     @Test
     void checkCorrectPatternFromEast_ShouldAssertTrue() {
         assertTrue(commonStrategy.checkPattern(correctPatternEast));
     }
 
+    /**
+     * Test for shelf "half" filled, but not creating a pyramid.
+     * Test should ensure that checkPattern returns false
+     */
     @Test
     void checkWrongPattern_ShouldAssertFalse() {
         assertFalse(commonStrategy.checkPattern(wrongPattern));
