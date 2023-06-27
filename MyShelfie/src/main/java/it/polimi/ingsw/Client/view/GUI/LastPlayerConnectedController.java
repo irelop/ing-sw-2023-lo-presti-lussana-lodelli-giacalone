@@ -3,6 +3,7 @@ package it.polimi.ingsw.Client.view.GUI;
 
 import it.polimi.ingsw.Server.Messages.*;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 
 import static java.lang.Thread.sleep;
@@ -14,6 +15,8 @@ import static java.lang.Thread.sleep;
  */
 public class LastPlayerConnectedController extends Controller{
     @FXML Text alertText;
+    @FXML Text waitText;
+    @FXML Button exitButton;
 
     LastOneConnectedMsg lastOneConnectedMsg;
     private boolean goOn = false;
@@ -29,6 +32,7 @@ public class LastPlayerConnectedController extends Controller{
         lastOneConnectedMsg = (LastOneConnectedMsg) message;
         alertText.setText("\n"+lastOneConnectedMsg.nickname+", all the other players have disconnected.\n" +
                 "At least one of them has to reconnect to this game in 30 seconds or you will be the winner.\n");
+        exitButton.setVisible(false);
     }
 
     /**
@@ -54,6 +58,8 @@ public class LastPlayerConnectedController extends Controller{
      */
     public void finish(){
         alertText.setText("Congratulation! You are the winner!");
+        waitText.setVisible(false);
+        exitButton.setVisible(true);
         try {
             sleep(2000);
         } catch (InterruptedException e) {
@@ -79,6 +85,13 @@ public class LastPlayerConnectedController extends Controller{
         if(!goOn){
             finish();
         }
+    }
+
+    /**
+     * this method manages the click of exit button
+     */
+    public void exit() {
+        getOwner().getStageManager().getStage().close();
     }
 }
 

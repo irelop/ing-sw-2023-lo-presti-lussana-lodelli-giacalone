@@ -82,6 +82,9 @@ public class EndGameController extends Controller {
             emptyBoard.setVisible(true);
     }
 
+    /**
+     * this method manages the reception of messages from server
+     */
     @Override
     public void receiveAnswer(S2CMessage message) {
         if(message instanceof ScoreBoardMsg) {
@@ -90,6 +93,9 @@ public class EndGameController extends Controller {
         }
     }
 
+    /**
+     * this method manages the click of exit button
+     */
     public void exit() {
         getOwner().getStageManager().getStage().close();
     }
