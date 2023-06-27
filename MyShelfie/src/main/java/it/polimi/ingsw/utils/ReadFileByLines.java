@@ -1,7 +1,6 @@
 package it.polimi.ingsw.utils;
 
-import java.io.File;  // Import the File class
-import java.io.FileNotFoundException;  // Import this class to handle errors
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner; // Import the Scanner class to read text files
 
@@ -28,10 +27,8 @@ public class ReadFileByLines {
 
     /**
      * Scan all the file line by line and put them into text attribute
-     * @param fileName: the name of the path to the file
      */
     public void readFrom(String fileName) {
-
         try {
             File myObj = new File(fileName);
             Scanner myReader = new Scanner(myObj);
@@ -40,8 +37,27 @@ public class ReadFileByLines {
                 text.add(data);
             }
             myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("Can't find the file");
+
+        } catch (Exception e) {
+            System.out.println("Error in reading the file");
+        }
+    }
+    public void readFromResource(InputStream input) {
+
+        try {
+            if(input!=null){
+                Scanner myReader = new Scanner(input);
+                while (myReader.hasNextLine()) {
+                    String data = myReader.nextLine();
+                    text.add(data);
+                }
+                myReader.close();
+            }else{
+                System.out.println("Can't find the file");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error in reading the file");
         }
     }
 }

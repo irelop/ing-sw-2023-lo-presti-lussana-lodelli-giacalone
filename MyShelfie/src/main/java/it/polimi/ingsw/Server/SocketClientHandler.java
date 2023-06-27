@@ -63,7 +63,7 @@ public class SocketClientHandler extends ClientHandler{
             this.isConnected = false;
             if(getController() != null)
                 getController().shouldFinishTurn(this);
-            System.out.println("[SKT] Client" + client.getInetAddress() + " connection dropped");
+                System.out.println("[SKT] Client" + client.getInetAddress() + " connection closed");
         }
 
         try {

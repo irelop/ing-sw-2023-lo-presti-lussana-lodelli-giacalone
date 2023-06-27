@@ -34,6 +34,25 @@ public class Server {
         numRMIClients = 0;
         gameRecord = new GameRecord();
 
+        String generalPath = "safetxt";
+        File mainFolder = new File(generalPath);
+        if(!mainFolder.exists()){
+            mainFolder.mkdirs();
+            new File(generalPath+"/games").mkdirs();
+            new File(generalPath+"/players").mkdirs();
+        }else{
+            String gamesPath = generalPath + "/games";
+            File gamesForder = new File(gamesPath);
+            if(!gamesForder.exists()) {
+                new File(gamesPath).mkdirs();
+            }
+            String playersPath = generalPath + "/players";
+            File playersForder = new File(gamesPath);
+            if(!playersForder.exists()) {
+                new File(playersPath).mkdirs();
+            }
+        }
+
         //FA: persistence
         if(hasCrashed()){
             gameRecord.reset();
@@ -49,7 +68,7 @@ public class Server {
      * @return true if the server has crashed, false otherwise
      */
     private static boolean hasCrashed(){
-        String[] files = new File("src/safetxt/games").list();
+        String[] files = new File("safetxt/games").list();
         if(files == null)
             return false;
         else return files.length > 0;
@@ -97,6 +116,7 @@ public class Server {
             gameRecord.setRemoteServer(serverInterface);
         }catch(Exception e){
             System.out.println("[RMI] Error: failed to open RMI server");
+            e.printStackTrace();
             System.exit(1);
         }
 

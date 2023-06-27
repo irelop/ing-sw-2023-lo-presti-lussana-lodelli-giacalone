@@ -2,6 +2,8 @@ package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.utils.ReadFileByLines;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -20,8 +22,9 @@ public class PersonalGoalDeck {
         personalGoalCardDeck = new ArrayList<>();
 
         ReadFileByLines reader = new ReadFileByLines();
-        //reader.readFrom("MyShelfie/src/txtfiles/PersonalGoalCards.txt");
-        reader.readFrom("src/txtfiles/PersonalGoalCards.txt");
+
+        reader.readFromResource(PersonalGoalDeck.class.getResourceAsStream("/txtfiles/PersonalGoalCards.txt"));
+        //reader.readFrom("src/txtfiles/PersonalGoalCards.txt");
 
         for (int i = 0; i < MAX_SIZE; i++) {
             personalGoalCardDeck.add(new PersonalGoalCard());

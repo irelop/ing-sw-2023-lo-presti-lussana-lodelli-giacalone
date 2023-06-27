@@ -1,5 +1,6 @@
 package it.polimi.ingsw.Client.view.CLI;
 
+import it.polimi.ingsw.Server.Model.CommonCardInfo;
 import it.polimi.ingsw.utils.Exceptions.InvalidRuleAnswerException;
 import it.polimi.ingsw.Server.Messages.*;
 import it.polimi.ingsw.utils.Exceptions.InvalidDirectionException;
@@ -230,8 +231,9 @@ public class ChooseTilesFromBoardView extends View {
 
         Tile[][] example = new Tile[6][5];
         ReadFileByLines reader = new ReadFileByLines();
-        //reader.readFrom("MyShelfie/src/txtfiles/ExampleForRules.txt");
-        reader.readFrom("src/txtfiles/ExampleForRules.txt");
+        reader.readFromResource(ChooseTilesFromBoardView.class.getResourceAsStream("/txtfiles/ExampleForRules.txt"));
+        //reader.readFrom("src/txtfiles/ExampleForRules.txt");
+
         for (int i = 0; i < 6; i++) {
 
             String row = ReadFileByLines.getLine();
@@ -398,6 +400,7 @@ public class ChooseTilesFromBoardView extends View {
      */
     public void printSmallMatrix(Tile[][] pattern){
         String code = "\u25CF";
+        //String code = "●";
         for(int r=0; r<6; r++){
 
             for(int c=0; c<5; c++){

@@ -29,7 +29,8 @@ public class GameRecord {
         games = new HashMap<>();
         currentGame = -1;
         persistenceManager = new PersistenceManager();
-        playersPath = "src/safetxt/players/";
+        playersPath = System.getProperty("user.dir") + "/safetxt/players/";
+
     }
 
     /**

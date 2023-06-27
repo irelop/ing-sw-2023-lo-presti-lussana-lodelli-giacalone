@@ -1,10 +1,10 @@
 package it.polimi.ingsw.Server.Model;
 
 import it.polimi.ingsw.utils.Exceptions.*;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Scanner;
 
 
 /**

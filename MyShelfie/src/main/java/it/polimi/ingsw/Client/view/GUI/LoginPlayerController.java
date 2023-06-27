@@ -86,7 +86,6 @@ public class LoginPlayerController extends Controller{
             // other cases
             C2SMessage nicknameRequest = new LoginNicknameRequest(playerName, true);
             getOwner().getServerHandler().sendMessageToServer(nicknameRequest);
-            System.out.println("LoginReq inviata");
         }
     }
 
@@ -105,7 +104,6 @@ public class LoginPlayerController extends Controller{
      * to the next window: game's lobby
      */
     private void manageNicknameAnswer(){
-        System.out.println("sono nella manageLogin");
         if (answer.getNicknameStatus() == LoginNicknameAnswer.Status.FIRST_ACCEPTED) {
             numOfPlayersSelection.setOpacity(1);
             numOfPlayersSelection.setDisable(false);

@@ -28,7 +28,9 @@ public class PersistenceManager {
      * Constructor method
      */
     public PersistenceManager(){
-        this.path = "src/safetxt/";
+        this.path = "safetxt/";
+
+
         this.gamePath = path + "games/";
         this.playerPath = path + "players/";
     }
@@ -183,14 +185,17 @@ public class PersistenceManager {
      * @return arraylist with the static info
      */
     private ArrayList<String> readPlayerStaticInfo(String nickname){
-        String playerPath = getPlayerPath(nickname);
+        //String playerPath = getPlayerPath(nickname);
 
         ReadFileByLines reader = new ReadFileByLines();
-        reader.readFrom(playerPath);
+        reader.readFrom("safetxt/players/" +nickname+".txt");
+        System.out.println("leggo: "+System.getProperty("user.dir")+"/safetxt/players/" +nickname+".txt");
         String line;
         ArrayList<String> info = new ArrayList<>();
         while((line = ReadFileByLines.getLine())!=null){
+            System.out.println("sono nel while");
             info.add(line);
+            System.out.println(line);
         }
 
         //remove the dynamic info
@@ -209,7 +214,7 @@ public class PersistenceManager {
      */
     public ArrayList<Integer> reset(){
         //find all the names of the old games files that are in folder
-        String[] gameFilesNames = new File("src/safetxt/games").list();
+        String[] gameFilesNames = new File("safetxt/games").list();
         ArrayList<Integer> gameIndexes = new ArrayList<>();
 
         assert gameFilesNames != null;
@@ -224,7 +229,7 @@ public class PersistenceManager {
         }
 
         //find players files and delete the empty ones
-        String[]  playerFilesNames = new File("src/safetxt/players").list();
+        String[]  playerFilesNames = new File("safetxt/players").list();
         assert playerFilesNames != null;
         for(String player : playerFilesNames){
             File file = new File(path + "players/" + player);

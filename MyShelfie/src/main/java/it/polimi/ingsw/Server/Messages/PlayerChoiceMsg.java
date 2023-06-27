@@ -1,8 +1,8 @@
 package it.polimi.ingsw.Server.Messages;
 import it.polimi.ingsw.Server.ClientHandler;
 
-import it.polimi.ingsw.utils.rmi.RemoteInterface;
 import it.polimi.ingsw.utils.Exceptions.*;
+import it.polimi.ingsw.utils.rmi.RemoteInterface;
 
 import java.rmi.RemoteException;
 
