@@ -178,9 +178,13 @@ public class Client implements Runnable{
      */
     public void manageRMIConnection(){
         RemoteInterface remoteServer = null;
+        System.out.println("Please insert the IP address of the server:\n");
+        Scanner input = new Scanner(System.in);
+        String ip;
         try{
+            ip = input.nextLine();
             client = new RMIAdapter();      //instantiating the remote interface of the client
-            Registry registry = LocateRegistry.getRegistry();       //getting the reference of the RMI registry
+            Registry registry = LocateRegistry.getRegistry(ip,1099);       //getting the reference of the RMI registry
             remoteServer = (RemoteInterface) registry.lookup("server");     //getting the remote interface of the server
 
 
