@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * Tests for Player class
+ * @author Irene Lo Presti, Matteo Lussana
+ */
 public class PlayerTest {
     Player player;
 
@@ -22,6 +26,10 @@ public class PlayerTest {
     public void tearDown() throws Exception {
     }
 
+    /**
+     * Test for orderTiles() method (1 tile): ensures that the only tile
+     * in littleHand isn't modified in any way
+     */
     @Test
     public void orderTiles_singleTile() {
         ArrayList<Tile> chosenTiles = new ArrayList<>();
@@ -34,6 +42,10 @@ public class PlayerTest {
         assertEquals(chosenTiles, player.getLittleHand());
     }
 
+    /**
+     * Test for orderTiles() method (2 tile): ensures that, given an order for the 2 tiles,
+     * player's littleHand is correctly reordered after the invocation of the method
+     */
     @Test
     public void orderTiles_twoTiles() {
         ArrayList<Tile> chosenTiles = new ArrayList<>();
@@ -52,6 +64,10 @@ public class PlayerTest {
         assertEquals(chosenTiles, player.getLittleHand());
     }
 
+    /**
+     * Test for orderTiles() method (3 tile): ensures that, given an order for the 3 tiles,
+     * player's littleHand is correctly reordered after the invocation of the method
+     */
     @Test
     public void orderTiles_threeTiles() {
         ArrayList<Tile> chosenTiles = new ArrayList<>();
@@ -71,6 +87,10 @@ public class PlayerTest {
         assertEquals(chosenTiles, player.getLittleHand());
     }
 
+    /**
+     * Test for clearLittleHand() method : ensures that, fulfilling littleHand,
+     * it is correctly cleared after the invocation of the method
+     */
     @Test
     public void clearLittleHand(){
         ArrayList<Tile> chosenTiles = new ArrayList<>();
@@ -83,30 +103,50 @@ public class PlayerTest {
         assert(player.getLittleHand().size() == 0);
     }
 
+    /**
+     * Test for getTiles(choices) method: ensures the correct throw of
+     * InvalidTileIndexInLittleHandException, when user inserts 2 times the same index
+     */
     @Test
     public void getTiles_duplicateChoice(){
         int[] choices = new int[] {1, 2 ,2};
         assertThrows(InvalidTileIndexInLittleHandException.class, ()->player.getTiles(choices));
     }
 
+    /**
+     * Test for getTiles(choices) method: ensures the correct throw of
+     * InvalidTileIndexInLittleHandException, when user inserts a negative number as an index
+     */
     @Test
     public void getTiles_negativeChoice(){
         int[] choices = new int[] {1, 2 ,-2};
         assertThrows(InvalidTileIndexInLittleHandException.class, ()->player.getTiles(choices));
     }
 
+    /**
+     * Test for getTiles(choices) method: ensures the correct throw of
+     * InvalidTileIndexInLittleHandException, when user inserts an index > 2
+     */
     @Test
     public void getTiles_choiceTooHigh(){
         int[] choices = new int[] {1, 2 ,3};
         assertThrows(InvalidTileIndexInLittleHandException.class, ()->player.getTiles(choices));
     }
 
+    /**
+     * Test for addScore(score) method: ensures the player gains the
+     * correct amount of points when the method is invoked
+     */
     @Test
     public void addScore(){
         player.addScore(3);
         assertEquals(player.getScore(), 3);
     }
 
+    /**
+     * Test for setCommonGoalAchieved(commonCardIdx) method: ensures player can't
+     * achieve the same card more than once (setting to false a boolean variable)
+     */
     @Test
     public void setCommonGoalAchieved(){
         player.setCommonGoalAchieved(0);
@@ -114,6 +154,9 @@ public class PlayerTest {
         assertFalse(player.isCommonGoalAchieved(1));
     }
 
+    /**
+     * Test for setShelf(newShelf) method: ensures the setter works properly
+     */
     @Test
     public void setShelf(){
         ReadFileByLines reader = new ReadFileByLines();

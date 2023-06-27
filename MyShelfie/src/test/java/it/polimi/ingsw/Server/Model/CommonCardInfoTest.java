@@ -6,6 +6,10 @@ import org.junit.jupiter.api.Test;
 
 import static it.polimi.ingsw.utils.ColorCode.*;
 
+/**
+ * Tests for CommonCardInfo class
+ * @author Matteo Lussana
+ */
 class CommonCardInfoTest {
 
     CommonCardInfo commonCardInfo = new CommonCardInfo("M8PatternStrategy");
@@ -20,7 +24,10 @@ class CommonCardInfoTest {
     void tearDown() {
     }
 
-
+    /**
+     * VisualTest for attribute Schema: ensures that the class is correctly
+     * reading from the file, then it prints the Schema
+     */
     @Test
     void getSchema() {
         Tile[][] schema = commonCardInfo.getSchema();
@@ -53,11 +60,19 @@ class CommonCardInfoTest {
         }
     }
 
+    /**
+     * VisualTest for attribute Times: ensures that the class is correctly
+     * reading from the file, then it prints "xTimes times"
+     */
     @Test
     void getTimes() {
         System.out.println("x"+commonCardInfo.getTimes()+" times");
     }
 
+    /**
+     * VisualTest for attribute Description: ensures that the class is correctly
+     * reading from the file, then it prints the Description
+     */
     @Test
     void getDescription() {
         System.out.println(commonCardInfo.getDescription());

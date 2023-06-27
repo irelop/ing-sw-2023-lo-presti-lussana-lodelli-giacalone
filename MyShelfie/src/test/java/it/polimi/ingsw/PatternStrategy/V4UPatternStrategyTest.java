@@ -10,6 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for V4UPatternStrategy class
+ * @author Matteo Lussana
+ */
 class V4UPatternStrategyTest {
     StrategyInterface v4uPatternStrategy = null;
     Tile[][] shelfSnapshot;
@@ -39,11 +43,20 @@ class V4UPatternStrategyTest {
     void tearDown() {
     }
 
+    /**
+     * Test for shelf containing 4 groups formed by 4 tiles of the same color.
+     * Test should ensure that checkPattern returns true
+     */
     @Test
     void checkPattern_true() {
         assertTrue(v4uPatternStrategy.checkPattern(shelfSnapshot));
     }
 
+    /**
+     * Test for shelf containing 4 groups formed by 4 tiles of the same color.
+     * Changing some tiles destroys the pattern, so now....
+     * Test should ensure that checkPattern returns false
+     */
     @Test
     void checkPattern_false() {
         shelfSnapshot[2][3] = Tile.GREEN;

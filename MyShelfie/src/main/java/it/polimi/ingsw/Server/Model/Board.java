@@ -320,7 +320,7 @@ public class Board implements Serializable {
      * @author Irene Lo Presti
      */
     public int getNumberOfTiles(int maxTilesPickable, int numberOfTiles) throws InvalidNumberOfTilesException {
-        if(numberOfTiles>maxTilesPickable || numberOfTiles < 0) throw new InvalidNumberOfTilesException(maxTilesPickable);   // cambia il nome perchè toomany non ha senso
+        if(numberOfTiles>maxTilesPickable || numberOfTiles <= 0) throw new InvalidNumberOfTilesException(maxTilesPickable);   // cambia il nome perchè toomany non ha senso
         else return numberOfTiles;
     }
 
@@ -340,11 +340,9 @@ public class Board implements Serializable {
     }
 
     /**
-     * OVERVIEW: a first draft of the initialization of the board. In this method we use some variables
-     * that move in the board: ns (north - south), sn (south-north), w (west), e (est), we (west-est),
-     * ew (est-west).
+     * OVERVIEW: a first draft of the initialization of the board. This method initialize the matrix with NOT_VALID
+     * tiles
      * @param numPlayers: number of player playing
-     * @deprecated
      * @author Irene Lo Presti
      */
     public void initGrid(int numPlayers){
@@ -353,27 +351,6 @@ public class Board implements Serializable {
             for (int c = 0; c < MAX_COLUMNS; c++) {
                 boardGrid[r][c] = Tile.NOT_VALID;
             }
-        }
-
-        int ns, e, w, sn, we;
-
-        ns = 0;
-        e = (MAX_COLUMNS-1)/2;
-        w = (MAX_COLUMNS-1)/2;
-        sn = MAX_ROWS-1;
-
-
-        while(ns<=4){
-            we = w;
-            while(we<=e){
-                boardGrid[ns][we] = Tile.BLANK;
-                boardGrid[sn][we] = Tile.BLANK;
-                we++;
-            }
-            w--;
-            e++;
-            ns++;
-            sn--;
         }
 
         switch (numPlayers){
@@ -387,10 +364,9 @@ public class Board implements Serializable {
 
     /**
      * OVERVIEW: initialization of the board for 2 players
-     * @deprecated
      * @author Irene Lo Presti
      */
-    private void init2Players(){
+    public void init2Players(){
         int ns, e, w, sn, we, ew;
         ns = 1;
         w = (MAX_COLUMNS-1)/2 - 1;
@@ -467,8 +443,8 @@ public class Board implements Serializable {
     private void init4Players() {
         int ns, e, w, sn, we, ew;
         ns = 0;
-        w = (MAX_COLUMNS-1)/2;
-        e = (MAX_COLUMNS-1)/2;
+        w = (MAX_COLUMNS-1)/2 - 1;
+        e = (MAX_COLUMNS-1)/2 + 1;
         sn = MAX_ROWS-1;
 
         boardGrid[ns][w] = Tile.BLANK;

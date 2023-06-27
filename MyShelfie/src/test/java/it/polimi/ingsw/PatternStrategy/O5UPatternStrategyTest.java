@@ -10,6 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for O5UPatternStrategy class
+ * @author Andrea Giacalone
+ */
 class O5UPatternStrategyTest {
 
     StrategyInterface commonStrategy;
@@ -61,11 +65,19 @@ class O5UPatternStrategyTest {
         wrongPattern = null;
     }
 
+    /**
+     * Test for shelf with 3rd and 4th rows filled with 5 tiles of different colors.
+     * Test should ensure that checkPattern returns true
+     */
     @Test
     void checkCorrectPattern_ShouldAssertTrue() {
         assertTrue(commonStrategy.checkPattern(correctPattern));
     }
 
+    /**
+     * Test for shelf with ONLY 4th row filled with 5 tiles of different colors.
+     * Test should ensure that checkPattern returns false
+     */
     @Test
     void checkWrongPattern_ShouldAssertFalse() {
         assertFalse(commonStrategy.checkPattern(wrongPattern));

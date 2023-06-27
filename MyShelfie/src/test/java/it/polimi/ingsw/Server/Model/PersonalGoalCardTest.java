@@ -7,6 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests for PersonalGoalCard class
+ * @author Riccardo Lodelli
+ */
 public class PersonalGoalCardTest {
 
     PersonalGoalCard myCard;
@@ -40,6 +44,10 @@ public class PersonalGoalCardTest {
     public void tearDown() throws Exception {
     }
 
+    /**
+     * Test for getPersonalGoalScore(shelf) method (0 tiles in the right place):
+     * ensures that, if no tiles are in the right place, player gets 0 points
+     */
     @Test
     public void getPersonalGoalScore_test0() {
         int tot = 0;
@@ -49,6 +57,10 @@ public class PersonalGoalCardTest {
         assertEquals(0,tot);
     }
 
+    /**
+     * Test for getPersonalGoalScore(shelf) method (1 tiles in the right place):
+     * ensures that, if 1 tile is in the right place, player gets 1 points
+     */
     @Test
     public void getPersonalGoalScore_test1() {
         playerShelf[0][0] = Tile.GREEN;
@@ -58,6 +70,11 @@ public class PersonalGoalCardTest {
         //}
         assertEquals(1,tot);
     }
+
+    /**
+     * Test for getPersonalGoalScore(shelf) method (2 tiles in the right place):
+     * ensures that, if 2 tiles are in the right place, player gets 2 points
+     */
     @Test
     public void getPersonalGoalScore_test2() {
         playerShelf[0][0] = Tile.GREEN;
@@ -68,6 +85,11 @@ public class PersonalGoalCardTest {
         }
         assertEquals(2,tot);
     }
+
+    /**
+     * Test for getPersonalGoalScore(shelf) method (3 tiles in the right place):
+     * ensures that, if 3 tiles are in the right place, player gets 4 points
+     */
     @Test
     public void getPersonalGoalScore_test3() {
         playerShelf[0][0] = Tile.GREEN;
@@ -79,6 +101,11 @@ public class PersonalGoalCardTest {
         }
         assertEquals(4,tot);
     }
+
+    /**
+     * Test for getPersonalGoalScore(shelf) method (4 tiles in the right place):
+     * ensures that, if 4 tiles are in the right place, player gets 6 points
+     */
     @Test
     public void getPersonalGoalScore_test4() {
         playerShelf[0][0] = Tile.GREEN;
@@ -91,6 +118,11 @@ public class PersonalGoalCardTest {
         }
         assertEquals(6,tot);
     }
+
+    /**
+     * Test for getPersonalGoalScore(shelf) method (5 tiles in the right place):
+     * ensures that, if 5 tiles are in the right place, player gets 9 points
+     */
     @Test
     public void getPersonalGoalScore_test5() {
         playerShelf[0][0] = Tile.GREEN;
@@ -104,6 +136,11 @@ public class PersonalGoalCardTest {
         }
         assertEquals(9,tot);
     }
+
+    /**
+     * Test for getPersonalGoalScore(shelf) method (6 tiles in the right place):
+     * ensures that, if 6 tiles are in the right place, player gets 12 points
+     */
     @Test
     public void getPersonalGoalScore_test6() {
         playerShelf[0][0] = Tile.GREEN;
@@ -118,6 +155,10 @@ public class PersonalGoalCardTest {
         }
         assertEquals(12,tot);
     }
+
+    /**
+     * VisualTest for Shelf class (prints tile's color names)
+     */
     @Test
     public void PersonalGoalCard_visualTest() {
         System.out.println(myCard.getId());
