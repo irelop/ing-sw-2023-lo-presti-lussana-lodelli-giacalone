@@ -69,6 +69,8 @@ If there is only player connected to the game, a countdown timer of 30 seconds w
 
 > *DISCLAIMER* : due to formatting reasons and limits of the TUI, the chat can be accessed only at the end of a turn, with a maximum limit of 3 available messages which can be send, avoiding possible time wasting of a player. In GUI, this processed is implemented in real-time and messages can be sent and shown in every moment.
 
+For further details, you can check it out [here](https://github.com/irelop/ing-sw-2023-lo-presti-lussana-lodelli-giacalone/blob/main/MyShelfie/info/provaFinalePresentation.pptx)
+
 ## JAR Instructions
 
 ### MyShelfie_server.jar
