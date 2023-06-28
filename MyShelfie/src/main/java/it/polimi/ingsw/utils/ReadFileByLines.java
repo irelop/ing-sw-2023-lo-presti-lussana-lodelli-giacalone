@@ -26,6 +26,7 @@ public class ReadFileByLines {
     }
 
     /**
+     * Method to read file from safetxt folder
      * Scan all the file line by line and put them into text attribute
      */
     public void readFrom(String fileName) {
@@ -42,6 +43,11 @@ public class ReadFileByLines {
             System.out.println("Error in reading the file");
         }
     }
+
+    /**
+     * Method to read file from resources folder
+     * Scan all the file line by line and put them into text attribute
+     */
     public void readFromResource(InputStream input) {
 
         try {
