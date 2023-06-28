@@ -181,27 +181,33 @@ public class Client implements Runnable{
         System.out.println("Please insert the IP address of the server:\n");
         Scanner input = new Scanner(System.in);
         String ip;
-        try{
-            ip = input.nextLine();
-            client = new RMIAdapter();      //instantiating the remote interface of the client
-            Registry registry = LocateRegistry.getRegistry(ip,1099);       //getting the reference of the RMI registry
-            remoteServer = (RemoteInterface) registry.lookup("server");     //getting the remote interface of the server
-
-
-            //printing logging message in the server side
+        do{
             try {
-                remoteServer.printLoginStatus("["+ InetAddress.getByName("localhost") +"] now connected through RMI");
-            } catch (UnknownHostException e) {
-                System.out.println("[RMI] Error in retrieving host address");
-            }
-            remoteServer.addRemoteClient(client);       //adding the remote interface of the client to the remote server
-            client.setOwner(this);     //adding the reference of this client to the remote client interface
+                ip = input.nextLine();
 
-        }catch(RemoteException e){
-            System.out.println("[RMI] Error: unable to invoke remote method");
-        } catch (NotBoundException e) {
-            System.out.println("[RMI] Error: Server unreachable");
-        }
+                if(ip.equals("exit"))
+                    System.exit(0);
+
+                client = new RMIAdapter();      //instantiating the remote interface of the client
+                Registry registry = LocateRegistry.getRegistry(ip, 1099);       //getting the reference of the RMI registry
+                remoteServer = (RemoteInterface) registry.lookup("server");     //getting the remote interface of the server
+
+
+                //printing logging message in the server side
+                try {
+                    remoteServer.printLoginStatus("[" + InetAddress.getByName("localhost") + "] now connected through RMI");
+                } catch (UnknownHostException e) {
+                    System.out.println("[RMI] Error in retrieving host address");
+                }
+                remoteServer.addRemoteClient(client);       //adding the remote interface of the client to the remote server
+                client.setOwner(this);     //adding the reference of this client to the remote client interface
+                break;
+            } catch (RemoteException e) {
+                System.out.println("[RMI] Error: unable to invoke remote method, try again to insert the ip address,or insert 'exit' if you don't want to connect to the server anymore");
+            } catch (NotBoundException e) {
+                System.out.println("[RMI] Error: Server unreachable, try again to insert the ip address, or insert 'exit' if you don't want to connect to the server anymore");
+            }
+        }while(true);
 
         //creating the handler for the RMI connection
         serverHandler = new RMIServerHandler(this,remoteServer);

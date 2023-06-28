@@ -15,12 +15,6 @@ import java.rmi.RemoteException;
 
 public class RMIClientHandler extends ClientHandler {
     private boolean goOn;
-    @Deprecated
-    public RMIClientHandler(MyShelfie game, RemoteInterface remoteClient){
-        super(game, remoteClient);
-        setIsRMI(true);
-        goOn = true;
-    }
 
     public RMIClientHandler(RemoteInterface remoteClient){
         super(remoteClient);

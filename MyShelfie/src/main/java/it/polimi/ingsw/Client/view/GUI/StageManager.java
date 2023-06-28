@@ -66,7 +66,6 @@ public class StageManager {
         FXMLLoader loader = new FXMLLoader();
 
         URL url = StageManager.class.getResource("/fxml/titleScreen.fxml");
-        System.out.println(url);
 
         loader.setLocation(url);
         StageManager.getStage().setTitle("MyShelfie");

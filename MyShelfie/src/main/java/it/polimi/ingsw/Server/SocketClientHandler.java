@@ -25,18 +25,6 @@ public class SocketClientHandler extends ClientHandler{
     private final Socket client;
     private final AtomicBoolean shouldStop = new AtomicBoolean(false);
 
-
-    public SocketClientHandler(Socket client, MyShelfie game){
-        super(game, null);
-        this.client = client;
-        setIsRMI(false);
-    }
-    public SocketClientHandler(Socket client){
-        super(null);
-        this.client = client;
-        setIsRMI(false);
-    }
-
     public SocketClientHandler(Socket client, GameRecord gameRecord){
         super(null, gameRecord);
         this.client = client;

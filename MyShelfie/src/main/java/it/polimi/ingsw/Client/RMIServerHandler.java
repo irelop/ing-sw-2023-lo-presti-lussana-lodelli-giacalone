@@ -25,7 +25,6 @@ public class RMIServerHandler extends ServerHandler{
      */
     @Override
     public void run() {
-        //boolean goOn = true;
         while(!stop){
             try{
                 Thread.sleep(1000);

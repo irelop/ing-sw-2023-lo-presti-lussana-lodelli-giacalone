@@ -50,13 +50,11 @@ public class JavaGUI extends Application {
      *
      */
     public void transitionScene(AnchorPane newRoot) {
-        if(StageManager.getStage().getScene() == null) System.out.println("la scena è nulla");
         Platform.runLater(
                 ()->{
                     try{
                         StageManager.getStage().getScene().setRoot(newRoot);
                     }catch (Exception e){
-                        System.out.println("sono nell'eccezione");
                         e.printStackTrace();
                     }
                 }

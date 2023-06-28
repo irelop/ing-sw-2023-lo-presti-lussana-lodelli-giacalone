@@ -20,12 +20,6 @@ public abstract class ClientHandler implements Runnable {
     protected boolean isConnected;
     protected GameRecord gameRecord;
 
-    public ClientHandler(MyShelfie game, RemoteInterface client){
-        this.game = game;
-        this.client = client;
-        this.isConnected = true;
-    }
-
     public ClientHandler(RemoteInterface client){
         this.client = client;
         this.isConnected = true;

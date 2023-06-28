@@ -75,7 +75,6 @@ public class LastPlayerConnectedController extends Controller{
      */
     public void timer(){
         for(int i=30; i>=0 && !goOn; i--){
-            System.out.println(i+" seconds");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
