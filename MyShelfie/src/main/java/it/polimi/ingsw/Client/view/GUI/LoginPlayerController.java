@@ -12,6 +12,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
+import static java.lang.Thread.sleep;
+
 /**
  * Controller implementation for the login management
  * It contains a form to insert player's nickname and some other stuff
@@ -20,6 +22,7 @@ import javafx.scene.text.Text;
 public class LoginPlayerController extends Controller{
 
     private LoginNicknameAnswer answer;
+    private NumberOfPlayerManagementMsg answerPlayerManagement;
     volatile boolean answerReceived;
 
     @FXML
@@ -28,6 +31,8 @@ public class LoginPlayerController extends Controller{
     private Text loginResult;
     @FXML
     private Button backButton;
+    @FXML
+    private Button submitButton;
     @FXML
     private ComboBox<String> numOfPlayersSelection;
     @FXML
@@ -60,8 +65,14 @@ public class LoginPlayerController extends Controller{
 
     @Override
     public void receiveAnswer(S2CMessage message) {
-        answer = (LoginNicknameAnswer) message;
-        manageNicknameAnswer();
+        if(message instanceof LoginNicknameAnswer){
+            answer = (LoginNicknameAnswer) message;
+            manageNicknameAnswer();
+        }
+        if(message instanceof NumberOfPlayerManagementMsg){
+            answerPlayerManagement = (NumberOfPlayerManagementMsg) message;
+            manageKickedOut();
+        }
     }
 
     /**
@@ -130,6 +141,16 @@ public class LoginPlayerController extends Controller{
         }
     }
 
+    public void manageKickedOut(){
+        loginResult.setText("Sorry, there are some problems with the lobby you were inserted in. Insertion in a new lobby");
+        playerNickname.setText(answerPlayerManagement.nickname);
+        playerName = playerNickname.getText().toUpperCase();
+        getOwner().setNickname(playerName);
+        submitButton.setDisable(true);
+        Thread delayingComputationThread = new Thread(this::delayComputation);
+        delayingComputationThread.start();
+    }
+
     /**
      * With this method user can press ENTER instead of
      * clicking the Submit button
@@ -141,5 +162,16 @@ public class LoginPlayerController extends Controller{
 
     public void closeTextPane() {
         textPane.setVisible(false);
+    }
+
+    private void delayComputation(){
+        try {
+                sleep(5000);
+        } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+        }
+        submitButton.setDisable(false);
+        C2SMessage nicknameRequest = new LoginNicknameRequest(playerName, true);
+        getOwner().getServerHandler().sendMessageToServer(nicknameRequest);
     }
 }

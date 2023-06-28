@@ -28,6 +28,7 @@ public class NumberOfPlayerManagementMsg extends S2CMessage{
     public void processMessage(ServerHandler serverHandler) {
         if(serverHandler.getOwner().gui) {
             serverHandler.getOwner().getStageManager().loadNextStage("loginPlayer.fxml");
+            serverHandler.getOwner().getStageManager().getController().receiveAnswer(this);
         } else {
             serverHandler.getOwner().transitionToView(new LoginView(this));
             serverHandler.getOwner().getCurrentView().notifyView();
@@ -39,6 +40,7 @@ public class NumberOfPlayerManagementMsg extends S2CMessage{
         try {
             if(client.getOwner().gui) {
                 client.getOwner().getStageManager().loadNextStage("loginPlayer.fxml");
+                client.getOwner().getStageManager().getController().receiveAnswer(this);
             } else {
                 client.goToLoginView(this);
                 if (client.getCurrentView().getClass() == WaitingView.class)

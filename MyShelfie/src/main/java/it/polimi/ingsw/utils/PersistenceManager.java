@@ -189,13 +189,10 @@ public class PersistenceManager {
 
         ReadFileByLines reader = new ReadFileByLines();
         reader.readFrom("safetxt/players/" +nickname+".txt");
-        System.out.println("leggo: "+System.getProperty("user.dir")+"/safetxt/players/" +nickname+".txt");
         String line;
         ArrayList<String> info = new ArrayList<>();
         while((line = ReadFileByLines.getLine())!=null){
-            System.out.println("sono nel while");
             info.add(line);
-            System.out.println(line);
         }
 
         //remove the dynamic info

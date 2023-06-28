@@ -158,6 +158,7 @@ public class MyShelfie {
         }
         else if(playersConnected.size() > numberOfPlayers){
             for(int i=playersConnected.size()-1; i>numberOfPlayers-1; i--) {
+                persistenceManager.deletePlayerFile(playersConnected.get(i).getNickname());
                 NumberOfPlayerManagementMsg msg = new NumberOfPlayerManagementMsg(playersConnected.get(i).getNickname());
                 if(clientHandlers.get(i).isConnected())
                     clientHandlers.get(i).sendMessageToClient(msg);
@@ -177,7 +178,7 @@ public class MyShelfie {
         ArrayList<String> lobbyPlayers = playersConnected.stream().map(Player::getNickname).collect(Collectors.toCollection(ArrayList::new));
         for (int i = 0; i<playersConnected.size();i++) {
             LobbyUpdateAnswer msg = new LobbyUpdateAnswer(lobbyPlayers, allPlayersReady);
-            if(clientHandlers.get(i).isConnected())
+            if(clientHandlers.get(i).isConnected() && !(i == 0 && numberOfPlayers == -1))
                 clientHandlers.get(i).sendMessageToClient(msg);
         }
     }
@@ -627,6 +628,7 @@ public class MyShelfie {
             persistenceManager.deletePlayerFile(playersConnected.get(0).getNickname());
             if(playersConnected.size() > 1){
                 for(int i=1; i<playersConnected.size(); i++){
+                    persistenceManager.deletePlayerFile(playersConnected.get(i).getNickname());
                     NumberOfPlayerManagementMsg msg = new NumberOfPlayerManagementMsg(playersConnected.get(i).getNickname());
                     if(clientHandlers.get(i).isConnected())
                         clientHandlers.get(1).sendMessageToClient(msg);
