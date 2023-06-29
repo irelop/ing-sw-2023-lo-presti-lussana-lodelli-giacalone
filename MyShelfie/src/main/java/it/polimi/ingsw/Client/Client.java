@@ -178,7 +178,7 @@ public class Client implements Runnable{
      */
     public void manageRMIConnection(){
         RemoteInterface remoteServer = null;
-        System.out.println("Please insert the IP address of the server:\n");
+        System.out.println("Please insert the IP address of the server:");
         Scanner input = new Scanner(System.in);
         String ip;
         do{

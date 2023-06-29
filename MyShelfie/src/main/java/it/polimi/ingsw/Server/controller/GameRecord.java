@@ -111,50 +111,62 @@ public class GameRecord {
             //read the controller index from the player's file
             gameIndex = Integer.parseInt(ReadFileByLines.getLineByIndex(0));
 
-            //find if the player is really disconnected from the game
-            playerIndex = games.get(gameIndex).checkPlayerDisconnected(nickname);
-
-            if(playerIndex == -1)
+            if(!games.containsKey(gameIndex)) {
                 msg = """
-                        
-                        The player with your nickname is connected and is playing.
+
+                        Your last game is ended.
                         Redirecting to a new lobby.
                         """;
-            else{
-                //find how many players are still connected to the game
+                persistenceManager.deletePlayerFile(nickname);
+            }
 
-                int playersConnected = games.get(gameIndex).getClientHandlers().stream().filter(ClientHandler::isConnected).toList().size();
+            else {
 
-                if(playersConnected == 0 && (!games.get(gameIndex).isPersistenceManaged() || games.get(gameIndex).isGameOver())){
-                    //if there aren't players connected we are in 2 possible scenarios:
-                        //1) the server connection dropped so all players are reconnecting so the player can
-                        //   reconnect to the game -> !persistenceManaged
-                        //2) the player connection drop but the game is over
+                //find if the player is really disconnected from the game
+                playerIndex = games.get(gameIndex).checkPlayerDisconnected(nickname);
+
+                if(playerIndex == -1)
                     msg = """
-
-                            Sorry, it took you too long to reconnect so the game is over.
-                            Redirecting to a new lobby.""";
-
-                    //games.get(gameIndex).fileDeleting(nickname);
-                    deleteGame(gameIndex);
-                    persistenceManager.deletePlayerFile(nickname);
-                }
-                //if there are no players connected and persistenceManaged == true
-                // then this player is the first one to reconnect to the game
-
+                            
+                            The player with your nickname is connected and is playing.
+                            Redirecting to a new lobby.
+                            """;
                 else{
-                    if(playersConnected == 1 && games.get(gameIndex).isPlayerInCountdown())
-                        countDownClient = games.get(gameIndex).getCountdownClientHandler(); //the player who is in Countdown Mode
-                    if(clientHandler.getIsRMI()){
-                        try {
-                            //set the correct controller in the map
-                            remoteServer.resetControllerToClient(games.get(gameIndex), clientHandler.getClientInterface());
-                        } catch (RemoteException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
+                    //find how many players are still connected to the game
 
-                    games.get(gameIndex).switchClientHandler(playerIndex, clientHandler);
+                    int playersConnected = games.get(gameIndex).getClientHandlers().stream().filter(ClientHandler::isConnected).toList().size();
+
+                    if(playersConnected == 0 && (!games.get(gameIndex).isPersistenceManaged() || games.get(gameIndex).isGameOver())){
+                        //if there aren't players connected we are in 2 possible scenarios:
+                            //1) the server connection dropped so all players are reconnecting so the player can
+                            //   reconnect to the game -> !persistenceManaged
+                            //2) the player connection drop but the game is over
+                        msg = """
+    
+                                Sorry, it took you too long to reconnect so the game is over.
+                                Redirecting to a new lobby.""";
+
+                        //games.get(gameIndex).fileDeleting(nickname);
+                        deleteGame(gameIndex);
+                        persistenceManager.deletePlayerFile(nickname);
+                    }
+                    //if there are no players connected and persistenceManaged == true
+                    // then this player is the first one to reconnect to the game
+
+                    else{
+                        if(playersConnected == 1 && games.get(gameIndex).isPlayerInCountdown())
+                            countDownClient = games.get(gameIndex).getCountdownClientHandler(); //the player who is in Countdown Mode
+                        if(clientHandler.getIsRMI()){
+                            try {
+                                //set the correct controller in the map
+                                remoteServer.resetControllerToClient(games.get(gameIndex), clientHandler.getClientInterface());
+                            } catch (RemoteException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+
+                        games.get(gameIndex).switchClientHandler(playerIndex, clientHandler);
+                    }
                 }
             }
         }

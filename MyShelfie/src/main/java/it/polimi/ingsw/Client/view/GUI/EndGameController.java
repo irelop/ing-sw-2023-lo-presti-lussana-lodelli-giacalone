@@ -87,16 +87,17 @@ public class EndGameController extends Controller {
      */
     @Override
     public void receiveAnswer(S2CMessage message) {
-        if(message instanceof ScoreBoardMsg) {
-            FinishGameRequest finishGameRequest = new FinishGameRequest();
-            getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
-        }
+
     }
 
     /**
      * this method manages the click of exit button
      */
     public void exit() {
+
+        FinishGameRequest finishGameRequest = new FinishGameRequest();
+        getOwner().getServerHandler().sendMessageToServer(finishGameRequest);
+
         getOwner().getStageManager().getStage().close();
     }
 }

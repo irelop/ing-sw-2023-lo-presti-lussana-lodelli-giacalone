@@ -82,7 +82,8 @@ public class LoginPlayerController extends Controller{
      */
     @FXML
     private void submitNicknameRequest() {
-        playerName = playerNickname.getText().toUpperCase();
+        playerName = playerNickname.getText().toUpperCase().replaceAll("\\s", "");
+
         if (playerName.isEmpty()) {
             // case: text field empty
             loginResult.setText("PLEASE TYPE SOMETHING");
@@ -116,6 +117,9 @@ public class LoginPlayerController extends Controller{
      */
     private void manageNicknameAnswer(){
         if (answer.getNicknameStatus() == LoginNicknameAnswer.Status.FIRST_ACCEPTED) {
+            playerName = playerNickname.getText();
+            playerName = playerName.replaceAll("\\s", "");
+
             numOfPlayersSelection.setOpacity(1);
             numOfPlayersSelection.setDisable(false);
             playerNickname.setDisable(true);
@@ -134,6 +138,8 @@ public class LoginPlayerController extends Controller{
             loginResult.setText("GAME LOBBY IS FULL! Please wait");
 
         } else {
+            playerName = playerNickname.getText();
+            playerName = playerName.replaceAll("\\s", "");
             getOwner().setNickname(playerName);
             C2SMessage lobbyUpdate = new LobbyUpdateRequest();
             getOwner().getServerHandler().sendMessageToServer(lobbyUpdate);

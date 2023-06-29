@@ -82,7 +82,7 @@ public class LoginView extends View implements ObserverView {
      */
     public void askNickname(){
         Scanner input = new Scanner(System.in);
-        System.out.println("\nPlease select your nickname:\n");
+        System.out.println("Please select your nickname:");
         insertedNickname = input.nextLine().replace(" ", "").toUpperCase();
     }
 

@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="scene" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.Client.view.GUI.TitleScreenController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="scene" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="it.polimi.ingsw.Client.view.GUI.TitleScreenController">
    <children>
       <GridPane fx:id="shelf" hgap="17.0" prefHeight="400.0" prefWidth="579.2" vgap="6.0" AnchorPane.bottomAnchor="106.0" AnchorPane.leftAnchor="371.0" AnchorPane.rightAnchor="371.0" AnchorPane.topAnchor="247.0">
         <columnConstraints>

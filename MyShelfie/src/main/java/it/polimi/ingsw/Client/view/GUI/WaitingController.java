@@ -87,6 +87,7 @@ public class WaitingController extends Controller {
      * the method show a message with the name of the player that is playing
      */
     private void manageGameIsEnding(GameIsEndingUpdate message) {
+        chatPane.setVisible(false);
         if(message.firstToFinish == message.playerIndex)
             currentPlayerText.setText("Congratulation, you are the first one to fill the personal shelf! The game is ending...");
         else
