@@ -8,6 +8,12 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
+# .idea files
+.idea/
+
+# target files
+target/
+
 # AWS User-specific
 .idea/**/aws.xml
 
