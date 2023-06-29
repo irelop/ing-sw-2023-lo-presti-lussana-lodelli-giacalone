@@ -195,7 +195,7 @@ public class Client implements Runnable{
 
                 //printing logging message in the server side
                 try {
-                    remoteServer.printLoginStatus("[" + InetAddress.getByName("localhost") + "] now connected through RMI");
+                    remoteServer.printLoginStatus("[" + InetAddress.getByName(ip) + "] now connected through RMI");
                 } catch (UnknownHostException e) {
                     System.out.println("[RMI] Error in retrieving host address");
                 }
