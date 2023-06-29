@@ -8,8 +8,7 @@
 .idea/**/dictionaries
 .idea/**/shelf
 
-# .idea files
-.idea/
+
 
 # target files
 target/
