@@ -27,7 +27,7 @@ GUI |:white_check_mark:
 Multiple Parallel Games |:white_check_mark:
 Persistence |:white_check_mark:
 Disconnection Resilience |:white_check_mark:
-Chat |:white_check_mark:
+Chat |:negative_squared_cross_mark:
 
 
 ## Project Details
@@ -65,9 +65,10 @@ For further info, you can check it out how game data are stored [here](https://g
 :signal_strength:  **Disconnection Resilience** : when connection drops or the client crashes, players can reconnected to their game and continue from where they left. In the meanwhile, other players can still play skipping the disconnected player rounds.
 If there is only player connected to the game, a countdown timer of 30 seconds will be set and, if no reconnections notifies it, the game will end declaring the last player connected as the winner.
 
-:speech_balloon:  **Chat** : each one of the connected players can send public or private messages to the others.
+:speech_balloon:  **Chat** : each one of the connected players can send  messages to the others.
 
 > *DISCLAIMER* : due to formatting reasons and limits of the TUI, the chat can be accessed only at the end of a turn, with a maximum limit of 3 available messages which can be send, avoiding possible time wasting of a player. In GUI, this processed is implemented in real-time and messages can be sent and shown in every moment.
+> In CLI there is also the possibility to send private messages to the others.
 
 For further details, you can check it out [here](https://github.com/irelop/ing-sw-2023-lo-presti-lussana-lodelli-giacalone/blob/main/MyShelfie/info/provaFinalePresentation.pptx)
 
