@@ -19,10 +19,12 @@ public class PersonalGoalCard implements Serializable {
     private final static int maxc = 5;
     private Tile[][] pattern;
     private ArrayList<Integer> availableScore;
+    private ArrayList<Integer> score;
 
     public PersonalGoalCard(Tile[][] givenPattern) {
         availableScore = new ArrayList<>(Arrays.asList(1,1,2,2,3,3));
         this.pattern = givenPattern;
+        score = new ArrayList<>(Arrays.asList(1,2,4,6,9,12));
     }
 
     public Tile[][] getPattern() {
@@ -38,6 +40,7 @@ public class PersonalGoalCard implements Serializable {
         // the correct color in the correct position, given by the personal goal card
         availableScore = new ArrayList<>(Arrays.asList(1,1,2,2,3,3));
         pattern = new Tile[maxr][maxc];
+        score = new ArrayList<>(Arrays.asList(1,2,4,6,9,12));
 
         id = ReadFileByLines.getLine();
         this.imageCode = ReadFileByLines.getLine();
@@ -60,7 +63,8 @@ public class PersonalGoalCard implements Serializable {
      *  OVERVIEW: this method removes the head of availableScore in order to give points to the player who put a tile
      *  in the place indicated on the personal goal card.
      */
-    private int getScore() {
+    public int getScore() {
+        score.remove(0);
         return availableScore.remove(0);
     }
 
@@ -85,5 +89,15 @@ public class PersonalGoalCard implements Serializable {
 
     public String getImageCode() {
         return this.imageCode;
+    }
+
+    public String printAvailableScore(){
+        if(this.score.isEmpty()) return "0";
+        return Integer.toString( this.score.get(0));
+    }
+
+    public int getLastScore(int x){
+        int index = score.indexOf(x);
+        return score.get(index-1);
     }
 }

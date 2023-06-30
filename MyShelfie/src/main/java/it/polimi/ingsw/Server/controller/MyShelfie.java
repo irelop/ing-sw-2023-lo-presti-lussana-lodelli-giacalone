@@ -82,15 +82,24 @@ public class MyShelfie {
      * @author Irene Lo Presti
      */
     public MyShelfie(PersistenceManager persistenceManager, int gameIndex, Board board,
-                     String[] commonGoalCardsNames, int currentPlayerIndex, boolean isStarted, boolean isOver,
-                     int numberOfPlayers, boolean firstTurn, int firstToFinish){
+                     String[] commonGoalCardsNames, int currentPlayerIndex, boolean isStarted,
+                     boolean isOver, int numberOfPlayers, boolean firstTurn, int firstToFinish,
+                     int firstScore, int secondScore){
         this.commonDeck = new CommonGoalDeck();
         this.board = board;
 
         CommonGoalCard[] commonGoalCards = new CommonGoalCard[2];
         //get the right cards form the deck
         commonGoalCards[0] = commonDeck.getCard(commonGoalCardsNames[0]);
+        while(Integer.parseInt(commonGoalCards[0].printAvailableScore()) != firstScore){
+            commonGoalCards[0].getScore();
+        }
+
         commonGoalCards[1] = commonDeck.getCard(commonGoalCardsNames[1]);
+        while(Integer.parseInt(commonGoalCards[1].printAvailableScore()) != secondScore){
+            commonGoalCards[1].getScore();
+        }
+
         board.setCommonGoalCards(commonGoalCards);
 
         this.isOver = isOver;
@@ -228,7 +237,10 @@ public class MyShelfie {
                 PersonalGoalCard card = personalDeck.drawPersonal();
                 player.setCard(card);
                 //update the file
-                String info = card.getId() + "\n0\nshelf\n"+player.getHasFinished()+"\n";
+                String info = card.getId() + "\n0\nshelf\n"+ player.getHasFinished()+"\n" +
+                        player.isCommonGoalAchieved(0)+"\n"+
+                        player.isCommonGoalAchieved(1)+"\n" +
+                        card.printAvailableScore() + "\n";
                 persistenceManager.writeStaticPlayerInfo(player.getNickname(), info);
             }
         }
@@ -619,7 +631,7 @@ public class MyShelfie {
     public void shouldFinishTurn(ClientHandler clientHandler){
         //if the client disconnected was the actual one playing
         if(isStarted){
-            if (clientHandlers.get(currentPlayerIndex).equals(clientHandler) && clientHandlers.stream().filter(ClientHandler::isConnected).toList().size()>=1) {
+            if (clientHandlers.get(currentPlayerIndex).equals(clientHandler) && clientHandlers.stream().filter(ClientHandler::isConnected).toList().size()>=1 && !gameOver) {
                 setNextPlayer();
             }
         }
@@ -809,12 +821,8 @@ public class MyShelfie {
     public void resetPlayers(){
         int numberOfPlayersConnected = 0;
         for(Player player : playersConnected){
-            String personalCardIndex = persistenceManager.setPlayer(player);
-            if(personalCardIndex != null){
-                PersonalGoalCard card = personalDeck.getCard(personalCardIndex);
-                player.setCard(card);
-                numberOfPlayersConnected++;
-            }
+            persistenceManager.setPlayer(player, personalDeck);
+            numberOfPlayersConnected ++;
         }
 
         if(numberOfPlayersConnected == 1) //also checking for 0?
@@ -834,8 +842,13 @@ public class MyShelfie {
                 currentPlayerIndex + "\n" + isStarted + "\n" + numberOfPlayers + "\n" +
                 board.getBag().toString() + "\n" + isOver + "\n" + firstTurn + "\n" + firstToFinish +"\n");
 
+        update.append(board.getCommonGoalCard(0).printAvailableScore() + "\n"+
+                board.getCommonGoalCard(1).printAvailableScore() + "\n");
+
         for(int j=0; j<numberOfPlayers; j++)
             update.append(playersConnected.get(j).getNickname()).append("\n");
+
+
         //write the info on the game file
         persistenceManager.updateGameFile(gameIndex, update.toString());
 
@@ -848,10 +861,16 @@ public class MyShelfie {
      */
     private void updatePlayerFile(){
         Player player = playersConnected.get(currentPlayerIndex);
+        System.out.println("update file di "+player.getNickname());
+        System.out.println(player.getPersonalGoalCard().printAvailableScore());
         //update of the player file
         String playerUpdate = player.getScore() + "\n" +
                 Arrays.deepToString(player.getShelfGrid()) + "\n" +
-                player.getHasFinished()+"\n";
+                player.getHasFinished()+"\n" +
+                player.isCommonGoalAchieved(0)+"\n" +
+                player.isCommonGoalAchieved(1)+"\n"+
+                player.getPersonalGoalCard().printAvailableScore() + "\n";
+
         persistenceManager.updatePlayerFile(playersConnected.get(currentPlayerIndex).getNickname(), playerUpdate);
     }
 

@@ -1,8 +1,6 @@
 package it.polimi.ingsw.utils;
 
-import it.polimi.ingsw.Server.Model.Board;
-import it.polimi.ingsw.Server.Model.Player;
-import it.polimi.ingsw.Server.Model.Tile;
+import it.polimi.ingsw.Server.Model.*;
 import it.polimi.ingsw.Server.ClientHandler;
 import it.polimi.ingsw.Server.RMIClientHandler;
 import java.io.BufferedWriter;
@@ -199,6 +197,9 @@ public class PersistenceManager {
         info.remove(info.size()-1);
         info.remove(info.size()-1);
         info.remove(info.size()-1);
+        info.remove(info.size()-1);
+        info.remove(info.size()-1);
+        info.remove(info.size()-1);
 
         return info;
     }
@@ -291,15 +292,22 @@ public class PersistenceManager {
         boolean firstTurn = Boolean.parseBoolean(ReadFileByLines.getLineByIndex(8));
         int firstToFinish = Integer.parseInt(ReadFileByLines.getLineByIndex(9));
 
+        //read common score available
+        int firstScore = Integer.parseInt(ReadFileByLines.getLineByIndex(10));
+        int secondScore = Integer.parseInt(ReadFileByLines.getLineByIndex(11));
+
         //read players names
         String[] playerNicknames = new String[numberOfPlayers];
         for(int j=0; j<numberOfPlayers; j++){
-            playerNicknames[j] = ReadFileByLines.getLineByIndex(j+10);
+            playerNicknames[j] = ReadFileByLines.getLineByIndex(j+12);
         }
+
+
 
         //create a new game setting all the old info
         MyShelfie game = new MyShelfie(this, gameIdx, board, commonGoalCardsNames,
-                currentPlayerIndex, isStarted, isOver, numberOfPlayers, firstTurn, firstToFinish);
+                currentPlayerIndex, isStarted, isOver, numberOfPlayers, firstTurn, firstToFinish,
+                firstScore, secondScore);
 
         //setting facade client handlers (they could also be socket) instantiates the players and
         // to check the connection
@@ -319,12 +327,10 @@ public class PersistenceManager {
      * @param player: new instance of Player
      * @return the id of the personal card of 'player' that will be set correctly by the controller
      */
-    public String setPlayer(Player player){
+    public void setPlayer(Player player, PersonalGoalDeck deck){
         File playerFile = new File(getPlayerPath(player.getNickname()));
         ReadFileByLines reader;
         reader = new ReadFileByLines();
-
-        String cardIdx = null;
 
         if (playerFile.exists() && playerFile.length() > 2){
             reader.readFrom(getPlayerPath(player.getNickname()));
@@ -332,8 +338,11 @@ public class PersistenceManager {
             if (Boolean.parseBoolean(ReadFileByLines.getLineByIndex(1)))
                 player.setChair();
 
-            //get the personal card index (the right card will be set in myshelfie)
-            cardIdx = ReadFileByLines.getLineByIndex(2);
+            //get the personal card
+            String cardIdx = ReadFileByLines.getLineByIndex(2);
+            int personalScore =  Integer.parseInt(ReadFileByLines.getLineByIndex(8));
+            PersonalGoalCard personalGoalCard = deck.getCard(cardIdx);
+            player.setCard(personalGoalCard);
 
             //set the old score
             int score = Integer.parseInt(ReadFileByLines.getLineByIndex(3));
@@ -346,6 +355,12 @@ public class PersistenceManager {
             boolean hasFinished = Boolean.parseBoolean(ReadFileByLines.getLineByIndex(5));
             if(hasFinished)
                 player.setHasFinished(true);
+            boolean isFirstCommonAchieved = Boolean.parseBoolean(ReadFileByLines.getLineByIndex(6));
+            if(isFirstCommonAchieved)
+                player.setCommonGoalAchieved(0);
+            boolean isSecondCommonAchieved = Boolean.parseBoolean(ReadFileByLines.getLineByIndex(7));
+            if(isSecondCommonAchieved)
+                player.setCommonGoalAchieved(1);
 
             //if row.equals("shelf") the player didn't play their turn, so the shelf was all blank
             if (!row.equals("shelf")) {
@@ -360,8 +375,9 @@ public class PersistenceManager {
                     }
                 }
                 player.setShelf(shelf);
+                //set the correct score
+                personalGoalCard.getPersonalGoalScore(shelf);
             }
         }
-        return cardIdx;
     }
 }

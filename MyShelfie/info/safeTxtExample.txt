@@ -10,10 +10,12 @@ name: game_index.txt
 8th line: isOver
 9th line: firstTurn
 10th line: it is the index of the first player to fill their shelf, if it's -1 nobody filled it
-11th line: first player's nickname
-12th line: second player's nickname
-13th line: third player's nickname
-14th line: fourth player's nickname
+11th line: first common goal card available score
+12th line: second common goal card available score
+13th line: first player's nickname
+14th line: second player's nickname
+15th line: third player's nickname
+16th line: fourth player's nickname
 NB: if there are less than 4 players the line are blank
 
 For player txt:
@@ -23,4 +25,8 @@ name: playerNickname.txt
 3rd line: personal goal card id
 4th line: score
 5th line: shelf
+6th line: hasFinished
+7th line: isCommonGoalAchieved(0)
+8th line: isCommonGoalAchieved(1)
+9th line: personal goal card available score
 NB: if the shelf is blank in the 5th line there is the word "shelf"
