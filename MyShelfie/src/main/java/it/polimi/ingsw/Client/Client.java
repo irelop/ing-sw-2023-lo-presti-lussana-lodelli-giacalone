@@ -221,7 +221,7 @@ public class Client implements Runnable{
      * @author Andrea Giacalone, Irene Lo Presti
      */
     public void manageSocketConnection(){
-        System.out.println("Please insert the IP address of the server:\n");
+        System.out.println("Please insert the IP address of the server:");
         Scanner input = new Scanner(System.in);
         String ip;
 

@@ -503,7 +503,6 @@ public class ShelfController extends Controller {
      */
     public void manageChatAnswer(){
         ArrayList<String> messages = new ArrayList<>();
-        messages.add("To send a private message tag the player (@playerName) at the beginning\n");
         //preparing the chat list
         for(int i=0; i<chatRecord.getChatStorage().getStorage().size(); i++){
             String sender = chatRecord.getChatStorage().getStorage().get(i).getSender();
@@ -530,14 +529,6 @@ public class ShelfController extends Controller {
         if (message == null) {
             message = "Sium";
             formattedMsg = "Sium";
-        }
-        if(message.startsWith("@")){
-            receiver_name = message.split(" ")[0];
-            StringBuilder sb = new StringBuilder(receiver_name);
-            sb.deleteCharAt(0);
-            receiver_name = sb.toString();
-            formattedMsg = message.substring(receiver_name.length()+2);
-            if(receiver_name.toUpperCase().equals(getOwner().getNickname())) receiver_name = "";
         }
         ChatMsgRequest chatMsgRequest = new ChatMsgRequest(getOwner().getNickname(), receiver_name, formattedMsg);
         getOwner().getServerHandler().sendMessageToServer(chatMsgRequest);
