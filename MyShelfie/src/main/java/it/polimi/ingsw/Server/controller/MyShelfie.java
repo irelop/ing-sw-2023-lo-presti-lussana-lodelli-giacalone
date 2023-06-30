@@ -861,8 +861,6 @@ public class MyShelfie {
      */
     private void updatePlayerFile(){
         Player player = playersConnected.get(currentPlayerIndex);
-        System.out.println("update file di "+player.getNickname());
-        System.out.println(player.getPersonalGoalCard().printAvailableScore());
         //update of the player file
         String playerUpdate = player.getScore() + "\n" +
                 Arrays.deepToString(player.getShelfGrid()) + "\n" +
