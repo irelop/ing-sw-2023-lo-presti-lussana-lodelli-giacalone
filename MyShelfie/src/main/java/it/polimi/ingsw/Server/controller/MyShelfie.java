@@ -706,11 +706,11 @@ public class MyShelfie {
         if(!gameOver)
             gameOver = true;
 
-        if(!clientHandler.getIsGui())
-            clientHandler.stop();
-
         int playerIndex = clientHandlers.indexOf(clientHandler);
         fileDeleting(playersConnected.get(playerIndex).getNickname(), playerIndex);
+
+        if(!clientHandler.getIsGui())
+            clientHandler.stop();
 
     }
 
