@@ -96,6 +96,8 @@ You are now able to execute your **MyShelfie_client.jar** through the comand:
 
 Enjoy your game!
 
+## License
+[My Shelfie](https://www.craniocreations.it/prodotto/my-shelfie) is a board game developed and published by [Cranio Creations Srl](https://www.craniocreations.it/). The graphic contents of this project attributable to the board editorial product are used with the prior approval of Cranio Creations Srl for educational purposes only. The distribution, copying or reproduction of the contents and images in any form outside the project is prohibited, as is the redistribution and publication of the contents and images for purposes other than the aforementioned. Furthermore, the commercial use of these contents is prohibited.
 
 ## Credits 
 We would like to thank our professor Pierluigi San Pietro, our project managers Alessandro Bertani and Tommaso Paladini, our tutors Silvia Marino and Patrick Niantcho, who have helped us during the project development.
